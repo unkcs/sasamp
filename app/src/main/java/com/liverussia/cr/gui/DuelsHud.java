@@ -28,8 +28,7 @@ public class DuelsHud {
 
     native void init();
 
-    public DuelsHud(Activity activity)
-    {
+    public DuelsHud(Activity activity) {
         init();
         this.activity = activity;
 
@@ -64,6 +63,32 @@ public class DuelsHud {
                 adapter.addItem(killertext, deathtext, gun, team);
             }
         });
+    }
+
+    void addTop(String top1Name, String top2Name, String top3Name, boolean show) {
+        if(show) {
+            activity.runOnUiThread(() -> {
+
+            });
+        }
+        else {
+            activity.runOnUiThread( () -> {
+
+            });
+        }
+    }
+
+    void addStatistic(int killsCount, int deathsCount, boolean show) {
+        if(show) {
+            activity.runOnUiThread(() -> {
+
+            });
+        }
+        else {
+            activity.runOnUiThread( () -> {
+
+            });
+        }
     }
 
     void clearKillList() {

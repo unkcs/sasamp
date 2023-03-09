@@ -253,6 +253,10 @@ public:
 
 	static void packetDuelsKillsLeft(Packet *p);
 
+	static void packetDuelsTop(Packet *p);
+
+	static void packetDuelsStatistic(Packet *p);
+
 	static void packetDailyRewards(Packet *p);
 
 	static void packetNotification(Packet *p);

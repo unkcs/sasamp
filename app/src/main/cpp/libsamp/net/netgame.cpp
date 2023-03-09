@@ -524,6 +524,14 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			packetDuelsKillsLeft(p);
 			break;
 		}
+		case RPC_DUELS_SHOW_LOCAL_TOP: {
+			packetDuelsTop(p);
+			break;
+		}
+		case RPC_DUELS_SHOW_LOCAL_STAT: {
+			packetDuelsStatistic(p);
+			break;
+		}
 		case RPC_CLEAR_KILL_LIST: {
             CDuelsGui::clearKillList();
 			break;

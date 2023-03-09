@@ -43,6 +43,45 @@ void CDuelsGui::addMessage(PLAYERID killer, PLAYERID killee, int reason, int tea
     env->DeleteLocalRef(jKillername);
 }
 
+void CDuelsGui::addTop(PLAYERID top1, PLAYERID top2, PLAYERID top3, bool show)
+{
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
+    if(!env)return;
+    if(!pNetGame)return;
+
+    CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
+    if(!pPlayerPool)return;
+
+    jstring top1name = env->NewStringUTF( pPlayerPool->GetPlayerName(top1) );
+    jstring top2name = env->NewStringUTF( pPlayerPool->GetPlayerName(top2) );
+    jstring top3name = env->NewStringUTF( pPlayerPool->GetPlayerName(top3) );
+
+    jclass clazz = env->GetObjectClass(CDuelsGui::thiz);
+    jmethodID method = env->GetMethodID(clazz, "addTop", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
+
+    env->CallVoidMethod(CDuelsGui::thiz, method, top1name, top2name, top3name, show);
+    env->DeleteLocalRef(top1name);
+    env->DeleteLocalRef(top2name);
+    env->DeleteLocalRef(top3name);
+
+
+}
+
+void CDuelsGui::addStatistic(PLAYERID kills, PLAYERID deaths, bool show)
+{
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
+    if(!env)return;
+    if(!pNetGame)return;
+
+    CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
+    if(!pPlayerPool)return;
+
+    jclass clazz = env->GetObjectClass(CDuelsGui::thiz);
+    jmethodID method = env->GetMethodID(clazz, "addStatistic", "(IIZ)V");
+
+    env->CallVoidMethod(CDuelsGui::thiz, method, kills, deaths, show);
+}
+
 void CDuelsGui::showKillsLeft(bool show, int kills, int needKills)
 {
     JNIEnv* env = g_pJavaWrapper->GetEnv();
@@ -69,6 +108,42 @@ void CNetGame::packetDuelsKillsLeft(Packet* p)
     bs.Read(needKiils);
 
     CDuelsGui::showKillsLeft(show, kills, needKiils);
+}
+
+void CNetGame::packetDuelsTop(Packet* p)
+{
+    RakNet::BitStream bs((unsigned char*)p->data, p->length, false);
+
+    bs.IgnoreBits(40); // skip packet and rpc id
+
+    uint8_t show;
+    uint16_t top1;
+    uint16_t top2;
+    uint16_t top3;
+
+    bs.Read(show);
+    bs.Read(top1);
+    bs.Read(top2);
+    bs.Read(top3);
+
+    CDuelsGui::addTop(top1, top2, top3, show);
+}
+
+void CNetGame::packetDuelsStatistic(Packet* p)
+{
+    RakNet::BitStream bs((unsigned char*)p->data, p->length, false);
+
+    bs.IgnoreBits(40); // skip packet and rpc id
+
+    uint8_t show;
+    uint16_t kills;
+    uint16_t deaths;
+
+    bs.Read(show);
+    bs.Read(kills);
+    bs.Read(deaths);
+
+    CDuelsGui::addStatistic(kills, deaths, show);
 }
 
 void CNetGame::packetKillList(Packet* p)

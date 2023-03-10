@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.liverussia.cr.R;
+import com.liverussia.launcher.domain.inscriptions.Inscriptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,16 @@ public class DuelsHud {
 
     ConstraintLayout duels_kills_left_layout;
     TextView duels_kills_left_text;
+
+    private ConstraintLayout topPanel;
+    private ConstraintLayout statePanel;
+
+    private TextView top1NameTextView;
+    private TextView top2NameTextView;
+    private TextView top3NameTextView;
+
+    private TextView stateKillsCountTextView;
+    private TextView stateDeathsCountTextView;
 
     native void init();
 
@@ -40,6 +51,16 @@ public class DuelsHud {
         //
         duels_kills_left_layout = activity.findViewById(R.id.duels_kills_left_layout);
         duels_kills_left_text = activity.findViewById(R.id.duels_kills_left_text);
+
+        topPanel = activity.findViewById(R.id.top_panel);
+        statePanel = activity.findViewById(R.id.state_panel);
+
+        top1NameTextView = activity.findViewById(R.id.top1_name_text);
+        top2NameTextView = activity.findViewById(R.id.top2_name_text);
+        top3NameTextView = activity.findViewById(R.id.top3_name_text);
+
+        stateKillsCountTextView = activity.findViewById(R.id.state_kills_count_text);
+        stateDeathsCountTextView = activity.findViewById(R.id.state_deaths_count_text);
     }
 
     void showKillsLeft(boolean show, int kills, int needKills) {
@@ -68,12 +89,14 @@ public class DuelsHud {
     void addTop(String top1Name, String top2Name, String top3Name, boolean show) {
         if(show) {
             activity.runOnUiThread(() -> {
-
+                topPanel.setVisibility(View.VISIBLE);
+                top1NameTextView.setText(Inscriptions.createDuelsTop1Inscription(top1Name));
+                top2NameTextView.setText(Inscriptions.createDuelsTop2Inscription(top2Name));
+                top3NameTextView.setText(Inscriptions.createDuelsTop3Inscription(top3Name));
             });
-        }
-        else {
+        } else {
             activity.runOnUiThread( () -> {
-
+                topPanel.setVisibility(View.GONE);
             });
         }
     }
@@ -81,12 +104,13 @@ public class DuelsHud {
     void addStatistic(int killsCount, int deathsCount, boolean show) {
         if(show) {
             activity.runOnUiThread(() -> {
-
+                statePanel.setVisibility(View.VISIBLE);
+                stateKillsCountTextView.setText("УБИЙСТВ: ".concat(String.valueOf(killsCount)));
+                stateDeathsCountTextView.setText("СМЕРТЕЙ: ".concat(String.valueOf(deathsCount)));
             });
-        }
-        else {
+        } else {
             activity.runOnUiThread( () -> {
-
+                statePanel.setVisibility(View.GONE);
             });
         }
     }

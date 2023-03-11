@@ -105,8 +105,8 @@ public class DuelsHud {
         if(show) {
             activity.runOnUiThread(() -> {
                 statePanel.setVisibility(View.VISIBLE);
-                stateKillsCountTextView.setText("УБИЙСТВ: ".concat(String.valueOf(killsCount)));
-                stateDeathsCountTextView.setText("СМЕРТЕЙ: ".concat(String.valueOf(deathsCount)));
+                stateKillsCountTextView.setText(String.valueOf(killsCount));
+                stateDeathsCountTextView.setText(String.valueOf(deathsCount));
             });
         } else {
             activity.runOnUiThread( () -> {

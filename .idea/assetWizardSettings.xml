@@ -382,26 +382,12 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
-                        <option name="children">
-                          <map>
-                            <entry key="clipartAsset">
-                              <value>
-                                <PersistentState>
-                                  <option name="values">
-                                    <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/volume_off/baseline_volume_off_24.xml" />
-                                    </map>
-                                  </option>
-                                </PersistentState>
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="b81515" />
-                            <entry key="outputName" value="casino_bc_off_sound_icon" />
-                            <entry key="sourceFile" value="D:\players_icon.svg" />
+                            <entry key="outputName" value="duels_state_delimeter" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/duels_state_delimeter.svg" />
                           </map>
                         </option>
                       </PersistentState>

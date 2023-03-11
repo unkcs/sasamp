@@ -201,7 +201,7 @@ public class DuelsHud {
                         break;
                     }
                     default: {
-                        this.teamColor.add(Color.parseColor("#90a4ae"));
+                        this.teamColor.add(Color.parseColor("#FF282A2C"));
                     }
                 }
                 notifyItemInserted(this.killertext.size()-1);

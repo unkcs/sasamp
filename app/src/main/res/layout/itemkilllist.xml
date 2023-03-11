@@ -5,7 +5,6 @@
     android:layout_height="@dimen/_18sdp"
     xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/kill_list_bg"
-    android:backgroundTint="#90a4ae"
     android:layout_marginBottom="@dimen/_1sdp"
     android:layout_marginTop="@dimen/_1sdp"
     android:id="@+id/kill_list_bg">
@@ -16,7 +15,7 @@
         android:layout_height="@dimen/_11sdp"
         android:layout_marginStart="8dp"
         android:background="@drawable/kill_list_icon_death"
-        android:backgroundTint="@color/gray"
+        android:backgroundTint="@color/white"
         strokeAttrs:layout_constraintBottom_toBottomOf="parent"
         strokeAttrs:layout_constraintStart_toStartOf="parent"
         strokeAttrs:layout_constraintTop_toTopOf="parent" />

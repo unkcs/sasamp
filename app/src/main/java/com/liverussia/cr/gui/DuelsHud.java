@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DuelsHud {
+
+    private static final String KILL_LIST_ICON_RESOURCE_NAME = "kill_list_icon_weapon_";
+
     Activity activity;
     KillListAdapter adapter;
     RecyclerView kill_list;
@@ -81,8 +85,9 @@ public class DuelsHud {
         activity.runOnUiThread(() -> {
             if(kill_list.getVisibility() == View.GONE) {
                 kill_list.setVisibility(View.VISIBLE);
-                adapter.addItem(killertext, deathtext, gun, team);
             }
+
+            adapter.addItem(killertext, deathtext, gun, team);
         });
     }
 
@@ -151,6 +156,15 @@ public class DuelsHud {
             holder.kill_list_killer_textview.setText(killertext.get(position));
             holder.kill_list_death_textview.setText(deathtext.get(position));
             holder.kill_list_bg.setBackgroundTintList(ColorStateList.valueOf(teamColor.get(position)));
+
+            String gunId = String.valueOf(gun.get(position));
+            String resourceName = KILL_LIST_ICON_RESOURCE_NAME.concat(gunId);
+
+            holder.kill_list_gun_icon.setBackgroundResource(getResId(resourceName));
+        }
+
+        public int getResId(String res) {
+            return activity.getResources().getIdentifier(res, "drawable", activity.getPackageName());
         }
 
         @Override
@@ -161,6 +175,7 @@ public class DuelsHud {
         public class ViewHolder extends RecyclerView.ViewHolder {
             final TextView kill_list_killer_textview;
             final TextView kill_list_death_textview;
+            final ImageView kill_list_gun_icon;
             final ConstraintLayout kill_list_bg;
 
             ViewHolder(View view){
@@ -168,6 +183,7 @@ public class DuelsHud {
                 kill_list_bg = view.findViewById(R.id.kill_list_bg);
                 kill_list_killer_textview = view.findViewById(R.id.kill_list_killer_textview);
                 kill_list_death_textview = view.findViewById(R.id.kill_list_death_textview);
+                kill_list_gun_icon = view.findViewById(R.id.kill_list_gun_icon);
             }
         }
 

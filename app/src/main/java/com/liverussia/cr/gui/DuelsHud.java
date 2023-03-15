@@ -83,6 +83,12 @@ public class DuelsHud {
 
     void addItem(String killertext, String deathtext, int gun, int team) {
         activity.runOnUiThread(() -> {
+
+            if (adapter == null || kill_list.getAdapter() == null || kill_list.getAdapter().getItemCount() <= 0) {
+                adapter = new KillListAdapter(activity);
+                kill_list.setAdapter(adapter);
+            }
+
             if(kill_list.getVisibility() == View.GONE) {
                 kill_list.setVisibility(View.VISIBLE);
             }
@@ -125,7 +131,7 @@ public class DuelsHud {
         adapter.clearItems();
     }
 
-    public class KillListAdapter  extends RecyclerView.Adapter<KillListAdapter.ViewHolder> {
+    public class KillListAdapter extends RecyclerView.Adapter<KillListAdapter.ViewHolder> {
 
         final LayoutInflater inflater;
         List<String> killertext;

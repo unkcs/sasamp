@@ -11,7 +11,7 @@
         android:id="@+id/duels_kills_left_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -297,12 +297,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:visibility="gone"
         android:layout_marginEnd="4dp"
-
+        android:layout_marginTop="100dp"
         android:id="@+id/kill_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/all_state_panel"
+        app:layout_constraintTop_toTopOf="parent"
         app:reverseLayout="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -572,6 +572,11 @@ void CNetGame::Packet_CustomRPC(Packet* p)
             packetMafiaWar(p);
 			break;
 		}
+		case RPC_FACILITY_WAR:
+		{
+			packetFacilityWar(p);
+			break;
+		}
 		case RPC_CASINO_LUCKY_WHEEL_MENU:
 		{
 			uint32_t count;

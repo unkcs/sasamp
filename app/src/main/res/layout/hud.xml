@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_100sdp"
                 android:layout_marginLeft="@dimen/_75sdp"
-                android:layout_marginTop="@dimen/_24sdp"
+                android:layout_marginTop="@dimen/_12sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/hud_down_bg"
                 app:layout_constraintStart_toEndOf="@+id/hud_center_bg"
                 app:layout_constraintTop_toTopOf="@+id/imageView">
@@ -796,6 +796,65 @@
                 app:layout_constraintEnd_toEndOf="@+id/opg_time_bg"
                 app:layout_constraintStart_toStartOf="@+id/opg_time_bg"
                 app:layout_constraintTop_toTopOf="@+id/opg_time_bg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="visible"
+            android:id="@+id/family_war_layout"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginBottom="90dp"
+            android:background="@drawable/casino_lucky_wheel_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/family_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:text="Очки вашей семьи: 0"
+                android:textSize="@dimen/_8sdp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/family_lider_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:text="Лидер сражения: 214687"
+                android:textSize="@dimen/_8sdp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/family_score"
+                app:layout_constraintTop_toBottomOf="@+id/family_score" />
+
+            <View
+                android:id="@+id/family_time_bg"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/yellow_gradient_rounded"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/family_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="600 секунд"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/family_time_bg"
+                app:layout_constraintStart_toStartOf="@+id/family_time_bg"
+                app:layout_constraintTop_toTopOf="@+id/family_time_bg" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

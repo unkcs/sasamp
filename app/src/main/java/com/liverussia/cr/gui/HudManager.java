@@ -76,9 +76,13 @@ public class HudManager {
     private ImageView button_horn;
     ImageView button_siren;
     private ConstraintLayout opg_war_layout;
+    private ConstraintLayout family_war_layout;
     private TextView opg_attacker_score;
+    private TextView family_score;
     private TextView opg_defender_score;
+    private TextView family_lider_score;
     private TextView opg_time_text;
+    private TextView family_time_text;
     private ImageView hud_bg;
     private EditText chat_input;
     private ConstraintLayout chat_input_layout;
@@ -286,11 +290,17 @@ public class HudManager {
         hud_bg = activity.findViewById(R.id.hud_bg);
         // OPG WAR
         opg_war_layout = activity.findViewById(R.id.opg_war_layout);
+        family_war_layout = activity.findViewById(R.id.family_war_layout);
         opg_attacker_score = activity.findViewById(R.id.opg_attacker_score);
+        family_score = activity.findViewById(R.id.family_score);
         opg_defender_score = activity.findViewById(R.id.opg_defender_score);
+        family_lider_score = activity.findViewById(R.id.family_lider_score);
+
         opg_time_text = activity.findViewById(R.id.opg_time_text);
+        family_time_text = activity.findViewById(R.id.family_time_text);
 
         opg_war_layout.setVisibility(View.GONE);
+        family_war_layout.setVisibility(View.GONE);
 
         //Кнопка сирены
         button_siren = activity.findViewById(R.id.button_siren);
@@ -550,6 +560,23 @@ public class HudManager {
         } );
 
     }
+
+    public void updateFamilyWarLayout(int seconds, int topScore, int currScore, boolean show)
+    {
+        activity.runOnUiThread(() -> {
+            if(!show || seconds == 0)
+            {
+                family_war_layout.setVisibility(View.GONE);
+                return;
+            }
+            family_war_layout.setVisibility(View.VISIBLE);
+            family_score.setText(String.format("Очки вашей семьи: %d", currScore));
+            family_lider_score.setText(String.format("Лидер сражения: %d", topScore));
+            family_time_text.setText(String.format("%d секунд", seconds));
+        } );
+
+    }
+
     void toggleSirenButton(boolean toggle)
     {
         if(toggle)

@@ -460,6 +460,27 @@ void CNetGame::packetMafiaWar(Packet* p)
     CHUD::updateOpgWarLayout(time, attack_score, def_score);
 }
 
+void CNetGame::packetFacilityWar(Packet* p)
+{
+    RakNet::BitStream bs((unsigned char*)p->data, p->length, false);
+
+    bs.IgnoreBits(40); // skip packet and rpc id
+
+    uint16_t show;
+    uint16_t seconds;
+    uint16_t currScore;
+    uint16_t topScore;
+
+    bs.Read(show);
+    bs.Read(seconds);
+    bs.Read(currScore);
+    bs.Read(topScore);
+
+
+
+    CHUD::updateFamilyWarLayout(seconds, topScore, currScore, show);
+}
+
 void CHUD::updateOpgWarLayout(int time, int attack_score, int def_score)
 {
     JNIEnv* env = g_pJavaWrapper->GetEnv();
@@ -479,6 +500,22 @@ void CHUD::updateOpgWarLayout(int time, int attack_score, int def_score)
         bIsShowMafiaWar = false;
     }
     else bIsShowMafiaWar = true;
+}
+
+void CHUD::updateFamilyWarLayout(int seconds, int topScore, int currScore, bool show)
+{
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
+
+    jclass clazz = env->GetObjectClass(thiz);
+    jmethodID UpdateFamilyWarLayout = env->GetMethodID(clazz, "updateFamilyWarLayout", "(IIIZ)V");
+
+    if(CKeyBoard::IsOpen())
+    {
+        env->CallVoidMethod(thiz, UpdateFamilyWarLayout, 0, 0, 0, false);
+        return;
+    }
+
+    env->CallVoidMethod(thiz, UpdateFamilyWarLayout, seconds, topScore, currScore, show);
 }
 
 void CHUD::UpdateSalary(int salary, int lvl, float exp)

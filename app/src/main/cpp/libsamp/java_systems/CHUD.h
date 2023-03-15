@@ -89,6 +89,8 @@ public:
     static void hideBusInfo();
 
     static int iSatiety;
+
+    static void updateFamilyWarLayout(int seconds, int topScore, int currScore, bool show);
 };
 
 

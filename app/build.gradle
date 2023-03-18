@@ -22,8 +22,8 @@ android {
     //    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         applicationId "com.liverussia.cr"
-        versionName "179"
-        versionCode 179
+        versionName "182"
+        versionCode 182
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled = true
@@ -54,6 +54,10 @@ android {
     ndkVersion '25.1.8937393'
     buildTypes {
         release {
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
+
             minifyEnabled false
         }
         debug {
@@ -114,7 +118,8 @@ dependencies {
     implementation 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5' //
-
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+    apply plugin: 'com.google.gms.google-services'
     implementation 'com.techyourchance:threadposter:1.0.1'
 
 }

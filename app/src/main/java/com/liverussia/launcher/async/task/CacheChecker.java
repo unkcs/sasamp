@@ -191,56 +191,7 @@ public class CacheChecker implements Listener<FileInfo[]> {
                 .concat("/")
                 .concat(filePath)
         );
-
-        return !file.exists() || !isValidHash(filePath, fileInfo);
-    }
-
-    private boolean isValidHash(String filePath, FileInfo fileInfo) {
-        String hash = calculateHash(activity.getExternalFilesDir(null).toString()
-                .concat("/")
-                .concat(filePath)
-        );
-
-        return hash.equalsIgnoreCase(fileInfo.getHash());
-    }
-
-    private String calculateHash(String filename) {
-
-//        try {
-//            MessageDigest md = MessageDigest.getInstance("MD5");
-//
-//            try (DigestInputStream dis = new DigestInputStream(new FileInputStream(filename), md)) {
-//                while (dis.read() != -1) ; // пустой цикл для очистки данных
-//                md = dis.getMessageDigest();
-//            }
-//
-//            StringBuilder result = new StringBuilder();
-//
-//            for (byte b : md.digest()) {
-//                result.append(String.format("%02x", b));
-//            }
-//
-//            return result.toString();
-//        } catch (NoSuchAlgorithmException | IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] buffer = new byte[8192];
-
-            try (InputStream is = new BufferedInputStream(new FileInputStream(filename))) {
-                int read;
-                while ((read = is.read(buffer)) > 0) {
-                    md.update(buffer, 0, read);
-                }
-            }
-            byte[] digest = md.digest();
-            return bytesToHex(digest);
-        } catch (NoSuchAlgorithmException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
     }
 
     private GameFileInfoDto getGameFilesInfo() {

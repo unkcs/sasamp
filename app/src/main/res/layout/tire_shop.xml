@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_panel"
+        android:visibility="gone"
+        android:layout_width="388dp"
+        android:layout_height="50dp"
+        android:background="@drawable/tire_shop_item_panel"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <ImageView
+            android:id="@+id/buy_btn"
+            android:visibility="visible"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tire_shop_buy_button"
+            android:adjustViewBounds="true"
+            android:layout_marginStart="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/cost_text"
+            android:layout_gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="1dp"
+            android:fontFamily="@font/visby_chat"
+            android:shadowColor="@color/black"
+            android:background="@drawable/tire_shop_buy_button_text_bg"
+            android:text="0 РУБ."
+            android:textColor="@color/white"
+            android:textSize="@dimen/_4sdp"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintLeft_toLeftOf="@+id/buy_btn"
+            app:layout_constraintRight_toRightOf="@+id/buy_btn"
+            app:layout_constraintBottom_toBottomOf="@+id/buy_btn"/>
+
+
+        <LinearLayout
+            android:id="@+id/tire_items_LL"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buy_btn"
+            app:layout_constraintEnd_toStartOf="@+id/close_btn">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tire_items_RV"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:clipToPadding="false" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/close_btn"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tire_shop_close_button"
+            android:adjustViewBounds="true"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+<!--        сдвигается из-за того что к этой кнопке не вяжется-->
+        <ImageView
+            android:id="@+id/go_back_btn"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tire_shop_go_back_button_text_bg"
+            android:adjustViewBounds="true"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

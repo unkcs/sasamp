@@ -500,6 +500,10 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			packetKillList(p);
 			break;
 		}
+		case RPC_TUNING_WHEELS: {
+			packetTireShop(p);
+			break;
+		}
 		case RPC_TECH_INSPECT: {
 			packetTechInspect(p);
 			break;

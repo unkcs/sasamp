@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.Samp;
+import com.liverussia.cr.gui.tire_shop.TireShop;
 import com.liverussia.cr.gui.util.Utils;
 import com.liverussia.cr.gui.util.SeekArc;
 import com.nvidia.devtech.NvEventQueueActivity;
@@ -72,6 +73,9 @@ public class Speedometer {
     public Speedometer(Activity activity)
     {
         this.activity = activity;
+
+        TireShop tireShop = new TireShop(activity);
+        tireShop.showRendering(true, 300);
 
         activity.runOnUiThread(() -> {
             speedometr_blinker_icon = activity.findViewById(R.id.speedometr_blinker_icon);

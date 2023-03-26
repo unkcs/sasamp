@@ -294,6 +294,7 @@ public class Donate {
         allItems.add( new DonateItem("Месси", CATEGORY_SKINS, 2500, getResId("skin_161"), 161) );
         allItems.add( new DonateItem("Kaneki Aogiri", CATEGORY_SKINS, 7500, getResId("skin_147"), 147) );
         allItems.add( new DonateItem("Seidou Takizawa", CATEGORY_SKINS, 7500, getResId("skin_140"), 140) );
+        allItems.add( new DonateItem("Грут", CATEGORY_SKINS, 50000, getResId("skin_14"), 14) );
 
         // cars
         allItems.add( new DonateItem("Lamborghini Urus", CATEGORY_CARS, 8250, getResId("auc_veh_579"), 579) );

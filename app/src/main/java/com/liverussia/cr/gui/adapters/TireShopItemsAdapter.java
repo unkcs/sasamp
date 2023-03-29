@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.liverussia.cr.R;
 import com.liverussia.cr.gui.tire_shop.ItemInfo;
 import com.liverussia.cr.gui.tire_shop.ItemType;
+import com.liverussia.cr.gui.tire_shop.TireShop;
 import com.liverussia.launcher.ui.activity.StoryActivity;
 
 import java.util.List;
@@ -24,14 +25,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdapter.TireShopItemsViewHolder> {
-    private Activity activity;
+    private final Activity activity;
+    private final TireShop tireShop;
+
+    private int selectedItem = -1;
     @Getter
     @Setter
 	private List<ItemInfo> items;
 
-	public TireShopItemsAdapter(Activity activity, List<ItemInfo> items){
+	public TireShopItemsAdapter(Activity activity, List<ItemInfo> items, TireShop tireShop) {
 		 this.activity = activity;
 		 this.items = items;
+         this.tireShop = tireShop;
 	}
 	
 	@NonNull
@@ -46,19 +51,26 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
         ItemInfo itemInfo = this.items.get(position);
         holder.image.setImageResource(itemInfo.getResource());
 
+        if (position == selectedItem && ItemType.CONCRETE_ITEM_IN_CATEGORY.equals(itemInfo.getType())) {
+            holder.image.setImageResource(itemInfo.getResourceSelected());
+        }
 
-		holder.image.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                view.startAnimation(AnimationUtils.loadAnimation(activity,R.anim.button_click));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (ItemType.MAIN_MENU_ITEM.equals(itemInfo.getType())) {
-                            handleMainMenuAction(itemInfo);
-                        }
-                    }
-                }, 200);
-            }
+
+		holder.image.setOnClickListener(view -> {
+            view.startAnimation(AnimationUtils.loadAnimation(activity,R.anim.button_click));
+
+            new Handler().postDelayed(() -> {
+                if (ItemType.MAIN_MENU_ITEM.equals(itemInfo.getType())) {
+                    selectedItem = -1;
+                    handleMainMenuAction(itemInfo);
+                }
+
+                if (ItemType.CONCRETE_ITEM_IN_CATEGORY.equals(itemInfo.getType())) {
+                    selectedItem = position;
+                    handleConcreteItemInCategoryAction(itemInfo);
+                    this.notifyDataSetChanged();
+                }
+            }, 200);
         });
     }
 
@@ -76,6 +88,10 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
 
         notifyDataSetChanged();
 
+    }
+
+    private void handleConcreteItemInCategoryAction(ItemInfo itemInfo) {
+        tireShop.handleConcreteItemInCategoryAction(itemInfo);
     }
 
     public void startStorySlider(int pos) {

@@ -81,3 +81,57 @@ void CNetGame::packetTireShop(Packet* p)
 
 
 
+
+//extern "C"
+//JNIEXPORT void JNICALL
+//Java_com_liverussia_cr_gui_tire_1shop_TireShop_sendClickItem(JNIEnv *env, jobject thiz,
+//                                                             jint button_id, float value) {
+//    uint8_t packet = ID_CUSTOM_RPC;
+//    uint8_t RPC = RPC_TUNING_WHEELS;
+//
+//    RakNet::BitStream bsSend;
+//    bsSend.Write(packet);
+//    bsSend.Write(RPC);
+//    bsSend.Write((uint8_t) button_id);
+//    bsSend.Write((float_t) value);
+////    bsSend.Write((uint16_t) item_type);
+////    bsSend.Write((uint16_t) item_id);
+//
+//    pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
+//}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_tire_1shop_TireShop_sendClickItem(JNIEnv *env, jobject thiz,
+                                                             jint button_id, jfloat value) {
+    uint8_t packet = ID_CUSTOM_RPC;
+    uint8_t RPC = RPC_TUNING_WHEELS;
+
+    RakNet::BitStream bsSend;
+    bsSend.Write(packet);
+    bsSend.Write(RPC);
+    bsSend.Write((int8_t) button_id);
+    bsSend.Write((float) value);
+
+    pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
+
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_tire_1shop_TireShop_chooseDisk(JNIEnv *env, jobject thiz, jint disk_id) {
+//    if(!env)return;
+
+//    jclass clazz = env->GetObjectClass(CTireShop::thiz);
+
+    // ------------ сидит в машине
+
+    CPlayerPed *pPlayerPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
+    CVehicle* pVehicle = pPlayerPed->GetCurrentVehicle();
+
+    pVehicle->AddVehicleUpgrade(disk_id);
+
+
+//    jmethodID method = env->GetMethodID(clazz, "clearKillList", "()V");
+//
+//    env->CallVoidMethod(CTireShop::thiz, method);
+}

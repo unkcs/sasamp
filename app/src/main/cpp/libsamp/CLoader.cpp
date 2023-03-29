@@ -72,7 +72,7 @@ void CLoader::initJavaClasses(JavaVM* pjvm)
     CDonate::clazz = (jclass) env->NewGlobalRef( CDonate::clazz );
 
     CTireShop::clazz = env->FindClass("com/liverussia/cr/gui/tire_shop/TireShop");
-    CDonate::clazz = (jclass) env->NewGlobalRef( CDonate::clazz );
+    CTireShop::clazz = (jclass) env->NewGlobalRef( CTireShop::clazz );
 
     CEditobject::clazz = env->FindClass("com/liverussia/cr/gui/AttachEdit");
     CEditobject::clazz = (jclass) env->NewGlobalRef( CEditobject::clazz );

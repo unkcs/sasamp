@@ -386,8 +386,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="b81515" />
-                            <entry key="outputName" value="tire_shop_go_back_button_text_bg" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/tire_shop_go_back_button_text_bg.svg" />
+                            <entry key="outputName" value="tire_shop_stock_button" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/tire_shop_stock_button.svg" />
                           </map>
                         </option>
                       </PersistentState>

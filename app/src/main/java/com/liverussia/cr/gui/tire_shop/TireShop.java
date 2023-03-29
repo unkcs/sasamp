@@ -26,11 +26,12 @@ public class TireShop implements View.OnClickListener {
 
     private Activity activity;
 
-    private ConstraintLayout itemPanel;
+    private ConstraintLayout tireShopHud;
     private TextView costText;
     private RecyclerView recyclerItems;
     private ImageView closeBtn;
     private ImageView goBackBtn;
+    private ImageView stockBtn;
 
     private TireShopItemsAdapter tireShopItemsAdapter;
     private Animation animation;
@@ -43,6 +44,10 @@ public class TireShop implements View.OnClickListener {
         otherSymbols.setGroupingSeparator('.');
         costFormat = new DecimalFormat("###,###.###", otherSymbols);
     }
+
+    native void sendClickItem(int buttonId, float value);
+
+    native void chooseDisk(int diskId);
 
     public TireShop(Activity activity) {
         this.activity = activity;
@@ -58,13 +63,15 @@ public class TireShop implements View.OnClickListener {
             goBackBtn.setOnClickListener(this);
             closeBtn = activity.findViewById(R.id.close_btn);
             closeBtn.setOnClickListener(this);
+            stockBtn = activity.findViewById(R.id.stock_btn);
+            stockBtn.setOnClickListener(this);
 
             recyclerItems = activity.findViewById(R.id.tire_items_RV);
             recyclerItems.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
             recyclerItems.setLayoutManager(layoutManager);
 
-            itemPanel = activity.findViewById(R.id.item_panel);
+            tireShopHud = activity.findViewById(R.id.tire_shop_hud);
         });
     }
 
@@ -73,53 +80,61 @@ public class TireShop implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.close_btn:
                 v.startAnimation(animation);
+                sendClickItem(7, 0);
                 break;
             case R.id.go_back_btn:
                 v.startAnimation(animation);
-
-                viewPagerItems.clear();
-                viewPagerItems.addAll(ItemInfo.getMainMenuItems());
-                tireShopItemsAdapter = new TireShopItemsAdapter(activity, viewPagerItems);
-                recyclerItems.setAdapter(tireShopItemsAdapter);
-
-                //todo почему-то npe
-//                tireShopItemsAdapter.setItems(ItemInfo.getMainMenuItems());
-//                tireShopItemsAdapter.notifyDataSetChanged();
-
-
-                closeBtn.setVisibility(View.VISIBLE);
-                goBackBtn.setVisibility(View.GONE);
+                doGoBackButtonAction();
                 break;
+            case R.id.stock_btn:
+                v.startAnimation(animation);
             default:
                 break;
         }
     }
 
+    private void doGoBackButtonAction() {
+        viewPagerItems.clear();
+        viewPagerItems.addAll(ItemInfo.getMainMenuItems());
+        tireShopItemsAdapter = new TireShopItemsAdapter(activity, viewPagerItems, this);
+        recyclerItems.setAdapter(tireShopItemsAdapter);
+
+        //todo почему-то npe
+//                tireShopItemsAdapter.setItems(ItemInfo.getMainMenuItems());
+//                tireShopItemsAdapter.notifyDataSetChanged();
+
+        closeBtn.setVisibility(View.VISIBLE);
+        goBackBtn.setVisibility(View.GONE);
+    }
+
+    public void handleConcreteItemInCategoryAction(ItemInfo itemInfo) {
+        if (ItemInfo.DISK_TYPE.getTypeId() == itemInfo.getTypeId()) {
+            chooseDisk(itemInfo.getClientItemId());
+        }
+    }
+
     public void showRendering(boolean toggle, int price) {
         activity.runOnUiThread(()-> {
-
-            if (View.VISIBLE == itemPanel.getVisibility()) {
-                costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
-                return;
-            }
-
             if (toggle) {
+                if (View.VISIBLE == tireShopHud.getVisibility()) {
+                    costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
+                    return;
+                }
+
                 costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
-                itemPanel.setVisibility(View.VISIBLE);
+                tireShopHud.setVisibility(View.VISIBLE);
                 closeBtn.setVisibility(View.VISIBLE);
                 viewPagerItems.addAll(ItemInfo.getMainMenuItems());
 
                 addItemsIntoViewPager();
             } else {
-                itemPanel.setVisibility(View.GONE);
+                tireShopHud.setVisibility(View.GONE);
             }
         });
     }
 
-
-
     private void addItemsIntoViewPager() {
-        tireShopItemsAdapter = new TireShopItemsAdapter(activity, viewPagerItems);
+        tireShopItemsAdapter = new TireShopItemsAdapter(activity, viewPagerItems, this);
         recyclerItems.setAdapter(tireShopItemsAdapter);
     }
 

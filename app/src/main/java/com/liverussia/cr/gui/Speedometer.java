@@ -74,9 +74,6 @@ public class Speedometer {
     {
         this.activity = activity;
 
-        TireShop tireShop = new TireShop(activity);
-        tireShop.showRendering(true, 300);
-
         activity.runOnUiThread(() -> {
             speedometr_blinker_icon = activity.findViewById(R.id.speedometr_blinker_icon);
             speedometr_speed_text = activity.findViewById(R.id.speedometr_speed_text);

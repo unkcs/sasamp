@@ -109,7 +109,9 @@ public class TireShop implements View.OnClickListener {
 
     public void handleConcreteItemInCategoryAction(ItemInfo itemInfo) {
         if (ItemInfo.DISK_TYPE.getTypeId() == itemInfo.getTypeId()) {
-            chooseDisk(itemInfo.getClientItemId());
+//            chooseDisk(itemInfo.getClientItemId()); todo разобраться, пофиксить и переделать когда-нибудь
+//            sendClickItem(itemInfo.getTypeId(), itemInfo.getItemId());
+            sendClickItem(itemInfo.getTypeId(), itemInfo.getClientItemId());
         }
     }
 

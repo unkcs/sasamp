@@ -1876,3 +1876,7 @@ void CVehicle::ProcessDamage()
 		}
 	}
 }
+
+int32_t CVehicle::AddVehicleUpgrade(int32_t modelId) {
+	return ( ( int32_t(*)(VEHICLE_TYPE*, int32_t) )(g_libGTASA + 0x00516090 + 1) )(m_pVehicle, modelId);
+}

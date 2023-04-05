@@ -105,7 +105,6 @@
 #define RPC_UPDATE_SATIETY 	69
 #define RPC_SHOW_DONATE 	70
 #define RPC_FACILITY_WAR    71
-#define RPC_TUNING_WHEELS    72
 
 
 // Packet 252
@@ -270,8 +269,6 @@ public:
 	static void packetShowDonat(Packet *p);
 
 	static void packetFacilityWar(Packet *p);
-
-	static void packetTireShop(Packet *p);
 };
 
 extern CNetGame *pNetGame;

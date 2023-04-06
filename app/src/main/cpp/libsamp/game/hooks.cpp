@@ -299,29 +299,6 @@ void InitialiseRenderWare_hook() {
 	InitialiseRenderWare();
 }
 
-/* ====================================================== */
-void (*CLoadingScreen_DisplayPCScreen)();
-void CLoadingScreen_DisplayPCScreen_hook()
-{
-//	RwCamera *camera = *(RwCamera **)(g_libGTASA + 0x95B064);
-//
-//	if (RwCameraBeginUpdate(camera))
-//	{
-//		DefinedState2d();
-//		((void (*)())(g_libGTASA + 0x5519C8 + 1))(); // CSprite2d::InitPerFrame()
-//		RwRenderStateSet(rwRENDERSTATETEXTUREADDRESS, (void *)rwTEXTUREADDRESSCLAMP);
-//		((void (*)(bool))(g_libGTASA + 0x198010 + 1))(false); // emu_GammaSet()
-
-		const float percent = *(float*)(g_libGTASA + 0x8F08C0)*2;
-		if (percent <= 0.0f) return;
-
-		g_pJavaWrapper->UpdateSplash((int)percent);
-
-//		RwCameraEndUpdate(camera);
-//		RwCameraShowRaster(camera, 0, 0);
-//	}
-}
-
 int bBlockCWidgetRegionLookUpdate = 0;
 
 /* ====================================================== */
@@ -2976,8 +2953,6 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x0032217C, &CEventHandler__HandleEvents_hook, &CEventHandler__HandleEvents);
 	CHook::InlineHook(g_libGTASA, 0x00281398, &CWidgetRegionLook__Update_hook, &CWidgetRegionLook__Update);
 
-	CHook::InlineHook(g_libGTASA, 0x3D7CA8, &CLoadingScreen_DisplayPCScreen_hook, &CLoadingScreen_DisplayPCScreen);
-
 	CHook::Redirect(g_libGTASA, 0x39AEF4, &Render2dStuff);
 	CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);
 	CHook::InlineHook(g_libGTASA, 0x239D5C, &TouchEvent_hook, &TouchEvent);
@@ -3038,14 +3013,14 @@ void InstallHooks()
 
 	CHook::InlineHook(g_libGTASA, 0x0025CB8C, &MainMenuScreen__OnExit_hook, &MainMenuScreen__OnExit);
 
-	CHook::WriteMemory(g_libGTASA + 0x003DA86C,
-		"\x80\xB4"\
-		"\x00\xAF"\
-		"\x1B\x4B"\
-		"\x7B\x44"\
-		"\x1B\x68", 10); // CRadar::LimitRadarPoint
-
-	CHook::NOP(g_libGTASA + 0x003DA876, 3); // CRadar::LimitRadarPoint
+//	CHook::WriteMemory(g_libGTASA + 0x003DA86C,
+//		"\x80\xB4"\
+//		"\x00\xAF"\
+//		"\x1B\x4B"\
+//		"\x7B\x44"\
+//		"\x1B\x68", 10); // CRadar::LimitRadarPoint
+//
+//	CHook::NOP(g_libGTASA + 0x003DA876, 3); // CRadar::LimitRadarPoint
 
 	// headlights color, wheel size, wheel align
 	CHook::InlineHook(g_libGTASA, 0x005466EC, &CShadows__StoreCarLightShadow_hook, &CShadows__StoreCarLightShadow);

@@ -162,7 +162,7 @@ void InitInGame()
 		pGame->InitInGame();
 		pGame->SetMaxStats();
 
-		g_pJavaWrapper->UpdateSplash(101);
+		g_pJavaWrapper->hideLoadingScreen();
 
 		CHUD::toggleServerLogo(true);
 		bGameInited = true;

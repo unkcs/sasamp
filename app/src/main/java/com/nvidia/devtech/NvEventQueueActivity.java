@@ -35,9 +35,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,16 +57,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.DialogClientSettings;
 import com.liverussia.cr.gui.AdminRecon;
-import com.liverussia.cr.gui.AttachEdit;
-import com.liverussia.cr.gui.AucContainer;
 import com.liverussia.cr.gui.AutoShop;
-import com.liverussia.cr.gui.Casino;
-import com.liverussia.cr.gui.CasinoBaccarat;
-import com.liverussia.cr.gui.CasinoDice;
 import com.liverussia.cr.gui.Casino_LuckyWheel;
-import com.liverussia.cr.gui.DailyReward;
 import com.liverussia.cr.gui.Furniture_factory;
-import com.liverussia.cr.gui.HudManager;
 import com.liverussia.cr.gui.Inventory;
 import com.liverussia.cr.gui.DuelsHud;
 import com.liverussia.cr.gui.MineGame1;
@@ -79,7 +69,6 @@ import com.liverussia.cr.gui.PreDeath;
 import com.liverussia.cr.gui.SamwillManager;
 import com.liverussia.cr.gui.TechIspect;
 import com.liverussia.cr.gui.dialogs.Dialog;
-import com.liverussia.cr.gui.Speedometer;
 import com.liverussia.cr.gui.Notification;
 import com.liverussia.cr.gui.AuthorizationManager;
 import com.liverussia.cr.gui.RegistrationManager;
@@ -90,16 +79,11 @@ import com.liverussia.cr.gui.ShopStoreManager;
 import com.liverussia.cr.gui.GunShopManager;
 import com.liverussia.cr.gui.ChooseSpawn;
 import com.liverussia.cr.gui.Menu;
-import com.liverussia.cr.gui.ChooseServer;
-import com.liverussia.cr.gui.tab.Tab;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -193,7 +177,6 @@ public abstract class NvEventQueueActivity
     private GunShopManager mGunShopManager = null;
     private ChooseSpawn mChooseSpawn = null;
     private Menu mMenu = null;
-    private ChooseServer mChooseServer = null;
 
     /* *
      * Helper function to select fixed window size.
@@ -916,9 +899,6 @@ public abstract class NvEventQueueActivity
 
         //
 
-        //
-
-        mChooseServer = new ChooseServer(this);
         new Furniture_factory(this);
         new AdminRecon(this);
         new DuelsHud(this);
@@ -1460,8 +1440,6 @@ public abstract class NvEventQueueActivity
     public void showMenu() { runOnUiThread(() -> { mMenu.ShowMenu(); }); }
 
     public void showSamwill() { runOnUiThread(() -> { mSamwillManager.Show(); }); }
-
-    public void updateSplash(int percent) { runOnUiThread(() -> { mChooseServer.Update(percent); } ); }
 
     public void ExitGame(){
         finishAndRemoveTask();

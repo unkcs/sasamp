@@ -22,8 +22,8 @@ android {
     //    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         applicationId "com.liverussia.cr"
-        versionName "183"
-        versionCode 183
+        versionName "300"
+        versionCode 300
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled = true
@@ -62,7 +62,6 @@ android {
         }
         debug {
             debuggable true
-            jniDebuggable true
             minifyEnabled false
             multiDexEnabled true
         }
@@ -92,14 +91,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 
     //CrashLytics
-    implementation 'com.google.firebase:firebase-crashlytics:18.3.5'
-    implementation platform('com.google.firebase:firebase-bom:31.1.0')
+    implementation 'com.google.firebase:firebase-crashlytics:18.3.6'
+    implementation platform('com.google.firebase:firebase-bom:31.4.0')
 
     implementation 'com.google.firebase:firebase-crashlytics-ndk'
     implementation 'com.google.firebase:firebase-analytics'
     ///////////////////////////////////////////////////////////////
 
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'com.github.valkriaine:Bouncy:2.3'
     implementation("com.google.guava:guava:31.1-jre")

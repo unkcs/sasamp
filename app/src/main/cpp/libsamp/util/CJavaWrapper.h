@@ -50,8 +50,6 @@ class CJavaWrapper
 
 	jmethodID s_setPauseState;
 
-	//jmethodID s_showSplash;
-	jmethodID s_updateSplash;
 	jmethodID s_ExitGame;
 
 
@@ -90,9 +88,6 @@ public:
 
 	void SetPauseState(bool a1);
 
-	//void ShowSplash();
-	void UpdateSplash(int progress);	
-
 	uint32_t ChangeRegisterSkin(int skin);
 
 	int RegisterSexMale;
@@ -126,6 +121,8 @@ public:
     void SendBuffer(const char string[]);
 
 	jobject activity;
+
+    void hideLoadingScreen();
 };
 
 extern CJavaWrapper* g_pJavaWrapper;

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "bass.h"
+#include "game/Core/Vector.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -69,11 +70,7 @@ typedef unsigned short PLAYERID;
 #pragma message "Compiling for GTASA"
 #endif
 
-#pragma pack(1)
-typedef struct _VECTOR 
-{
-	float X,Y,Z;
-} VECTOR, *PVECTOR;
+
 
 enum eLights
 {

@@ -2367,17 +2367,6 @@ int SetCompAlphaCB_hook(int a1, char a2)
 	return result;
 }
 
-int (*CEntity__RegisterReference)(ENTITY_TYPE *thiz, ENTITY_TYPE **a2);
-int CEntity__RegisterReference_hook(ENTITY_TYPE *thiz, ENTITY_TYPE **a2)
-{
-	if(!thiz)return false;
-	if(!a2)return false;
-//    if( !*((DWORD *)thiz + 4)  )return false;
-//	if(! thiz + 0x36)return false;
-
-	return CEntity__RegisterReference(thiz, a2);
-}
-
 float (*CDraw__SetFOV)(float thiz, float a2);
 float CDraw__SetFOV_hook(float thiz, float a2)
 {
@@ -2391,7 +2380,7 @@ int (*MobileSettings__GetMaxResWidth)();
 int MobileSettings__GetMaxResWidth_hook()
 {
 	//Log("res = %d", ((int(*)())(g_libGTASA + 0x0023816C + 1))());
-	return (int)( ((int(*)())(g_libGTASA + 0x0023816C + 1))()/1.1 );
+	return (int)( ((int(*)())(g_libGTASA + 0x0023816C + 1))()/1.2 );
 }
 
 char **(*CPhysical__Add)(uintptr_t thiz);
@@ -2680,31 +2669,6 @@ uint32_t CWeapon__FireSniper_hook(WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE *pFiri
 	}
 
 	return 1;
-}
-
-VECTOR& (*FindPlayerSpeed)(int a1);
-VECTOR& FindPlayerSpeed_hook(int a1)
-{
-	uintptr_t dwRetAddr = 0;
-	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
-	dwRetAddr -= g_libGTASA;
-
-	if(dwRetAddr == 0x3DF20E + 1)
-	{
-		if(pNetGame)
-		{
-			CPlayerPed *pPlayerPed = pGame->FindPlayerPed();
-			if(pPlayerPed &&
-			   pPlayerPed->IsInVehicle() &&
-			   pPlayerPed->IsAPassenger())
-			{
-				VECTOR vec = {0.1f, 0.1f, 0.1f};
-				return vec;
-			}
-		}
-	}
-
-	return FindPlayerSpeed(a1);
 }
 
 void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TYPE **ppEntity)

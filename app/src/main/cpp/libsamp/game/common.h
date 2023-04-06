@@ -3,6 +3,7 @@
 #include "bass.h"
 #include "game/Core/Vector.h"
 #include "RwMatrix.h"
+#include "game/Entity/Placeable.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -271,15 +272,9 @@ struct MaterialInfo
 };
 
 #pragma pack(1)
-typedef struct _ENTITY_TYPE
+typedef struct _ENTITY_TYPE : CPlaceable
 {
-	uint32_t vtable;
 
-	PADDING(_pad0, 12);
-
-	float fRotZBeforeMat;
-
-	RwMatrix *mat;
 	union {
 		uintptr_t m_pRwObject;
 		uintptr_t m_pRpClump;

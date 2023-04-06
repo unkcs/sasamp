@@ -17,7 +17,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.Samp;
-import com.liverussia.cr.gui.tire_shop.TireShop;
 import com.liverussia.cr.gui.util.Utils;
 import com.liverussia.cr.gui.util.SeekArc;
 import com.nvidia.devtech.NvEventQueueActivity;

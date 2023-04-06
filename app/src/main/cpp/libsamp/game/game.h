@@ -19,7 +19,6 @@
 #include "RW/RenderWare.h"
 #include "widget.h"
 #include "widgetmanager.h"
-#include "stream.h"
 #include "CHandlingDefault.h"
 #include "CActorPed.h"
 #include "CExtendedCarColors.h"

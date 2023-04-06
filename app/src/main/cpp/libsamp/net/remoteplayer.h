@@ -2,6 +2,10 @@
 
 #include "../vendor/raknet/rijndael.h"
 
+#include "../game/common.h"
+#include "../game/vehicle.h"
+#include "../game/playerped.h"
+
 #define PLAYER_STATE_NONE						0
 #define PLAYER_STATE_ONFOOT						17
 #define PLAYER_STATE_PASSENGER					18

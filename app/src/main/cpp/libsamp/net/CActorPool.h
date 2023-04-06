@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../game/CActorPed.h"
+
 #define MAX_ACTORS 1000
 #define INVALID_ACTOR_ID 0xFFFF
 

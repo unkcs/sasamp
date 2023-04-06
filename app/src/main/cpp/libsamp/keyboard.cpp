@@ -334,6 +334,7 @@ void CKeyBoard::Close()
 #include "java_systems/CDuelsGui.h"
 #include "util/patch.h"
 #include "game/CVector.h"
+#include "java_systems/CStyling.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -2346,6 +2347,12 @@ bool ProcessLocalCommands(const char str[])
 		}
 		size = 27 * size;
 		CHUD::ChangeChatTextSize( ceil(size) );
+		return true;
+	}
+
+	if (strcmp(str, "/test_styling") == 0)
+	{
+		CStyling::show(0);
 		return true;
 	}
 

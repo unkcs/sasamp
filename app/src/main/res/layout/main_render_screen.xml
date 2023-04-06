@@ -51,6 +51,7 @@
         <include layout="@layout/donate"/>
         <include layout="@layout/sd_dialog" />
         <include layout="@layout/notification" />
+            <include layout="@layout/styling_center" />
 
     </FrameLayout>
 

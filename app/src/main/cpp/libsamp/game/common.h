@@ -2,6 +2,7 @@
 #include <string>
 #include "bass.h"
 #include "game/Core/Vector.h"
+#include "RwMatrix.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -159,21 +160,6 @@ public:
 
 
 #pragma pack(pop)
-
-#pragma pack(1)
-struct RwMatrixTag
-{
-	VECTOR right;		// 0-12 	; r11 r12 r13
-	uint32_t  flags;	// 12-16
-	VECTOR up;			// 16-28	; r21 r22 r23
-	float  pad_u;		// 28-32
-	VECTOR at;			// 32-44	; r31 r32 r33
-	float  pad_a;		// 44-48
-	VECTOR pos;			// 48-60
-	float  pad_p;		// 60-64
-};
-typedef RwMatrixTag RwMatrix;
-
 
 //-----------------------------------------------------------
 

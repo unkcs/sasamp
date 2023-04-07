@@ -1079,7 +1079,7 @@ void CLocalPlayer::SendAimSyncData()
     aimSync.aspect_ratio = /*GameGetAspectRatio() * */ 255.0f;
     aimSync.byteCamExtZoom = (uint8_t)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);
 
-    WEAPON_SLOT_TYPE* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
+    CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
     if (pwstWeapon->dwState == 2) {
         aimSync.byteWeaponState = WS_RELOADING;
     }

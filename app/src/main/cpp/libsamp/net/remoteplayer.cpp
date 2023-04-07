@@ -765,7 +765,7 @@ void CRemotePlayer::UpdateAimFromSyncData(AIM_SYNC_DATA * pAimSync)
 
 	m_pPlayerPed->SetCameraExtendedZoom(fExtZoom, fAspect);
 
-	WEAPON_SLOT_TYPE* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
+	CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
 	if (pAimSync->byteWeaponState == WS_RELOADING)
 		pwstWeapon->dwState = 2;		// Reloading
 	else

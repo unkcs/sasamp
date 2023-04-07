@@ -882,9 +882,9 @@ void CPlayerPed::DestroyFollowPedTask()
 
 }
 
-int Weapon_FireSniper(WEAPON_SLOT_TYPE* pWeaponSlot, PED_TYPE* pPed)
+int Weapon_FireSniper(CWeapon* pWeaponSlot, PED_TYPE* pPed)
 {
-	return ((int (*)(WEAPON_SLOT_TYPE*, PED_TYPE*))(g_libGTASA + 0x0056668C + 1))(pWeaponSlot, pPed);
+	return ((int (*)(CWeapon*, PED_TYPE*))(g_libGTASA + 0x0056668C + 1))(pWeaponSlot, pPed);
 }
 
 void CPlayerPed::ClearAllWeapons()
@@ -909,7 +909,7 @@ VECTOR* CPlayerPed::GetCurrentWeaponFireOffset() {
 		return nullptr;
 	}
 
-	WEAPON_SLOT_TYPE* pSlot = GetCurrentWeaponSlot();
+	CWeapon* pSlot = GetCurrentWeaponSlot();
 	if (pSlot) {
 		return (VECTOR*)(GetWeaponInfo(pSlot->dwType, 1) + 0x24);
 	}
@@ -946,8 +946,8 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 	}
 }
 
-extern uint32_t (*CWeapon__FireInstantHit)(WEAPON_SLOT_TYPE* thiz, PED_TYPE* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
-extern uint32_t (*CWeapon__FireSniper)(WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
+extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, PED_TYPE* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
+extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
 
 void CPlayerPed::FireInstant() {
 	if(!m_pPed || !GamePool_Ped_GetAt(m_dwGTAId)) {
@@ -975,7 +975,7 @@ void CPlayerPed::FireInstant() {
 		g_pCurrentBulletData = nullptr;
 	}
 
-	WEAPON_SLOT_TYPE *pSlot = GetCurrentWeaponSlot();
+	CWeapon *pSlot = GetCurrentWeaponSlot();
 	if(pSlot) {
 		if(GetCurrentWeapon() == WEAPON_SNIPER) {
 			if(pSlot) {
@@ -1761,7 +1761,7 @@ uint16_t CPlayerPed::GetKeys(uint16_t *lrAnalog, uint16_t *udAnalog)
 	return wRet;
 }
 
-WEAPON_SLOT_TYPE * CPlayerPed::GetCurrentWeaponSlot()
+CWeapon * CPlayerPed::GetCurrentWeaponSlot()
 {
 	if (m_pPed) 
 	{

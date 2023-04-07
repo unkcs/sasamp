@@ -2,6 +2,7 @@
 #include "aimstuff.h"
 #include "bass.h"
 #include "vehicle.h"
+#include "Weapon.h"
 
 class CPlayerPed
 	: public CEntity
@@ -75,7 +76,7 @@ public:
 	void ClearPlayerAimState();
 	void SetAimZ(float fAimZ);
 	float GetAimZ();
-	WEAPON_SLOT_TYPE * GetCurrentWeaponSlot();
+	CWeapon * GetCurrentWeaponSlot();
 	//CAMERA_AIM* GetCurrentAim();
 
 	void ClearAllWeapons();

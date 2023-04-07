@@ -28,11 +28,12 @@ LOCAL_C_INCLUDES += $(wildcard $(LOCAL_PATH)/vendor/)
 # samp
 FILE_LIST := $(wildcard $(LOCAL_PATH)/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/game/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/game/**/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/game/**/**/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/net/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/java_systems/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/java_systems/casino/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/util/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/game/RW/RenderWare.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/gui/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/cryptors/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../santrope-tea-gtasa/encryption/*.cpp)
@@ -47,5 +48,5 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/hash/*.cpp)
 
 LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 LOCAL_STATIC_LIBRARIES := libopenal libopus libenet
-LOCAL_CPPFLAGS := -w -s -fvisibility=hidden -pthread -Wall -fpack-struct=1 -O2 -std=c++17 -fexceptions
+LOCAL_CPPFLAGS := -w -s -fvisibility=hidden -pthread -Wall -fpack-struct=1 -O2 -std=c++20 -fexceptions
 include $(BUILD_SHARED_LIBRARY)

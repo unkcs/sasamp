@@ -4,6 +4,7 @@
 #include "game/Core/Vector.h"
 #include "RwMatrix.h"
 #include "game/Entity/Placeable.h"
+#include "Weapon.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -340,16 +341,6 @@ typedef struct _ENTITY_TYPE : CPlaceable
 //-----------------------------------------------------------
 
 #pragma pack(1)
-typedef struct _WEAPON_SLOT_TYPE
-{
-	uint32_t dwType;
-	uint32_t dwState;
-	uint32_t dwAmmoInClip;
-	uint32_t dwAmmo;
-	PADDING(_pwep1,12);
-} WEAPON_SLOT_TYPE;  // MUST BE EXACTLY ALIGNED TO 28 bytes
-
-#pragma pack(1)
 typedef struct _PED_TYPE
 {
 	ENTITY_TYPE entity; 		// 0000-0184	;entity
@@ -380,7 +371,7 @@ typedef struct _PED_TYPE
 	PADDING(_pad108, 8);		// 1424-1432
 	uint32_t dwPedType;			// 1432-1436	;dwPedType
 	uint32_t dwUnk1;	 // 1436-1440
-	WEAPON_SLOT_TYPE WeaponSlots[13]; // 1440-1804
+	CWeapon WeaponSlots[13]; // 1440-1804
 	PADDING(_pad270, 12); // 1804-1816
 	uint8_t byteCurWeaponSlot; // 1816-1817
 	PADDING(_pad280, 23); // 1817-1840

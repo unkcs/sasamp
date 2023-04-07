@@ -43,9 +43,6 @@ char CKeyBoard::m_utf8Input[MAX_INPUT_LEN * 3 + 0xF];
 int CKeyBoard::m_iInputOffset;
 CKeyBoardHistory *CKeyBoard::m_pkHistory;
 
-bool CKeyBoard::m_bNewKeyboard;
-DataStructures::SingleProducerConsumer<std::string> CKeyBoard::bufferedStrings;
-
 void CKeyBoard::init()
 {
 	Log("Initalizing KeyBoard..");
@@ -86,14 +83,12 @@ void CKeyBoard::init()
 	InitRU();
 	InitNUM();
 
-	m_bNewKeyboard = true;
-
 	Log("KeyBoard inited");
 }
 
 void CKeyBoard::Render()
 {
-	if (!m_bEnable || m_bNewKeyboard)
+	if (!m_bEnable)
 		return;
 
 	ImGuiIO &io = ImGui::GetIO();
@@ -304,6 +299,7 @@ void CKeyBoard::Open()
 
 void CKeyBoard::Close()
 {
+	if(!m_bEnable)return;
 
 	m_bEnable = false;
 
@@ -313,6 +309,8 @@ void CKeyBoard::Close()
 	m_utf8Input[0] = 0;
 	m_iCase = LOWER_CASE;
 	m_iPushedKey = -1;
+
+	CHUD::ToggleChatInput(false);
 
 	CHUD::toggleServerLogo(true);
 	if (pGame->m_bRaceCheckpointsEnabled)
@@ -324,8 +322,6 @@ void CKeyBoard::Close()
 	if(CAdminRecon::bIsToggle) CAdminRecon::tempToggle(true);
 	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(true);
 	//g_pJavaWrapper->ShowVoice();
-
-	return;
 }
 #include "util/CJavaWrapper.h"
 #include "chatwindow.h"
@@ -604,7 +600,6 @@ void CKeyBoard::Send()
 	}
 
 	m_bEnable = false;
-	CHUD::ToggleChatInput(false);
 
 	CHUD::toggleServerLogo(true);
 	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(true);
@@ -2319,21 +2314,6 @@ void CKeyBoard::Flush()
 	memset(m_utf8Input, 0, sizeof(m_utf8Input) - 1);
 }
 
-void CKeyBoard::EnableNewKeyboard()
-{
-	m_bNewKeyboard = true;
-}
-
-void CKeyBoard::EnableOldKeyboard()
-{
-	m_bNewKeyboard = false;
-}
-
-bool CKeyBoard::IsNewKeyboard()
-{
-	return m_bNewKeyboard;
-}
-
 extern void ApplyFPSPatch(uint8_t fps);
 bool ProcessLocalCommands(const char str[])
 {
@@ -2530,4 +2510,14 @@ Java_com_liverussia_cr_gui_HudManager_ChatSetCursor(JNIEnv *env, jobject thiz, j
                                                     jint end) {
     CChatWindow::cursorStart = start;
 	CChatWindow::cursorEnd = end;
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_HudManager_toggleNativeKeyboard(JNIEnv *env, jobject thiz,
+                                                           jboolean toggle) {
+	if (toggle) {
+		CKeyBoard::Open();
+	} else {
+		CKeyBoard::Close();
+	}
 }

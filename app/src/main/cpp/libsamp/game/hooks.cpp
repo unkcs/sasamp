@@ -98,10 +98,13 @@ struct stFile
 	FILE *f;
 };
 
+char lastFile[512];
+
 stFile* (*NvFOpen)(const char*, const char*, int, int);
 stFile* NvFOpen_hook(const char* r0, const char* r1, int r2, int r3)
 {
 	char path[0xFF] = { 0 };
+	strcpy(lastFile, r1);
 	// ----------------------------
 	if(!strncmp(r1+12, "mainV1.scm", 10))
 	{
@@ -738,10 +741,8 @@ void CTimer__StartUserPause_hook()
 	// process pause event
 	if (g_pJavaWrapper)
 	{
-		if (CKeyBoard::IsNewKeyboard())
-		{
-			CKeyBoard::Close();
-		}
+		CKeyBoard::Close();
+
 		g_pJavaWrapper->SetPauseState(true);
 
 		CSpeedometr::tempToggle(false);

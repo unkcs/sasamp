@@ -10,11 +10,13 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,6 +38,7 @@ import com.skydoves.progressview.ProgressView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -143,7 +146,7 @@ public class HudManager {
     native void clickSiren();
     native void SetRadarBgPos(float x1, float y1, float x2, float y2);
     native void SetRadarPos(float x1, float y1);
-    native void ToggleKeyBoard(boolean toggle);
+    native void toggleNativeKeyboard(boolean toggle);
     native void SendChatMessage(byte str[]);
     native void SendChatButton(int buttonID);
     native void ChatSetCursor(int start, int end);
@@ -251,22 +254,22 @@ public class HudManager {
       //  ArrayAdapter<String> autocompleete = new ArrayAdapter (activity, R.layout.chat_autocompleete_line, cities);
       //  chat_input.setAdapter(autocompleete);
 
-//        chat_input.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_SEND) {
-//                    try {
-//                        SendChatMessage(chat_input.getText().toString().getBytes("windows-1251"));
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    }
-//                    chat_input.getText().clear();
-//                    ClickChatj();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
+        chat_input.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    try {
+                        SendChatMessage(chat_input.getText().toString().getBytes("windows-1251"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    chat_input.getText().clear();
+                    ClickChatj();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         defaultChatFontSize = 27;
 
@@ -445,8 +448,15 @@ public class HudManager {
         Utils.HideLayout(hud_gpsactive, false);
     }
 
-    void showKillAnounce(String text) {
-
+    public void ToggleChatInput(boolean toggle){
+        activity.runOnUiThread(() ->
+        {
+            if(toggle){
+                chat_input_layout.setVisibility(View.VISIBLE);
+            }else {
+                chat_input_layout.setVisibility(View.GONE);
+            }
+        });
     }
 
     void hideChat() {
@@ -991,36 +1001,38 @@ public class HudManager {
         });
 
     }
+
+    void toggleKeyboard(boolean toggle) {
+        if(Storage.getBoolean("isAndroidKeyboard")) {
+            // android клава
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            if(toggle)
+                imm.showSoftInput(chat_input, InputMethodManager.SHOW_IMPLICIT);
+            else
+                imm.hideSoftInputFromWindow(chat_input.getWindowToken(), 0);
+        }
+        else {
+            // нативная
+            toggleNativeKeyboard(toggle);
+        }
+    }
     public void ClickChatj(){
         activity.runOnUiThread(() -> {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             if (chat_input_layout.getVisibility() == View.VISIBLE) {
                 chat_input_layout.setVisibility(View.GONE);
-                ToggleKeyBoard(false);
+                toggleKeyboard(false);
                 cursorPos = 0;
-                //   imm.hideSoftInputFromWindow(chat_input.getWindowToken(), 0);
 
             } else {
                 chat_input_layout.setVisibility(View.VISIBLE);
                 chat_input.requestFocus();
-                ToggleKeyBoard(true);
+                toggleKeyboard(true);
                 cursorPos = chat_input.getText().length();
-               //  imm.showSoftInput(chat_input, InputMethodManager.SHOW_IMPLICIT);
             }
         });
+    }
 
-       // ClickChat();
-    }
-    public void ToggleChatInput(boolean toggle){
-        activity.runOnUiThread(() ->
-        {
-            if(toggle){
-                chat_input_layout.setVisibility(View.VISIBLE);
-            }else {
-                chat_input_layout.setVisibility(View.GONE);
-            }
-        });
-    }
     public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
         private final LayoutInflater inflater;

@@ -57,6 +57,9 @@ public:
 	static std::string m_sInput;
 
 	static int dop_butt;
+
+	static void Send();
+
 private:
 	static void Render();
 	static bool OnTouchEvent(int type, bool multi, int x, int y);
@@ -68,7 +71,6 @@ private:
 
 	static void HandleInput(kbKey &key);
 	static void DeleteCharFromInput();
-	static void Send();
 
 public:
 	static bool m_bEnable;
@@ -94,7 +96,4 @@ public:
 	static char m_utf8Input[MAX_INPUT_LEN * 3 + 0xF];
 	static int m_iInputOffset;
 	static CKeyBoardHistory *m_pkHistory;
-
-	static bool m_bNewKeyboard;
-	static DataStructures::SingleProducerConsumer<std::string> bufferedStrings;
 };

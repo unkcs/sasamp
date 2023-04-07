@@ -13,6 +13,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.liverussia.cr.R;
 
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class SplashActivity extends AppCompatActivity {
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
+		FirebaseCrashlytics.getInstance().deleteUnsentReports();
+		FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
+
 		checkAndroidVersion();
 
         super.onCreate(savedInstanceState);

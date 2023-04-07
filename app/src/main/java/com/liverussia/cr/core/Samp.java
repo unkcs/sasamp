@@ -29,7 +29,7 @@ import java.util.TimerTask;
 
 public class Samp extends GTASA
 {
-    static Activity activity;
+    public static Activity activity;
 
     public static native void playUrlSound(String url);
     public static DecimalFormat formatter = null;

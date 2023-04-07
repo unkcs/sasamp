@@ -1172,19 +1172,19 @@ void ScrAttachObjectToPlayer(RPCParameters* rpcParams)
 void ScrPlaySound(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrPlaySound");
-
-	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-
-	int iSound;
-	float fX, fY, fZ;
-	bsData.Read(iSound);
-	bsData.Read(fX);
-	bsData.Read(fY);
-	bsData.Read(fZ);
-	pGame->PlaySound(iSound, fX, fY, fZ);
+//
+//	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+//	int iBitLength = rpcParams->numberOfBitsOfData;
+//
+//	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
+//
+//	int iSound;
+//	float fX, fY, fZ;
+//	bsData.Read(iSound);
+//	bsData.Read(fX);
+//	bsData.Read(fY);
+//	bsData.Read(fZ);
+//	pGame->PlaySound(iSound, fX, fY, fZ);
 }
 
 void ScrSetPlayerWantedLevel(RPCParameters *rpcParams)

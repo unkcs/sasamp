@@ -146,6 +146,8 @@ void ApplyPatches_level0()
 	// osMutexStuff
 	CHook::WriteMemory(g_libGTASA + 0x001A7ECE, (uintptr_t)"\x4F\xF0\x01\x00\x00\x46", 6);
 
+	CHook::RET(g_libGTASA + 0x00508E54);
+
 	// CdStreamInit(6);
 	CHook::WriteMemory(g_libGTASA + 0x3981EC, (uintptr_t)"\x06\x20", 2);
 

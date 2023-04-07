@@ -1,5 +1,7 @@
 package com.liverussia.launcher.storage;
 
+import static com.liverussia.cr.core.Samp.activity;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -9,6 +11,19 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Storage {
     public static final String STORAGE_NAME = "LiveRussia";
+
+    public static boolean getBoolean(String value) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(value, false);
+    }
+
+    public static void setBoolean(String element, boolean value) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(element, value);
+        editor.apply();
+    }
 
     public static void addProperty(StorageElements element, String value, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);

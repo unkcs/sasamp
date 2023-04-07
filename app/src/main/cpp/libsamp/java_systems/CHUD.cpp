@@ -543,17 +543,6 @@ void CHUD::SetChatInput(const char ch[])
     env->DeleteLocalRef(jch);
 }
 
-void CHUD::ToggleChatInput(bool toggle)
-{
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-
-
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID ToggleChatInput = env->GetMethodID(clazz, "ToggleChatInput", "(Z)V");
-
-    env->CallVoidMethod(thiz, ToggleChatInput, toggle);
-}
-
 void CHUD::AddChatMessage(const char msg[])
 {
     if(!thiz)return;
@@ -659,6 +648,17 @@ Java_com_liverussia_cr_gui_HudManager_SetRadarPos(JNIEnv *env, jobject thiz, jfl
 
 }
 
+void CHUD::ToggleChatInput(bool toggle)
+{
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
+
+
+    jclass clazz = env->GetObjectClass(thiz);
+    jmethodID ToggleChatInput = env->GetMethodID(clazz, "ToggleChatInput", "(Z)V");
+
+    env->CallVoidMethod(thiz, ToggleChatInput, toggle);
+}
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_HudManager_SendChatMessage(JNIEnv *env, jobject thiz, jbyteArray str) {
@@ -669,21 +669,15 @@ Java_com_liverussia_cr_gui_HudManager_SendChatMessage(JNIEnv *env, jobject thiz,
     //const char *inputText = pEnv->GetStringUTFChars(str, nullptr);
 
     if(pNetGame) {
-        pNetGame->SendChatMessage(const_cast<char *>(szStr.c_str()));
+        CKeyBoard::m_sInput = szStr;
+        CKeyBoard::Send();
+       // pNetGame->SendChatMessage(const_cast<char *>(szStr.c_str()));
 
     }
 
     env->ReleaseByteArrayElements(str, pMsg, JNI_ABORT);
 }
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_ToggleKeyBoard(JNIEnv *env, jobject thiz, jboolean toggle) {
-    if (toggle) {
-        CKeyBoard::Open();
-    } else {
-        CKeyBoard::Close();
-    }
-}
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_HudManager_clickCameraMode(JNIEnv *env, jobject thiz) {

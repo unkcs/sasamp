@@ -54,6 +54,7 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.DialogClientSettings;
 import com.liverussia.cr.gui.AdminRecon;
@@ -1442,6 +1443,8 @@ public abstract class NvEventQueueActivity
     public void showSamwill() { runOnUiThread(() -> { mSamwillManager.Show(); }); }
 
     public void ExitGame(){
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false);
+
         finishAndRemoveTask();
         System.exit(0);
     }

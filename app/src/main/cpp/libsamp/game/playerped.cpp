@@ -8,6 +8,7 @@
 #include "util/patch.h"
 #include "ePedState.h"
 #include "CWorld.h"
+#include "CModelInfo.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -97,7 +98,7 @@ CPlayerPed::~CPlayerPed()
 	if (m_pPed && IsValidGamePed(m_pPed) && m_pPed->entity.vtable != (g_libGTASA + 0x5C7358))
 	{
 		FlushAttach();
-		if (IN_VEHICLE(m_pPed)) {
+		if (m_pPed->bInVehicle) {
 			RemoveFromVehicleAndPutAt(100.0f, 100.0f, 20.0f);
 
 		//	ClearAllTasks();
@@ -159,7 +160,7 @@ void CPlayerPed::ApplyCrouch()
 		return;
 	}
 
-	if (!(m_pPed->dwStateFlags & 256))
+	if (!(m_pPed->bIsDucking))
 	{
 		if (!IsCrouching())
 		{
@@ -182,7 +183,7 @@ void CPlayerPed::ResetCrouch()
 	{
 		return;
 	}
-	m_pPed->dwStateFlags &= 0xFBFFFFFF;
+	m_pPed->bIsDucking = false;
 	if (m_pPed->pPedIntelligence)
 	{
 		((int (*)(CPedIntelligence*))(g_libGTASA + 0x0044E164 + 1))(m_pPed->pPedIntelligence);
@@ -201,7 +202,7 @@ bool CPlayerPed::IsCrouching()
 	{
 		return false;
 	}
-	return IS_CROUCHING(m_pPed);
+	return m_pPed->bIsDucking;
 }
 
 void CPlayerPed::SetCameraExtendedZoom(float fZoom)
@@ -244,10 +245,7 @@ bool CPlayerPed::IsInVehicle()
 {
 	if(!m_pPed) return false;
 
-	if(IN_VEHICLE(m_pPed))
-		return true;
-
-	return false;
+	return m_pPed->bInVehicle;
 }
 int GameGetWeaponModelIDFromWeaponID(int iWeaponID)
 {
@@ -521,8 +519,8 @@ BYTE CPlayerPed::GetCurrentWeapon()
 // 0.3.7
 bool CPlayerPed::IsAPassenger()
 {
-	//if(m_pPed->dwAction == PEDSTATE_PASSENGER) return true;
-	if(m_pPed->pVehicle && IN_VEHICLE(m_pPed))
+	//if(m_pPed->m_nPedState == PEDSTATE_PASSENGER) return true;
+	if(m_pPed->pVehicle && m_pPed->bInVehicle)
 	{
 		VEHICLE_TYPE *pVehicle = (VEHICLE_TYPE *)m_pPed->pVehicle;
 
@@ -554,7 +552,7 @@ void CPlayerPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
 		return;
 	}
 	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
-	if(m_pPed && IN_VEHICLE(m_pPed))
+	if(m_pPed && m_pPed->bInVehicle)
 		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, fX, fY, fZ);
 }
 
@@ -729,7 +727,7 @@ void CPlayerPed::ExitCurrentVehicle()
 
 	//VEHICLE_TYPE* ThisVehicleType = 0;
 
-	if(IN_VEHICLE(m_pPed))
+	if(m_pPed->bInVehicle)
 	{
 		ScriptCommand(&TASK_LEAVE_ANY_CAR, m_dwGTAId);
 
@@ -1040,12 +1038,12 @@ void CPlayerPed::SetRotation(float fRotation)
 // 0.3.7
 uint8_t CPlayerPed::GetActionTrigger()
 {
-	return (uint8_t)m_pPed->dwAction;
+	return (uint8_t)m_pPed->m_nPedState;
 }
 
-void CPlayerPed::SetActionTrigger(uint8_t action)
+void CPlayerPed::SetActionTrigger(ePedState action)
 {
-	m_pPed->dwAction = (uint32_t)action;
+	m_pPed->m_nPedState = action;
 }
 
 int GetInternalBoneIDFromSampID(int sampid);
@@ -1422,9 +1420,10 @@ bool IsBlendAssocGroupLoaded(int iGroup)
 void CPlayerPed::SetMoveAnim(int iAnimGroup)
 {
 	Log("SetMoveAnim %d", iAnimGroup);
-	if (iAnimGroup == 0)
+	if (iAnimGroup == ANIM_GROUP_DEFAULT)
 	{
-		return;
+		auto pModel = reinterpret_cast<CPedModelInfo*>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
+		iAnimGroup = pModel->m_nAnimType;
 	}
 
 	// Find which anim block to load
@@ -1645,7 +1644,7 @@ ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
 	char buf[100];
 
 	if(!m_pPed) return nullptr;
-	if( IN_VEHICLE(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId))
+	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
 		return 0;
 
 	vecStart.X = m_pPed->entity.mat->pos.X;

@@ -108,7 +108,7 @@ public:
 	// roflan
 	//BYTE FindDeathReasonAndResponsiblePlayer(PLAYERID *nPlayer);
 	PLAYERID FindDeathResponsiblePlayer();
-	void SetActionTrigger(uint8_t action);
+	void SetActionTrigger(ePedState action);
 	PED_TYPE * GetGtaActor() { return m_pPed; };
 
 	void AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot);

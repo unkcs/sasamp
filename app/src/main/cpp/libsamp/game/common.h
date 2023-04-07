@@ -38,7 +38,6 @@ typedef unsigned short PLAYERID;
 
 #define PADDING(x,y) uint8_t x[y]
 
-#define IN_VEHICLE(x) ((x->dwStateFlags & 0x100) >> 8)
 #define IS_CROUCHING(x) ((x->dwStateFlags >> 26) & 1)
 
 #define BIT_SET(byte,nbit)   ((byte) |=  (1<<(nbit)))
@@ -200,12 +199,6 @@ struct SHandlingData
 	int iValue;
 	SHandlingData(uint8_t uFlag, float fvalue, int ivalue) : flag(uFlag), fValue(fvalue), iValue(ivalue) {}
 };
-
-typedef struct _CVector2D
-{
-	int X;
-	int Y;
-} CVector2D;
 
 typedef struct _CVector2DFloat
 {

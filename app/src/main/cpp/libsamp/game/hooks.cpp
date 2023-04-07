@@ -2250,7 +2250,7 @@ int CPad__CycleCameraModeDownJustDown_hook(void* thiz)
 		lastTick = GetTickCount();
 	}
 
-	if (IN_VEHICLE(pPed))
+	if (pPed->bInVehicle)
 	{
 		if (bPressed)
 		{
@@ -2803,7 +2803,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 					if(!g_pCurrentBulletData->pEntity)
 					{
 						PED_TYPE *pLocalPed = pGame->FindPlayerPed()->GetGtaActor();
-						if(*ppEntity == pLocalPed || (IN_VEHICLE(pLocalPed) && *(uintptr_t *)ppEntity == pLocalPed->pVehicle))
+						if(*ppEntity == pLocalPed || pLocalPed->bInVehicle && *(uintptr_t *)ppEntity == pLocalPed->pVehicle)
 						{
 							*ppEntity = nullptr;
 							vecPos->X = 0.0f;

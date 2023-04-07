@@ -6,6 +6,7 @@
 #include "game/Entity/Placeable.h"
 #include "Weapon.h"
 #include "game/Entity/Entity.h"
+#include "game/Entity/Ped.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -146,20 +147,6 @@ enum eSecondaryTasks //array indexes
 	TASK_SECONDARY_MAX
 };
 
-class CTaskManager
-{
-public:
-	void* m_aPrimaryTasks[5];
-	void* m_aSecondaryTasks[6];
-	class CPed* m_pPed;
-};
-
-class CPedIntelligence
-{
-public:
-	class CPed* m_pPed;
-	CTaskManager   m_TaskMgr;
-};
 
 
 #pragma pack(pop)
@@ -274,47 +261,6 @@ struct MaterialInfo
 };
 
 //-----------------------------------------------------------
-
-#pragma pack(1)
-typedef struct _PED_TYPE
-{
-	ENTITY_TYPE entity; 		// 0000-0184	;entity
-	PADDING(_pad106, 174);		// 0184-0358
-	uint32_t _pad107;			// 0358-0362	;dwPedType
-	PADDING(_pad101, 722);		// 0362-1084
-	CPedIntelligence* pPedIntelligence; // 1084-1088
-	PADDING(_pad100, 8);		// 1088-1096
-	uint32_t dwAction;			// 1096-1100	;Action
-	PADDING(_pad102, 52);		// 1100-1152
-	uint32_t dwStateFlags; 		// 1152-1156	;StateFlags
-
-	uintptr_t dwInvulFlags; // 1136-1140		0x1000 = can_decap
-	PADDING(_pad228, 8); // 1140-1148
-	uintptr_t Tasks; // 1148-1152
-	uintptr_t dwPlayerInfoOffset; // 1152-1156
-
-	PADDING(_pad103, 168);		// 1156-1344
-	float fHealth;		 		// 1344-1348	;Health
-	float fMaxHealth;			// 1348-1352	;MaxHealth
-	float fArmour;				// 1352-1356	;Armour
-	float fAim;
-	PADDING(_pad104, 8);		// 1356-1368
-	float m_fCurrentRotation;			// 1368-1372	;Rotation1
-	float m_fAimingRotation;			// 1372-1376	;Rotation2
-	PADDING(_pad105, 44);		// 1376-1420
-	uint32_t pVehicle;			// 1420-1424	;pVehicle
-	PADDING(_pad108, 8);		// 1424-1432
-	uint32_t dwPedType;			// 1432-1436	;dwPedType
-	uint32_t dwUnk1;	 // 1436-1440
-	CWeapon WeaponSlots[13]; // 1440-1804
-	PADDING(_pad270, 12); // 1804-1816
-	uint8_t byteCurWeaponSlot; // 1816-1817
-	PADDING(_pad280, 23); // 1817-1840
-	uint32_t pFireObject;	 // 1840-1844
-	PADDING(_pad281, 44); // 1844-1888
-	uint32_t  dwWeaponUsed; // 1888-1892
-	uintptr_t pdwDamageEntity; // 1892-1896
-} PED_TYPE;
 
 enum eDoors
 {

@@ -7,6 +7,7 @@
 #include "Weapon.h"
 #include "game/Entity/Entity.h"
 #include "game/Entity/Ped.h"
+#include "game/RW/rwlpcore.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -162,15 +163,6 @@ struct RwListEntry
 struct RwList
 {
 	RwListEntry root;
-};
-
-struct RwObject
-{
-	unsigned char type;
-	unsigned char subtype;
-	unsigned char flags;
-	unsigned char privateFlags;
-	void* parent;            // should be RwFrame with RpClump
 };
 
 struct RwFrame

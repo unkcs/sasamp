@@ -409,13 +409,6 @@ extern RwCamera*    (*RwCameraShowRaster)(RwCamera * camera, void *pDev, RwUInt3
 
 #define rwTEXTUREBASENAMELENGTH     32
 
-struct RwLLLink
-{
-    RwLLLink *next;
-    RwLLLink *prev;
-};
-typedef struct RwLLLink  RwLLLink;
-
 struct RwTexture
 {
     RwRaster           *raster; /** pointer to RwRaster with data */                      //+0
@@ -432,3 +425,14 @@ struct RwTexture
 };
 typedef struct RwTexture RwTexture;
 
+/*--- Automatically derived from: C:/daily/rwsdk/src/batypehf.h ---*/
+
+typedef struct RwObjectHasFrame RwObjectHasFrame;
+typedef RwObjectHasFrame * (*RwObjectHasFrameSyncFunction)(RwObjectHasFrame *object);
+
+struct RwObjectHasFrame
+{
+    RwObject                     object;
+    RwLLLink                     lFrame;
+    RwObjectHasFrameSyncFunction sync;
+};

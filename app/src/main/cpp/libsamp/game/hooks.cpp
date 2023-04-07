@@ -14,7 +14,7 @@ extern "C"
 {
 #include "..//santrope-tea-gtasa/encryption/aes.h"
 }
-
+#include "RW/rpworld.h"
 #include "..///..//santrope-tea-gtasa/CGameResourcesDecryptor.cpp"
 #include "..///..//santrope-tea-gtasa/CGameResourcesDecryptor.h"
 #include "chatwindow.h"
@@ -1504,7 +1504,7 @@ int CPlayerInfo__Process_hook(uintptr_t *thiz, uintptr_t *a2)
 	}
 	return CPlayerInfo__Process(thiz, a2);
 }
-typedef uintptr_t RpClump;
+
 RwFrame* CClumpModelInfo_GetFrameFromId_Post(RwFrame* pFrameResult, RpClump* pClump, int id)
 {
 	if (pFrameResult)
@@ -1680,35 +1680,32 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 	return material;
 }
 
-uintptr_t CVehicle__SetupRenderCB(uintptr_t atomic, void* data)
+RpAtomic* CVehicle__SetupRenderCB(RpAtomic* atomic, void* data)
 {
-	if (*(RpGeometry * *)(atomic + 24))
+	if (atomic->geometry)
 	{
-		((RpGeometry * (*)(RpGeometry*, uintptr_t, void*))(g_libGTASA + 0x001E284C + 1))(*(RpGeometry * *)(atomic + 24), (uintptr_t)CVehicle__SetupRenderMatCB, (void*)data); // RpGeometryForAllMaterials
+		((RpGeometry * (*)(RpGeometry*, uintptr_t, void*))(g_libGTASA + 0x001E284C + 1))(atomic->geometry, (uintptr_t)CVehicle__SetupRenderMatCB, (void*)data); // RpGeometryForAllMaterials
 	}
 
 	return atomic;
 }
 #include "..//cryptors/MODELINFO_EDITABLE_result.h"
-typedef uintptr_t RpClump;
-void (*CVehicleModelInfo__SetEditableMaterials)(uintptr_t);
-void CVehicleModelInfo__SetEditableMaterials_hook(uintptr_t clump)
-{
-	PROTECT_CODE_MODELINFO_EDITABLE;
-	RpClump *pClump = (RpClump *)clump;
 
-	if (pNetGame && pClump)
+void (*CVehicleModelInfo__SetEditableMaterials)(RpClump* clump);
+void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
+{
+	if (pNetGame && clump)
 	{
 		if (pNetGame->GetVehiclePool())
 		{
-			VEHICLEID vehId = pNetGame->GetVehiclePool()->FindIDFromRwObject((RwObject *)clump);
+			VEHICLEID vehId = pNetGame->GetVehiclePool()->FindIDFromRwObject(&clump->object);
 			CVehicle *pVehicle = pNetGame->GetVehiclePool()->GetAt(vehId);
 			if (pVehicle)
 			{
 				if (pVehicle->m_bReplacedTexture)
 				{
 					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
-					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(pClump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
+					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(clump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
 				}
 			}
 		}

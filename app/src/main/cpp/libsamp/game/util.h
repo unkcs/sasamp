@@ -1,5 +1,7 @@
 #pragma once
 
+#include "game/Entity/Entity.h"
+
 PED_TYPE* GamePool_FindPlayerPed();
 PED_TYPE* GamePool_Ped_GetAt(int iID);
 int GamePool_Ped_GetIndex(PED_TYPE *pActor);

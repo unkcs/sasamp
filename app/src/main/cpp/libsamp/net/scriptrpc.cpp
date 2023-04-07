@@ -1701,10 +1701,38 @@ void ScrSetObjectRotation(RPCParameters* rpcParams)
 	}
 }
 
+void ScrSetPlayerTeam(RPCParameters *rpcParams)
+{
+	Log("RPC: ScrSetPlayerTeam");
+	auto * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	int iBitLength = rpcParams->numberOfBitsOfData;
+
+	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
+
+	PLAYERID playerId;
+	uint8_t teamId;
+
+	bsData.Read(playerId);
+	bsData.Read(teamId);
+
+	if(teamId == 255)
+		return;
+
+	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
+	if(playerId == pPlayerPool->GetLocalPlayerID())
+		pPlayerPool->GetLocalPlayer()->GetPlayerPed()->SetMoveAnim(teamId);
+	else
+	{
+		if(pPlayerPool->m_pPlayers[playerId] && pPlayerPool->GetAt(playerId)->GetPlayerPed())
+			pPlayerPool->GetAt(playerId)->GetPlayerPed()->SetMoveAnim(teamId);
+	}
+}
+
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
 {
 	Log("Registering ScriptRPC's..");
 
+	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerTeam, ScrSetPlayerTeam);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrDisplayGameText, ScrDisplayGameText);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetGravity, ScrSetGravity);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrForceSpawnSelection,ScrForceSpawnSelection);

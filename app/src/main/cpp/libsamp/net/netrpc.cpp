@@ -1364,6 +1364,7 @@ void RegisterRPCs(RakClientInterface* pRakClient)
 void UnRegisterRPCs(RakClientInterface* pRakClient)
 {
 	Log("UnRegistering RPC's..");
+	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrSetPlayerTeam);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_UpdateScoresPingsIPs);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_InitGame);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ServerJoin);

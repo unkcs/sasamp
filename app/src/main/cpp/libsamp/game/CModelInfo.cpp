@@ -21,14 +21,11 @@ void CModelInfo::injectHooks()
     CHook::Redirect(g_libGTASA + 0x00336690, &CModelInfo::AddPedModel);
     CHook::Redirect(g_libGTASA + 0x00336618, &CModelInfo::AddVehicleModel);
     CHook::Redirect(g_libGTASA + 0x00336268, &CModelInfo::AddAtomicModel);
-
-    // CHook::WriteMemory(g_libGTASA + 0x006796CC, &CModelInfo::ms_modelInfoPtrs, sizeof(void*));
-    // *(CBaseModelInfo**)(g_libGTASA + 0x006796CC) = *CModelInfo::ms_modelInfoPtrs;
 }
 
 CVehicleModelInfo* CModelInfo::AddVehicleModel(int index)
 {
-    Log("AddVehicleModel %d", index);
+  //  Log("AddVehicleModel %d", index);
     auto& pInfo = CModelInfo::ms_vehicleModelInfoStore.AddItem();
 
     ((void(*)(CVehicleModelInfo*))(g_libGTASA + 0x0033559C + 1))(&pInfo); // CBaseModelInfo::CBaseModelInfo();
@@ -43,7 +40,7 @@ CVehicleModelInfo* CModelInfo::AddVehicleModel(int index)
 
 CPedModelInfo* CModelInfo::AddPedModel(int index)
 {
-    Log("CModelInfo_AddPedModel_hook %d", index);
+ //   Log("CModelInfo_AddPedModel_hook %d", index);
 
     auto& pInfo = CModelInfo::ms_pedModelInfoStore.AddItem();
 
@@ -59,7 +56,7 @@ CPedModelInfo* CModelInfo::AddPedModel(int index)
 
 CAtomicModelInfo* CModelInfo::AddAtomicModel(int index)
 {
-    Log("AddAtomicModel %d", index);
+   // Log("AddAtomicModel %d", index);
     auto& pInfo = ms_atomicModelInfoStore.AddItem();
 
     ((void(*)(CAtomicModelInfo*))(g_libGTASA + 0x0033559C + 1))(&pInfo);

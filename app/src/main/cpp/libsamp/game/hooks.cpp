@@ -1332,30 +1332,6 @@ int CAnimBlendNode__FindKeyFrame_hook(int a1, float a2, int a3, int a4)
 	else return 0;
 }
 
-/* ====================================================== */
-//
-//
-//VEHICLE_MODEL VehicleModels[370];
-//int VehicleModelsCount = 0;
-//
-//VEHICLE_MODEL* (*CModelInfo_AddVehicleModel)(int id);
-//VEHICLE_MODEL* CModelInfo_AddVehicleModel_hook(int id)
-//{
-//	VEHICLE_MODEL* model = &VehicleModels[VehicleModelsCount];
-//	memset(model, 0, sizeof(VEHICLE_MODEL));
-//
-//	((void(*)(void* thiz))(g_libGTASA + 0x00337AA0 + 1))((void*)model); // CVehicleModelInfo::CVehicleModelInfo();
-//
-//	model->vtable = (uintptr_t)(g_libGTASA + 0x005C6EE0);			// assign CVehicleModelInfo vmt
-//
-//	((uintptr_t(*)(VEHICLE_MODEL*))(*(void**)(model->vtable + 0x1C)))(model); // CVehicleModelInfo::Init()
-//
-//	*(VEHICLE_MODEL * *)(g_libGTASA + 0x87BF48 + (id * 4)) = model; // CModelInfo::ms_modelInfoPtrs
-//
-//	VehicleModelsCount++;
-//	return model;
-//}
-
 #include "..//keyboard.h"
 
 uint64_t(*CWorld_ProcessPedsAfterPreRender)();
@@ -2910,11 +2886,6 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x3DE9A8, &CRadar__DrawRadarGangOverlay_hook, &CRadar__DrawRadarGangOverlay);
 
 	CHook::CodeInject(g_libGTASA + 0x2D99F4, (uintptr_t)PickupPickUp_hook, 1);
-
-
-	//CHook::InlineHook(g_libGTASA, 0x00336268, &CModelInfo_AddAtomicModel_hook, &CModelInfo_AddAtomicModel);
-
-	//CHook::InlineHook(g_libGTASA, 0x00336618, &CModelInfo_AddVehicleModel_hook, &CModelInfo_AddVehicleModel); // dangerous
 
 	CHook::InlineHook(g_libGTASA, 0x0033DA5C, &CAnimManager__UncompressAnimation_hook, &CAnimManager__UncompressAnimation);
 	CHook::InlineHook(g_libGTASA, 0x001AECC0, &RwFrameAddChild_hook, &RwFrameAddChild);

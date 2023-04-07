@@ -45,47 +45,4 @@ public:
 	static void AddDebugMessageNonFormatted(char* szStr);
 
 	static void FilterInvalidChars(char* szString);
-
-protected:
-	//void Render();
-
-public:
-	//void RenderText(const char* u8Str, float posX, float posY, uint32_t dwColor, float alphaNewMessage);
-	void SetChatDissappearTimeout(uint32_t uiTimeoutStart, uint32_t uiTimeoutEnd);
-
-	static void ProcessPushedCommands();
-
-	static int cursorStart;
-	static int cursorEnd;
-private:
-	void ReInit();
-
-	void AddToChatWindowBuffer(eChatMessageType eType, char* szString, char* szNick,
-		uint32_t dwTextColor, uint32_t dwNickColor);
-	void PushBack(CHAT_WINDOW_ENTRY &entry);
-
-	uint8_t GetAlphaFromLastTimePushedMessage();
-
-private:
-	
-	uint32_t m_uiMaxTimeChatHide;
-	uint32_t m_uiTimeChatHideBegin;
-
-	int m_iMaxMessages;
-	std::vector<CHAT_WINDOW_ENTRY*> m_vChatWindowEntries;
-
-	uint32_t m_dwTextColor;
-	uint32_t m_dwInfoColor;
-	uint32_t m_dwDebugColor;
-
-	uint32_t m_uiLastTimePushedMessage;
-
-	bool m_bNewMessage;
-	uint32_t m_uiTimePushed;
-
-	float m_fPosBeforeBoundChat;
-	float m_fOffsetBefore;
-public:
-	bool m_bPendingReInit;
-	//static DataStructures::SingleProducerConsumer< BUFFERED_COMMAND_CHAT> bufferedChat;
 };

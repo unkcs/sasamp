@@ -14,9 +14,6 @@ extern CGUI *pGUI;
 extern CNetGame *pNetGame;
 extern CAMERA_AIM * pcaInternalAim;
 extern CGame * pGame;
-int CChatWindow::cursorStart = 0;
-int CChatWindow::cursorEnd = 0;
-bool g_bShowVoiceList = false;
 
 #define NUM_OF_MESSAGES	100
 

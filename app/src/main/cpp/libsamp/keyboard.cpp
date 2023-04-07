@@ -2309,8 +2309,7 @@ void CKeyBoard::Flush()
 	m_sInput.clear();
 	CHUD::SetChatInput(m_sInput.c_str());
 	m_iInputOffset = 0;
-	CChatWindow::cursorStart = 0;
-	CChatWindow::cursorEnd = 0;
+
 	memset(m_utf8Input, 0, sizeof(m_utf8Input) - 1);
 }
 
@@ -2504,13 +2503,7 @@ JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_HudManager_SendChatButton(JNIEnv *env, jobject thiz, jint button_id) {
 	CKeyBoard::dop_butt = button_id;
 }
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_ChatSetCursor(JNIEnv *env, jobject thiz, jint start,
-                                                    jint end) {
-    CChatWindow::cursorStart = start;
-	CChatWindow::cursorEnd = end;
-}
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_HudManager_toggleNativeKeyboard(JNIEnv *env, jobject thiz,

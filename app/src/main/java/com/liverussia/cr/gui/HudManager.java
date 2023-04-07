@@ -115,7 +115,6 @@ public class HudManager {
     // damage
     TextView death_anounce_text;
 
-    private int cursorPos = 0;
     private final int INVALID = -1;
     private final int ME_BUTTON = 0;
     private final int DO_BUTTON = 1;
@@ -149,7 +148,6 @@ public class HudManager {
     native void toggleNativeKeyboard(boolean toggle);
     native void SendChatMessage(byte str[]);
     native void SendChatButton(int buttonID);
-    native void ChatSetCursor(int start, int end);
     native void clickCameraMode();
     native void clickMultText();
     ChatAdapter adapter;
@@ -247,12 +245,6 @@ public class HudManager {
         chat_input_layout.setVisibility(View.GONE);
         chat_input = activity.findViewById(R.id.chat_input);
         chat_input.setShowSoftInputOnFocus(false);
-
-       // String[] cities = {"Москва", "Самара", "Вологда", "Волгоград", "Саратов", "Воронеж"};
-       // AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autocomplete);
-        // Создаем адаптер для автозаполнения элемента AutoCompleteTextView
-      //  ArrayAdapter<String> autocompleete = new ArrayAdapter (activity, R.layout.chat_autocompleete_line, cities);
-      //  chat_input.setAdapter(autocompleete);
 
         chat_input.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
@@ -986,18 +978,6 @@ public class HudManager {
     public void AddToChatInput(String msg){
         activity.runOnUiThread(() -> {
             chat_input.setText(msg);
-            // Log.d("af", "start = "+chat_input.getSelectionStart()+" size = "+chat_input.getText().length());
-           // if(!msg.isEmpty()) {
-             //   if (cursorPos == chat_input.getText().length()-1) {
-                    int len = chat_input.getText().length();
-                    if(len >= 0) chat_input.setSelection(len);
-              //      cursorPos = chat_input.getSelectionStart();
-              //  }
-          //  }
-          //  else{
-           //     cursorPos = 0;
-           // }
-           //
         });
 
     }
@@ -1022,13 +1002,11 @@ public class HudManager {
             if (chat_input_layout.getVisibility() == View.VISIBLE) {
                 chat_input_layout.setVisibility(View.GONE);
                 toggleKeyboard(false);
-                cursorPos = 0;
 
             } else {
                 chat_input_layout.setVisibility(View.VISIBLE);
                 chat_input.requestFocus();
                 toggleKeyboard(true);
-                cursorPos = chat_input.getText().length();
             }
         });
     }

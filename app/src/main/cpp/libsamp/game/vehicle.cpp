@@ -5,6 +5,8 @@ extern CGame* pGame;
 #include "..//CDebugInfo.h"
 #include "..//net/netgame.h"
 #include "CVector.h"
+#include "CVehicleModelInfo.h"
+#include "CModelInfo.h"
 
 extern CNetGame* pNetGame;
 
@@ -271,12 +273,9 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 {
     m_bIsOnRightTurnLight = toggle;
 
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
 
-	uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
-
-	CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
+	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
 	VECTOR vecFront;
 	// 0 - front light
@@ -317,12 +316,9 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 
 void CVehicle::toggleReverseLight(bool toggle)
 {
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
 
-	uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
-
-	CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
+	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
 	VECTOR vecRight;
 	vecRight.X = m_avDummyPos[1].x;
@@ -364,12 +360,9 @@ void CVehicle::toggleLeftTurnLight(bool toggle)
 {
     m_bIsOnLeftTurnLight = toggle;
 
-    uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-    uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
 
-    uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
-
-    CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
+	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
     VECTOR vecFront;
     // 0 - front light
@@ -782,7 +775,7 @@ void* GetSuspensionLinesFromModel(int nModelIndex, int& numWheels)
 
 uint8_t* GetCollisionDataFromModel(int nModelIndex)
 {
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[nModelIndex];
 
 	if (!pModelInfoStart)
@@ -823,7 +816,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		m_pCustomHandling = new tHandlingData;
 	}
 
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
 	if (!pModelInfoStart)
 	{
@@ -987,7 +980,7 @@ void CVehicle::ResetVehicleHandling()
 	{
 		m_pCustomHandling = new tHandlingData;
 	}
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
 
 	if (!pModelInfoStart)

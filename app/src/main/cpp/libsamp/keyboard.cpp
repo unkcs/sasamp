@@ -334,6 +334,7 @@ void CKeyBoard::Close()
 #include "java_systems/CDuelsGui.h"
 #include "util/patch.h"
 #include "game/CVector.h"
+#include "game/CModelInfo.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -2426,7 +2427,7 @@ bool ProcessLocalCommands(const char str[])
 		CPlayerPed *pPlayer = pGame->FindPlayerPed();
 		CVehicle* pVehicle = pPlayer->GetCurrentVehicle();
 
-		uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+		auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 		uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[pVehicle->m_pVehicle->entity.nModelIndex];
 
 		if (!pModelInfoStart)

@@ -14,7 +14,7 @@
 class CModelInfo {
 public:
 
-    static CBaseModelInfo* ms_modelInfoPtrs[20000];
+    static CBaseModelInfo* ms_modelInfoPtrs[30000];
 
     static void injectHooks();
 

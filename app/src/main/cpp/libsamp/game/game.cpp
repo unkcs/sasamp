@@ -5,6 +5,7 @@
 #include "java_systems/CHUD.h"
 #include "util/patch.h"
 #include "CGtaWidgets.h"
+#include "CModelInfo.h"
 
 void ApplyPatches();
 void ApplyInGamePatches();
@@ -116,7 +117,7 @@ uint32_t CGame::CreatePickup(int iModel, int iType, float fX, float fY, float fZ
 
 	if(iModel > 0 && iModel < 20000)
 	{
-		uintptr_t *dwModelArray = (uintptr_t*)(g_libGTASA+0x87BF48);
+		auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
     	if(dwModelArray[iModel] == 0)
     		iModel = 18631;
 	}

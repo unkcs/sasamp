@@ -7,6 +7,7 @@
 #include "..//net/netgame.h"
 #include "util/patch.h"
 #include "CVector.h"
+#include "CModelInfo.h"
 
 #define SA_ADDR(addr) (g_libGTASA + (addr))
 CObject* CSkyBox::m_pSkyObjectDaily = nullptr;
@@ -67,7 +68,7 @@ void CSkyBox::SetEnabled(bool bEnable)
 
 void CSkyBox::Initialise()
 {
-	auto* dwModelArray = (uintptr_t*)(SA_ADDR(0x87BF48));
+	auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
 	if (!dwModelArray[17476])
 		return;
 

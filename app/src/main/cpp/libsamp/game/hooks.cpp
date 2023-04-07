@@ -393,32 +393,32 @@ void CStreaming_InitImageList_hook()
 }
 
 /* ====================================================== */
-typedef struct _PED_MODEL
-{
-	uintptr_t 	vtable;
-	uint8_t		data[88];
-} PED_MODEL; // SIZE = 92
+//typedef struct _PED_MODEL
+//{
+//	uintptr_t 	vtable;
+//	uint8_t		data[88];
+//} PED_MODEL; // SIZE = 92
+//
+//PED_MODEL PedsModels[370];
+//int PedsModelsCount = 0;
 
-PED_MODEL PedsModels[370];
-int PedsModelsCount = 0;
-
-PED_MODEL* (*CModelInfo_AddPedModel)(int id);
-PED_MODEL* CModelInfo_AddPedModel_hook(int id)
-{
-	PED_MODEL* model = &PedsModels[PedsModelsCount];
-	memset(model, 0, sizeof(PED_MODEL));								// initialize by zero
-
-	((void(*)(void* thiz))(g_libGTASA + 0x0033559C + 1))((void*)model); // CBaseModelInfo::CBaseModelInfo();
-
-    model->vtable = (uintptr_t)(g_libGTASA+0x5C6E90);					// assign CPedModelInfo vmt
-
-    (( uintptr_t (*)(PED_MODEL*))(*(void**)(model->vtable+0x1C)))(model);  // CClumpModelInfo::Init()
-
-    *(PED_MODEL**)(g_libGTASA+0x87BF48+(id*4)) = model; // CModelInfo::ms_modelInfoPtrs
-
-	PedsModelsCount++;
-	return model;
-}
+//PED_MODEL* (*CModelInfo_AddPedModel)(int id);
+//PED_MODEL* CModelInfo_AddPedModel_hook(int id)
+//{
+//	PED_MODEL* model = &PedsModels[PedsModelsCount];
+//	memset(model, 0, sizeof(PED_MODEL));								// initialize by zero
+//
+//	((void(*)(void* thiz))(g_libGTASA + 0x0033559C + 1))((void*)model); // CBaseModelInfo::CBaseModelInfo();
+//
+//    model->vtable = (uintptr_t)(g_libGTASA+0x5C6E90);					// assign CPedModelInfo vmt
+//
+//    (( uintptr_t (*)(PED_MODEL*))(*(void**)(model->vtable+0x1C)))(model);  // CClumpModelInfo::Init()
+//
+//    *(PED_MODEL**)(g_libGTASA+0x87BF48+(id*4)) = model; // CModelInfo::ms_modelInfoPtrs
+//
+//	PedsModelsCount++;
+//	return model;
+//}
 /* ====================================================== */
 
 uint32_t (*CRadar__GetRadarTraceColor)(uint32_t color, uint8_t bright, uint8_t friendly);
@@ -1057,8 +1057,12 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 	return atomic;
 }
 
+#include "CModelInfo.h"
+
 void InstallSpecialHooks()
 {
+	CModelInfo::injectHooks();
+
 	//CHook::WriteMemory(g_libGTASA + 0x52F4C6, (uintptr_t)"\x00\x22\xC4\xF2\xC8\x32", 6); // CEntity::ProcessLightsForEntity
 	//CHook::JMPCode(g_libGTASA + 0x3A9B10 + 0x1, g_libGTASA + 0x3A98AC + 0x1);
 	// Fix sky multitude
@@ -1328,51 +1332,29 @@ int CAnimBlendNode__FindKeyFrame_hook(int a1, float a2, int a3, int a4)
 	else return 0;
 }
 
-
 /* ====================================================== */
-struct _ATOMIC_MODEL
-{
-	uintptr_t func_tbl;
-	char data[56];
-};
-extern struct _ATOMIC_MODEL* ATOMIC_MODELS;
-
-uintptr_t(*CModelInfo_AddAtomicModel)(int iModel);
-uintptr_t CModelInfo_AddAtomicModel_hook(int iModel)
-{
-	uint32_t iCount = *(uint32_t*)(g_libGTASA + 0x7802C4);
-	_ATOMIC_MODEL* model = &ATOMIC_MODELS[iCount];
-	*(uint32_t*)(g_libGTASA + 0x7802C4) = iCount + 1;
-
-	((void(*)(_ATOMIC_MODEL*))(*(uintptr_t*)(model->func_tbl + 0x1C)))(model);
-	_ATOMIC_MODEL** ms_modelInfoPtrs = (_ATOMIC_MODEL**)(g_libGTASA + 0x87BF48);
-	ms_modelInfoPtrs[iModel] = model;
-	return (uintptr_t)model;
-}
-
-/* ====================================================== */
-
-
-VEHICLE_MODEL VehicleModels[370];
-int VehicleModelsCount = 0;
-
-VEHICLE_MODEL* (*CModelInfo_AddVehicleModel)(int id);
-VEHICLE_MODEL* CModelInfo_AddVehicleModel_hook(int id)
-{
-	VEHICLE_MODEL* model = &VehicleModels[VehicleModelsCount];
-	memset(model, 0, sizeof(VEHICLE_MODEL));
-
-	((void(*)(void* thiz))(g_libGTASA + 0x00337AA0 + 1))((void*)model); // CVehicleModelInfo::CVehicleModelInfo();
-
-	model->vtable = (uintptr_t)(g_libGTASA + 0x005C6EE0);			// assign CVehicleModelInfo vmt
-
-	((uintptr_t(*)(VEHICLE_MODEL*))(*(void**)(model->vtable + 0x1C)))(model); // CVehicleModelInfo::Init()
-
-	*(VEHICLE_MODEL * *)(g_libGTASA + 0x87BF48 + (id * 4)) = model; // CModelInfo::ms_modelInfoPtrs
-
-	VehicleModelsCount++;
-	return model;
-}
+//
+//
+//VEHICLE_MODEL VehicleModels[370];
+//int VehicleModelsCount = 0;
+//
+//VEHICLE_MODEL* (*CModelInfo_AddVehicleModel)(int id);
+//VEHICLE_MODEL* CModelInfo_AddVehicleModel_hook(int id)
+//{
+//	VEHICLE_MODEL* model = &VehicleModels[VehicleModelsCount];
+//	memset(model, 0, sizeof(VEHICLE_MODEL));
+//
+//	((void(*)(void* thiz))(g_libGTASA + 0x00337AA0 + 1))((void*)model); // CVehicleModelInfo::CVehicleModelInfo();
+//
+//	model->vtable = (uintptr_t)(g_libGTASA + 0x005C6EE0);			// assign CVehicleModelInfo vmt
+//
+//	((uintptr_t(*)(VEHICLE_MODEL*))(*(void**)(model->vtable + 0x1C)))(model); // CVehicleModelInfo::Init()
+//
+//	*(VEHICLE_MODEL * *)(g_libGTASA + 0x87BF48 + (id * 4)) = model; // CModelInfo::ms_modelInfoPtrs
+//
+//	VehicleModelsCount++;
+//	return model;
+//}
 
 #include "..//keyboard.h"
 
@@ -1912,7 +1894,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 	float v18; // s15
 	float v19; // ST08_4
 
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 
 	v2 = pVeh->m_pVehicle;
 	v3 = *((uintptr_t*)v2 + 5);
@@ -2070,7 +2052,7 @@ void CAutomobile__UpdateWheelMatrix_hook(VEHICLE_TYPE* thiz, int nodeIndex, int 
 void (*CAutomobile__PreRender)(VEHICLE_TYPE* thiz);
 void CAutomobile__PreRender_hook(VEHICLE_TYPE* thiz)
 {
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[thiz->entity.nModelIndex];
 
 	float fOldFront = *(float*)(pModelInfoStart + 88);
@@ -2922,7 +2904,7 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x239D5C, &TouchEvent_hook, &TouchEvent);
     //
 
-	CHook::InlineHook(g_libGTASA, 0x336690, &CModelInfo_AddPedModel_hook, &CModelInfo_AddPedModel); // hook is dangerous
+//	CHook::InlineHook(g_libGTASA, 0x336690, &CModelInfo_AddPedModel_hook, &CModelInfo_AddPedModel); // hook is dangerous
 	CHook::InlineHook(g_libGTASA, 0x3DBA88, &CRadar__GetRadarTraceColor_hook, &CRadar__GetRadarTraceColor); // dangerous
 	CHook::InlineHook(g_libGTASA, 0x3DAF84, &CRadar__SetCoordBlip_hook, &CRadar__SetCoordBlip);
 	CHook::InlineHook(g_libGTASA, 0x3DE9A8, &CRadar__DrawRadarGangOverlay_hook, &CRadar__DrawRadarGangOverlay);
@@ -2930,9 +2912,9 @@ void InstallHooks()
 	CHook::CodeInject(g_libGTASA + 0x2D99F4, (uintptr_t)PickupPickUp_hook, 1);
 
 
-	CHook::InlineHook(g_libGTASA, 0x00336268, &CModelInfo_AddAtomicModel_hook, &CModelInfo_AddAtomicModel);
+	//CHook::InlineHook(g_libGTASA, 0x00336268, &CModelInfo_AddAtomicModel_hook, &CModelInfo_AddAtomicModel);
 
-	CHook::InlineHook(g_libGTASA, 0x00336618, &CModelInfo_AddVehicleModel_hook, &CModelInfo_AddVehicleModel); // dangerous
+	//CHook::InlineHook(g_libGTASA, 0x00336618, &CModelInfo_AddVehicleModel_hook, &CModelInfo_AddVehicleModel); // dangerous
 
 	CHook::InlineHook(g_libGTASA, 0x0033DA5C, &CAnimManager__UncompressAnimation_hook, &CAnimManager__UncompressAnimation);
 	CHook::InlineHook(g_libGTASA, 0x001AECC0, &RwFrameAddChild_hook, &RwFrameAddChild);

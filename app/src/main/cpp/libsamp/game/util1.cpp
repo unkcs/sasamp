@@ -1,6 +1,7 @@
 #include "../main.h"
 #include "game.h"
 #include "CWorld.h"
+#include "CModelInfo.h"
 
 #define PI 3.14159265
 
@@ -1911,9 +1912,9 @@ int LineOfSight(VECTOR* start, VECTOR* end, void* colpoint, uintptr_t ent,
 bool IsPedModel(unsigned int iModelID)
 {
 	if(iModelID < 0 || iModelID > 20000) return false;
-    uintptr_t *dwModelArray = (uintptr_t*)(g_libGTASA+0x87BF48);
+    auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
     
-    uintptr_t ModelInfo = dwModelArray[iModelID];
+    uintptr_t ModelInfo = reinterpret_cast<uintptr_t>(dwModelArray[iModelID]);
     if(ModelInfo && *(uintptr_t*)ModelInfo == (uintptr_t)(g_libGTASA+0x5C6E90/*CPedModelInfo vtable*/))
         return true;
 
@@ -1924,9 +1925,9 @@ bool IsPedModel(unsigned int iModelID)
 bool IsValidModel(unsigned int uiModelID)
 {
     if(uiModelID < 0 || uiModelID > 20000) return false;
-    uintptr_t *dwModelArray = (uintptr_t*)(g_libGTASA+0x87BF48);
+    auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
 
-    uintptr_t dwModelInfo = dwModelArray[uiModelID];
+    uintptr_t dwModelInfo = reinterpret_cast<uintptr_t>(dwModelArray[uiModelID]);
     if(dwModelInfo && *(uintptr_t*)(dwModelInfo+0x34/*pRwObject*/))
         return true;
 
@@ -1935,7 +1936,7 @@ bool IsValidModel(unsigned int uiModelID)
 
 uint16_t GetModelReferenceCount(int nModelIndex)
 {
-	uintptr_t *dwModelarray = (uintptr_t*)(g_libGTASA+0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t *pModelInfoStart = (uint8_t*)dwModelarray[nModelIndex];
 	
 	return *(uint16_t*)(pModelInfoStart+0x1E);
@@ -2223,8 +2224,8 @@ uintptr_t GetModelInfoByID(int iModelID)
 		return false;
 	}
 
-	uintptr_t* dwModelArray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-	return dwModelArray[iModelID];
+	auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
+	return reinterpret_cast<uintptr_t>(dwModelArray[iModelID]);
 }
 
 

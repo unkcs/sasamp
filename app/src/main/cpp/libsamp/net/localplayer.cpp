@@ -186,6 +186,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CDialog.h"
 #include "java_systems/CTechInspect.h"
 #include "java_systems/casino/CBaccarat.h"
+#include "java_systems/CTireShop.h"
 
 CAMERA_AIM* caAim = new CAMERA_AIM();
 
@@ -471,7 +472,7 @@ bool CLocalPlayer::Process()
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow)
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || CTireShop::bIsShow)
 	{
 		needDrawableHud = false;
 	}

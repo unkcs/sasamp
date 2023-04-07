@@ -11,6 +11,7 @@
 
 jclass CTireShop::clazz = nullptr;
 jobject CTireShop::thiz = nullptr;
+bool CTireShop::bIsShow = false;
 
 void CTireShop::startRendering(bool toggle, uint32_t price) {
     JNIEnv* env = g_pJavaWrapper->GetEnv();
@@ -38,6 +39,12 @@ void CTireShop::show(bool toggle, uint32_t price) {
 
     jmethodID method = env->GetMethodID(clazz, "showRendering", "(ZI)V");
     env->CallVoidMethod(CTireShop::thiz, method, toggle, price);
+
+    if (toggle) {
+        CTireShop::bIsShow = true;
+    } else {
+        CTireShop::bIsShow = false;
+    }
 }
 
 void CNetGame::packetTireShop(Packet* p)

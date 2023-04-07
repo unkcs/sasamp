@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.liverussia.cr.R;
@@ -31,21 +33,21 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
     private int selectedItem = -1;
     @Getter
     @Setter
-	private List<ItemInfo> items;
+    private List<ItemInfo> items;
 
-	public TireShopItemsAdapter(Activity activity, List<ItemInfo> items, TireShop tireShop) {
-		 this.activity = activity;
-		 this.items = items;
-         this.tireShop = tireShop;
-	}
-	
-	@NonNull
-	@Override
+    public TireShopItemsAdapter(Activity activity, List<ItemInfo> items, TireShop tireShop) {
+        this.activity = activity;
+        this.items = items;
+        this.tireShop = tireShop;
+    }
+
+    @NonNull
+    @Override
     public TireShopItemsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(activity).inflate(R.layout.tire_shop_item, parent, false);
-		return new TireShopItemsViewHolder(v);
+        return new TireShopItemsViewHolder(v);
     }
-  
+
     @Override
     public void onBindViewHolder(@NonNull TireShopItemsViewHolder holder, int position) {
         ItemInfo itemInfo = this.items.get(position);
@@ -56,7 +58,7 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
         }
 
 
-		holder.image.setOnClickListener(view -> {
+        holder.image.setOnClickListener(view -> {
             view.startAnimation(AnimationUtils.loadAnimation(activity,R.anim.button_click));
 
             new Handler().postDelayed(() -> {
@@ -75,15 +77,26 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
     }
 
     private void handleMainMenuAction(ItemInfo itemInfo) {
-        ImageView goBackBtn = activity.findViewById(R.id.go_back_btn);
-        goBackBtn.setVisibility(View.VISIBLE);
-        ImageView closeBtn = activity.findViewById(R.id.close_btn);
-        closeBtn.setVisibility(View.GONE);
 
+        ConstraintLayout dialog = activity.findViewById(R.id.dialog);
 
         if (ItemInfo.DISK_TYPE.equals(itemInfo)) {
             items.clear();
             items.addAll(ItemInfo.getDisks());
+
+            ImageView goBackBtn = activity.findViewById(R.id.go_back_btn);
+            goBackBtn.setVisibility(View.VISIBLE);
+            ImageView closeBtn = activity.findViewById(R.id.close_btn);
+            closeBtn.setVisibility(View.GONE);
+
+            dialog.setVisibility(View.GONE);
+        } else {
+            dialog.setVisibility(View.VISIBLE);
+
+            TextView dialogTitle = activity.findViewById(R.id.dialog_title);
+            dialogTitle.setText(itemInfo.getItemName());
+
+            tireShop.setDialogItemInfo(itemInfo);
         }
 
         notifyDataSetChanged();
@@ -107,17 +120,17 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
 
     public static class TireShopItemsViewHolder extends RecyclerView.ViewHolder {
 
-		ImageView image;
+        ImageView image;
 
         public TireShopItemsViewHolder(View itemView) {
             super(itemView);
 
-			image = itemView.findViewById(R.id.roulette_item);
+            image = itemView.findViewById(R.id.roulette_item);
         }
     }
-	
-	private void setAnimation(View view) {	
-    Animation anim = AnimationUtils.loadAnimation(activity, R.anim.button_click);
-    view.startAnimation(anim);
-}
+
+    private void setAnimation(View view) {
+        Animation anim = AnimationUtils.loadAnimation(activity, R.anim.button_click);
+        view.startAnimation(anim);
+    }
 }

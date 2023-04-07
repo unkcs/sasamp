@@ -11,6 +11,7 @@ static class CTireShop {
 public:
     static jobject thiz;
     static jclass clazz;
+    static bool bIsShow;
 
     static void startRendering(bool toggle, uint32_t price);
 

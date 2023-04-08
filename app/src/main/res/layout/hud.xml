@@ -926,29 +926,9 @@
             app:srcCompat="@drawable/bus_text" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--            <ImageView-->
-    <!--            android:id="@+id/hud_logo_image"-->
-    <!--            android:layout_width="@dimen/_40sdp"-->
-    <!--            android:layout_height="@dimen/_40sdp"-->
-    <!--            android:background="@drawable/logo_circle"-->
-    <!--            android:backgroundTint="@color/yellow"-->
-    <!--            android:backgroundTintMode="src_in"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent" />-->
-    <!--    <ImageView-->
-    <!--        android:id="@+id/hud_logo"-->
-    <!--        android:layout_width="@dimen/_140sdp"-->
-    <!--        android:layout_height="@dimen/_50sdp"-->
-    <!--        android:adjustViewBounds="true"-->
-    <!--        android:src="@drawable/moscow"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
-
     <include layout="@layout/chat"/>
 
     <include layout="@layout/salary_skill" />
-
-
 
     <!--    <include layout="@layout/gametext"/>-->
 

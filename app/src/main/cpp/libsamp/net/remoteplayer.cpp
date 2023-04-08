@@ -95,7 +95,6 @@ void CRemotePlayer::Process()
 				GetPlayerPed()->GiveWeapon(m_ofSync.byteCurrentWeapon, 9999);
 				GetPlayerPed()->SetArmedWeapon(m_ofSync.byteCurrentWeapon);
 			}
-
 			UpdateOnFootPositionAndSpeed(&m_ofSync.vecPos, &m_ofSync.vecMoveSpeed);
 			UpdateOnFootTargetPosition();
 		}
@@ -161,7 +160,6 @@ void CRemotePlayer::Process()
 			{
 				GetPlayerPed()->ClearPlayerAimState();
 			}
-
 			if( m_ofSync.vecMoveSpeed.X == 0.0f &&
 				m_ofSync.vecMoveSpeed.Y == 0.0f &&
 				m_ofSync.vecMoveSpeed.Z == 0.0f)

@@ -1238,9 +1238,9 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
 	if (thiz && pEntity) onDamage((PED_TYPE*)*(uintptr_t*)thiz, (PED_TYPE*)pEntity);
 	int weaponid = thiz->iWeaponType;
 	float fDamage;
-	if( weaponid < 0 || weaponid > size(m_fWeaponDamages) )
+	if( weaponid < 0 || weaponid > std::size(m_fWeaponDamages) )
 	{
-		fDamage = thiz->fDamage;
+		fDamage = thiz->fDamage / 3.0303030303;
 	}
 	else {
 		fDamage = m_fWeaponDamages[weaponid];
@@ -1366,33 +1366,8 @@ uint64_t CWorld_ProcessPedsAfterPreRender_hook()
 	return res;
 }
 
-int RemoveModelIDs[MAX_REMOVE_MODELS];
-VECTOR RemovePos[MAX_REMOVE_MODELS];
-float RemoveRad[MAX_REMOVE_MODELS];
-int iTotalRemovedObjects = 0;
-
 
 #include "util.h"
-
-int(*CFileLoader__LoadObjectInstance)(uintptr_t, uintptr_t);
-int CFileLoader__LoadObjectInstance_hook(uintptr_t thiz, uintptr_t name)
-{
-	for (int i = 0; i < iTotalRemovedObjects; i++)
-	{
-		if (RemoveModelIDs[i] == *(uint32_t*)(thiz + 28))
-		{
-			VECTOR pos;
-			pos.X = *(float*)(thiz);
-			pos.Y = *(float*)(thiz + 4);
-			pos.Z = *(float*)(thiz + 8);
-			if (GetDistanceBetween3DPoints(&pos, &RemovePos[i]) <= RemoveRad[i])
-			{
-				*(int*)(thiz + 28) = 19300;
-			}
-		}
-	}
-	return CFileLoader__LoadObjectInstance(thiz, name);
-}
 
 #include <list>
 

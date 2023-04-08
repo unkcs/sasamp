@@ -975,18 +975,24 @@ void CPlayerPed::FireInstant() {
 
 	CWeapon *pSlot = GetCurrentWeaponSlot();
 	if(pSlot) {
-		if(GetCurrentWeapon() == WEAPON_SNIPER) {
-			if(pSlot) {
-				Weapon_FireSniper(pSlot, m_pPed);
-			} else {
-				Weapon_FireSniper(nullptr, nullptr);
-			}
-		} else {
+		if(GetCurrentWeapon() == WEAPON_SNIPER)
+		{
+			if(m_pPed)
+				CWeapon__FireSniper(pSlot, m_pPed, nullptr, nullptr);
+			else
+				CWeapon__FireSniper(nullptr, m_pPed, nullptr, nullptr);
+		}
+		else
+		{
 			VECTOR vecBonePos;
 			VECTOR vecOut;
 
-			GetWeaponInfoForFire(false, &vecBonePos, &vecOut);
-			CWeapon__FireInstantHit(pSlot, m_pPed, &vecBonePos, &vecOut, nullptr, nullptr, nullptr, 0, 1);
+			GetWeaponInfoForFire(true, &vecBonePos, &vecOut);
+
+			if(m_pPed)
+				CWeapon__FireInstantHit(pSlot, m_pPed, &vecBonePos, &vecOut, nullptr, nullptr, nullptr, 0, 1);
+			else
+				CWeapon__FireInstantHit(nullptr, m_pPed, &vecBonePos, &vecOut, nullptr, nullptr, nullptr, 0, 1);
 		}
 	}
 

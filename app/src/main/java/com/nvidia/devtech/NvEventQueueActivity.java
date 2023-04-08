@@ -118,7 +118,6 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
     protected boolean paused = false;
 
 	protected boolean supportPauseResume = true;
-    protected boolean ResumeEventDone = false;
 
     //accelerometer related
   //  protected boolean wantsAccelerometer = false;
@@ -145,7 +144,7 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
 	protected SurfaceHolder cachedSurfaceHolder = null;
     private int surfaceWidth = 0;
     private int surfaceHeight = 0;
-
+    protected boolean ResumeEventDone = false;
     private int fixedWidth = 0;
     private int fixedHeight = 0;
     private boolean HasGLExtensions = false;
@@ -553,8 +552,6 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
             hideSystemUI();
-           // this.paused = false;
-        //    resumeEvent();
         }
         super.onWindowFocusChanged(hasFocus);
     }
@@ -591,7 +588,6 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
      * And remaps as needed into the native calls exposed by nv_event.h
      */
     public void onPause() {
-        pauseEvent();
         super.onPause();
     }
     
@@ -640,21 +636,6 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
         } catch (InterruptedException e) {
         }
     }
-
-//    public void DoResumeEvent()
-//    {
-//        new Thread(new Runnable() {
-//            public void run() {
-//                while (NvEventQueueActivity.this.cachedSurfaceHolder == null)
-//                {
-//                    NvEventQueueActivity.this.mSleep(1000);
-//                }
-//                System.out.println("Call from DoResumeEvent");
-//                NvEventQueueActivity.this.resumeEvent();
-//                NvEventQueueActivity.this.ResumeEventDone = true;
-//            }
-//        }).start();
-//    }
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// Auto-generated method stub
@@ -861,13 +842,15 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
 
         mMenu = new Menu(this);
 
+        DoResumeEvent();
+
         holder.addCallback(new Callback()
         {
             // @Override
             public void surfaceCreated(SurfaceHolder holder)
             {
                 System.out.println("systemInit.surfaceCreated");
-
+                boolean firstRun = NvEventQueueActivity.this.cachedSurfaceHolder == null;
                 cachedSurfaceHolder = holder;
 
                 if (fixedWidth!=0 && fixedHeight!=0)
@@ -886,10 +869,13 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
                     });
                 }
 
-                System.out.println("entering resumeEvent");
-                resumeEvent();
-                System.out.println("returned from resumeEvent");
-
+                if(!firstRun && ResumeEventDone)
+                {
+                    System.out.println("entering resumeEvent");
+                    resumeEvent();
+                    paused = false;
+                    System.out.println("returned from resumeEvent");
+                }
                 setWindowSize(surfaceWidth, surfaceHeight);
             }
 
@@ -919,12 +905,26 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
                 System.out.println("systemInit.surfaceDestroyed");
                 viewIsActive = false;
                 pauseEvent();
+                paused = true;
                 destroyEGLSurface();
             }
         });
         return true;
     }
 
+    public void DoResumeEvent() {
+        new Thread(new Runnable() {
+            public void run() {
+                while (NvEventQueueActivity.this.cachedSurfaceHolder == null) {
+                    NvEventQueueActivity.this.mSleep(1000);
+                }
+                Log.d(TAG, "Call from DoResumeEvent");
+                NvEventQueueActivity.this.resumeEvent();
+                Log.d(TAG,"DoResumeEvent done");
+                ResumeEventDone = true;
+            }
+        }).start();
+    }
 
     /** The number of bits requested for the red component */
     protected int redSize     = 5;

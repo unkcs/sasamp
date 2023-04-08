@@ -1371,11 +1371,6 @@ extern int iTotalRemovedObjects;
 
 void CNetGame::ShutDownForGameRestart()
 {
-	iTotalRemovedObjects = 0;
-	for (int i = 0; i < MAX_REMOVE_MODELS; i++)
-	{
-		RemoveModelIDs[i] = -1;
-	}
 	for(PLAYERID playerId = 0; playerId < MAX_PLAYERS; playerId++)
 	{
 		CRemotePlayer* pPlayer = m_pPlayerPool->GetAt(playerId);

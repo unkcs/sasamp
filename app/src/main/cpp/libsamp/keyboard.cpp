@@ -599,18 +599,7 @@ void CKeyBoard::Send()
 		}
 	}
 
-	m_bEnable = false;
-
-	CHUD::toggleServerLogo(true);
-	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(true);
-	if(pGame->isCasinoDiceActive)g_pJavaWrapper->TempToggleCasinoDice(true);
-	if(CBaccarat::bIsShow) CBaccarat::tempToggle(true);
-	if(CAdminRecon::bIsToggle) CAdminRecon::tempToggle(true);
-	if (pGame->m_bRaceCheckpointsEnabled)
-	{
-		CHUD::toggleGps(true);
-	}
-	//g_pJavaWrapper->ShowVoice();
+	CKeyBoard::Close();
 }
 
 kbKey *CKeyBoard::GetKeyFromPos(int x, int y)

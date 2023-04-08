@@ -978,6 +978,8 @@ public class HudManager {
     public void AddToChatInput(String msg){
         activity.runOnUiThread(() -> {
             chat_input.setText(msg);
+            int len = chat_input.getText().length();
+            if(len >= 0) chat_input.setSelection(len);
         });
 
     }

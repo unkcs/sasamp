@@ -127,6 +127,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="imagePath" value="C:\Users\plaka\OneDrive\Рабочий стол\1.png" />
+                                                <entry key="scalingPercent" value="68" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -359,11 +361,6 @@
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

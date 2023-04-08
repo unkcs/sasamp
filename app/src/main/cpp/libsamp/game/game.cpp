@@ -63,7 +63,7 @@ void CGame::exitGame()
 	//delete pNetGame;
     //exit(0);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+   // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	g_pJavaWrapper->ExitGame();
 }
@@ -123,13 +123,13 @@ uint32_t CGame::CreatePickup(int iModel, int iType, float fX, float fY, float fZ
 	}
 	else iModel = 18631;
 
-	if(!ScriptCommand(&is_model_available, iModel))
-	{
-		ScriptCommand(&request_model, iModel);
-		ScriptCommand(&load_requested_models);
-		while(!ScriptCommand(&is_model_available, iModel))
-			usleep(1000);
-	}
+//	if(!ScriptCommand(&is_model_available, iModel))
+//	{
+//		ScriptCommand(&request_model, iModel);
+//		ScriptCommand(&load_requested_models);
+//		while(!ScriptCommand(&is_model_available, iModel))
+//			usleep(1000);
+//	}
 
 	ScriptCommand(&create_pickup, iModel, iType, fX, fY, fZ, &hnd);
 

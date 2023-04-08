@@ -571,10 +571,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <include
-                layout="@layout/duels_hud"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="0dp" />
+            <include layout="@layout/duels_hud" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

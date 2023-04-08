@@ -1042,7 +1042,7 @@ void CLocalPlayer::SendPassengerFullSyncData()
 
 	psSync.byteDriveBy = 0;//m_bPassengerDriveByMode;
 
-	psSync.byteCurrentWeapon = 0;//m_pPlayerPed->GetCurrentWeapon();
+	psSync.byteCurrentWeapon = m_pPlayerPed->GetCurrentWeapon();//m_pPlayerPed->GetCurrentWeapon();
 
 	m_pPlayerPed->GetMatrix(&mat);
 	psSync.vecPos.X = mat.pos.X;

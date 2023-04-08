@@ -66,7 +66,7 @@ void CHUD::ChangeChatTextSize(int size) {
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_HudInit(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_HudInit(JNIEnv *env, jobject thiz) {
 
     CHUD::thiz = env->NewGlobalRef(thiz);
     jUpdateHudInfo = env->GetMethodID(env->GetObjectClass(thiz), "UpdateHudInfo", "(IIIIII)V");
@@ -363,7 +363,7 @@ void CHUD::UpdateMoney()
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_ClickEnterPassengerButton(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_ClickEnterPassengerButton(JNIEnv *env, jobject thiz) {
     CLocalPlayer *pPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
     if(pPlayer != nullptr) {
         pPlayer->GoEnterVehicle(true);
@@ -372,7 +372,7 @@ Java_com_liverussia_cr_gui_HudManager_ClickEnterPassengerButton(JNIEnv *env, job
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_ClickEnterExitVehicleButton(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_ClickEnterExitVehicleButton(JNIEnv *env, jobject thiz) {
     if(!pNetGame)return;
     if(!pNetGame->GetPlayerPool())return;
 
@@ -398,13 +398,13 @@ Java_com_liverussia_cr_gui_HudManager_ClickEnterExitVehicleButton(JNIEnv *env, j
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_ClickLockVehicleButton(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_ClickLockVehicleButton(JNIEnv *env, jobject thiz) {
     pNetGame->SendChatCommand("/lock");
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_PressedHorn(JNIEnv *env, jobject thiz, jboolean pressed) {
+Java_com_liverussia_cr_gui_hud_HudManager_PressedHorn(JNIEnv *env, jobject thiz, jboolean pressed) {
     pGame->isHornActive = pressed;
 }
 extern "C"
@@ -631,7 +631,7 @@ void CHUD::ToggleChat(bool toggle){
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_SetRadarBgPos(JNIEnv *env, jobject thiz, jfloat x1, jfloat y1,
+Java_com_liverussia_cr_gui_hud_HudManager_SetRadarBgPos(JNIEnv *env, jobject thiz, jfloat x1, jfloat y1,
                                                     jfloat x2, jfloat y2) {
     CHUD::radarBgPos1.X = x1;
     CHUD::radarBgPos1.Y = y1;
@@ -641,7 +641,7 @@ Java_com_liverussia_cr_gui_HudManager_SetRadarBgPos(JNIEnv *env, jobject thiz, j
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_SetRadarPos(JNIEnv *env, jobject thiz, jfloat x1, jfloat y1) {
+Java_com_liverussia_cr_gui_hud_HudManager_SetRadarPos(JNIEnv *env, jobject thiz, jfloat x1, jfloat y1) {
 
     CHUD::radarPos.X = x1;
     CHUD::radarPos.Y = y1;
@@ -661,7 +661,7 @@ void CHUD::ToggleChatInput(bool toggle)
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_SendChatMessage(JNIEnv *env, jobject thiz, jbyteArray str) {
+Java_com_liverussia_cr_gui_hud_Chat_SendChatMessage(JNIEnv *env, jobject thiz, jbyteArray str) {
     jbyte* pMsg = env->GetByteArrayElements(str, nullptr);
     jsize length = env->GetArrayLength(str);
 
@@ -680,7 +680,7 @@ Java_com_liverussia_cr_gui_HudManager_SendChatMessage(JNIEnv *env, jobject thiz,
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_clickCameraMode(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_clickCameraMode(JNIEnv *env, jobject thiz) {
 //
     if(!pNetGame)return;
     if(!pNetGame->GetPlayerPool())return;
@@ -700,12 +700,12 @@ Java_com_liverussia_cr_gui_HudManager_clickCameraMode(JNIEnv *env, jobject thiz)
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_clickMultText(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_clickMultText(JNIEnv *env, jobject thiz) {
     pNetGame->SendChatCommand("/action");
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_clickSiren(JNIEnv *env, jobject thiz) {
+Java_com_liverussia_cr_gui_hud_HudManager_clickSiren(JNIEnv *env, jobject thiz) {
     CLocalPlayer *pPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
     if(!pPlayer)return;
 

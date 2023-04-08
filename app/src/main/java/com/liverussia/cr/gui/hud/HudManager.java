@@ -1,53 +1,36 @@
-package com.liverussia.cr.gui;
+package com.liverussia.cr.gui.hud;
 
 import static java.lang.Thread.sleep;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
-import android.util.TypedValue;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.liverussia.cr.R;
 import com.liverussia.cr.core.Samp;
 import com.liverussia.cr.gui.util.Utils;
 import com.liverussia.launcher.domain.enums.StorageElements;
 import com.liverussia.launcher.storage.Storage;
 import com.nvidia.devtech.NvEventQueueActivity;
-import com.liverussia.cr.R;
 import com.skydoves.progressview.ProgressView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.UnsupportedEncodingException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HudManager {
+public class HudManager extends Chat {
     private Timer money_timer;
 
     private Activity activity;
@@ -87,16 +70,10 @@ public class HudManager {
     private TextView opg_time_text;
     private TextView family_time_text;
     private ImageView hud_bg;
-    private EditText chat_input;
-    private ConstraintLayout chat_input_layout;
+
     private TextView armour_text;
     private TextView hp_text;
     TextView satiety_text;
-    private TextView me_button;
-    private TextView try_button;
-    private TextView do_button;
-    private View hide_chat;
-    private ConstraintLayout chat_box;
 
     // заработано
     private ConstraintLayout salary_job_layout;
@@ -115,14 +92,10 @@ public class HudManager {
     // damage
     TextView death_anounce_text;
 
-    private final int INVALID = -1;
-    private final int ME_BUTTON = 0;
-    private final int DO_BUTTON = 1;
-    private final int TRY_BUTTON = 2;
-    private int chat_button = -1;
+
     long buttonLockCD;
     private boolean isHudSetPos = false;
-    private int chatFontSize;
+
     private int old_salary_exp;
 
     private int current_real_salary;
@@ -133,10 +106,6 @@ public class HudManager {
     private int current_visual_money;
     Thread thread_update_money;
 
-    private RecyclerView chat;
-    //int defaultChatHeight;
-    int defaultChatFontSize;
-
     native void HudInit();
     native void ClickEnterPassengerButton();
     native void ClickEnterExitVehicleButton();
@@ -145,15 +114,11 @@ public class HudManager {
     native void clickSiren();
     native void SetRadarBgPos(float x1, float y1, float x2, float y2);
     native void SetRadarPos(float x1, float y1);
-    native void toggleNativeKeyboard(boolean toggle);
-    native void SendChatMessage(byte str[]);
-    native void SendChatButton(int buttonID);
+
     native void clickCameraMode();
     native void clickMultText();
-    ChatAdapter adapter;
-    int damageSound = 0;
 
-    ArrayList<String> chat_lines = new ArrayList<>();
+    int damageSound = 0;
 
     @SuppressLint("ClickableViewAccessibility")
     public HudManager(Activity aactivity) {
@@ -185,100 +150,6 @@ public class HudManager {
         armour_text = activity.findViewById(R.id.armour_text);
         hp_text = activity.findViewById(R.id.hp_text);
         satiety_text = activity.findViewById(R.id.satiety_text);
-
-        // ================ CHAT
-        chat_box = activity.findViewById(R.id.chat_box);
-
-        hide_chat = activity.findViewById(R.id.hide_chat);
-        hide_chat.setOnClickListener(view -> {
-            if(chat_box.getVisibility() == View.GONE){
-                showChat();
-            }
-            else{
-                hideChat();
-            }
-        });
-
-        me_button = activity.findViewById(R.id.me_button);
-        me_button.setOnClickListener(view -> {
-            if(chat_button == ME_BUTTON){
-                me_button.setBackgroundTintList(null);
-                chat_button = INVALID;
-            }else {
-                chat_button = ME_BUTTON;
-                me_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#9c27b0")));
-                try_button.setBackgroundTintList(null);
-                do_button.setBackgroundTintList(null);
-            }
-            SendChatButton(chat_button);
-        });
-
-        try_button = activity.findViewById(R.id.try_button);
-        try_button.setOnClickListener(view -> {
-            if(chat_button == TRY_BUTTON){
-                try_button.setBackgroundTintList(null);
-                chat_button = INVALID;
-            }else {
-                chat_button = TRY_BUTTON;
-                try_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#087f23")));
-                me_button.setBackgroundTintList(null);
-                do_button.setBackgroundTintList(null);
-            }
-            SendChatButton(chat_button);
-        });
-
-        do_button = activity.findViewById(R.id.do_button);
-        do_button.setOnClickListener(view -> {
-            if(chat_button == DO_BUTTON){
-                do_button.setBackgroundTintList(null);
-                chat_button = INVALID;
-            }else {
-                chat_button = DO_BUTTON;
-                do_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#c67100")));
-                try_button.setBackgroundTintList(null);
-                me_button.setBackgroundTintList(null);
-            }
-            SendChatButton(chat_button);
-        });
-
-        chat_input_layout = activity.findViewById(R.id.chat_input_layout);
-        chat_input_layout.setVisibility(View.GONE);
-        chat_input = activity.findViewById(R.id.chat_input);
-        chat_input.setShowSoftInputOnFocus(false);
-
-        chat_input.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    try {
-                        SendChatMessage(chat_input.getText().toString().getBytes("windows-1251"));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    chat_input.getText().clear();
-                    ClickChatj();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        defaultChatFontSize = 27;
-
-        chat = activity.findViewById(R.id.chat);
-        //defaultChatHeight = chat.getLayoutParams().height;
-
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
-
-        mLayoutManager.setStackFromEnd(true);
-        chat.setLayoutManager(mLayoutManager);
-
-
-        // создаем адаптер
-        adapter = new ChatAdapter(activity, chat_lines);
-        // устанавливаем для списка адаптер
-        chat.setAdapter(adapter);
-        //============================== .chat ==============================
 
         HudInit();
 
@@ -440,31 +311,6 @@ public class HudManager {
         Utils.HideLayout(hud_gpsactive, false);
     }
 
-    public void ToggleChatInput(boolean toggle){
-        activity.runOnUiThread(() ->
-        {
-            if(toggle){
-                chat_input_layout.setVisibility(View.VISIBLE);
-            }else {
-                chat_input_layout.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    void hideChat() {
-        activity.runOnUiThread(() -> {
-            Utils.HideLayout(chat_box, true);
-            hide_chat.setScaleY(-1);
-        });
-    }
-
-    void showChat() {
-        activity.runOnUiThread(() -> {
-            Utils.ShowLayout(chat_box, true);
-            hide_chat.setScaleY(1);
-        });
-    }
-
     void addGiveDamageNotify(String nick, String weapon, float damage){
         Samp.soundPool.play(damageSound, 0.1f, 0.1f, 1, 0, 1.2f);
 
@@ -525,18 +371,7 @@ public class HudManager {
         });
 
     }
-    public void ToggleChat(boolean toggle){
-        activity.runOnUiThread(()-> {
-            if(toggle){
-                chat.setVisibility(View.VISIBLE);
-            } else {
-                chat.setVisibility(View.GONE);
-            }
-        });
-    }
-    public void AddChatMessage(String msg){
-        adapter.addItem(msg);
-    }
+
 
     public void togglePassengerButton(boolean toggle)
     {
@@ -623,37 +458,6 @@ public class HudManager {
         {
             activity.runOnUiThread(() -> Utils.HideLayout(lock_vehicle, true) );
         }
-    }
-    public void ChangeChatHeight(int height)
-    {
-        activity.runOnUiThread(() -> {
-//            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) chat.getLayoutParams();
-//            if(height == -1){
-//                layoutParams.height = defaultChatHeight;
-//            }else{
-//                layoutParams.height = height;
-//            }
-//            chat.setLayoutParams(layoutParams);
-        });
-    }
-    public void ChangeChatFontSize(int size)
-    {
-        activity.runOnUiThread(() -> {
-           // TextView chat_line = activity.findViewById(R.id.chat_line_text);
-           // TextView chat_line_shadow = activity.findViewById(R.id.chat_line_shadow);
-            if(size == -1){
-                chatFontSize = defaultChatFontSize;
-             //   chat_line.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultChatFontSize);
-               // chat_line_shadow.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultChatFontSize);
-            }else{
-                chatFontSize = size;
-//                chat_line.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
-//                chat_line_shadow.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
-            }
-            adapter = new ChatAdapter(activity, adapter.getItems());
-            // устанавливаем для списка адаптер
-            chat.setAdapter(adapter);
-        });
     }
 
     public void UpdateHudInfo(int health, int armour, int hunger, int weaponid, int ammo, int ammoclip)
@@ -975,107 +779,5 @@ public class HudManager {
         });
     }
 
-    public void AddToChatInput(String msg){
-        activity.runOnUiThread(() -> {
-            chat_input.setText(msg);
-            int len = chat_input.getText().length();
-            if(len >= 0) chat_input.setSelection(len);
-        });
-
-    }
-
-    void toggleKeyboard(boolean toggle) {
-        if(Storage.getBoolean("isAndroidKeyboard")) {
-            // android клава
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-            if(toggle)
-                imm.showSoftInput(chat_input, InputMethodManager.SHOW_IMPLICIT);
-            else
-                imm.hideSoftInputFromWindow(chat_input.getWindowToken(), 0);
-        }
-        else {
-            // нативная
-            toggleNativeKeyboard(toggle);
-        }
-    }
-    public void ClickChatj(){
-        activity.runOnUiThread(() -> {
-            if (chat_input_layout.getVisibility() == View.VISIBLE) {
-                chat_input_layout.setVisibility(View.GONE);
-                toggleKeyboard(false);
-
-            } else {
-                chat_input_layout.setVisibility(View.VISIBLE);
-                chat_input.requestFocus();
-                toggleKeyboard(true);
-            }
-        });
-    }
-
-    public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
-
-        private final LayoutInflater inflater;
-        private List<String> chat_lines;
-
-        ChatAdapter(Context context, List<String> chat_lines) {
-            this.chat_lines = chat_lines;
-            this.inflater = LayoutInflater.from(context);
-        }
-        @NotNull
-        @Override
-        public ChatAdapter.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-
-            View view = inflater.inflate(R.layout.chatline, parent, false);
-            view.setOnClickListener(view1 -> {
-                //ClickChat();
-                ClickChatj();
-            });
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
-            holder.chat_line_text.setText(Html.fromHtml(chat_lines.get(position)));
-            holder.chat_line_shadow.setText(Html.fromHtml(chat_lines.get(position)).toString());
-
-            holder.chat_line_shadow.setTextSize(TypedValue.COMPLEX_UNIT_PX, chatFontSize);
-            holder.chat_line_text.setTextSize(TypedValue.COMPLEX_UNIT_PX, chatFontSize);
-        }
-
-        @Override
-        public int getItemCount() {
-            return chat_lines.size();
-        }
-
-        public List getItems() {
-            return chat_lines;
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView chat_line_text;
-            final TextView chat_line_shadow;
-            ViewHolder(View view){
-                super(view);
-                chat_line_text = view.findViewById(R.id.chat_line_text);
-                chat_line_shadow = view.findViewById(R.id.chat_line_shadow);
-            }
-        }
-        public void addItem(String item) {
-            activity.runOnUiThread(() -> {
-                if(this.chat_lines.size() > 40){
-                    this.chat_lines.remove(0);
-                    notifyItemRemoved(0);
-                }
-                this.chat_lines.add(" "+item+" ");
-                notifyItemInserted(this.chat_lines.size()-1);
-
-                if(chat.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
-                    chat.scrollToPosition(this.chat_lines.size()-1);
-                }
-            });
-
-        }
-    }
 }
 

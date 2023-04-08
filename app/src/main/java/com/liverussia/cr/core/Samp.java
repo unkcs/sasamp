@@ -16,8 +16,7 @@ import com.liverussia.cr.gui.Casino;
 import com.liverussia.cr.gui.CasinoBaccarat;
 import com.liverussia.cr.gui.CasinoDice;
 import com.liverussia.cr.gui.DailyReward;
-import com.liverussia.cr.gui.HudManager;
-import com.liverussia.cr.gui.donate.Donate;
+import com.liverussia.cr.gui.hud.HudManager;
 import com.liverussia.cr.gui.tab.Tab;
 import com.liverussia.cr.gui.util.Utils;
 

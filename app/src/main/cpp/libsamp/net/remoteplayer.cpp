@@ -76,14 +76,14 @@ void CRemotePlayer::ProcessSpecialActions(BYTE byteSpecialAction)
 void CRemotePlayer::Process()
 {
 	CPlayerPool *pPool = pNetGame->GetPlayerPool();
-	CLocalPlayer *pLocalPlayer = pPool->GetLocalPlayer();
+
 	RwMatrix matPlayer, matVehicle;
 	VECTOR vecMoveSpeed;
 
 	if(IsActive())
 	{
 		m_bIsAFK = false;
-		if((GetTickCount() - m_dwLastRecvTick) > 3500)
+		if((GetTickCount() - m_dwLastRecvTick) > 2000)
 			m_bIsAFK = true;
 
 		// ---- ONFOOT NETWORK PROCESSING ----
@@ -100,7 +100,7 @@ void CRemotePlayer::Process()
 			UpdateOnFootTargetPosition();
 		}
 
-		if(GetState() == PLAYER_STATE_DRIVER &&
+		else if(GetState() == PLAYER_STATE_DRIVER &&
 			m_byteUpdateFromNetwork == UPDATE_TYPE_INCAR && m_pPlayerPed->IsInVehicle())
 		{
 			if(!m_pCurrentVehicle || !GamePool_Vehicle_GetAt(m_pCurrentVehicle->m_dwGTAId))
@@ -112,37 +112,8 @@ void CRemotePlayer::Process()
 			matVehicle.pos.Y = m_icSync.vecPos.Y;
 			matVehicle.pos.Z = m_icSync.vecPos.Z;
 
-			if( m_pCurrentVehicle->GetModelIndex() == TRAIN_PASSENGER_LOCO ||
-				m_pCurrentVehicle->GetModelIndex() == TRAIN_FREIGHT_LOCO ||
-				m_pCurrentVehicle->GetModelIndex() == TRAIN_TRAM)
-			{
-				//UpdateTrainDriverMatrixAndSpeed(&matVehicle, &m_icSync.vecMoveSpeed, m_icSync.fTrainSpeed);
-			}
-			else
-			{
-				UpdateInCarMatrixAndSpeed(&matVehicle, &m_icSync.vecPos, &m_icSync.vecMoveSpeed);
-				UpdateInCarTargetPosition();
-			}
-		}
-		else if(GetState() == PLAYER_STATE_PASSENGER &&
-			m_byteUpdateFromNetwork == UPDATE_TYPE_PASSENGER)
-		{
-			if(!m_pCurrentVehicle) return;
-
-			// UPDATE CURRENT WEAPON
-			uint8_t byteCurrentWeapon = m_ofSync.byteCurrentWeapon & 0x3F;
-			if(m_pPlayerPed->IsAdded() && m_pPlayerPed->GetCurrentWeapon() != byteCurrentWeapon)
-			{
-				m_pPlayerPed->GiveWeapon(byteCurrentWeapon, 9999);
-				m_pPlayerPed->SetArmedWeapon(byteCurrentWeapon);
-
-				// double check
-				if(m_pPlayerPed->GetCurrentWeapon() != byteCurrentWeapon)
-				{
-					m_pPlayerPed->GiveWeapon(byteCurrentWeapon, 9999);
-					m_pPlayerPed->SetArmedWeapon(byteCurrentWeapon);
-				}
-			}
+			UpdateInCarMatrixAndSpeed(&matVehicle, &m_icSync.vecPos, &m_icSync.vecMoveSpeed);
+			UpdateInCarTargetPosition();
 		}
 
 		m_byteUpdateFromNetwork = UPDATE_TYPE_NONE;
@@ -225,12 +196,7 @@ void CRemotePlayer::Process()
 			{
 				return;
 			}
-			if( m_pCurrentVehicle->GetModelIndex() != TRAIN_PASSENGER_LOCO &&
-				m_pCurrentVehicle->GetModelIndex() != TRAIN_FREIGHT_LOCO &&
-				m_pCurrentVehicle->GetModelIndex() != TRAIN_TRAM)
-			{
-				UpdateVehicleRotation();
-			}
+			UpdateVehicleRotation();
 
 			if(	m_icSync.vecMoveSpeed.X == 0.0f &&
 				m_icSync.vecMoveSpeed.Y == 0.0f &&
@@ -870,11 +836,12 @@ void CRemotePlayer::StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync)
 	memcpy(&m_psSync, ppsSync, sizeof(PASSENGER_SYNC_DATA));
 	m_VehicleID = ppsSync->VehicleID;
 
-	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
-	if(!pVehiclePool) return;
-	if (!pVehiclePool->GetSlotState(m_VehicleID)) return;
+	auto pVehiclePool = pNetGame->GetVehiclePool();
 
-	m_byteSeatID = ppsSync->byteSeatFlags & 127;
+	if (!pVehiclePool->GetSlotState(m_VehicleID))
+        return;
+
+	m_byteSeatID = ppsSync->byteSeatFlags;
 	m_pCurrentVehicle = pVehiclePool->GetAt(m_VehicleID);
 
 	if(!m_pCurrentVehicle)return;

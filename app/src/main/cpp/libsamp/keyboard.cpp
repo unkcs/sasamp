@@ -2489,17 +2489,23 @@ bool ProcessLocalCommands(const char str[])
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_SendChatButton(JNIEnv *env, jobject thiz, jint button_id) {
+Java_com_liverussia_cr_gui_hud_Chat_SendChatButton(JNIEnv *env, jobject thiz, jint button_id) {
 	CKeyBoard::dop_butt = button_id;
 }
-
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_toggleNativeKeyboard(JNIEnv *env, jobject thiz,
-                                                           jboolean toggle) {
+Java_com_liverussia_cr_gui_hud_Chat_toggleNativeKeyboard(JNIEnv *env, jobject thiz, jboolean toggle) {
 	if (toggle) {
 		CKeyBoard::Open();
 	} else {
 		CKeyBoard::Close();
 	}
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_hud_Chat_clickHistoryButt(JNIEnv *env, jobject thiz, jint butt_id) {
+	if(butt_id)
+		CKeyBoard::m_pkHistory->PageUp();
+	else
+		CKeyBoard::m_pkHistory->PageDown();
 }

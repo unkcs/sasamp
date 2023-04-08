@@ -128,9 +128,16 @@ typedef struct _INCAR_SYNC_DATA
 typedef struct _PASSENGER_SYNC_DATA
 {
 	VEHICLEID VehicleID;			// +0
-	uint8_t byteSeatFlags : 7;
-	uint8_t byteDriveBy : 1;		// +2
-	uint8_t byteCurrentWeapon;		// +3
+	union {
+		uint16_t DriveBySeatAdditionalKeyWeapon;
+		struct
+		{
+			uint8_t byteSeatFlags : 2;
+			uint8_t byteDriveBy : 6;
+			uint8_t byteCurrentWeapon : 6;
+			uint8_t AdditionalKey : 2;
+		};
+	};
 	uint8_t bytePlayerHealth;		// +4
 	uint8_t bytePlayerArmour;		// +5
 	uint16_t lrAnalog;				// +6

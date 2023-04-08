@@ -21,6 +21,8 @@
 //----------------------------------------------------------------------------------
 package com.nvidia.devtech;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -106,9 +108,7 @@ are also made available to the native code for ease of application porting.
 Please see the external SDK documentation for an introduction to the use of
 this class and its paired native library.
 */
-public abstract class NvEventQueueActivity
-    extends AppCompatActivity
-        implements SensorEventListener, View.OnTouchListener, HeightProvider.HeightListener {
+public abstract class NvEventQueueActivity extends AppCompatActivity implements SensorEventListener, View.OnTouchListener {
 
     private static NvEventQueueActivity instance = null;
     protected Handler handler = null;
@@ -116,9 +116,6 @@ public abstract class NvEventQueueActivity
     private int SwapBufferSkip = 0;
 
     protected boolean paused = false;
-   // private boolean inputPaused = false;
-
-    protected boolean wantsMultitouch = false;
 
 	protected boolean supportPauseResume = true;
     protected boolean ResumeEventDone = false;
@@ -263,57 +260,33 @@ public abstract class NvEventQueueActivity
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent event)
-    {
-        if(view == mRootFrame)
-        {
-            if (wantsMultitouch)
-            {
-                int x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
-                // marshal up the data.
-                int numEvents = event.getPointerCount();
-                for (int i=0; i<numEvents; i++)
-                {
-                    // only use pointers 0 and 1, 2, 3
-                    int pointerId = event.getPointerId(i);
-                    if (pointerId == 0)
-                    {
-                        x1 = (int)event.getX(i);
-                        y1 = (int)event.getY(i);
-                    }
-                    else if (pointerId == 1)
-                    {
-                        x2 = (int)event.getX(i);
-                        y2 = (int)event.getY(i);
-                    }
-                    else if (pointerId == 2)
-                    {
-                        x3 = (int)event.getX(i);
-                        y3 = (int)event.getY(i);
-                    }
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mRootFrame) {
+            int x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
+            // marshal up the data.
+            int numEvents = event.getPointerCount();
+            for (int i = 0; i < numEvents; i++) {
+                // only use pointers 0 and 1, 2, 3
+                int pointerId = event.getPointerId(i);
+                if (pointerId == 0) {
+                    x1 = (int) event.getX(i);
+                    y1 = (int) event.getY(i);
+                } else if (pointerId == 1) {
+                    x2 = (int) event.getX(i);
+                    y2 = (int) event.getY(i);
+                } else if (pointerId == 2) {
+                    x3 = (int) event.getX(i);
+                    y3 = (int) event.getY(i);
                 }
+            }
 
-                int pointerId = event.getPointerId(event.getActionIndex());
-                int action = event.getActionMasked();
-                customMultiTouchEvent(action, pointerId, x1, y1, x2, y2,
-                        x3, y3);
-            }
-            else // old style input.*/
-            {
-                touchEvent(event.getAction(), (int)event.getX(), (int)event.getY(), event);
-            }
+            int pointerId = event.getPointerId(event.getActionIndex());
+            int action = event.getActionMasked();
+            customMultiTouchEvent(action, pointerId, x1, y1, x2, y2, x3, y3);
         }
         return true;
     }
 
-    @Override
-    public void onHeightChanged(int orientation, int height)
-    {
-//        Dialog dialog = mDialog;
-//        if (dialog != null) {
-//            dialog.onHeightChanged(height);
-//        }
-    }
     public native void onWeaponChanged();
 
     public native void togglePlayer(int toggle);
@@ -538,9 +511,6 @@ public abstract class NvEventQueueActivity
             init(false);
         }
         handler = new Handler();
-//        if(wantsAccelerometer && (mSensorManager == null)) {
-//            mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-//        }
 
         mClipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
@@ -581,33 +551,10 @@ public abstract class NvEventQueueActivity
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
-//        if (getSupportFragmentManager().findFragmentByTag("dialog") != null) {
-//            super.onWindowFocusChanged(z);
-//            return;
-//        }
-//        if (this.ResumeEventDone && this.viewIsActive && !this.paused) {
-//
-//            if (GameIsFocused && !z) {
-//                System.out.println("*** onWindowFocusChanged pauseEvent entering");
-//                pauseEvent();
-//                System.out.println("*** onWindowFocusChanged pauseEvent executed");
-//            } else if (!GameIsFocused && z) {
-//                System.out.println("*** onWindowFocusChanged resumeEvent entering");
-//                resumeEvent();
-//                System.out.println("*** onWindowFocusChanged resumeEvent executed");
-//            }
-//            this.GameIsFocused = z;
-//        }
-//        super.onWindowFocusChanged(z);
-//        if (z) {
-//            hideSystemUI();
-//            return;
-//        }
-
         if (hasFocus) {
             hideSystemUI();
-            this.paused = false;
-            resumeEvent();
+           // this.paused = false;
+        //    resumeEvent();
         }
         super.onWindowFocusChanged(hasFocus);
     }
@@ -644,12 +591,8 @@ public abstract class NvEventQueueActivity
      * And remaps as needed into the native calls exposed by nv_event.h
      */
     public void onPause() {
-       // if (this.ResumeEventDone) {
-           // pauseEvent();
-       // }
-        //this.paused = true;
+        pauseEvent();
         super.onPause();
-       // this.inputPaused = true;
     }
     
     /**
@@ -659,13 +602,6 @@ public abstract class NvEventQueueActivity
      */
 	@Override
     public void onStop() {
-//        if (this.mSensorManager != null) {
-//            this.mSensorManager.unregisterListener(this);
-//        }
-        if(!paused){
-            pauseEvent();
-            this.paused = true;
-        }
 
         super.onStop();
     }
@@ -882,9 +818,7 @@ public abstract class NvEventQueueActivity
         setContentView(R.layout.main_render_screen);
 
         SurfaceView view = findViewById(R.id.main_sv);
-
-       // view.setAlpha(0);
-
+        getWindow().setSustainedPerformanceMode(true);
         mSurfaceView = view;
         mRootFrame = findViewById(R.id.main_fl_root);
         mAndroidUI = findViewById(R.id.ui_layout);
@@ -897,8 +831,6 @@ public abstract class NvEventQueueActivity
         view.setFocusableInTouchMode(true);
 
         mRootFrame.setOnTouchListener(this);
-
-        //
 
         new Furniture_factory(this);
         new AdminRecon(this);
@@ -929,16 +861,13 @@ public abstract class NvEventQueueActivity
 
         mMenu = new Menu(this);
 
-     //   DoResumeEvent();
-
         holder.addCallback(new Callback()
         {
             // @Override
             public void surfaceCreated(SurfaceHolder holder)
             {
                 System.out.println("systemInit.surfaceCreated");
-                @SuppressWarnings("unused")
-                boolean firstRun = cachedSurfaceHolder == null;
+
                 cachedSurfaceHolder = holder;
 
                 if (fixedWidth!=0 && fixedHeight!=0)
@@ -950,34 +879,17 @@ public abstract class NvEventQueueActivity
                 ranInit = true;
                 if(!supportPauseResume && !init(true))
                 {
-                    handler.post(new Runnable()
-                                 {
-                                     public void run()
-                                     {
-                                         new AlertDialog.Builder(act)
-                                                 .setMessage("Application initialization failed. The application will exit.")
-                                                 .setPositiveButton("Ok",
-                                                         new DialogInterface.OnClickListener ()
-                                                         {
-                                                             public void onClick(DialogInterface i, int a)
-                                                             {
-                                                                 finish();
-                                                             }
-                                                         }
-                                                 )
-                                                 .setCancelable(false)
-                                                 .show();
-                                     }
-                                 }
-                    );
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Log.d(TAG, "ERR handler.post gl");
+                        }
+                    });
                 }
 
-               // if (!firstRun && ResumeEventDone)
-                //{
-                    System.out.println("entering resumeEvent");
-                    resumeEvent();
-                    System.out.println("returned from resumeEvent");
-               // }
+                System.out.println("entering resumeEvent");
+                resumeEvent();
+                System.out.println("returned from resumeEvent");
+
                 setWindowSize(surfaceWidth, surfaceHeight);
             }
 

@@ -6,9 +6,9 @@
 
 #include "..//CDebugInfo.h"
 #include "util/patch.h"
-#include "ePedState.h"
+#include "/Enums/ePedState.h"
 #include "CWorld.h"
-#include "CModelInfo.h"
+#include "game/Models/ModelInfo.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -68,9 +68,9 @@ CPlayerPed::CPlayerPed(uint8_t bytePlayerNumber, int iSkin, float fX, float fY, 
 	ForceTargetRotation(fRotation);
 	RwMatrix mat;
 	GetMatrix(&mat);
-	mat.pos.X = fX;
-	mat.pos.Y = fY;
-	mat.pos.Z = fZ+ 0.15f;
+	mat.pos.x = fX;
+	mat.pos.y = fY;
+	mat.pos.z = fZ+ 0.15f;
 	SetMatrix(mat);
 	
 	for (int i = 0; i < MAX_ATTACHED_OBJECTS; i++)
@@ -231,7 +231,7 @@ void CPlayerPed::SetDead()
 	RwMatrix mat;
 	GetMatrix(&mat);
 	// will reset the tasks
-	TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+	TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 	m_pPed->fHealth = 0.0f;
 
 	uint8_t old = CWorld::PlayerInFocus;
@@ -616,7 +616,7 @@ void CPlayerPed::SetInterior(uint8_t byteID, bool refresh)
 		if(refresh) {
 			RwMatrix mat;
 			this->GetMatrix(&mat);
-			ScriptCommand(&refresh_streaming_at, mat.pos.X, mat.pos.Y);
+			ScriptCommand(&refresh_streaming_at, mat.pos.x, mat.pos.y);
 		}
 	}
 }
@@ -870,7 +870,7 @@ void CPlayerPed::ClearAnimations()
 	//ClearAllTasks();
 	RwMatrix mat;
 	GetMatrix(&mat);
-	TeleportTo(mat.pos.X,mat.pos.Y,mat.pos.Z);
+	TeleportTo(mat.pos.x,mat.pos.y,mat.pos.z);
 
 	Log("ClearAnimations");
 }
@@ -1063,8 +1063,8 @@ void CPlayerPed::AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot)
 	memcpy((void*)& m_aAttachedObjects[iSlot], (const void*)pInfo, sizeof(ATTACHED_OBJECT_INFO));
 	RwMatrix matPos;
 	GetMatrix(&matPos);
-	VECTOR vecRot{ 0.0f, 0.0f, 0.0f };
-	m_aAttachedObjects[iSlot].pObject = new CObject(pInfo->dwModelId, matPos.pos.X, matPos.pos.Y, matPos.pos.Z, vecRot, 200.0f);
+	CVector vecRot{ 0.0f, 0.0f, 0.0f };
+	m_aAttachedObjects[iSlot].pObject = new CObject(pInfo->dwModelId, matPos.pos.x, matPos.pos.y, matPos.pos.z, vecRot, 200.0f);
 	*(uint32_t*)((uintptr_t)m_aAttachedObjects[iSlot].pObject->m_pEntity + 28) &= 0xFFFFFFFE; // disable collision
 	m_aAttachedObjects[iSlot].bState = true;
 
@@ -1118,9 +1118,9 @@ RwMatrix* RwMatrixMultiplyByVector(VECTOR* out, RwMatrix* a2, VECTOR* in)
 
 	result = a2;
 	v4 = in;
-	out->X = a2->at.X * in->Z + a2->up.X * in->Y + a2->right.X * in->X + a2->pos.X;
-	out->Y = result->at.Y * v4->Z + result->up.Y * v4->Y + result->right.Y * v4->X + result->pos.Y;
-	out->Z = result->at.Z * v4->Z + result->up.Z * v4->Y + a2->right.Z * in->X + result->pos.Z;
+	out->X = a2->at.X * in->Z + a2->up.X * in->Y + a2->right.X * in->X + a2->pos.x;
+	out->Y = result->at.Y * v4->Z + result->up.Y * v4->Y + result->right.Y * v4->X + result->pos.y;
+	out->Z = result->at.Z * v4->Z + result->up.Z * v4->Y + a2->right.Z * in->X + result->pos.z;
 	return result;
 }
 
@@ -1177,9 +1177,9 @@ void CPlayerPed::ProcessAttach()
 			VECTOR vecOut;
 			RwMatrixMultiplyByVector(&vecOut, &outMat, &m_aAttachedObjects[i].vecOffset);
 
-			outMat.pos.X = vecOut.X;
-			outMat.pos.Y = vecOut.Y;
-			outMat.pos.Z = vecOut.Z;
+			outMat.pos.x = vecOut.X;
+			outMat.pos.y = vecOut.Y;
+			outMat.pos.z = vecOut.Z;
 
 			VECTOR axis = { 1.0f, 0.0f, 0.0f };
 			if (m_aAttachedObjects[i].vecRotation.X != 0.0f)
@@ -1200,9 +1200,9 @@ void CPlayerPed::ProcessAttach()
 			RwMatrixScale(&outMat, &m_aAttachedObjects[i].vecScale);
 			*(uint32_t*)((uintptr_t)pObject->m_pEntity + 28) &= 0xFFFFFFFE; // disable collision
 
-			if (outMat.pos.X >= 10000.0f || outMat.pos.X <= -10000.0f ||
-				outMat.pos.Y >= 10000.0f || outMat.pos.Y <= -10000.0f ||
-				outMat.pos.Z >= 10000.0f || outMat.pos.Z <= -10000.0f)
+			if (outMat.pos.x >= 10000.0f || outMat.pos.x <= -10000.0f ||
+				outMat.pos.y >= 10000.0f || outMat.pos.y <= -10000.0f ||
+				outMat.pos.z >= 10000.0f || outMat.pos.z <= -10000.0f)
 			{
 				continue;
 			}
@@ -1370,7 +1370,7 @@ void CPlayerPed::PlayAnimByIdx(int idx, float BlendData, bool loop, bool freeze,
 	{
 		RwMatrix mat;
 		GetMatrix(&mat);
-		TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+		TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 		return;
 	}
 	std::string szAnim;
@@ -1652,12 +1652,12 @@ ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
 	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
 		return 0;
 
-	vecStart.X = m_pPed->entity.mat->pos.X;
-	vecStart.Y = m_pPed->entity.mat->pos.Y;
-	vecStart.Z = m_pPed->entity.mat->pos.Z - 0.25f;
+	vecStart.X = m_pPed->entity.mat->pos.x;
+	vecStart.Y = m_pPed->entity.mat->pos.y;
+	vecStart.Z = m_pPed->entity.mat->pos.z - 0.25f;
 
-	vecEnd.X = m_pPed->entity.mat->pos.X;
-	vecEnd.Y = m_pPed->entity.mat->pos.Y;
+	vecEnd.X = m_pPed->entity.mat->pos.x;
+	vecEnd.Y = m_pPed->entity.mat->pos.y;
 	vecEnd.Z = vecStart.Z - 1.75f;
 
 	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
@@ -1965,9 +1965,9 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 												}
 												else
 												{
-													btData->vecOffset.X = btData->pEntity->mat->pos.X + btData->vecOffset.X;
-													btData->vecOffset.Y = btData->pEntity->mat->pos.Y + btData->vecOffset.Y;
-													btData->vecOffset.Z = btData->pEntity->mat->pos.Z + btData->vecOffset.Z;
+													btData->vecOffset.X = btData->pEntity->mat->pos.x + btData->vecOffset.X;
+													btData->vecOffset.Y = btData->pEntity->mat->pos.y + btData->vecOffset.Y;
+													btData->vecOffset.Z = btData->pEntity->mat->pos.z + btData->vecOffset.Z;
 												}
 											}
 											else

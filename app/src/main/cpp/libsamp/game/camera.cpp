@@ -49,9 +49,7 @@ void CCamera::GetMatrix(RwMatrix* Matrix)
 	Matrix->at.Y = m_matPos->at.Y;
 	Matrix->at.Z = m_matPos->at.Z;
 
-	Matrix->pos.X = m_matPos->pos.X;
-	Matrix->pos.Y = m_matPos->pos.Y;
-	Matrix->pos.Z = m_matPos->pos.Z;
+	Matrix->pos = m_matPos->pos;
 }
 
 // 0.3.7

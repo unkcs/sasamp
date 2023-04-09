@@ -8,6 +8,7 @@
 #pragma pack(1)
 
 #include "Core/Vector.h"
+#include "game/RW/rwlpcore.h"
 
 struct RwMatrixTag
 {
@@ -17,7 +18,7 @@ struct RwMatrixTag
     float  pad_u;		// 28-32
     VECTOR at;			// 32-44	; r31 r32 r33
     float  pad_a;		// 44-48
-    VECTOR pos;			// 48-60
+    RwV3d   pos;			// 48-60
     float  pad_p;		// 60-64
 };
 typedef RwMatrixTag RwMatrix;

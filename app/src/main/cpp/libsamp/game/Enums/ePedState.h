@@ -4,7 +4,7 @@
 
 #pragma once
 
-enum ePedState : __int32
+enum ePedState : int32_t
 {
     PED_NONE = 0x0,
     PED_IDLE = 0x1,

@@ -1058,7 +1058,7 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 	return atomic;
 }
 
-#include "CModelInfo.h"
+#include "game/Models/ModelInfo.h"
 
 void InstallSpecialHooks()
 {
@@ -1236,61 +1236,58 @@ void (*CPedDamageResponseCalculator__ComputeDamageResponse)(stPedDamageResponse*
 void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageResponse* thiz, ENTITY_TYPE* pEntity, uintptr_t pDamageResponse, bool bSpeak)
 {
 	if (thiz && pEntity) onDamage((PED_TYPE*)*(uintptr_t*)thiz, (PED_TYPE*)pEntity);
-	int weaponid = thiz->iWeaponType;
-	float fDamage;
-	if( weaponid < 0 || weaponid > std::size(m_fWeaponDamages) )
+
+	if( thiz->iWeaponType < 0 || thiz->iWeaponType > std::size(m_fWeaponDamages) )
 	{
-		fDamage = thiz->fDamage / 3.0303030303;
+		thiz->fDamage /= 3.0303030303;
 	}
 	else {
-		fDamage = m_fWeaponDamages[weaponid];
+		thiz->fDamage = m_fWeaponDamages[thiz->iWeaponType];
 	}
-//	float fDamage = m_fWeaponDamages[weaponid];
+	float fDamage = thiz->fDamage;
 
 	int bodypart = thiz->iBodyPart;
 
-	if(pNetGame)
-	{
-		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-		if(pPlayerPool)
-		{
-			if(weaponid < 0 || weaponid > 255 || (weaponid > 54 && weaponid < 200) || (weaponid > 201 && weaponid < 255))
-				weaponid = 255; // suicide
-			else if(weaponid == 18)
-				weaponid = 37; // flamethower
-			else if(weaponid == 35 || weaponid == 16)
-				weaponid = 51; // explosion
+    auto pPlayerPool = pNetGame->GetPlayerPool();
+    if(pPlayerPool) {
+        if (thiz->iWeaponType < 0 || thiz->iWeaponType > 255 ||
+            (thiz->iWeaponType > 54 && thiz->iWeaponType < 200)
+            || (thiz->iWeaponType > 201 && thiz->iWeaponType < 255))
+            thiz->iWeaponType = 255; // suicide
+        else if (thiz->iWeaponType == 18)
+            thiz->iWeaponType = 37; // flamethower
+        else if (thiz->iWeaponType == 35 || thiz->iWeaponType == 16)
+            thiz->iWeaponType = 51; // explosion
 
-			PLAYERID damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)thiz->pEntity); // отправитель урона
-			PLAYERID issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)pEntity); // получатель
+        PLAYERID damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr(
+                (PED_TYPE *) thiz->pEntity); // отправитель урона
+        PLAYERID issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr(
+                (PED_TYPE *) pEntity); // получатель
 
-			PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
+        PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
 
-			// give player damage
-			if((PED_TYPE*)thiz->pEntity == pGame->FindPlayerPed()->m_pPed && issuerid != INVALID_PLAYER_ID ) {
-				CHUD::addGiveDamageNotify(issuerid, weaponid, fDamage);
-				pPlayerPool->GetLocalPlayer()->GiveTakeDamage(false, issuerid, fDamage, weaponid,
-															  bodypart);
-			}
+        // player give damage
+        if ((PED_TYPE *) thiz->pEntity == pGame->FindPlayerPed()->m_pPed) {
+            CHUD::addGiveDamageNotify(issuerid, thiz->iWeaponType, fDamage);
+            pPlayerPool->GetLocalPlayer()->GiveTakeDamage(false, issuerid, fDamage,
+                                                          thiz->iWeaponType,
+                                                          bodypart);
+        }
 
-			// player take damage
-			else if(damagedid != INVALID_PLAYER_ID && issuerid == INVALID_PLAYER_ID) {
-				pPlayerPool->GetLocalPlayer()->GiveTakeDamage(true, damagedid, fDamage, weaponid, bodypart);
+        // player take damage
+        else if ((PED_TYPE *) pEntity == pGame->FindPlayerPed()->m_pPed) {
+            pPlayerPool->GetLocalPlayer()->GiveTakeDamage(true, damagedid, fDamage,
+                                                          thiz->iWeaponType, bodypart);
 
-				char nick[MAX_PLAYER_NAME];
-				if( pPlayerPool->GetSlotState(damagedid) )
-				{
-					strcpy(nick, pPlayerPool->GetPlayerName(damagedid));
-				}
-				else {
-					strcpy(nick, "None");
-				}
-				CHUD::addTakeDamageNotify(pPlayerPool->GetPlayerName(damagedid), weaponid, fDamage);
-			}
-		}
-	}
+            char nick[MAX_PLAYER_NAME];
+            strcpy(nick, pPlayerPool->GetPlayerName(damagedid));
 
-	CPedDamageResponseCalculator__ComputeDamageResponse(thiz, pEntity, pDamageResponse, bSpeak);
+            CHUD::addTakeDamageNotify(pPlayerPool->GetPlayerName(damagedid), thiz->iWeaponType,
+                                      fDamage);
+        }
+    }
+
+//	CPedDamageResponseCalculator__ComputeDamageResponse(thiz, pEntity, pDamageResponse, bSpeak);
 }
 
 
@@ -2085,7 +2082,7 @@ void (*CCam__Process)(uintptr_t);
 void CCam__Process_hook(uintptr_t thiz)
 {
 
-	VECTOR vecSpeed;
+	CVector vecSpeed;
 	CVehicle* pVeh = nullptr;
 	float pOld = *(float*)(g_libGTASA + 0x00608558);
 	if (pNetGame && (*(uint16_t*)(thiz + 14) == 18 || *(uint16_t*)(thiz + 14) == 16) && CFirstPersonCamera::IsEnabled())
@@ -2098,12 +2095,8 @@ void CCam__Process_hook(uintptr_t thiz)
 				pVeh = pNetGame->GetVehiclePool()->GetAt(pNetGame->GetPlayerPool()->GetLocalPlayer()->m_CurrentVehicle);
 				if (pVeh)
 				{
-					pVeh->GetMoveSpeedVector(&vecSpeed);
-					VECTOR vec;
-					vec.X = vecSpeed.X * 6.0f;
-					vec.Y = vecSpeed.Y * 6.0f;
-					vec.Z = vecSpeed.Z * 6.0f;
-					pVeh->SetMoveSpeedVector(vec);
+					pVeh->m_pEntity->vecMoveSpeed *= 6.0f;
+
 					*(float*)(g_libGTASA + 0x00608558) = 200.0f;
 				}
 			}
@@ -2332,8 +2325,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 						if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
 						{
 							CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-							if (pObject->m_pEntity->mat->pos.X > 20000.0f || pObject->m_pEntity->mat->pos.Y > 20000.0f || pObject->m_pEntity->mat->pos.Z > 20000.0f ||
-								pObject->m_pEntity->mat->pos.X < -20000.0f || pObject->m_pEntity->mat->pos.Y < -20000.0f || pObject->m_pEntity->mat->pos.Z < -20000.0f)
+							if (pObject->m_pEntity->mat->pos.x > 20000.0f || pObject->m_pEntity->mat->pos.y > 20000.0f || pObject->m_pEntity->mat->pos.z > 20000.0f ||
+								pObject->m_pEntity->mat->pos.x < -20000.0f || pObject->m_pEntity->mat->pos.y < -20000.0f || pObject->m_pEntity->mat->pos.z < -20000.0f)
 							{
 								/*if(pChatWindow)
 								{
@@ -2398,8 +2391,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 									if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
 									{
 										CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-										if (pObject->m_pEntity->mat->pos.X > 20000.0f || pObject->m_pEntity->mat->pos.Y > 20000.0f || pObject->m_pEntity->mat->pos.Z > 20000.0f ||
-											pObject->m_pEntity->mat->pos.X < -20000.0f || pObject->m_pEntity->mat->pos.Y < -20000.0f || pObject->m_pEntity->mat->pos.Z < -20000.0f)
+										if (pObject->m_pEntity->mat->pos.x > 20000.0f || pObject->m_pEntity->mat->pos.y > 20000.0f || pObject->m_pEntity->mat->pos.z > 20000.0f ||
+											pObject->m_pEntity->mat->pos.x < -20000.0f || pObject->m_pEntity->mat->pos.y < -20000.0f || pObject->m_pEntity->mat->pos.z < -20000.0f)
 										{
 											/*if(pChatWindow)
 											{
@@ -2511,9 +2504,9 @@ int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
 										pVehicle->GetMatrix(&vehicleMat);
 										pPlayerPed->GetMatrix(&playerMat);
 
-										float fSX = (vehicleMat.pos.X - playerMat.pos.X) * (vehicleMat.pos.X - playerMat.pos.X);
-										float fSY = (vehicleMat.pos.Y - playerMat.pos.Y) * (vehicleMat.pos.Y - playerMat.pos.Y);
-										float fSZ = (vehicleMat.pos.Z - playerMat.pos.Z) * (vehicleMat.pos.Z - playerMat.pos.Z);
+										float fSX = (vehicleMat.pos.x - playerMat.pos.x) * (vehicleMat.pos.x - playerMat.pos.x);
+										float fSY = (vehicleMat.pos.y - playerMat.pos.y) * (vehicleMat.pos.y - playerMat.pos.y);
+										float fSZ = (vehicleMat.pos.z - playerMat.pos.z) * (vehicleMat.pos.z - playerMat.pos.z);
 
 										float fDistance = (float)sqrt(fSX + fSY + fSZ);
 
@@ -2625,9 +2618,9 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TY
 			{
 				if(pNetGame->m_iLagCompensation)
 				{
-					bulletData.vecOffset.X = vecPos->X - pEntity->mat->pos.X;
-					bulletData.vecOffset.Y = vecPos->Y - pEntity->mat->pos.Y;
-					bulletData.vecOffset.Z = vecPos->Z - pEntity->mat->pos.Z;
+					bulletData.vecOffset.X = vecPos->X - pEntity->mat->pos.x;
+					bulletData.vecOffset.Y = vecPos->Y - pEntity->mat->pos.y;
+					bulletData.vecOffset.Z = vecPos->Z - pEntity->mat->pos.z;
 				}
 				else
 				{
@@ -2695,9 +2688,9 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 							{
 								if(pNetGame->m_iLagCompensation)
 								{
-									vecPosPlusOffset.X = pMatrix->pos.X + g_pCurrentBulletData->vecOffset.X;
-									vecPosPlusOffset.Y = pMatrix->pos.Y + g_pCurrentBulletData->vecOffset.Y;
-									vecPosPlusOffset.Z = pMatrix->pos.Z + g_pCurrentBulletData->vecOffset.Z;
+									vecPosPlusOffset.X = pMatrix->pos.x + g_pCurrentBulletData->vecOffset.X;
+									vecPosPlusOffset.Y = pMatrix->pos.y + g_pCurrentBulletData->vecOffset.Y;
+									vecPosPlusOffset.Z = pMatrix->pos.z + g_pCurrentBulletData->vecOffset.Z;
 								}
 								else ProjectMatrix(&vecPosPlusOffset, pMatrix, &g_pCurrentBulletData->vecOffset);
 

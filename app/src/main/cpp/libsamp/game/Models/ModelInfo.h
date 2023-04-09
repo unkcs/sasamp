@@ -2,14 +2,14 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CMODELINFO_H
-#define LIVERUSSIA_CMODELINFO_H
+#ifndef LIVERUSSIA_MODELINFO_H
+#define LIVERUSSIA_MODELINFO_H
 
 
-#include "CPedModelInfo.h"
-#include "CAtomicModelInfo.h"
-#include "CVehicleModelInfo.h"
-#include "CStore.h"
+#include "PedModelInfo.h"
+#include "AtomicModelInfo.h"
+#include "VehicleModelInfo.h"
+#include "game/Core/CStore.h"
 
 class CModelInfo {
 public:
@@ -33,4 +33,4 @@ public:
 };
 
 
-#endif //LIVERUSSIA_CMODELINFO_H
+#endif //LIVERUSSIA_MODELINFO_H

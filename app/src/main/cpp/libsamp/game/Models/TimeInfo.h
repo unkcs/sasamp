@@ -2,8 +2,8 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CTIMEINFO_H
-#define LIVERUSSIA_CTIMEINFO_H
+#ifndef LIVERUSSIA_TIMEINFO_H
+#define LIVERUSSIA_TIMEINFO_H
 
 class CTimeInfo {
 public:
@@ -14,4 +14,4 @@ public:
 
 
 
-#endif //LIVERUSSIA_CTIMEINFO_H
+#endif //LIVERUSSIA_TIMEINFO_H

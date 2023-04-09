@@ -78,7 +78,7 @@ void CRemotePlayer::Process()
 	CPlayerPool *pPool = pNetGame->GetPlayerPool();
 
 	RwMatrix matPlayer, matVehicle;
-	VECTOR vecMoveSpeed;
+	CVector vecMoveSpeed;
 
 	if(IsActive())
 	{
@@ -107,9 +107,7 @@ void CRemotePlayer::Process()
 
 			m_icSync.quat.Normalize();
 			m_icSync.quat.GetMatrix(&matVehicle);
-			matVehicle.pos.X = m_icSync.vecPos.X;
-			matVehicle.pos.Y = m_icSync.vecPos.Y;
-			matVehicle.pos.Z = m_icSync.vecPos.Z;
+			matVehicle.pos = m_icSync.vecPos;
 
 			UpdateInCarMatrixAndSpeed(&matVehicle, &m_icSync.vecPos, &m_icSync.vecMoveSpeed);
 			UpdateInCarTargetPosition();
@@ -160,9 +158,9 @@ void CRemotePlayer::Process()
 			{
 				GetPlayerPed()->ClearPlayerAimState();
 			}
-			if( m_ofSync.vecMoveSpeed.X == 0.0f &&
-				m_ofSync.vecMoveSpeed.Y == 0.0f &&
-				m_ofSync.vecMoveSpeed.Z == 0.0f)
+			if( m_ofSync.vecMoveSpeed.x == 0.0f &&
+				m_ofSync.vecMoveSpeed.y == 0.0f &&
+				m_ofSync.vecMoveSpeed.z == 0.0f)
 			{
 				m_pPlayerPed->SetMoveSpeedVector(m_ofSync.vecMoveSpeed);
 			}
@@ -172,15 +170,13 @@ void CRemotePlayer::Process()
 				m_ofSync.lrAnalog = 0;
 				m_ofSync.udAnalog = 0;
 
-				vecMoveSpeed.X = 0.0f;
-				vecMoveSpeed.Y = 0.0f;
-				vecMoveSpeed.Z = 0.0f;
+				vecMoveSpeed = 0.0f;
+
 				m_pPlayerPed->SetMoveSpeedVector(vecMoveSpeed);
 
 				m_pPlayerPed->GetMatrix(&matPlayer);
-				matPlayer.pos.X = m_ofSync.vecPos.X;
-				matPlayer.pos.Y = m_ofSync.vecPos.Y;
-				matPlayer.pos.Z = m_ofSync.vecPos.Z;
+				matPlayer.pos = m_ofSync.vecPos;
+
 				m_pPlayerPed->SetMatrix(matPlayer);
 			}
 		}
@@ -196,9 +192,9 @@ void CRemotePlayer::Process()
 			}
 			UpdateVehicleRotation();
 
-			if(	m_icSync.vecMoveSpeed.X == 0.0f &&
-				m_icSync.vecMoveSpeed.Y == 0.0f &&
-				m_icSync.vecMoveSpeed.Z == 0.0f)
+			if(	m_icSync.vecMoveSpeed.x == 0.0f &&
+				m_icSync.vecMoveSpeed.y == 0.0f &&
+				m_icSync.vecMoveSpeed.z == 0.0f)
 			{
 				m_pCurrentVehicle->SetMoveSpeedVector(m_icSync.vecMoveSpeed);
 			}
@@ -272,17 +268,12 @@ void CRemotePlayer::Remove()
 	}
 }
 
-void CRemotePlayer::UpdateInCarMatrixAndSpeed(RwMatrix* mat, VECTOR* pos, VECTOR* speed)
+void CRemotePlayer::UpdateInCarMatrixAndSpeed(RwMatrix* mat, CVector* pos, CVector* speed)
 {
 	m_InCarQuaternion.SetFromMatrix(*mat);
 
-	m_vecInCarTargetPos.X = pos->X;
-	m_vecInCarTargetPos.Y = pos->Y;
-	m_vecInCarTargetPos.Z = pos->Z;
-
-	m_vecInCarTargetSpeed.X = speed->X;
-	m_vecInCarTargetSpeed.Y = speed->Y;
-	m_vecInCarTargetSpeed.Z = speed->Z;
+	m_vecInCarTargetPos = *pos;
+	m_vecInCarTargetSpeed = *speed;
 
 	m_pCurrentVehicle->SetMoveSpeedVector(*speed);
 }
@@ -290,7 +281,7 @@ void CRemotePlayer::UpdateInCarMatrixAndSpeed(RwMatrix* mat, VECTOR* pos, VECTOR
 void CRemotePlayer::UpdateInCarTargetPosition()
 {
 	RwMatrix matEnt;
-	VECTOR vec = { 0.0f, 0.0f, 0.0f };
+	CVector vec = { 0.0f, 0.0f, 0.0f };
 
 	float delta = 0.0f;
 
@@ -300,9 +291,9 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 
 	if(m_pCurrentVehicle->IsAdded())
 	{
-		m_vecPosOffset.X = FloatOffset(m_vecInCarTargetPos.X, matEnt.pos.X);
-		m_vecPosOffset.Y = FloatOffset(m_vecInCarTargetPos.Y, matEnt.pos.Y);
-		m_vecPosOffset.Z = FloatOffset(m_vecInCarTargetPos.Z, matEnt.pos.Z);
+		m_vecPosOffset.X = FloatOffset(m_vecInCarTargetPos.x, matEnt.pos.x);
+		m_vecPosOffset.Y = FloatOffset(m_vecInCarTargetPos.y, matEnt.pos.y);
+		m_vecPosOffset.Z = FloatOffset(m_vecInCarTargetPos.z, matEnt.pos.z);
 
 		if(m_vecPosOffset.X > 0.05f || m_vecPosOffset.Y > 0.05f || m_vecPosOffset.Z > 0.05f)
 		{
@@ -316,9 +307,8 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 
 			if(m_vecPosOffset.X > 8.0f || m_vecPosOffset.Y > 8.0f || m_vecPosOffset.Z > delta)
 			{
-				matEnt.pos.X = m_vecInCarTargetPos.X;
-				matEnt.pos.Y = m_vecInCarTargetPos.Y;
-				matEnt.pos.Z = m_vecInCarTargetPos.Z;
+				matEnt.pos = m_vecInCarTargetPos;
+
 				m_pCurrentVehicle->SetMatrix(matEnt);
 				m_pCurrentVehicle->SetMoveSpeedVector(m_vecInCarTargetSpeed);
 			}
@@ -326,15 +316,15 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 			{
 				m_pCurrentVehicle->GetMoveSpeedVector(&vec);
 				if(m_vecPosOffset.X > 0.05f)
-					vec.X += (m_vecInCarTargetPos.X - matEnt.pos.X) * 0.06f;
+					vec.x += (m_vecInCarTargetPos.x - matEnt.pos.x) * 0.06f;
 				if(m_vecPosOffset.Y > 0.05f)
-					vec.Y += (m_vecInCarTargetPos.Y - matEnt.pos.Y) * 0.06f;
+					vec.y += (m_vecInCarTargetPos.y - matEnt.pos.y) * 0.06f;
 				if(m_vecPosOffset.Z > 0.05f)
-					vec.Z += (m_vecInCarTargetPos.Z - matEnt.pos.Z) * 0.06f;
+					vec.z += (m_vecInCarTargetPos.z - matEnt.pos.z) * 0.06f;
 
-				if( FloatOffset(vec.X, 0.0f) > 0.01f ||
-					FloatOffset(vec.Y, 0.0f) > 0.01f ||
-					FloatOffset(vec.Z, 0.0f) > 0.01f)
+				if( FloatOffset(vec.x, 0.0f) > 0.01f ||
+					FloatOffset(vec.y, 0.0f) > 0.01f ||
+					FloatOffset(vec.z, 0.0f) > 0.01f)
 				{
 					m_pCurrentVehicle->SetMoveSpeedVector(vec);
 				}
@@ -343,9 +333,8 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 	}
 	else
 	{
-		matEnt.pos.X = m_vecInCarTargetPos.X;
-		matEnt.pos.Y = m_vecInCarTargetPos.Y;
-		matEnt.pos.Z = m_vecInCarTargetPos.Z;
+		matEnt.pos = m_vecInCarTargetPos;
+
 		m_pCurrentVehicle->SetMatrix(matEnt);
 	}
 }
@@ -354,29 +343,29 @@ void CRemotePlayer::UpdateVehicleRotation()
 {
 	CQuaternion quat, qresult;
 	RwMatrix matEnt;
-	VECTOR vec = { 0.0f, 0.0f, 0.0f };
+	CVector vec = { 0.0f, 0.0f, 0.0f };
 
 
 	if(!m_pCurrentVehicle) return;
 
 	m_pCurrentVehicle->GetTurnSpeedVector(&vec);
-	if(vec.X <= 0.02f)
+	if(vec.x <= 0.02f)
 	{
-		if(vec.X < -0.02f) vec.X = -0.02f;
+		if(vec.x < -0.02f) vec.x = -0.02f;
 	}
-	else vec.X = 0.02f;
+	else vec.x = 0.02f;
 
-	if(vec.Y <= 0.02f)
+	if(vec.y <= 0.02f)
 	{
-		if(vec.Y < -0.02f) vec.Y = -0.02f;
+		if(vec.y < -0.02f) vec.y = -0.02f;
 	}
-	else vec.Y = 0.02f;
+	else vec.y = 0.02f;
 
-	if(vec.Z <= 0.02f)
+	if(vec.z <= 0.02f)
 	{
-		if(vec.Z < -0.02f) vec.Z = -0.02f;
+		if(vec.z < -0.02f) vec.z = -0.02f;
 	}
-	else vec.Z = 0.02f;
+	else vec.z = 0.02f;
 
 	m_pCurrentVehicle->SetTurnSpeedVector(vec);
 
@@ -454,15 +443,11 @@ void CRemotePlayer::ExitVehicle()
 	}
 }
 
-void CRemotePlayer::UpdateOnFootPositionAndSpeed(VECTOR *vecPos, VECTOR *vecMove)
+void CRemotePlayer::UpdateOnFootPositionAndSpeed(CVector* vecPos, CVector* vecMove)
 {
 	if(!m_pPlayerPed)return;
-	m_vecOnFootTargetPos.X = vecPos->X;
-	m_vecOnFootTargetPos.Y = vecPos->Y;
-	m_vecOnFootTargetPos.Z = vecPos->Z;
-	m_vecOnFootTargetSpeed.X = vecMove->X;
-	m_vecOnFootTargetSpeed.Y = vecMove->Y;
-	m_vecOnFootTargetSpeed.Z = vecMove->Z;
+	m_vecOnFootTargetPos = *vecPos;
+	m_vecOnFootTargetSpeed = *vecMove;
 
 	m_pPlayerPed->SetMoveSpeedVector(m_vecOnFootTargetSpeed);
 }
@@ -479,9 +464,7 @@ void CRemotePlayer::StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync)
 		RwMatrix matWorld;
 
 		trSync->quat.GetMatrix(&matWorld);
-		matWorld.pos.X = trSync->vecPos.X;
-		matWorld.pos.Y = trSync->vecPos.Y;
-		matWorld.pos.Z = trSync->vecPos.Z;
+		matWorld.pos = trSync->vecPos;
 
 		pVehicle->SetMatrix(matWorld);
 		pVehicle->SetMoveSpeedVector(trSync->vecMoveSpeed);
@@ -492,43 +475,39 @@ void CRemotePlayer::StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync)
 void CRemotePlayer::UpdateOnFootTargetPosition()
 {
 	RwMatrix mat;
-	VECTOR vec;
+	CVector vec;
 
 	if(!m_pPlayerPed) return;
 	m_pPlayerPed->GetMatrix(&mat);
 
 	if(!m_pPlayerPed->IsAdded())
 	{
-		mat.pos.X = m_vecOnFootTargetPos.X;
-		mat.pos.Y = m_vecOnFootTargetPos.Y;
-		mat.pos.Z = m_vecOnFootTargetPos.Z;
+		mat.pos = m_vecOnFootTargetPos;
 
 		m_pPlayerPed->SetMatrix(mat);
 		return;
 	}
 
-	m_vecPosOffset.X = FloatOffset(m_vecOnFootTargetPos.X, mat.pos.X);
-	m_vecPosOffset.Y = FloatOffset(m_vecOnFootTargetPos.Y, mat.pos.Y);
-	m_vecPosOffset.Z = FloatOffset(m_vecOnFootTargetPos.Z, mat.pos.Z);
+	m_vecPosOffset.X = FloatOffset(m_vecOnFootTargetPos.x, mat.pos.x);
+	m_vecPosOffset.Y = FloatOffset(m_vecOnFootTargetPos.y, mat.pos.y);
+	m_vecPosOffset.Z = FloatOffset(m_vecOnFootTargetPos.z, mat.pos.z);
 
 	if(m_vecPosOffset.X > 0.00001f || m_vecPosOffset.Y > 0.00001f || m_vecPosOffset.Z > 0.00001f)
 	{
 		if(m_vecPosOffset.X > 2.0f || m_vecPosOffset.Y > 2.0f || m_vecPosOffset.Z > 1.0f)
 		{
-			mat.pos.X = m_vecOnFootTargetPos.X;
-			mat.pos.Y = m_vecOnFootTargetPos.Y;
-			mat.pos.Z = m_vecOnFootTargetPos.Z;
+			mat.pos = m_vecOnFootTargetPos;
 			m_pPlayerPed->SetMatrix(mat);
 			return;
 		}
 
 		m_pPlayerPed->GetMoveSpeedVector(&vec);
 		if(m_vecPosOffset.X > 0.00001f)
-			vec.X += (m_vecOnFootTargetPos.X - mat.pos.X) * 0.1f;
+			vec.x += (m_vecOnFootTargetPos.x - mat.pos.x) * 0.1f;
 		if(m_vecPosOffset.Y > 0.00001f)
-			vec.Y += (m_vecOnFootTargetPos.Y - mat.pos.Y) * 0.1f;
+			vec.y += (m_vecOnFootTargetPos.y - mat.pos.y) * 0.1f;
 		if(m_vecPosOffset.Z > 0.00001f)
-			vec.Z += (m_vecOnFootTargetPos.Z - mat.pos.Z) * 0.1f;
+			vec.z += (m_vecOnFootTargetPos.z - mat.pos.z) * 0.1f;
 
 		m_pPlayerPed->SetMoveSpeedVector(vec);
 	}
@@ -759,7 +738,7 @@ void CRemotePlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync, uint32_t 
 		{
 			RwMatrix mat;
 			m_pPlayerPed->GetMatrix(&mat);
-			m_pPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.X, mat.pos.Y, mat.pos.Z);
+			m_pPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z);
 		}
 	}
 	m_dwLastRecvTick = GetTickCount();
@@ -868,7 +847,7 @@ void CRemotePlayer::RemoveFromVehicle()
 		if(m_pPlayerPed->IsInVehicle())
 		{
 			m_pPlayerPed->GetMatrix(&mat);
-			m_pPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.X, mat.pos.Y, mat.pos.Z+1.0);
+			m_pPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z+1.0);
 		}
 	}
 }
@@ -973,7 +952,7 @@ void CRemotePlayer::StateChange(BYTE byteNewState, BYTE byteOldState)
 			LocalVehicle = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(pLocalPlayerPed->GetGtaVehicle());
 			if(LocalVehicle == m_VehicleID) {
 				pLocalPlayerPed->GetMatrix(&mat);
-				pLocalPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.X,mat.pos.Y,mat.pos.Z + 1.0f);
+				pLocalPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.x,mat.pos.y,mat.pos.z + 1.0f);
 				pGame->DisplayGameText("~r~Car Jacked~w~!",1000,5);
 			}
 		}

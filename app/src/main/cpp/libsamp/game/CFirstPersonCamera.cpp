@@ -110,9 +110,9 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 
 	if (!pPed->IsAPassenger())
 	{
-		VECTOR vecSpeed;
+		CVector vecSpeed;
 		pVeh->GetMoveSpeedVector(&vecSpeed);
-		float speed = sqrt((vecSpeed.X * vecSpeed.X) + (vecSpeed.Y * vecSpeed.Y) + (vecSpeed.Z * vecSpeed.Z)) * 2.0f * 100.0f;
+		float speed = sqrt((vecSpeed.x * vecSpeed.x) + (vecSpeed.y * vecSpeed.y) + (vecSpeed.z * vecSpeed.z)) * 2.0f * 100.0f;
 
 		
 		

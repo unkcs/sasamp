@@ -77,7 +77,7 @@ CStream* CStreamPool::GetStream(int iID)
 	return nullptr;
 }
 
-CStream* CStreamPool::AddStream(int iID, VECTOR* pPos, int iVirtualWorld, int iInterior, float fDistance, const char* szUrl) // ready
+CStream* CStreamPool::AddStream(int iID, CVector* pPos, int iVirtualWorld, int iInterior, float fDistance, const char* szUrl) // ready
 {
 	if (iID < 0 || iID >= MAX_STREAMS) return nullptr;
 	
@@ -292,9 +292,9 @@ void CStreamPool::Process() // ready
 
 	BASS_3DVECTOR pos;
 
-	pos.x = matLocal.pos.X;
-	pos.y = matLocal.pos.Y;
-	pos.z = matLocal.pos.Z;
+	pos.x = matLocal.pos.x;
+	pos.y = matLocal.pos.y;
+	pos.z = matLocal.pos.z;
 
 	BASS_Set3DPosition(&pos, nullptr, nullptr, nullptr);
 

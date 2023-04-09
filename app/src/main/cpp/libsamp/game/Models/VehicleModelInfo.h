@@ -2,14 +2,14 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CVEHICLEMODELINFO_H
-#define LIVERUSSIA_CVEHICLEMODELINFO_H
+#ifndef LIVERUSSIA_VEHICLEMODELINFO_H
+#define LIVERUSSIA_VEHICLEMODELINFO_H
 
 
-#include "CClumpModelInfo.h"
-#include "eVehicleClass.h"
-#include "quaternion.h"
-#include "CVector.h"
+#include "ClumpModelInfo.h"
+#include "game/Enums/eVehicleClass.h"
+#include "../quaternion.h"
+#include "../CVector.h"
 
 enum eVehicleDummy {
     DUMMY_LIGHT_FRONT_MAIN      = 0,
@@ -115,4 +115,4 @@ struct CVehicleModelInfo : public CClumpModelInfo {
 
 
 
-#endif //LIVERUSSIA_CVEHICLEMODELINFO_H
+#endif //LIVERUSSIA_VEHICLEMODELINFO_H

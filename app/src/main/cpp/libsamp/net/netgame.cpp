@@ -153,7 +153,6 @@ CNetGame::~CNetGame()
 #include "CUDPSocket.h"
 #include "..//CServerManager.h"
 #include "java_systems/CSpeedometr.h"
-#include "game/CSkyBox.h"
 
 int last_process_cnetgame = 0;
 void CNetGame::Process()
@@ -1180,12 +1179,12 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			char str[255];
 			uint8_t len;
 			uint16_t id, vw, interior;
-			VECTOR pos;
+			CVector pos;
 			float fDistance;
 			bs.Read(id);
-			bs.Read(pos.X);
-			bs.Read(pos.Y);
-			bs.Read(pos.Z);
+			bs.Read(pos.x);
+			bs.Read(pos.y);
+			bs.Read(pos.z);
 			bs.Read(fDistance);
 			bs.Read(vw);
 			bs.Read(interior);
@@ -1219,11 +1218,11 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 		case RPC_STREAM_POS:
 		{
 			uint16_t id;
-			VECTOR pos;
+			CVector pos;
 			bs.Read(id);
-			bs.Read(pos.X);
-			bs.Read(pos.Y);
-			bs.Read(pos.Z);
+			bs.Read(pos.x);
+			bs.Read(pos.y);
+			bs.Read(pos.z);
 			if (GetStreamPool()->GetStream(id))
 			{
 				GetStreamPool()->GetStream(id)->SetPosition(pos);
@@ -1756,19 +1755,19 @@ void CNetGame::Packet_PlayerSync(Packet* pkt)
     // SPECIAL ACTION
     bsPlayerSync.Read(ofSync.byteSpecialAction);
 
-    // READ MOVESPEED VECTORS
-    bsPlayerSync.ReadVector(tx, ty, tz);
-    ofSync.vecMoveSpeed.X = tx;
-    ofSync.vecMoveSpeed.Y = ty;
-    ofSync.vecMoveSpeed.Z = tz;
+	// READ MOVESPEED VECTORS
+	bsPlayerSync.ReadVector(tx, ty, tz);
+	ofSync.vecMoveSpeed.x = tx;
+	ofSync.vecMoveSpeed.y = ty;
+	ofSync.vecMoveSpeed.z = tz;
 
     bsPlayerSync.Read(bHasVehicleSurfingInfo);
     if (bHasVehicleSurfingInfo) 
     {
         bsPlayerSync.Read(ofSync.wSurfInfo);
-        bsPlayerSync.Read(ofSync.vecSurfOffsets.X);
-        bsPlayerSync.Read(ofSync.vecSurfOffsets.Y);
-        bsPlayerSync.Read(ofSync.vecSurfOffsets.Z);
+        bsPlayerSync.Read(ofSync.vecSurfOffsets.x);
+        bsPlayerSync.Read(ofSync.vecSurfOffsets.y);
+        bsPlayerSync.Read(ofSync.vecSurfOffsets.z);
     } 
     else
     	ofSync.wSurfInfo = INVALID_VEHICLE_ID;
@@ -1817,9 +1816,9 @@ void CNetGame::Packet_VehicleSync(Packet* pkt)
 
 	// speed
 	bsSync.ReadVector(
-		icSync.vecMoveSpeed.X,
-		icSync.vecMoveSpeed.Y,
-		icSync.vecMoveSpeed.Z);
+		icSync.vecMoveSpeed.x,
+		icSync.vecMoveSpeed.y,
+		icSync.vecMoveSpeed.z);
 
 	// vehicle health
 	uint16_t wTempVehicleHealth;

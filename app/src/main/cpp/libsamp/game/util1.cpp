@@ -1,7 +1,7 @@
 #include "../main.h"
 #include "game.h"
 #include "CWorld.h"
-#include "CModelInfo.h"
+#include "game/Models/ModelInfo.h"
 
 #define PI 3.14159265
 
@@ -2015,9 +2015,9 @@ float FloatOffset(float f1, float f2)
     else return (f2 - f1);
 }
 #include <cmath>
-float GetDistanceBetween3DPoints(VECTOR* f, VECTOR* s)
+float GetDistanceBetween3DPoints(const RwV3d f, const RwV3d s)
 {
-	return sqrt(pow(s->X - f->X, 2) + pow(s->Y - f->Y, 2) + pow(s->Z - f->Z, 2));
+	return sqrt(pow(s.x - f.x, 2) + pow(s.y - f.y, 2) + pow(s.z - f.z, 2));
 }
 
 const char* GetAnimByIdx(int idx)
@@ -2174,9 +2174,9 @@ void RwMatrixInvert(RwMatrix *matOut, RwMatrix *matIn)
 
 void ProjectMatrix(VECTOR* vecOut, RwMatrix* mat, VECTOR* vecPos)
 {
-	vecOut->X = mat->at.X * vecPos->Z + mat->up.X * vecPos->Y + mat->right.X * vecPos->X + mat->pos.X;
-	vecOut->Y = mat->at.Y * vecPos->Z + mat->up.Y * vecPos->Y + mat->right.Y * vecPos->X + mat->pos.Y;
-	vecOut->Z = mat->at.Z * vecPos->Z + mat->up.Z * vecPos->Y + mat->right.Z * vecPos->X + mat->pos.Z;
+	vecOut->X = mat->at.X * vecPos->Z + mat->up.X * vecPos->Y + mat->right.X * vecPos->X + mat->pos.x;
+	vecOut->Y = mat->at.Y * vecPos->Z + mat->up.Y * vecPos->Y + mat->right.Y * vecPos->X + mat->pos.y;
+	vecOut->Z = mat->at.Z * vecPos->Z + mat->up.Z * vecPos->Y + mat->right.Z * vecPos->X + mat->pos.z;
 }
 
 void RwMatrixRotate(RwMatrix* mat, int axis, float angle)

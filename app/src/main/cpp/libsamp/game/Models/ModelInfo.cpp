@@ -2,7 +2,7 @@
 // Created by plaka on 07.03.2023.
 //
 
-#include "CModelInfo.h"
+#include "ModelInfo.h"
 #include "util/patch.h"
 
 CBaseModelInfo *CModelInfo::ms_modelInfoPtrs[30000];

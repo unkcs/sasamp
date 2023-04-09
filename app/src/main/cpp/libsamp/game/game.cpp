@@ -5,7 +5,7 @@
 #include "java_systems/CHUD.h"
 #include "util/patch.h"
 #include "CGtaWidgets.h"
-#include "CModelInfo.h"
+#include "game/Models/ModelInfo.h"
 
 void ApplyPatches();
 void ApplyInGamePatches();
@@ -105,7 +105,7 @@ void CGame::RemovePlayer(CPlayerPed* pPlayer)
 	}
 }
 
-CObject *CGame::NewObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRot, float fDrawDistance)
+CObject *CGame::NewObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance)
 {
 	CObject *pObjectNew = new CObject(iModel, fPosX, fPosY, fPosZ, vecRot, fDrawDistance);
 	return pObjectNew;

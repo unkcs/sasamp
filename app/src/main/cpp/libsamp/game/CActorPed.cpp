@@ -119,7 +119,7 @@ void CActorPed::SetDead()
 
 	RwMatrix matEntity;
 	GetMatrix(&matEntity);
-	TeleportTo(matEntity.pos.X, matEntity.pos.Y, matEntity.pos.Z);
+	TeleportTo(matEntity.pos.x, matEntity.pos.y, matEntity.pos.z);
 
 	SetHealth(0.0f);
 	ScriptCommand(&kill_actor, m_dwGTAId);
@@ -190,7 +190,7 @@ void CActorPed::RemoveFromVehicle()
 	if (m_pPed->bInVehicle)
 	{
 		GetMatrix(&mat);
-		RemoveFromVehicleAndPutAt(mat.pos.X, mat.pos.Y, mat.pos.Z);
+		RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z);
 	}
 }
 

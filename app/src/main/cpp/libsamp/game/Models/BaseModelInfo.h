@@ -2,12 +2,12 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CBASEMODELINFO_H
-#define LIVERUSSIA_CBASEMODELINFO_H
+#ifndef LIVERUSSIA_BASEMODELINFO_H
+#define LIVERUSSIA_BASEMODELINFO_H
 
 #include <cstdint>
 
-#include "CTimeInfo.h"
+#include "TimeInfo.h"
 
 enum ModelInfoType : unsigned char {
     MODEL_INFO_ATOMIC = 1,
@@ -84,4 +84,4 @@ struct CBaseModelInfo {
 // sizeof=0x38
 
 
-#endif //LIVERUSSIA_CBASEMODELINFO_H
+#endif //LIVERUSSIA_BASEMODELINFO_H

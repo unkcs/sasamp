@@ -9,7 +9,7 @@
 #include "Entity.h"
 #include "../PedIntelligence.h"
 #include "../Weapon.h"
-#include "game/ePedState.h"
+#include "../Enums/ePedState.h"
 #include "game/Enums/eMoveState.h"
 #include "game/common.h"
 #include "game/Enums/AnimationEnums.h"

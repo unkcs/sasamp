@@ -19,7 +19,7 @@ float subAngle(float a1, float a2)
 	return fixAngle(fixAngle(a2) - a1);
 }
 
-CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRot, float fDrawDistance)
+CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance)
 {
 	uint32_t dwRetID 	= 0;
 	m_pEntity 			= 0;
@@ -47,7 +47,7 @@ CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRo
 		m_pMaterials[i].pTex = nullptr;
 	}
 
-	InstantRotate(vecRot.X, vecRot.Y, vecRot.Z);
+	InstantRotate(vecRot.x, vecRot.y, vecRot.z);
 }
 // todo
 CObject::~CObject()
@@ -85,16 +85,16 @@ void CObject::Process(float fElapsedTime)
 	if (!(m_pEntity->mat)) return;
 	if (m_byteMoving & 1)
 	{
-		VECTOR vecSpeed = { 0.0f, 0.0f, 0.0f };
+		CVector vecSpeed = { 0.0f, 0.0f, 0.0f };
 		RwMatrix matEnt;
 		GetMatrix(&matEnt);
 		float distance = fElapsedTime * m_fMoveSpeed;
 		float remaining = DistanceRemaining(&matEnt);
 		uint32_t dwThisTick = GetTickCount();
 
-		float posX = matEnt.pos.X;
-		float posY = matEnt.pos.Y;
-		float posZ = matEnt.pos.Z;
+		float posX = matEnt.pos.x;
+		float posY = matEnt.pos.y;
+		float posZ = matEnt.pos.z;
 
 		float f1 = ((float)(dwThisTick - m_dwMoveTick)) * 0.001f * m_fMoveSpeed;
 		float f2 = m_fDistanceToTargetPoint - remaining;
@@ -103,9 +103,8 @@ void CObject::Process(float fElapsedTime)
 		{
 			SetMoveSpeedVector(vecSpeed);
 			SetTurnSpeedVector(vecSpeed);
-			matEnt.pos.X = m_matTarget.pos.X;
-			matEnt.pos.Y = m_matTarget.pos.Y;
-			matEnt.pos.Z = m_matTarget.pos.Z;
+			matEnt.pos = m_matTarget.pos;
+
 			if (m_bNeedRotate) {
 				m_quatTarget.GetMatrix(&matEnt);
 			}
@@ -118,34 +117,30 @@ void CObject::Process(float fElapsedTime)
 			return;
 
 		float delta = 1.0f / (remaining / distance);
-		matEnt.pos.X += ((m_matTarget.pos.X - matEnt.pos.X) * delta);
-		matEnt.pos.Y += ((m_matTarget.pos.Y - matEnt.pos.Y) * delta);
-		matEnt.pos.Z += ((m_matTarget.pos.Z - matEnt.pos.Z) * delta);
+		matEnt.pos.x += ((m_matTarget.pos.x - matEnt.pos.x) * delta);
+		matEnt.pos.y += ((m_matTarget.pos.y - matEnt.pos.y) * delta);
+		matEnt.pos.z += ((m_matTarget.pos.z - matEnt.pos.z) * delta);
 
 		distance = remaining / m_fDistanceToTargetPoint;
 		float slerpDelta = 1.0f - distance;
 
 		delta = 1.0f / fElapsedTime;
-		vecSpeed.X = (matEnt.pos.X - posX) * delta * 0.02f;
-		vecSpeed.Y = (matEnt.pos.Y - posY) * delta * 0.02f;
-		vecSpeed.Z = (matEnt.pos.Z - posZ) * delta * 0.02f;
+		vecSpeed.x = (matEnt.pos.x - posX) * delta * 0.02f;
+		vecSpeed.y = (matEnt.pos.y - posY) * delta * 0.02f;
+		vecSpeed.z = (matEnt.pos.z - posZ) * delta * 0.02f;
 
 		if (FloatOffset(f1, f2) > 0.1f)
 		{
 			if (f1 > f2)
 			{
 				delta = (f1 - f2) * 0.1f + 1.0f;
-				vecSpeed.X *= delta;
-				vecSpeed.Y *= delta;
-				vecSpeed.Z *= delta;
+				vecSpeed *= delta;
 			}
 
 			if (f2 > f1)
 			{
 				delta = 1.0f - (f2 - f1) * 0.1f;
-				vecSpeed.X *= delta;
-				vecSpeed.Y *= delta;
-				vecSpeed.Z *= delta;
+				vecSpeed *= delta;
 			}
 		}
 
@@ -157,17 +152,17 @@ void CObject::Process(float fElapsedTime)
 			float fx, fy, fz;
 			GetRotation(&fx, &fy, &fz);
 			distance = m_vecRotationTarget.Z - distance * m_vecSubRotationTarget.Z;
-			vecSpeed.X = 0.0f;
-			vecSpeed.Y = 0.0f;
-			vecSpeed.Z = subAngle(remaining, distance) * 0.01f;
-			if (vecSpeed.Z <= 0.001f)
+			vecSpeed.x = 0.0f;
+			vecSpeed.y = 0.0f;
+			vecSpeed.z = subAngle(remaining, distance) * 0.01f;
+			if (vecSpeed.z <= 0.001f)
 			{
-				if (vecSpeed.Z < -0.001f)
-					vecSpeed.Z = -0.001f;
+				if (vecSpeed.z < -0.001f)
+					vecSpeed.z = -0.001f;
 			}
 			else
 			{
-				vecSpeed.Z = 0.001f;
+				vecSpeed.z = 0.001f;
 			}
 
 			SetTurnSpeedVector(vecSpeed);
@@ -190,9 +185,9 @@ float CObject::DistanceRemaining(RwMatrix *matPos)
 {
 
 	float	fSX,fSY,fSZ;
-	fSX = (matPos->pos.X - m_matTarget.pos.X) * (matPos->pos.X - m_matTarget.pos.X);
-	fSY = (matPos->pos.Y - m_matTarget.pos.Y) * (matPos->pos.Y - m_matTarget.pos.Y);
-	fSZ = (matPos->pos.Z - m_matTarget.pos.Z) * (matPos->pos.Z - m_matTarget.pos.Z);
+	fSX = (matPos->pos.x - m_matTarget.pos.x) * (matPos->pos.x - m_matTarget.pos.x);
+	fSY = (matPos->pos.y - m_matTarget.pos.y) * (matPos->pos.y - m_matTarget.pos.y);
+	fSZ = (matPos->pos.z - m_matTarget.pos.z) * (matPos->pos.z - m_matTarget.pos.z);
 	return (float)sqrt(fSX + fSY + fSZ);
 }
 
@@ -211,9 +206,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 
 	if (m_byteMoving & 1) {
 		this->StopMoving();
-		mat.pos.X = m_matTarget.pos.X;
-		mat.pos.Y = m_matTarget.pos.Y;
-		mat.pos.Z = m_matTarget.pos.Z;
+		mat.pos = m_matTarget.pos;
 
 		if (m_bNeedRotate) {
 			m_quatTarget.GetMatrix(&mat);
@@ -224,9 +217,9 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 
 	m_dwMoveTick = GetTickCount();
 	m_fMoveSpeed = fSpeed;
-	m_matTarget.pos.X = fX;
-	m_matTarget.pos.Y = fY;
-	m_matTarget.pos.Z = fZ;
+	m_matTarget.pos.x = fX;
+	m_matTarget.pos.y = fY;
+	m_matTarget.pos.z = fZ;
 	m_byteMoving |= 1;
 
 	if (fRotX <= -999.0f || fRotY <= -999.0f || fRotZ <= -999.0f) {
@@ -263,7 +256,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 		m_quatTarget.Normalize();
 	}
 
-	m_fDistanceToTargetPoint = this->GetDistanceFromPoint(m_matTarget.pos.X, m_matTarget.pos.Y, m_matTarget.pos.Z);
+	m_fDistanceToTargetPoint = this->GetDistanceFromPoint(m_matTarget.pos.x, m_matTarget.pos.y, m_matTarget.pos.z);
 
 	if (pNetGame) {
 		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
@@ -273,17 +266,17 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 	}
 }
 
-void CObject::AttachToVehicle(uint16_t usVehID, VECTOR* pVecOffset, VECTOR* pVecRot)
+void CObject::AttachToVehicle(uint16_t usVehID, CVector* pVecOffset, CVector* pVecRot)
 {
 	m_bAttachedType = 1;
 	m_usAttachedVehicle = usVehID;
-	m_vecAttachedOffset.X = pVecOffset->X;
-	m_vecAttachedOffset.Y = pVecOffset->Y;
-	m_vecAttachedOffset.Z = pVecOffset->Z;
+	m_vecAttachedOffset.X = pVecOffset->x;
+	m_vecAttachedOffset.Y = pVecOffset->y;
+	m_vecAttachedOffset.Z = pVecOffset->z;
 
-	m_vecAttachedRotation.X = pVecRot->X;
-	m_vecAttachedRotation.Y = pVecRot->Y;
-	m_vecAttachedRotation.Z = pVecRot->Z;
+	m_vecAttachedRotation.X = pVecRot->x;
+	m_vecAttachedRotation.Y = pVecRot->y;
+	m_vecAttachedRotation.Z = pVecRot->z;
 }
 
 void CObject::ProcessAttachToVehicle(CVehicle* pVehicle)
@@ -308,7 +301,7 @@ void CObject::InstantRotate(float x, float y, float z)
 
 void CObject::StopMoving()
 {
-	VECTOR vec = { 0.0f, 0.0f, 0.0f };
+	CVector vec = { 0.0f, 0.0f, 0.0f };
 	this->SetMoveSpeedVector(vec);
 	this->SetTurnSpeedVector(vec);
 	m_byteMoving &= ~1;
@@ -322,9 +315,9 @@ void CObject::ApplyMoveSpeed()
 
 		RwMatrix mat;
 		GetMatrix(&mat);
-		mat.pos.X += fTimeStep * m_pEntity->vecMoveSpeed.X;
-		mat.pos.Y += fTimeStep * m_pEntity->vecMoveSpeed.Y;
-		mat.pos.Z += fTimeStep * m_pEntity->vecMoveSpeed.Z;
+		mat.pos.x += fTimeStep * m_pEntity->vecMoveSpeed.x;
+		mat.pos.y += fTimeStep * m_pEntity->vecMoveSpeed.y;
+		mat.pos.z += fTimeStep * m_pEntity->vecMoveSpeed.z;
 		UpdateMatrix(mat);
 	}
 }

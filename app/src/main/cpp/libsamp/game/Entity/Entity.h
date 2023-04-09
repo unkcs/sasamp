@@ -7,6 +7,7 @@
 #pragma pack(1)
 
 #include "Placeable.h"
+#include "game/CVector.h"
 
 typedef struct _ENTITY_TYPE : CPlaceable
 {
@@ -64,8 +65,8 @@ typedef struct _ENTITY_TYPE : CPlaceable
 
     uint8_t _pad2[32];
 
-    VECTOR vecMoveSpeed;
-    VECTOR vecTurnSpeed;
+    CVector vecMoveSpeed;
+    CVector vecTurnSpeed;
 
     uint8_t _pad3[88];
 

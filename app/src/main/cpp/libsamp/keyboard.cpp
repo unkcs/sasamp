@@ -330,7 +330,7 @@ void CKeyBoard::Close()
 #include "java_systems/CDuelsGui.h"
 #include "util/patch.h"
 #include "game/CVector.h"
-#include "game/CModelInfo.h"
+#include "game/Models/ModelInfo.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -2351,9 +2351,9 @@ bool ProcessLocalCommands(const char str[])
 			ScriptCommand(&get_car_z_angle, m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),
-					pVehicle->entity.mat->pos.X,
-					pVehicle->entity.mat->pos.Y,
-					pVehicle->entity.mat->pos.Z,
+					pVehicle->entity.mat->pos.x,
+					pVehicle->entity.mat->pos.y,
+					pVehicle->entity.mat->pos.z,
 					fZAngle
 			);
 			CChatWindow::AddInfoMessage("-> InCar position saved.");
@@ -2365,9 +2365,9 @@ bool ProcessLocalCommands(const char str[])
 			ScriptCommand(&get_actor_z_angle, pPlayer->m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),
-					pActor->entity.mat->pos.X,
-					pActor->entity.mat->pos.Y,
-					pActor->entity.mat->pos.Z,
+					pActor->entity.mat->pos.x,
+					pActor->entity.mat->pos.y,
+					pActor->entity.mat->pos.z,
 					fZAngle
 			);
 			CChatWindow::AddInfoMessage("-> OnFoot position saved.");
@@ -2405,13 +2405,13 @@ bool ProcessLocalCommands(const char str[])
 
 		uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
 
-		CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
+		auto m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
 
-		VECTOR vec;
+		CVector vec;
 		// 0 - front light
-		vec.X = m_avDummyPos[size].x;
-		vec.Y = m_avDummyPos[size].y;
-		vec.Z = m_avDummyPos[size].z;
+		vec.x = m_avDummyPos[size].x;
+		vec.y = m_avDummyPos[size].y;
+		vec.z = m_avDummyPos[size].z;
 		//float x;
 
 
@@ -2431,8 +2431,8 @@ bool ProcessLocalCommands(const char str[])
 //										 x, y, z, 30.0f, 0, INVALID_PLAYER_ID, pPlayer->GetCurrentSampVehicleID());
 //		}
 		CObjectPool* pObjectPool = pNetGame->GetObjectPool();
-		VECTOR vec11;
-		vec11.X = vec11.Y = vec11.Z = 0.0;
+		CVector vec11;
+		vec11.x = vec11.y = vec11.z = 0.0;
 		pObjectPool->New(555, 19294, vec11, vec11, 300.0f);
 
 		CObject* pObject = pObjectPool->GetAt(555);
@@ -2440,7 +2440,7 @@ bool ProcessLocalCommands(const char str[])
 		pObject->AttachToVehicle(pPlayer->GetCurrentSampVehicleID(), &vec, &vec11);
 
 
-		CChatWindow::AddInfoMessage("%.3f, %.3f, %.3f", vec.X, vec.Y, vec.Z);
+		CChatWindow::AddInfoMessage("%.3f, %.3f, %.3f", vec.x, vec.y, vec.z);
 		return true;
 	}
 

@@ -2,11 +2,11 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CCLUMPMODELINFO_H
-#define LIVERUSSIA_CCLUMPMODELINFO_H
+#ifndef LIVERUSSIA_CLUMPMODELINFO_H
+#define LIVERUSSIA_CLUMPMODELINFO_H
 
 
-#include "CBaseModelInfo.h"
+#include "BaseModelInfo.h"
 
 struct CClumpModelInfo : public CBaseModelInfo {
     union {
@@ -17,4 +17,4 @@ struct CClumpModelInfo : public CBaseModelInfo {
 // 0x3C
 
 
-#endif //LIVERUSSIA_CCLUMPMODELINFO_H
+#endif //LIVERUSSIA_CLUMPMODELINFO_H

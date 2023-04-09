@@ -58,7 +58,7 @@ public:
 	// 0.3.7
 	static void RemovePlayer(CPlayerPed* pPlayer);
 	// 0.3.7
-	CObject* NewObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRot, float fDrawDistastatic);
+	CObject* NewObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistastatic);
 	uint32_t CreatePickup(int iModel, int iType, float fX, float fY, float fZ, int *unk);
 
 	static float FindGroundZForCoord(float x, float y, float z);

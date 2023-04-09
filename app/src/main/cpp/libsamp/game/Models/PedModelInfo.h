@@ -2,10 +2,10 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CPEDMODELINFO_H
-#define LIVERUSSIA_CPEDMODELINFO_H
+#ifndef LIVERUSSIA_PEDMODELINFO_H
+#define LIVERUSSIA_PEDMODELINFO_H
 
-#include "CClumpModelInfo.h"
+#include "ClumpModelInfo.h"
 
 struct CPedModelInfo : public CClumpModelInfo{
 public:
@@ -27,4 +27,4 @@ public:
 
 
 
-#endif //LIVERUSSIA_CPEDMODELINFO_H
+#endif //LIVERUSSIA_PEDMODELINFO_H

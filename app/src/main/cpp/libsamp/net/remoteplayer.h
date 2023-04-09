@@ -70,12 +70,12 @@ public:
 	void StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync, uint32_t time);
 	void StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync, uint32_t time);
 	void StorePassengerFullSyncData(PASSENGER_SYNC_DATA *psSync);
-	void UpdateOnFootPositionAndSpeed(VECTOR *vecPos, VECTOR *vecMoveSpeed);
+	void UpdateOnFootPositionAndSpeed(CVector *vecPos, CVector *vecMoveSpeed);
 	void StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync);
 	void UpdateOnFootTargetPosition();
 	void SlerpRotation();
 
-	void UpdateInCarMatrixAndSpeed(RwMatrix* mat, VECTOR* pos, VECTOR* speed);
+	void UpdateInCarMatrixAndSpeed(RwMatrix* mat, CVector* pos, CVector* speed);
 	void UpdateInCarTargetPosition();
 	void UpdateVehicleRotation();
 	void EnterVehicle(VEHICLEID VehicleID, bool bPassenger);
@@ -122,11 +122,11 @@ private:
 
 	VECTOR 				m_vecPosOffset;
 
-	VECTOR				m_vecOnFootTargetPos;
-	VECTOR 				m_vecOnFootTargetSpeed;
+	CVector				m_vecOnFootTargetPos;
+	CVector 				m_vecOnFootTargetSpeed;
 
-	VECTOR 				m_vecInCarTargetPos;
-	VECTOR 				m_vecInCarTargetSpeed;
+	CVector 				m_vecInCarTargetPos;
+	CVector 				m_vecInCarTargetSpeed;
 	CQuaternion			m_InCarQuaternion;
 
 	uint8_t				m_byteSpecialAction;

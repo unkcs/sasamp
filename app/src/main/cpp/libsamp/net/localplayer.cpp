@@ -597,7 +597,7 @@ void CLocalPlayer::SendNextClass()
 	if(m_iSelectedClass == (pNetGame->m_iSpawnsAvailable - 1)) m_iSelectedClass = 0;
 	else m_iSelectedClass++;
 
-	pGame->PlaySound(1052, matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z);
+	pGame->PlaySound(1052, matPlayer.pos.x, matPlayer.pos.y, matPlayer.pos.z);
 	RequestClass(m_iSelectedClass);
 }
 
@@ -609,7 +609,7 @@ void CLocalPlayer::SendPrevClass()
 	if(m_iSelectedClass == 0) m_iSelectedClass = (pNetGame->m_iSpawnsAvailable - 1);
 	else m_iSelectedClass--;		
 
-	pGame->PlaySound(1053,matPlayer.pos.X,matPlayer.pos.Y,matPlayer.pos.Z);
+	pGame->PlaySound(1053,matPlayer.pos.x,matPlayer.pos.y,matPlayer.pos.z);
 	RequestClass(m_iSelectedClass);
 }
 
@@ -784,7 +784,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 {
 	RakNet::BitStream bsPlayerSync;
 	RwMatrix matPlayer;
-	VECTOR vecMoveSpeed;
+	CVector vecMoveSpeed;
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
 
@@ -796,9 +796,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 	ofSync.lrAnalog = lrAnalog;
 	ofSync.udAnalog = udAnalog;
 	ofSync.wKeys = wKeys;
-	ofSync.vecPos.X = matPlayer.pos.X;
-	ofSync.vecPos.Y = matPlayer.pos.Y;
-	ofSync.vecPos.Z = matPlayer.pos.Z;
+	ofSync.vecPos = matPlayer.pos;
 
 	ofSync.quat.SetFromMatrix(matPlayer);
 	ofSync.quat.Normalize();
@@ -828,13 +826,10 @@ void CLocalPlayer::SendOnFootFullSyncData()
 		ofSync.byteSpecialAction = m_pPlayerPed->m_iCurrentSpecialAction;
 	}
 
-	ofSync.vecMoveSpeed.X = vecMoveSpeed.X;
-	ofSync.vecMoveSpeed.Y = vecMoveSpeed.Y;
-	ofSync.vecMoveSpeed.Z = vecMoveSpeed.Z;
+	ofSync.vecMoveSpeed = vecMoveSpeed;
 
-	ofSync.vecSurfOffsets.X = 0.0f;
-	ofSync.vecSurfOffsets.Y = 0.0f;
-	ofSync.vecSurfOffsets.Z = 0.0f;
+	ofSync.vecSurfOffsets = 0.0f;
+
 	ofSync.wSurfInfo = 0;
 
 	ofSync.dwAnimation = 0;
@@ -907,7 +902,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 	if(!m_pPlayerPed || !m_pPlayerPed->m_pPed)return;
 
 	RwMatrix matPlayer;
-	VECTOR vecMoveSpeed;
+	CVector vecMoveSpeed;
 
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
@@ -942,13 +937,10 @@ void CLocalPlayer::SendInCarFullSyncData()
 	}
 
 	// pos
-	icSync.vecPos.X = matPlayer.pos.X;
-	icSync.vecPos.Y = matPlayer.pos.Y;
-	icSync.vecPos.Z = matPlayer.pos.Z;
+	icSync.vecPos = matPlayer.pos;
+
 	// move speed
-	icSync.vecMoveSpeed.X = vecMoveSpeed.X;
-	icSync.vecMoveSpeed.Y = vecMoveSpeed.Y;
-	icSync.vecMoveSpeed.Z = vecMoveSpeed.Z;
+	icSync.vecMoveSpeed = vecMoveSpeed;
 
 	icSync.fCarHealth = pVehicle->GetHealth();
 	icSync.bytePlayerHealth = (uint8_t)m_pPlayerPed->GetHealth();
@@ -980,9 +972,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 			pTrailer->GetMatrix(&matTrailer);
 			trSync.trailerID = icSync.TrailerID;
 
-			trSync.vecPos.X = matTrailer.pos.X;
-			trSync.vecPos.Y = matTrailer.pos.Y;
-			trSync.vecPos.Z = matTrailer.pos.Z;
+			trSync.vecPos = matTrailer.pos;
 
 			CQuaternion syncQuat;
 			syncQuat.SetFromMatrix(matTrailer);
@@ -1034,9 +1024,7 @@ void CLocalPlayer::SendPassengerFullSyncData()
 	psSync.byteCurrentWeapon = m_pPlayerPed->GetCurrentWeapon();//m_pPlayerPed->GetCurrentWeapon();
 
 	m_pPlayerPed->GetMatrix(&mat);
-	psSync.vecPos.X = mat.pos.X;
-	psSync.vecPos.Y = mat.pos.Y;
-	psSync.vecPos.Z = mat.pos.Z;
+	psSync.vecPos = mat.pos;
 
 	// send
 	if((GetTickCount() - m_dwLastUpdatePassengerData) > 500 || memcmp(&m_PassengerData, &psSync, sizeof(PASSENGER_SYNC_DATA)))
@@ -1097,9 +1085,8 @@ void CLocalPlayer::ProcessSpectating()
 
 	if(!pPlayerPool || !pVehiclePool) return;
 
-	spSync.vecPos.X = matPos.pos.X;
-	spSync.vecPos.Y = matPos.pos.Y;
-	spSync.vecPos.Z = matPos.pos.Z;
+	spSync.vecPos = matPos.pos;
+
 	spSync.lrAnalog = lrAnalog;
 	spSync.udAnalog = udAnalog;
 	spSync.wKeys = wKeys;
@@ -1119,7 +1106,7 @@ void CLocalPlayer::ProcessSpectating()
 	}
 
 	m_pPlayerPed->SetHealth(100.0f);
-	GetPlayerPed()->TeleportTo(spSync.vecPos.X, spSync.vecPos.Y, spSync.vecPos.Z + 20.0f);
+	GetPlayerPed()->TeleportTo(spSync.vecPos.x, spSync.vecPos.y, spSync.vecPos.z + 20.0f);
 
 	// handle spectate player left the server
 	if(m_byteSpectateType == SPECTATE_TYPE_PLAYER &&

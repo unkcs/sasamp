@@ -29,7 +29,7 @@ void SetScissorRect(void* pRect);
 float DegToRad(float fDegrees);
 // 0.3.7
 float FloatOffset(float f1, float f2);
-float GetDistanceBetween3DPoints(VECTOR* f, VECTOR* s);
+float GetDistanceBetween3DPoints(const RwV3d f, const RwV3d s);
 
 const char* GetAnimByIdx(int idx);
 int GetAnimIdxByName(const char* szName);

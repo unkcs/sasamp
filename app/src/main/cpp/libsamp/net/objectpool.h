@@ -13,7 +13,7 @@ public:
 	CObjectPool();
 	~CObjectPool();
 
-	bool New(uint16_t ObjectID, int iModel, VECTOR vecPos, VECTOR vecRot, float fDrawDistance = 0);
+	bool New(uint16_t ObjectID, int iModel, CVector vecPos, CVector vecRot, float fDrawDistance = 0);
 	bool Delete(uint16_t ObjectID);
 
 	bool GetSlotState(uint16_t ObjectID)

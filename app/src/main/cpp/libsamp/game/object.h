@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CVector.h"
+
 struct RetextureMaterial
 {
 	RwTexture* texture;
@@ -38,7 +40,7 @@ public:
 	float		m_fDistanceToTargetPoint;
 	uint32_t		m_dwMoveTick;
 
-	CObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRot, float fDrawDistance);
+	CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance);
 	~CObject();
 
 	void Process(float fElapsedTime);
@@ -48,7 +50,7 @@ public:
 	void SetPos(float x, float y, float z);
 	void MoveTo(float x, float y, float z, float speed, float rX, float rY, float rZ);
 
-	void AttachToVehicle(uint16_t usVehID, VECTOR* pVecOffset, VECTOR* pVecRot);
+	void AttachToVehicle(uint16_t usVehID, CVector* pVecOffset, CVector* pVecRot);
 	void ProcessAttachToVehicle(CVehicle* pVehicle);
 
 	void InstantRotate(float x, float y, float z);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CVector.h"
+
 class CEntity
 {
 public:
@@ -19,12 +21,12 @@ public:
 	// 0.3.7
 	void SetMatrix(RwMatrix Matrix);
 	// 0.3.7
-	void GetMoveSpeedVector(PVECTOR Vector);
+	void GetMoveSpeedVector(CVector *vec);
 	// 0.3.7
-	void SetMoveSpeedVector(VECTOR Vector);
+	void SetMoveSpeedVector(CVector Vector);
 
-	void GetTurnSpeedVector(PVECTOR Vector);
-	void SetTurnSpeedVector(VECTOR Vector);
+	void GetTurnSpeedVector(CVector* Vector);
+	void SetTurnSpeedVector(const CVector Vector);
 	
 	// 0.3.7
 	uint16_t GetModelIndex();

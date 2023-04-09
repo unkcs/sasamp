@@ -8,6 +8,7 @@
 #include "../RwMatrix.h"
 #include "game/SimpleTransform.h"
 
+#pragma pack(push, 4)
 struct CPlaceable
 {
     uint32_t            vtable;
@@ -15,5 +16,6 @@ struct CPlaceable
     RwMatrix            *mat;
 };
 static_assert(sizeof(CPlaceable) == 0x18, "Invalid size CPlaceable");
+#pragma pack(pop)
 
 #endif //LIVERUSSIA_PLACEABLE_H

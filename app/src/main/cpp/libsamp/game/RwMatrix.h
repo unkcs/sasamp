@@ -9,6 +9,7 @@
 
 #include "Core/Vector.h"
 #include "game/RW/rwlpcore.h"
+#include <stdint.h>
 
 struct RwMatrixTag
 {

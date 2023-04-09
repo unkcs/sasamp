@@ -7,7 +7,7 @@
 
 #include "CActorPed.h"
 
-#include "Entity/EntityGta.h"
+#include "Entity/Physical.h"
 extern CGame* pGame;
 
 CActorPed::CActorPed(uint16_t usModel, VECTOR vecPosition, float fRotation, float fHealth, bool bInvulnerable)

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../game/common.h"
+#include "../game/quaternion.h"
+#include "../game/playerped.h"
+
 // spectate
 #define SPECTATE_TYPE_NONE				0
 #define SPECTATE_TYPE_PLAYER			1

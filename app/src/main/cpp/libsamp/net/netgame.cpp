@@ -610,6 +610,10 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			Packet_FurnitureFactory(p);
 			break;
 		}
+		case RPC_STYLING_CENTER: {
+			packetStylingCenter(p);
+			break;
+		}
 		case RPC_SEND_BUFFER:
 		{
 			uint16_t len;

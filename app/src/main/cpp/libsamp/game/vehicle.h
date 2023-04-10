@@ -1,5 +1,7 @@
 #pragma once
 
+#include "entity.h"
+
 enum E_CUSTOM_COMPONENTS
 {
 	ccBumperF = 0,
@@ -231,6 +233,8 @@ public:
 
 	bool m_bLightsOn;
 	bool m_bEngineOn;
+
+	uint8_t colorToner[3];
 
 	// Damage status
 	uint8_t			m_byteTyreStatus;

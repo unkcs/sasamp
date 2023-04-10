@@ -1,5 +1,6 @@
 #include "..//vendor/bass/bass.h"
 #include <thread>
+#include "../game/stream.h"
 struct BUFFERED_COMMAND_STREAMPOOL
 {
 	int iID;

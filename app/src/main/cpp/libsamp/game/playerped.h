@@ -3,6 +3,7 @@
 #include "bass.h"
 #include "vehicle.h"
 #include "Weapon.h"
+#include "entity.h"
 
 class CPlayerPed
 	: public CEntity

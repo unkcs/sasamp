@@ -5,6 +5,14 @@ plugins{
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Clients\\lr_android\\key_plaka_lr.jks')
+            keyAlias 'key_plaka_lr'
+            storePassword '3543488'
+            keyPassword '3543488'
+        }
+    }
     compileSdkVersion 33
 
     compileOptions {
@@ -120,5 +128,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
     apply plugin: 'com.google.gms.google-services'
     implementation 'com.techyourchance:threadposter:1.0.1'
+
+    implementation "com.github.skydoves:colorpickerview:2.2.4"
 
 }

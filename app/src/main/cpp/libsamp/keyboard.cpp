@@ -2319,12 +2319,6 @@ bool ProcessLocalCommands(const char str[])
 		return true;
 	}
 
-	if (strcmp(str, "/test_styling") == 0)
-	{
-		CStyling::show(0);
-		return true;
-	}
-
 	if (strcmp(str, "/q") == 0)
 	{
 		pGame->exitGame();

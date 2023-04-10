@@ -230,6 +230,12 @@ void ApplyPatches()
 {
 	Log("Installing patches..");
 
+	// fix invalid death id
+	CHook::NOP(g_libGTASA + 0x002FEAE6, 2);
+	CHook::NOP(g_libGTASA + 0x002FFAFC, 2);
+	CHook::NOP(g_libGTASA + 0x00300040, 2);
+	CHook::NOP(g_libGTASA + 0x002FFB4E, 2);
+
 	CHook::RET(g_libGTASA + 0x002C4E3C); // experemental!!! game logic no need for mp?
 
 	ApplyShadowPatch();

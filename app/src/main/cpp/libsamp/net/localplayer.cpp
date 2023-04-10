@@ -669,7 +669,7 @@ void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 	m_bHasSpawnInfo = true;
 }
 
-bool CLocalPlayer::Spawn(int skin, const CVector pos, float rot, int interior)
+bool CLocalPlayer::Spawn(const CVector pos, float rot, int interior)
 {
 	//if(!m_bHasSpawnInfo) return false;
 	m_pPlayerPed->SetInterior(interior);
@@ -695,7 +695,7 @@ bool CLocalPlayer::Spawn(int skin, const CVector pos, float rot, int interior)
 	pGame->RefreshStreamingAt(pos.x,pos.y);
 
 	m_pPlayerPed->RestartIfWastedAt(pos, rot);
-	m_pPlayerPed->SetModelIndex(skin);
+	//m_pPlayerPed->SetModelIndex(skin);
 	//m_pPlayerPed->ClearAllWeapons();
 	m_pPlayerPed->ResetDamageEntity();
 

@@ -1266,8 +1266,12 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
 
         PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
 
+		auto pedGive = (PED_TYPE *)thiz->pEntity;
+		auto pedTake = (PED_TYPE *)pEntity;
+		pedTake->pdwDamageEntity = reinterpret_cast<uintptr_t>(pedTake);
+
         // player give damage
-        if ((PED_TYPE *) thiz->pEntity == pGame->FindPlayerPed()->m_pPed) {
+        if (pedGive == pGame->FindPlayerPed()->m_pPed) {
             CHUD::addGiveDamageNotify(issuerid, thiz->iWeaponType, fDamage);
             pPlayerPool->GetLocalPlayer()->GiveTakeDamage(false, issuerid, fDamage,
                                                           thiz->iWeaponType,
@@ -1275,7 +1279,7 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
         }
 
         // player take damage
-        else if ((PED_TYPE *) pEntity == pGame->FindPlayerPed()->m_pPed) {
+        else if (pedTake == pGame->FindPlayerPed()->m_pPed) {
             pPlayerPool->GetLocalPlayer()->GiveTakeDamage(true, damagedid, fDamage,
                                                           thiz->iWeaponType, bodypart);
 

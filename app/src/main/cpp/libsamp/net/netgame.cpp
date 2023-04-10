@@ -593,16 +593,14 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			CVector pos;
 			float rotation;
 			uint32_t interior;
-			uint32_t skin;
 
-			bs.Read(skin);
 			bs.Read(pos.x);
 			bs.Read(pos.y);
 			bs.Read(pos.z);
 			bs.Read(rotation);
 			bs.Read(interior);
 
-			m_pPlayerPool->GetLocalPlayer()->Spawn(skin, pos, rotation, interior);
+			m_pPlayerPool->GetLocalPlayer()->Spawn(pos, rotation, interior);
 			break;
 		}
 		case RPC_SHOW_FACTORY_GAME:

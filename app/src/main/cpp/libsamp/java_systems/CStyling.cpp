@@ -25,6 +25,8 @@ void CStyling::show(int money, int total, int price1, int price2, int price3, in
         CStyling::thiz = env->NewObject(CStyling::clazz, constructor, g_pJavaWrapper->activity, money,
                                         total, price1, price2, price3, price4);
         CStyling::thiz = env->NewGlobalRef(CStyling::thiz);
+
+        bIsShow = true;
     }
 }
 

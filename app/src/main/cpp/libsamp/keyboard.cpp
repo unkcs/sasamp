@@ -2319,11 +2319,6 @@ bool ProcessLocalCommands(const char str[])
 		return true;
 	}
 
-	if (strcmp(str, "/q") == 0)
-	{
-		pGame->exitGame();
-		return true;
-	}
 	if (strstr(str, "/save "))
 	{
 		std::string msg;

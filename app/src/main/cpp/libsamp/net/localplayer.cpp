@@ -206,8 +206,7 @@ bool CLocalPlayer::Process()
 						  m_pPlayerPed->drunk_level / 100);
 		}
 		// handle dead
-		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH ||
-			m_pPlayerPed->IsDead()) {
+		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH || m_pPlayerPed->IsDead()) {
 			ToggleSpectating(false);
 			m_pPlayerPed->FlushAttach();
 			// reset tasks/anims
@@ -471,7 +470,7 @@ bool CLocalPlayer::Process()
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow)
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead())
 	{
 		needDrawableHud = false;
 	}
@@ -484,22 +483,6 @@ bool CLocalPlayer::Process()
         return true;
     }
 
-    // handle needs to respawn
-    if(m_bIsWasted && (m_pPlayerPed->GetActionTrigger() != ACTION_WASTED) && (m_pPlayerPed->GetActionTrigger() != ACTION_DEATH) )
-    {
-        if( m_bClearedToSpawn && !m_bWantsAnotherClass && pNetGame->GetGameState() == GAMESTATE_CONNECTED)
-        {
-            if(m_pPlayerPed->GetHealth() > 0.0f)
-                Spawn();
-        }
-        else
-        {
-            m_bIsWasted = false;
-            HandleClassSelection();
-            m_bWantsAnotherClass = false;
-        }
-        return true;
-    }
     return true;
 }
 
@@ -685,10 +668,10 @@ void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 	m_bHasSpawnInfo = true;
 }
 
-bool CLocalPlayer::Spawn()
+bool CLocalPlayer::Spawn(int skin, const CVector pos, float rot, int interior)
 {
-	if(!m_bHasSpawnInfo) return false;
-	m_pPlayerPed->SetInterior(0);
+	//if(!m_bHasSpawnInfo) return false;
+	m_pPlayerPed->SetInterior(interior);
 
     //g_pJavaWrapper->ShowSpeed();
 
@@ -697,7 +680,7 @@ bool CLocalPlayer::Spawn()
 	CCamera *pGameCamera = pGame->GetCamera();
 	pGameCamera->Restore();
 	pGameCamera->SetBehindPlayer();
-	pGame->DisplayWidgets(true);
+	//pGame->DisplayWidgets(true);
 	//pGame->DisplayHUD(true);
 	m_pPlayerPed->TogglePlayerControllable(true);
 	
@@ -708,30 +691,29 @@ bool CLocalPlayer::Spawn()
 
 	bFirstSpawn = false;
 
-	pGame->RefreshStreamingAt(m_SpawnInfo.vecPos.X,m_SpawnInfo.vecPos.Y);
+	pGame->RefreshStreamingAt(pos.x,pos.y);
 
-	m_pPlayerPed->RestartIfWastedAt(&m_SpawnInfo.vecPos, m_SpawnInfo.fRotation);
-	m_pPlayerPed->SetModelIndex(m_SpawnInfo.iSkin);
-	m_pPlayerPed->ClearAllWeapons();
+	m_pPlayerPed->RestartIfWastedAt(pos, rot);
+	m_pPlayerPed->SetModelIndex(skin);
+	//m_pPlayerPed->ClearAllWeapons();
 	m_pPlayerPed->ResetDamageEntity();
 
-	pGame->DisableTrainTraffic();
+	//pGame->DisableTrainTraffic();
 
 	// CCamera::Fade
 	CHook::WriteMemory(g_libGTASA + 0x36EA2C, "\x70\x47", 2); // bx lr
 
-	m_pPlayerPed->TeleportTo(m_SpawnInfo.vecPos.X,
-		m_SpawnInfo.vecPos.Y, (m_SpawnInfo.vecPos.Z + 0.5f));
+	m_pPlayerPed->TeleportTo(pos.x,pos.y, (pos.z + 0.5f));
 
-	m_pPlayerPed->ForceTargetRotation(m_SpawnInfo.fRotation);
+	m_pPlayerPed->ForceTargetRotation(rot);
 
 	m_bIsWasted = false;
 	m_bIsActive = true;
 	m_bWaitingForSpawnRequestReply = false;
 
-	RakNet::BitStream bsSendSpawn;
-	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
-		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
+//	RakNet::BitStream bsSendSpawn;
+//	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
+//		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
 
 	return true;
 }
@@ -1171,8 +1153,8 @@ void CLocalPlayer::ProcessSpectating()
 
 void CLocalPlayer::ToggleSpectating(bool bToggle)
 {
-	if(m_bIsSpectating && !bToggle)
-		Spawn();
+//	if(m_bIsSpectating && !bToggle)
+//		Spawn();
 
 	m_bIsSpectating = bToggle;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;

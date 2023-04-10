@@ -193,7 +193,7 @@ public:
 	void SendExitVehicleNotification(VEHICLEID VehicleID);
 	void UpdateRemoteInterior(uint8_t byteInterior);
 	void SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn);
-	bool Spawn();
+	bool Spawn(int skin, const CVector pos, float rot, int interior);
 	int GetOptimumOnFootSendRate();
 	uint8_t DetermineNumberOfPlayersInLocalRange();
 	int GetOptimumInCarSendRate();

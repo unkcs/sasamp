@@ -260,9 +260,9 @@ void RequestSpawn(RPCParameters *rpcParams)
 
 	if(pLocalPlayer)
 	{
-		if(byteRequestOutcome == 2 || (byteRequestOutcome && pLocalPlayer->m_bWaitingForSpawnRequestReply))
-			 pLocalPlayer->Spawn();
-		else
+		//if(byteRequestOutcome == 2 || (byteRequestOutcome && pLocalPlayer->m_bWaitingForSpawnRequestReply))
+			// pLocalPlayer->Spawn();
+	//	else
 			pLocalPlayer->m_bWaitingForSpawnRequestReply = false;
 	}
 }
@@ -862,20 +862,20 @@ void SetPlayerChatBubble(RPCParameters* rpcParams)
 
 void WorldPlayerDeath(RPCParameters* rpcParams)
 {
-	uint8_t* Data = reinterpret_cast<uint8_t*>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
-	PLAYERID playerId;
-	bsData.Read(playerId);
-	if (pNetGame->GetPlayerPool())
-	{
-		CRemotePlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(playerId);
-		if (pPlayer)
-		{
-			pPlayer->HandleDeath();
-		}
-	}
+//	uint8_t* Data = reinterpret_cast<uint8_t*>(rpcParams->input);
+//	int iBitLength = rpcParams->numberOfBitsOfData;
+//
+//	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
+//	PLAYERID playerId;
+//	bsData.Read(playerId);
+//	if (pNetGame->GetPlayerPool())
+//	{
+//		CRemotePlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(playerId);
+//		if (pPlayer)
+//		{
+//			pPlayer->HandleDeath();
+//		}
+//	}
 }
 
 void DamageVehicle(RPCParameters* rpcParams)

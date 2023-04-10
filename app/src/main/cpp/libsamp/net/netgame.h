@@ -106,6 +106,8 @@
 #define RPC_SHOW_DONATE 	70
 #define RPC_FACILITY_WAR    71
 
+#define RPC_SPAWN_AT		74
+
 
 // Packet 252
 #define RPC_TOGGLE_LOGIN (1)

@@ -587,6 +587,24 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			g_pJavaWrapper->ShowCasinoLuckyWheel(count, time);
 			break;
 		}
+		case RPC_SPAWN_AT:
+		{
+			Log("RPC_SPAWN_AT");
+			CVector pos;
+			float rotation;
+			uint32_t interior;
+			uint32_t skin;
+
+			bs.Read(skin);
+			bs.Read(pos.x);
+			bs.Read(pos.y);
+			bs.Read(pos.z);
+			bs.Read(rotation);
+			bs.Read(interior);
+
+			m_pPlayerPool->GetLocalPlayer()->Spawn(skin, pos, rotation, interior);
+			break;
+		}
 		case RPC_SHOW_FACTORY_GAME:
 		{
 			Packet_FurnitureFactory(p);

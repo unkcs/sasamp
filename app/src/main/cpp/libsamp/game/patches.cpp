@@ -230,6 +230,8 @@ void ApplyPatches()
 {
 	Log("Installing patches..");
 
+	CHook::RET(g_libGTASA + 0x002C4E3C); // experemental!!! game logic no need for mp?
+
 	ApplyShadowPatch();
     ApplyDefaultPlatePatch();
 

@@ -84,7 +84,7 @@ public:
 	void ResetDamageEntity();
 
 	// 0.3.7
-	void RestartIfWastedAt(VECTOR *vecRestart, float fRotation);
+	void RestartIfWastedAt(const CVector vecRestart, float fRotation);
 	// 0.3.7
 	void ForceTargetRotation(float fRotation);
 	// 0.3.7

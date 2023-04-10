@@ -1015,9 +1015,9 @@ void CPlayerPed::ResetDamageEntity()
 }
 
 // 0.3.7
-void CPlayerPed::RestartIfWastedAt(VECTOR *vecRestart, float fRotation)
+void CPlayerPed::RestartIfWastedAt(const CVector vec, float fRotation)
 {	
-	ScriptCommand(&restart_if_wasted_at, vecRestart->X, vecRestart->Y, vecRestart->Z, fRotation, 0);
+	ScriptCommand(&restart_if_wasted_at, vec.x, vec.y, vec.z, fRotation, 0);
 }
 
 // 0.3.7

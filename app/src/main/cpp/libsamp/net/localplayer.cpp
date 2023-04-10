@@ -711,9 +711,9 @@ bool CLocalPlayer::Spawn(int skin, const CVector pos, float rot, int interior)
 	m_bIsActive = true;
 	m_bWaitingForSpawnRequestReply = false;
 
-//	RakNet::BitStream bsSendSpawn;
-//	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
-//		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
+	RakNet::BitStream bsSendSpawn;
+	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
+		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
 
 	return true;
 }

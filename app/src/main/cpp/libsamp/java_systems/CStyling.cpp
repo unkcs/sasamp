@@ -3,10 +3,11 @@
 //
 
 #include "CStyling.h"
-#include "util/CJavaWrapper.h"
+#include "main.h"
+
+#include "../game/game.h"
 #include "net/netgame.h"
-#include "game/playerped.h"
-#include "game/game.h"
+#include "util/CJavaWrapper.h"
 
 extern CGame* pGame;
 

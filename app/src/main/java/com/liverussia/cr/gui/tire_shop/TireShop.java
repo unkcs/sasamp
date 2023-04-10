@@ -111,18 +111,15 @@ public class TireShop implements View.OnClickListener {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     tireShopBarProgress = progress;
-//
-//                    String strpriceinfo = String.format("%s р", fuelprice);
-//                    String strliterinfo = String.format("%s л", progress);
-//                    fuelstation_buyinfo.setText(String.valueOf(strpriceinfo));
-//                    fuelstation_literinfo.setText(String.valueOf(strliterinfo));
                 }
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {}
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {}
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    sendClickItem(dialogItemInfo.getTypeId(), tireShopBarProgress);
+                }
             });
         });
     }
@@ -155,11 +152,13 @@ public class TireShop implements View.OnClickListener {
                 v.startAnimation(animation);
                 sendClickItem(1, 0);
                 break;
-            case R.id.right_cursor:
-                v.startAnimation(animation);
-                break;
             case R.id.left_cursor:
                 v.startAnimation(animation);
+                sendClickItem(9, 0);
+                break;
+            case R.id.right_cursor:
+                v.startAnimation(animation);
+                sendClickItem(10, 0);
                 break;
             default:
                 break;
@@ -218,8 +217,29 @@ public class TireShop implements View.OnClickListener {
     }
 
     private void updateVisibilitySpeedometerAndHood(int visibility) {
-        ConstraintLayout hud = activity.findViewById(R.id.hud_main);
-        hud.setVisibility(visibility);
+//        ConstraintLayout hud = activity.findViewById(R.id.hud_main);
+        ConstraintLayout chat = activity.findViewById(R.id.chat_input_layout);
+        chat.setVisibility(visibility);
+//        hud.setVisibility(visibility);
+
+        ImageView hudMenu = activity.findViewById(R.id.hud_menu);
+        hudMenu.setVisibility(visibility);
+
+        ConstraintLayout hudStars = activity.findViewById(R.id.hud_stars);
+        hudStars.setVisibility(visibility);
+
+        ConstraintLayout hudDownLayout = activity.findViewById(R.id.hud_down_layout);
+        hudDownLayout.setVisibility(visibility);
+
+        ImageView hudBg = activity.findViewById(R.id.hud_bg);
+        hudBg.setVisibility(visibility);
+
+        ConstraintLayout hudCenterBg = activity.findViewById(R.id.hud_center_bg);
+        hudCenterBg.setVisibility(visibility);
+
+//        ConstraintLayout hudLogo = activity.findViewById(R.id.hud_logo_img_layout);
+//        hudLogo.setVisibility(visibility);
+
 
         ConstraintLayout speedometer = activity.findViewById(R.id.speedometer_main_layout);
         speedometer.setVisibility(visibility);

@@ -183,6 +183,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CMedic.h"
 #include "java_systems/CTab.h"
 #include "java_systems/CDailyReward.h"
+#include "java_systems/CStyling.h"
 #include "java_systems/CDialog.h"
 #include "java_systems/CTechInspect.h"
 #include "java_systems/casino/CBaccarat.h"
@@ -470,7 +471,7 @@ bool CLocalPlayer::Process()
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead())
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow)
 	{
 		needDrawableHud = false;
 	}

@@ -1735,9 +1735,6 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 							if (strstr(pVeh->m_szReplacedTextures[i].szOld, "ret_t"))
 							{
 								material->color.alpha = 255;
-								pVeh->colorToner[0] = material->color.red;
-								pVeh->colorToner[1] = material->color.green;
-								pVeh->colorToner[2] = material->color.blue;
 							}
 						}
 					}

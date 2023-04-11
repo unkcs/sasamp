@@ -106,8 +106,7 @@
 #define RPC_SHOW_DONATE 	70
 #define RPC_FACILITY_WAR    71
 #define RPC_TUNING_WHEELS    72
-#define RPC_STYLING_CENTER    73
-
+#define RPC_STYLING_CENTER    74
 
 // Packet 252
 #define RPC_TOGGLE_LOGIN (1)

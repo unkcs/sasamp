@@ -57,13 +57,21 @@ extern int g_iLastProcessedEntityCollision;
 
 extern char g_bufRenderQueueCommand[200];
 extern uintptr_t g_dwRenderQueueOffset;
+extern char lastFile[512];
+extern int g_iLastRenderedObject;
+char g_iLastBlock[512];
 
 void PrintBuildCrashInfo()
 {
+
 	CrashLog("SA:MP version: %d.%01d", SAMP_MAJOR_VERSION, SAMP_MINOR_VERSION);
 	CrashLog("Build times: %s %s", __TIME__, __DATE__);
 	CrashLog("Last processed auto and entity: %d %d", g_usLastProcessedModelIndexAutomobile, g_iLastProcessedModelIndexAutoEnt);
 	CrashLog("Last processed skin and entity: %d %d", g_iLastProcessedSkinCollision, g_iLastProcessedEntityCollision);
+
+	CrashLog("Last rendered object: %d", g_iLastRenderedObject);
+	CrashLog("Last texture: %s", g_iLastBlock);
+	CrashLog("Last file: %s", lastFile);
 }
 
 #include <sstream>
@@ -86,8 +94,6 @@ void InitSAMP(JNIEnv* pEnv, jobject thiz)
 	CWeaponsOutFit::ParseDatFile();
 }
 
-void ProcessCheckForKeyboard();
-
 void InitInMenu()
 {
 	pGame = new CGame();
@@ -97,8 +103,6 @@ void InitInMenu()
 	pGUI = new CGUI();
 	CKeyBoard::init();
 	pPlayerTags = new CPlayerTags();
-
-	ProcessCheckForKeyboard();
 
 	CFontRenderer::Initialise();
 }
@@ -121,18 +125,6 @@ bool unique_library_handler(const char* library)
 			return false;
 	}
 	return true;
-}
-
-void ProcessCheckForKeyboard()
-{
-	if (CSettings::m_Settings.iAndroidKeyboard)
-	{
-		CKeyBoard::EnableNewKeyboard();
-	}
-	else
-	{
-		CKeyBoard::EnableOldKeyboard();
-	}
 }
 
 void ObfuscatedForceExit3()
@@ -162,7 +154,7 @@ void InitInGame()
 		pGame->InitInGame();
 		pGame->SetMaxStats();
 
-		g_pJavaWrapper->UpdateSplash(101);
+		g_pJavaWrapper->hideLoadingScreen();
 
 		CHUD::toggleServerLogo(true);
 		bGameInited = true;
@@ -194,8 +186,7 @@ void MainLoop()
 
 	if(pNetGame) pNetGame->Process();
 }
-extern int g_iLastRenderedObject;
-char g_iLastBlock[512];
+
 
 void PrintSymbols(void* pc, void* lr)
 {
@@ -216,6 +207,12 @@ struct sigaction act1_old;
 struct sigaction act2_old;
 struct sigaction act3_old;
 
+
+void printInfo()
+{
+
+}
+
 void handler3(int signum, siginfo_t* info, void* contextPtr)
 {
 	ucontext* context = (ucontext_t*)contextPtr;
@@ -228,8 +225,7 @@ void handler3(int signum, siginfo_t* info, void* contextPtr)
 	if (info->si_signo == SIGBUS)
 	{
 		PrintBuildCrashInfo();
-		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
-		CrashLog("Last texture: %s", g_iLastBlock);
+
 		CrashLog("SIGBUS | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
 		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
@@ -288,8 +284,7 @@ void handler(int signum, siginfo_t *info, void* contextPtr)
 	{
 		CrashLog(" ");
 		PrintBuildCrashInfo();
-		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
-		CrashLog("Last texture: %s", g_iLastBlock);
+
 		CrashLog("SIGSEGV | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
 		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
@@ -340,8 +335,7 @@ void handler2(int signum, siginfo_t* info, void* contextPtr)
 	if (info->si_signo == SIGFPE)
 	{
 		PrintBuildCrashInfo();
-		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
-		CrashLog("Last texture: %s", g_iLastBlock);
+
 		CrashLog("SIGFPE | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
 		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
@@ -398,8 +392,6 @@ void handler1(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog(" ");
 		PrintBuildCrashInfo();
 
-		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
-		CrashLog("Last texture: %s", g_iLastBlock);
 		CrashLog("SIGABRT | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
 		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));

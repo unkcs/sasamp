@@ -2,6 +2,8 @@
 #include "aimstuff.h"
 #include "bass.h"
 #include "vehicle.h"
+#include "Weapon.h"
+#include "entity.h"
 
 class CPlayerPed
 	: public CEntity
@@ -75,7 +77,7 @@ public:
 	void ClearPlayerAimState();
 	void SetAimZ(float fAimZ);
 	float GetAimZ();
-	WEAPON_SLOT_TYPE * GetCurrentWeaponSlot();
+	CWeapon * GetCurrentWeaponSlot();
 	//CAMERA_AIM* GetCurrentAim();
 
 	void ClearAllWeapons();
@@ -83,7 +85,7 @@ public:
 	void ResetDamageEntity();
 
 	// 0.3.7
-	void RestartIfWastedAt(VECTOR *vecRestart, float fRotation);
+	void RestartIfWastedAt(const CVector vecRestart, float fRotation);
 	// 0.3.7
 	void ForceTargetRotation(float fRotation);
 	// 0.3.7
@@ -107,7 +109,7 @@ public:
 	// roflan
 	//BYTE FindDeathReasonAndResponsiblePlayer(PLAYERID *nPlayer);
 	PLAYERID FindDeathResponsiblePlayer();
-	void SetActionTrigger(uint8_t action);
+	void SetActionTrigger(ePedState action);
 	PED_TYPE * GetGtaActor() { return m_pPed; };
 
 	void AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot);

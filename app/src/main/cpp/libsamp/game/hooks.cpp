@@ -14,7 +14,7 @@ extern "C"
 {
 #include "..//santrope-tea-gtasa/encryption/aes.h"
 }
-
+#include "RW/rpworld.h"
 #include "..///..//santrope-tea-gtasa/CGameResourcesDecryptor.cpp"
 #include "..///..//santrope-tea-gtasa/CGameResourcesDecryptor.h"
 #include "chatwindow.h"
@@ -98,10 +98,13 @@ struct stFile
 	FILE *f;
 };
 
+char lastFile[512];
+
 stFile* (*NvFOpen)(const char*, const char*, int, int);
 stFile* NvFOpen_hook(const char* r0, const char* r1, int r2, int r3)
 {
 	char path[0xFF] = { 0 };
+	strcpy(lastFile, r1);
 	// ----------------------------
 	if(!strncmp(r1+12, "mainV1.scm", 10))
 	{
@@ -299,29 +302,6 @@ void InitialiseRenderWare_hook() {
 	InitialiseRenderWare();
 }
 
-/* ====================================================== */
-void (*CLoadingScreen_DisplayPCScreen)();
-void CLoadingScreen_DisplayPCScreen_hook()
-{
-//	RwCamera *camera = *(RwCamera **)(g_libGTASA + 0x95B064);
-//
-//	if (RwCameraBeginUpdate(camera))
-//	{
-//		DefinedState2d();
-//		((void (*)())(g_libGTASA + 0x5519C8 + 1))(); // CSprite2d::InitPerFrame()
-//		RwRenderStateSet(rwRENDERSTATETEXTUREADDRESS, (void *)rwTEXTUREADDRESSCLAMP);
-//		((void (*)(bool))(g_libGTASA + 0x198010 + 1))(false); // emu_GammaSet()
-
-		const float percent = *(float*)(g_libGTASA + 0x8F08C0)*2;
-		if (percent <= 0.0f) return;
-
-		g_pJavaWrapper->UpdateSplash((int)percent);
-
-//		RwCameraEndUpdate(camera);
-//		RwCameraShowRaster(camera, 0, 0);
-//	}
-}
-
 int bBlockCWidgetRegionLookUpdate = 0;
 
 /* ====================================================== */
@@ -416,32 +396,32 @@ void CStreaming_InitImageList_hook()
 }
 
 /* ====================================================== */
-typedef struct _PED_MODEL
-{
-	uintptr_t 	vtable;
-	uint8_t		data[88];
-} PED_MODEL; // SIZE = 92
+//typedef struct _PED_MODEL
+//{
+//	uintptr_t 	vtable;
+//	uint8_t		data[88];
+//} PED_MODEL; // SIZE = 92
+//
+//PED_MODEL PedsModels[370];
+//int PedsModelsCount = 0;
 
-PED_MODEL PedsModels[370];
-int PedsModelsCount = 0;
-
-PED_MODEL* (*CModelInfo_AddPedModel)(int id);
-PED_MODEL* CModelInfo_AddPedModel_hook(int id)
-{
-	PED_MODEL* model = &PedsModels[PedsModelsCount];
-	memset(model, 0, sizeof(PED_MODEL));								// initialize by zero
-
-	((void(*)(void* thiz))(g_libGTASA + 0x0033559C + 1))((void*)model); // CBaseModelInfo::CBaseModelInfo();
-
-    model->vtable = (uintptr_t)(g_libGTASA+0x5C6E90);					// assign CPedModelInfo vmt
-
-    (( uintptr_t (*)(PED_MODEL*))(*(void**)(model->vtable+0x1C)))(model);  // CClumpModelInfo::Init()
-
-    *(PED_MODEL**)(g_libGTASA+0x87BF48+(id*4)) = model; // CModelInfo::ms_modelInfoPtrs
-
-	PedsModelsCount++;
-	return model;
-}
+//PED_MODEL* (*CModelInfo_AddPedModel)(int id);
+//PED_MODEL* CModelInfo_AddPedModel_hook(int id)
+//{
+//	PED_MODEL* model = &PedsModels[PedsModelsCount];
+//	memset(model, 0, sizeof(PED_MODEL));								// initialize by zero
+//
+//	((void(*)(void* thiz))(g_libGTASA + 0x0033559C + 1))((void*)model); // CBaseModelInfo::CBaseModelInfo();
+//
+//    model->vtable = (uintptr_t)(g_libGTASA+0x5C6E90);					// assign CPedModelInfo vmt
+//
+//    (( uintptr_t (*)(PED_MODEL*))(*(void**)(model->vtable+0x1C)))(model);  // CClumpModelInfo::Init()
+//
+//    *(PED_MODEL**)(g_libGTASA+0x87BF48+(id*4)) = model; // CModelInfo::ms_modelInfoPtrs
+//
+//	PedsModelsCount++;
+//	return model;
+//}
 /* ====================================================== */
 
 uint32_t (*CRadar__GetRadarTraceColor)(uint32_t color, uint8_t bright, uint8_t friendly);
@@ -522,8 +502,8 @@ __attribute__((naked)) void PickupPickUp_hook()
 }
 
 // fire weapon hooks
-uint32_t (*CWeapon__FireInstantHit)(WEAPON_SLOT_TYPE * thiz, PED_TYPE * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
-uint32_t CWeapon__FireInstantHit_hook(WEAPON_SLOT_TYPE * thiz, PED_TYPE * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
+uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, PED_TYPE * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
+uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, PED_TYPE * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -761,10 +741,8 @@ void CTimer__StartUserPause_hook()
 	// process pause event
 	if (g_pJavaWrapper)
 	{
-		if (CKeyBoard::IsNewKeyboard())
-		{
-			CKeyBoard::Close();
-		}
+		CKeyBoard::Close();
+
 		g_pJavaWrapper->SetPauseState(true);
 
 		CSpeedometr::tempToggle(false);
@@ -1080,8 +1058,12 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 	return atomic;
 }
 
+#include "game/Models/ModelInfo.h"
+
 void InstallSpecialHooks()
 {
+	CModelInfo::injectHooks();
+
 	//CHook::WriteMemory(g_libGTASA + 0x52F4C6, (uintptr_t)"\x00\x22\xC4\xF2\xC8\x32", 6); // CEntity::ProcessLightsForEntity
 	//CHook::JMPCode(g_libGTASA + 0x3A9B10 + 0x1, g_libGTASA + 0x3A98AC + 0x1);
 	// Fix sky multitude
@@ -1254,61 +1236,62 @@ void (*CPedDamageResponseCalculator__ComputeDamageResponse)(stPedDamageResponse*
 void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageResponse* thiz, ENTITY_TYPE* pEntity, uintptr_t pDamageResponse, bool bSpeak)
 {
 	if (thiz && pEntity) onDamage((PED_TYPE*)*(uintptr_t*)thiz, (PED_TYPE*)pEntity);
-	int weaponid = thiz->iWeaponType;
-	float fDamage;
-	if( weaponid < 0 || weaponid > size(m_fWeaponDamages) )
+
+	if( thiz->iWeaponType < 0 || thiz->iWeaponType > std::size(m_fWeaponDamages) )
 	{
-		fDamage = thiz->fDamage;
+		thiz->fDamage /= 3.0303030303;
 	}
 	else {
-		fDamage = m_fWeaponDamages[weaponid];
+		thiz->fDamage = m_fWeaponDamages[thiz->iWeaponType];
 	}
-//	float fDamage = m_fWeaponDamages[weaponid];
+	float fDamage = thiz->fDamage;
 
 	int bodypart = thiz->iBodyPart;
 
-	if(pNetGame)
-	{
-		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-		if(pPlayerPool)
-		{
-			if(weaponid < 0 || weaponid > 255 || (weaponid > 54 && weaponid < 200) || (weaponid > 201 && weaponid < 255))
-				weaponid = 255; // suicide
-			else if(weaponid == 18)
-				weaponid = 37; // flamethower
-			else if(weaponid == 35 || weaponid == 16)
-				weaponid = 51; // explosion
+    auto pPlayerPool = pNetGame->GetPlayerPool();
+    if(pPlayerPool) {
+        if (thiz->iWeaponType < 0 || thiz->iWeaponType > 255 ||
+            (thiz->iWeaponType > 54 && thiz->iWeaponType < 200)
+            || (thiz->iWeaponType > 201 && thiz->iWeaponType < 255))
+            thiz->iWeaponType = 255; // suicide
+        else if (thiz->iWeaponType == 18)
+            thiz->iWeaponType = 37; // flamethower
+        else if (thiz->iWeaponType == 35 || thiz->iWeaponType == 16)
+            thiz->iWeaponType = 51; // explosion
 
-			PLAYERID damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)thiz->pEntity); // отправитель урона
-			PLAYERID issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)pEntity); // получатель
+        PLAYERID damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr(
+                (PED_TYPE *) thiz->pEntity); // отправитель урона
+        PLAYERID issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr(
+                (PED_TYPE *) pEntity); // получатель
 
-			PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
+        PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
 
-			// give player damage
-			if((PED_TYPE*)thiz->pEntity == pGame->FindPlayerPed()->m_pPed && issuerid != INVALID_PLAYER_ID ) {
-				CHUD::addGiveDamageNotify(issuerid, weaponid, fDamage);
-				pPlayerPool->GetLocalPlayer()->GiveTakeDamage(false, issuerid, fDamage, weaponid,
-															  bodypart);
-			}
+		auto pedGive = (PED_TYPE *)thiz->pEntity;
+		auto pedTake = (PED_TYPE *)pEntity;
+		pedTake->pdwDamageEntity = reinterpret_cast<uintptr_t>(pedTake);
 
-			// player take damage
-			else if(damagedid != INVALID_PLAYER_ID && issuerid == INVALID_PLAYER_ID) {
-				pPlayerPool->GetLocalPlayer()->GiveTakeDamage(true, damagedid, fDamage, weaponid, bodypart);
+        // player give damage
+        if (pedGive == pGame->FindPlayerPed()->m_pPed) {
+            CHUD::addGiveDamageNotify(issuerid, thiz->iWeaponType, fDamage);
+            pPlayerPool->GetLocalPlayer()->GiveTakeDamage(false, issuerid, fDamage,
+                                                          thiz->iWeaponType,
+                                                          bodypart);
+        }
 
-				char nick[MAX_PLAYER_NAME];
-				if( pPlayerPool->GetSlotState(damagedid) )
-				{
-					strcpy(nick, pPlayerPool->GetPlayerName(damagedid));
-				}
-				else {
-					strcpy(nick, "None");
-				}
-				CHUD::addTakeDamageNotify(pPlayerPool->GetPlayerName(damagedid), weaponid, fDamage);
-			}
-		}
-	}
+        // player take damage
+        else if (pedTake == pGame->FindPlayerPed()->m_pPed) {
+            pPlayerPool->GetLocalPlayer()->GiveTakeDamage(true, damagedid, fDamage,
+                                                          thiz->iWeaponType, bodypart);
 
-	CPedDamageResponseCalculator__ComputeDamageResponse(thiz, pEntity, pDamageResponse, bSpeak);
+            char nick[MAX_PLAYER_NAME];
+            strcpy(nick, pPlayerPool->GetPlayerName(damagedid));
+
+            CHUD::addTakeDamageNotify(pPlayerPool->GetPlayerName(damagedid), thiz->iWeaponType,
+                                      fDamage);
+        }
+    }
+
+//	CPedDamageResponseCalculator__ComputeDamageResponse(thiz, pEntity, pDamageResponse, bSpeak);
 }
 
 
@@ -1351,52 +1334,6 @@ int CAnimBlendNode__FindKeyFrame_hook(int a1, float a2, int a3, int a4)
 	else return 0;
 }
 
-
-/* ====================================================== */
-struct _ATOMIC_MODEL
-{
-	uintptr_t func_tbl;
-	char data[56];
-};
-extern struct _ATOMIC_MODEL* ATOMIC_MODELS;
-
-uintptr_t(*CModelInfo_AddAtomicModel)(int iModel);
-uintptr_t CModelInfo_AddAtomicModel_hook(int iModel)
-{
-	uint32_t iCount = *(uint32_t*)(g_libGTASA + 0x7802C4);
-	_ATOMIC_MODEL* model = &ATOMIC_MODELS[iCount];
-	*(uint32_t*)(g_libGTASA + 0x7802C4) = iCount + 1;
-
-	((void(*)(_ATOMIC_MODEL*))(*(uintptr_t*)(model->func_tbl + 0x1C)))(model);
-	_ATOMIC_MODEL** ms_modelInfoPtrs = (_ATOMIC_MODEL**)(g_libGTASA + 0x87BF48);
-	ms_modelInfoPtrs[iModel] = model;
-	return (uintptr_t)model;
-}
-
-/* ====================================================== */
-
-
-VEHICLE_MODEL VehicleModels[370];
-int VehicleModelsCount = 0;
-
-VEHICLE_MODEL* (*CModelInfo_AddVehicleModel)(int id);
-VEHICLE_MODEL* CModelInfo_AddVehicleModel_hook(int id)
-{
-	VEHICLE_MODEL* model = &VehicleModels[VehicleModelsCount];
-	memset(model, 0, sizeof(VEHICLE_MODEL));
-
-	((void(*)(void* thiz))(g_libGTASA + 0x00337AA0 + 1))((void*)model); // CVehicleModelInfo::CVehicleModelInfo();
-
-	model->vtable = (uintptr_t)(g_libGTASA + 0x005C6EE0);			// assign CVehicleModelInfo vmt
-
-	((uintptr_t(*)(VEHICLE_MODEL*))(*(void**)(model->vtable + 0x1C)))(model); // CVehicleModelInfo::Init()
-
-	*(VEHICLE_MODEL * *)(g_libGTASA + 0x87BF48 + (id * 4)) = model; // CModelInfo::ms_modelInfoPtrs
-
-	VehicleModelsCount++;
-	return model;
-}
-
 #include "..//keyboard.h"
 
 uint64_t(*CWorld_ProcessPedsAfterPreRender)();
@@ -1430,33 +1367,8 @@ uint64_t CWorld_ProcessPedsAfterPreRender_hook()
 	return res;
 }
 
-int RemoveModelIDs[MAX_REMOVE_MODELS];
-VECTOR RemovePos[MAX_REMOVE_MODELS];
-float RemoveRad[MAX_REMOVE_MODELS];
-int iTotalRemovedObjects = 0;
-
 
 #include "util.h"
-
-int(*CFileLoader__LoadObjectInstance)(uintptr_t, uintptr_t);
-int CFileLoader__LoadObjectInstance_hook(uintptr_t thiz, uintptr_t name)
-{
-	for (int i = 0; i < iTotalRemovedObjects; i++)
-	{
-		if (RemoveModelIDs[i] == *(uint32_t*)(thiz + 28))
-		{
-			VECTOR pos;
-			pos.X = *(float*)(thiz);
-			pos.Y = *(float*)(thiz + 4);
-			pos.Z = *(float*)(thiz + 8);
-			if (GetDistanceBetween3DPoints(&pos, &RemovePos[i]) <= RemoveRad[i])
-			{
-				*(int*)(thiz + 28) = 19300;
-			}
-		}
-	}
-	return CFileLoader__LoadObjectInstance(thiz, name);
-}
 
 #include <list>
 
@@ -1569,7 +1481,7 @@ int CPlayerInfo__Process_hook(uintptr_t *thiz, uintptr_t *a2)
 	}
 	return CPlayerInfo__Process(thiz, a2);
 }
-typedef uintptr_t RpClump;
+
 RwFrame* CClumpModelInfo_GetFrameFromId_Post(RwFrame* pFrameResult, RpClump* pClump, int id)
 {
 	if (pFrameResult)
@@ -1708,20 +1620,18 @@ int _rwFreeListFreeReal_hook(int a1, unsigned int a2)
 	}
 }
 
-uintptr_t* CTouchInterface__m_bWidgets;
-
-
 std::list<std::pair<unsigned int*, unsigned int>> resetEntriesVehicle;
 
 
 RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 {
+	int color = *(int*)&material->color & 0xFFFFFF;
+	auto pVeh = (CVehicle*)data;
+
 	if (material)
 	{
 		if (material->texture)
 		{
-			CVehicle* pVeh = (CVehicle*)data;
-
 			for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
 			{
 				if (pVeh->m_bReplaceTextureStatus[i])
@@ -1741,39 +1651,42 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 				}
 			}
 		}
+		//int v11 = *(DWORD *)&color & 0xFFFFFF;
+		if ( color == 0xFF3C )
+		{ // first color
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(material->color)), *reinterpret_cast<unsigned int*>(&(material->color)));
+			material->color.alpha = 255;
+			material->color.green = pVeh->color.g;
+			material->color.blue = pVeh->color.b;
+			material->color.red = pVeh->color.r;
+		}
 	}
 	return material;
 }
 
-uintptr_t CVehicle__SetupRenderCB(uintptr_t atomic, void* data)
+RpAtomic* CVehicle__SetupRenderCB(RpAtomic* atomic, void* data)
 {
-	if (*(RpGeometry * *)(atomic + 24))
-	{
-		((RpGeometry * (*)(RpGeometry*, uintptr_t, void*))(g_libGTASA + 0x001E284C + 1))(*(RpGeometry * *)(atomic + 24), (uintptr_t)CVehicle__SetupRenderMatCB, (void*)data); // RpGeometryForAllMaterials
-	}
-
+	RpGeometryForAllMaterials(RpAtomicGetGeometry(atomic), CVehicle__SetupRenderMatCB, data);
 	return atomic;
 }
 #include "..//cryptors/MODELINFO_EDITABLE_result.h"
-typedef uintptr_t RpClump;
-void (*CVehicleModelInfo__SetEditableMaterials)(uintptr_t);
-void CVehicleModelInfo__SetEditableMaterials_hook(uintptr_t clump)
-{
-	PROTECT_CODE_MODELINFO_EDITABLE;
-	RpClump *pClump = (RpClump *)clump;
 
-	if (pNetGame && pClump)
+void (*CVehicleModelInfo__SetEditableMaterials)(RpClump* clump);
+void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
+{
+	if (pNetGame && clump)
 	{
 		if (pNetGame->GetVehiclePool())
 		{
-			VEHICLEID vehId = pNetGame->GetVehiclePool()->FindIDFromRwObject((RwObject *)clump);
+			VEHICLEID vehId = pNetGame->GetVehiclePool()->FindIDFromRwObject(&clump->object);
 			CVehicle *pVehicle = pNetGame->GetVehiclePool()->GetAt(vehId);
 			if (pVehicle)
 			{
 				if (pVehicle->m_bReplacedTexture)
 				{
-					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
-					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(pClump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
+					RpClumpForAllAtomics(clump, CVehicle__SetupRenderCB, &pVehicle);
+//					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
+//					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(clump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
 				}
 			}
 		}
@@ -1935,7 +1848,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 	float v18; // s15
 	float v19; // ST08_4
 
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 
 	v2 = pVeh->m_pVehicle;
 	v3 = *((uintptr_t*)v2 + 5);
@@ -2093,7 +2006,7 @@ void CAutomobile__UpdateWheelMatrix_hook(VEHICLE_TYPE* thiz, int nodeIndex, int 
 void (*CAutomobile__PreRender)(VEHICLE_TYPE* thiz);
 void CAutomobile__PreRender_hook(VEHICLE_TYPE* thiz)
 {
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[thiz->entity.nModelIndex];
 
 	float fOldFront = *(float*)(pModelInfoStart + 88);
@@ -2177,7 +2090,7 @@ void (*CCam__Process)(uintptr_t);
 void CCam__Process_hook(uintptr_t thiz)
 {
 
-	VECTOR vecSpeed;
+	CVector vecSpeed;
 	CVehicle* pVeh = nullptr;
 	float pOld = *(float*)(g_libGTASA + 0x00608558);
 	if (pNetGame && (*(uint16_t*)(thiz + 14) == 18 || *(uint16_t*)(thiz + 14) == 16) && CFirstPersonCamera::IsEnabled())
@@ -2190,12 +2103,8 @@ void CCam__Process_hook(uintptr_t thiz)
 				pVeh = pNetGame->GetVehiclePool()->GetAt(pNetGame->GetPlayerPool()->GetLocalPlayer()->m_CurrentVehicle);
 				if (pVeh)
 				{
-					pVeh->GetMoveSpeedVector(&vecSpeed);
-					VECTOR vec;
-					vec.X = vecSpeed.X * 6.0f;
-					vec.Y = vecSpeed.Y * 6.0f;
-					vec.Z = vecSpeed.Z * 6.0f;
-					pVeh->SetMoveSpeedVector(vec);
+					pVeh->m_pEntity->vecMoveSpeed *= 6.0f;
+
 					*(float*)(g_libGTASA + 0x00608558) = 200.0f;
 				}
 			}
@@ -2273,7 +2182,7 @@ int CPad__CycleCameraModeDownJustDown_hook(void* thiz)
 		lastTick = GetTickCount();
 	}
 
-	if (IN_VEHICLE(pPed))
+	if (pPed->bInVehicle)
 	{
 		if (bPressed)
 		{
@@ -2390,17 +2299,6 @@ int SetCompAlphaCB_hook(int a1, char a2)
 	return result;
 }
 
-int (*CEntity__RegisterReference)(ENTITY_TYPE *thiz, ENTITY_TYPE **a2);
-int CEntity__RegisterReference_hook(ENTITY_TYPE *thiz, ENTITY_TYPE **a2)
-{
-	if(!thiz)return false;
-	if(!a2)return false;
-//    if( !*((DWORD *)thiz + 4)  )return false;
-//	if(! thiz + 0x36)return false;
-
-	return CEntity__RegisterReference(thiz, a2);
-}
-
 float (*CDraw__SetFOV)(float thiz, float a2);
 float CDraw__SetFOV_hook(float thiz, float a2)
 {
@@ -2414,7 +2312,7 @@ int (*MobileSettings__GetMaxResWidth)();
 int MobileSettings__GetMaxResWidth_hook()
 {
 	//Log("res = %d", ((int(*)())(g_libGTASA + 0x0023816C + 1))());
-	return (int)( ((int(*)())(g_libGTASA + 0x0023816C + 1))()/1.1 );
+	return (int)( ((int(*)())(g_libGTASA + 0x0023816C + 1))()/1.2 );
 }
 
 char **(*CPhysical__Add)(uintptr_t thiz);
@@ -2435,8 +2333,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 						if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
 						{
 							CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-							if (pObject->m_pEntity->mat->pos.X > 20000.0f || pObject->m_pEntity->mat->pos.Y > 20000.0f || pObject->m_pEntity->mat->pos.Z > 20000.0f ||
-								pObject->m_pEntity->mat->pos.X < -20000.0f || pObject->m_pEntity->mat->pos.Y < -20000.0f || pObject->m_pEntity->mat->pos.Z < -20000.0f)
+							if (pObject->m_pEntity->mat->pos.x > 20000.0f || pObject->m_pEntity->mat->pos.y > 20000.0f || pObject->m_pEntity->mat->pos.z > 20000.0f ||
+								pObject->m_pEntity->mat->pos.x < -20000.0f || pObject->m_pEntity->mat->pos.y < -20000.0f || pObject->m_pEntity->mat->pos.z < -20000.0f)
 							{
 								/*if(pChatWindow)
 								{
@@ -2501,8 +2399,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 									if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
 									{
 										CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-										if (pObject->m_pEntity->mat->pos.X > 20000.0f || pObject->m_pEntity->mat->pos.Y > 20000.0f || pObject->m_pEntity->mat->pos.Z > 20000.0f ||
-											pObject->m_pEntity->mat->pos.X < -20000.0f || pObject->m_pEntity->mat->pos.Y < -20000.0f || pObject->m_pEntity->mat->pos.Z < -20000.0f)
+										if (pObject->m_pEntity->mat->pos.x > 20000.0f || pObject->m_pEntity->mat->pos.y > 20000.0f || pObject->m_pEntity->mat->pos.z > 20000.0f ||
+											pObject->m_pEntity->mat->pos.x < -20000.0f || pObject->m_pEntity->mat->pos.y < -20000.0f || pObject->m_pEntity->mat->pos.z < -20000.0f)
 										{
 											/*if(pChatWindow)
 											{
@@ -2614,9 +2512,9 @@ int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
 										pVehicle->GetMatrix(&vehicleMat);
 										pPlayerPed->GetMatrix(&playerMat);
 
-										float fSX = (vehicleMat.pos.X - playerMat.pos.X) * (vehicleMat.pos.X - playerMat.pos.X);
-										float fSY = (vehicleMat.pos.Y - playerMat.pos.Y) * (vehicleMat.pos.Y - playerMat.pos.Y);
-										float fSZ = (vehicleMat.pos.Z - playerMat.pos.Z) * (vehicleMat.pos.Z - playerMat.pos.Z);
+										float fSX = (vehicleMat.pos.x - playerMat.pos.x) * (vehicleMat.pos.x - playerMat.pos.x);
+										float fSY = (vehicleMat.pos.y - playerMat.pos.y) * (vehicleMat.pos.y - playerMat.pos.y);
+										float fSZ = (vehicleMat.pos.z - playerMat.pos.z) * (vehicleMat.pos.z - playerMat.pos.z);
 
 										float fDistance = (float)sqrt(fSX + fSY + fSZ);
 
@@ -2689,8 +2587,8 @@ void RenderEffects_hook()
 //	}
 }
 
-uint32_t (*CWeapon__FireSniper)(WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
-uint32_t CWeapon__FireSniper_hook(WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin)
+uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
+uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin)
 {
 	if(GamePool_FindPlayerPed() == pFiringEntity)
 	{
@@ -2703,31 +2601,6 @@ uint32_t CWeapon__FireSniper_hook(WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE *pFiri
 	}
 
 	return 1;
-}
-
-VECTOR& (*FindPlayerSpeed)(int a1);
-VECTOR& FindPlayerSpeed_hook(int a1)
-{
-	uintptr_t dwRetAddr = 0;
-	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
-	dwRetAddr -= g_libGTASA;
-
-	if(dwRetAddr == 0x3DF20E + 1)
-	{
-		if(pNetGame)
-		{
-			CPlayerPed *pPlayerPed = pGame->FindPlayerPed();
-			if(pPlayerPed &&
-			   pPlayerPed->IsInVehicle() &&
-			   pPlayerPed->IsAPassenger())
-			{
-				VECTOR vec = {0.1f, 0.1f, 0.1f};
-				return vec;
-			}
-		}
-	}
-
-	return FindPlayerSpeed(a1);
 }
 
 void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TYPE **ppEntity)
@@ -2753,9 +2626,9 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TY
 			{
 				if(pNetGame->m_iLagCompensation)
 				{
-					bulletData.vecOffset.X = vecPos->X - pEntity->mat->pos.X;
-					bulletData.vecOffset.Y = vecPos->Y - pEntity->mat->pos.Y;
-					bulletData.vecOffset.Z = vecPos->Z - pEntity->mat->pos.Z;
+					bulletData.vecOffset.X = vecPos->X - pEntity->mat->pos.x;
+					bulletData.vecOffset.Y = vecPos->Y - pEntity->mat->pos.y;
+					bulletData.vecOffset.Z = vecPos->Z - pEntity->mat->pos.z;
 				}
 				else
 				{
@@ -2780,8 +2653,8 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TY
 }
 
 bool g_bForceWorldProcessLineOfSight = false;
-uint32_t (*CWeapon__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
-uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
+uint32_t (*CWeapon__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, CWeapon *pWeaponSlot, PED_TYPE **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
+uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, CWeapon *pWeaponSlot, PED_TYPE **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -2823,9 +2696,9 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 							{
 								if(pNetGame->m_iLagCompensation)
 								{
-									vecPosPlusOffset.X = pMatrix->pos.X + g_pCurrentBulletData->vecOffset.X;
-									vecPosPlusOffset.Y = pMatrix->pos.Y + g_pCurrentBulletData->vecOffset.Y;
-									vecPosPlusOffset.Z = pMatrix->pos.Z + g_pCurrentBulletData->vecOffset.Z;
+									vecPosPlusOffset.X = pMatrix->pos.x + g_pCurrentBulletData->vecOffset.X;
+									vecPosPlusOffset.Y = pMatrix->pos.y + g_pCurrentBulletData->vecOffset.Y;
+									vecPosPlusOffset.Z = pMatrix->pos.z + g_pCurrentBulletData->vecOffset.Z;
 								}
 								else ProjectMatrix(&vecPosPlusOffset, pMatrix, &g_pCurrentBulletData->vecOffset);
 
@@ -2862,7 +2735,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 					if(!g_pCurrentBulletData->pEntity)
 					{
 						PED_TYPE *pLocalPed = pGame->FindPlayerPed()->GetGtaActor();
-						if(*ppEntity == pLocalPed || (IN_VEHICLE(pLocalPed) && *(uintptr_t *)ppEntity == pLocalPed->pVehicle))
+						if(*ppEntity == pLocalPed || pLocalPed->bInVehicle && *(uintptr_t *)ppEntity == pLocalPed->pVehicle)
 						{
 							*ppEntity = nullptr;
 							vecPos->X = 0.0f;
@@ -2887,8 +2760,8 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 	return CWorld__ProcessLineOfSight(vecOrigin, vecEnd, vecPos, ppEntity, b1, b2, b3, b4, b5, b6, b7, b8);
 }
 
-signed int (*CBulletInfo_AddBullet)(ENTITY_TYPE* pEntity, WEAPON_SLOT_TYPE* pWeapon, VECTOR vec1, VECTOR vec2);
-signed int CBulletInfo_AddBullet_hook(ENTITY_TYPE* pEntity, WEAPON_SLOT_TYPE* pWeapon, VECTOR vec1, VECTOR vec2)
+signed int (*CBulletInfo_AddBullet)(ENTITY_TYPE* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2);
+signed int CBulletInfo_AddBullet_hook(ENTITY_TYPE* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2)
 {
 	vec2.X *= 50.0f;
 	vec2.Y *= 50.0f;
@@ -2976,24 +2849,17 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x0032217C, &CEventHandler__HandleEvents_hook, &CEventHandler__HandleEvents);
 	CHook::InlineHook(g_libGTASA, 0x00281398, &CWidgetRegionLook__Update_hook, &CWidgetRegionLook__Update);
 
-	CHook::InlineHook(g_libGTASA, 0x3D7CA8, &CLoadingScreen_DisplayPCScreen_hook, &CLoadingScreen_DisplayPCScreen);
-
 	CHook::Redirect(g_libGTASA, 0x39AEF4, &Render2dStuff);
 	CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);
 	CHook::InlineHook(g_libGTASA, 0x239D5C, &TouchEvent_hook, &TouchEvent);
     //
 
-	CHook::InlineHook(g_libGTASA, 0x336690, &CModelInfo_AddPedModel_hook, &CModelInfo_AddPedModel); // hook is dangerous
+//	CHook::InlineHook(g_libGTASA, 0x336690, &CModelInfo_AddPedModel_hook, &CModelInfo_AddPedModel); // hook is dangerous
 	CHook::InlineHook(g_libGTASA, 0x3DBA88, &CRadar__GetRadarTraceColor_hook, &CRadar__GetRadarTraceColor); // dangerous
 	CHook::InlineHook(g_libGTASA, 0x3DAF84, &CRadar__SetCoordBlip_hook, &CRadar__SetCoordBlip);
 	CHook::InlineHook(g_libGTASA, 0x3DE9A8, &CRadar__DrawRadarGangOverlay_hook, &CRadar__DrawRadarGangOverlay);
 
 	CHook::CodeInject(g_libGTASA + 0x2D99F4, (uintptr_t)PickupPickUp_hook, 1);
-
-
-	CHook::InlineHook(g_libGTASA, 0x00336268, &CModelInfo_AddAtomicModel_hook, &CModelInfo_AddAtomicModel);
-
-	CHook::InlineHook(g_libGTASA, 0x00336618, &CModelInfo_AddVehicleModel_hook, &CModelInfo_AddVehicleModel); // dangerous
 
 	CHook::InlineHook(g_libGTASA, 0x0033DA5C, &CAnimManager__UncompressAnimation_hook, &CAnimManager__UncompressAnimation);
 	CHook::InlineHook(g_libGTASA, 0x001AECC0, &RwFrameAddChild_hook, &RwFrameAddChild);
@@ -3038,14 +2904,14 @@ void InstallHooks()
 
 	CHook::InlineHook(g_libGTASA, 0x0025CB8C, &MainMenuScreen__OnExit_hook, &MainMenuScreen__OnExit);
 
-	CHook::WriteMemory(g_libGTASA + 0x003DA86C,
-		"\x80\xB4"\
-		"\x00\xAF"\
-		"\x1B\x4B"\
-		"\x7B\x44"\
-		"\x1B\x68", 10); // CRadar::LimitRadarPoint
-
-	CHook::NOP(g_libGTASA + 0x003DA876, 3); // CRadar::LimitRadarPoint
+//	CHook::WriteMemory(g_libGTASA + 0x003DA86C,
+//		"\x80\xB4"\
+//		"\x00\xAF"\
+//		"\x1B\x4B"\
+//		"\x7B\x44"\
+//		"\x1B\x68", 10); // CRadar::LimitRadarPoint
+//
+//	CHook::NOP(g_libGTASA + 0x003DA876, 3); // CRadar::LimitRadarPoint
 
 	// headlights color, wheel size, wheel align
 	CHook::InlineHook(g_libGTASA, 0x005466EC, &CShadows__StoreCarLightShadow_hook, &CShadows__StoreCarLightShadow);

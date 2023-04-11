@@ -146,6 +146,8 @@ void ApplyPatches_level0()
 	// osMutexStuff
 	CHook::WriteMemory(g_libGTASA + 0x001A7ECE, (uintptr_t)"\x4F\xF0\x01\x00\x00\x46", 6);
 
+	CHook::RET(g_libGTASA + 0x00508E54);
+
 	// CdStreamInit(6);
 	CHook::WriteMemory(g_libGTASA + 0x3981EC, (uintptr_t)"\x06\x20", 2);
 
@@ -161,8 +163,8 @@ void ApplyPatches_level0()
 	}
 
 	// fix hook crash
-	CHook::WriteMemory(g_libGTASA + 0x00336618, "\x4F\xF4\x6A\x71", 4);
-	CHook::WriteMemory(g_libGTASA + 0x33661C, "\x1A\x4B", 2);
+	//CHook::WriteMemory(g_libGTASA + 0x00336618, "\x4F\xF4\x6A\x71", 4);
+	//CHook::WriteMemory(g_libGTASA + 0x33661C, "\x1A\x4B", 2);
 	CHook::WriteMemory(g_libGTASA + 0x00274AB4, "\x00\x46", 2);
 
 	//WriteMemory(g_libGTASA + 0x001A7EB6, (uintptr_t)"\x00\x23", 2); // MOVS            R3, #0
@@ -185,12 +187,12 @@ void ApplyPatches_level0()
 //	CHook::NOP(g_libGTASA + 0x0040881A, 2); // CCranes::InitCranes(void)
 }
 
-struct _ATOMIC_MODEL
-{
-	uintptr_t func_tbl;
-	char data[56];
-};
-struct _ATOMIC_MODEL *ATOMIC_MODELS;
+//struct _ATOMIC_MODEL
+//{
+//	uintptr_t func_tbl;
+//	char data[56];
+//};
+//struct _ATOMIC_MODEL *ATOMIC_MODELS;
 
 void ApplyShadowPatch()
 {
@@ -228,18 +230,26 @@ void ApplyPatches()
 {
 	Log("Installing patches..");
 
+	// fix invalid death id
+	CHook::NOP(g_libGTASA + 0x002FEAE6, 2);
+	CHook::NOP(g_libGTASA + 0x002FFAFC, 2);
+	CHook::NOP(g_libGTASA + 0x00300040, 2);
+	CHook::NOP(g_libGTASA + 0x002FFB4E, 2);
+
+	CHook::RET(g_libGTASA + 0x002C4E3C); // experemental!!! game logic no need for mp?
+
 	ApplyShadowPatch();
     ApplyDefaultPlatePatch();
 
-	// allocate Atomic models pool
-	ATOMIC_MODELS = new _ATOMIC_MODEL[120000];
-	for (int i = 0; i < 120000; i++)
-	{
-		// CBaseModelInfo::CBaseModelInfo
-		((void(*)(_ATOMIC_MODEL*))(g_libGTASA + 0x33559C + 1))(&ATOMIC_MODELS[i]);
-		ATOMIC_MODELS[i].func_tbl = g_libGTASA + 0x5C6C68;
-		memset(ATOMIC_MODELS[i].data, 0, sizeof(ATOMIC_MODELS->data));
-	}
+//	// allocate Atomic models pool
+//	ATOMIC_MODELS = new _ATOMIC_MODEL[120000];
+//	for (int i = 0; i < 120000; i++)
+//	{
+//		// CBaseModelInfo::CBaseModelInfo
+//		((void(*)(_ATOMIC_MODEL*))(g_libGTASA + 0x33559C + 1))(&ATOMIC_MODELS[i]);
+//		ATOMIC_MODELS[i].func_tbl = g_libGTASA + 0x5C6C68;
+//		memset(ATOMIC_MODELS[i].data, 0, sizeof(ATOMIC_MODELS->data));
+//	}
 
 	CHook::Write<uint32_t>(g_libGTASA + 0x8E87E4, 1);
 

@@ -425,20 +425,7 @@ void CJavaWrapper::SetPauseState(bool a1)
     env->CallVoidMethod(this->activity, this->s_setPauseState, a1);
 }
 
-//void CJavaWrapper::ShowSplash() {
-//
-//	JNIEnv* env = GetEnv();
-//
-//	if (!env)
-//	{
-//		Log("No env");
-//		return;
-//	}
-//
-//	env->CallVoidMethod(this->activity, this->s_showSplash);
-//}
-
-void CJavaWrapper::UpdateSplash(int percent) {
+void CJavaWrapper::hideLoadingScreen() {
 	
 	JNIEnv* env = GetEnv();
 
@@ -447,8 +434,10 @@ void CJavaWrapper::UpdateSplash(int percent) {
 		Log("No env");
 		return;
 	}
+	jclass clazz = env->GetObjectClass(this->activity);
+	jmethodID method = env->GetMethodID(clazz, "hideLoadingScreen", "()V");
 
-	env->CallVoidMethod(this->activity, this->s_updateSplash, percent);
+	env->CallVoidMethod(this->activity, method);
 }
 
 void CJavaWrapper::ExitGame() {
@@ -681,7 +670,6 @@ CJavaWrapper::CJavaWrapper(JNIEnv* env, jobject activity)
 
 	s_setPauseState = env->GetMethodID(nvEventClass, "setPauseState", "(Z)V");
 
-	s_updateSplash = env->GetMethodID(nvEventClass, "updateSplash", "(I)V");
 	s_ExitGame = env->GetMethodID(nvEventClass, "ExitGame", "()V");
 	//s_showSplash = env->GetMethodID(nvEventClass, "showSplash", "()V");
 

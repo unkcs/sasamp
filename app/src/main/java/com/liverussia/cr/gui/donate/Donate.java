@@ -77,6 +77,7 @@ public class Donate {
     static final int DONATE_OTHER_VEH_SLOT = 11;
     static final int DONATE_OTHER_VEH_FAMILY_SLOT = 12;
     static final int DONATE_OTHER_GIVE_FAMILY_SLOT = 13;
+    static final int DONATE_OTHER_ROLLERS = 14;
 
     static final int BUTTTON_BUY = 0;
     static final int BUTTTON_INFO = 1;
@@ -294,6 +295,7 @@ public class Donate {
         allItems.add( new DonateItem("Месси", CATEGORY_SKINS, 2500, getResId("skin_161"), 161) );
         allItems.add( new DonateItem("Kaneki Aogiri", CATEGORY_SKINS, 7500, getResId("skin_147"), 147) );
         allItems.add( new DonateItem("Seidou Takizawa", CATEGORY_SKINS, 7500, getResId("skin_140"), 140) );
+        allItems.add( new DonateItem("Грут", CATEGORY_SKINS, 50000, getResId("skin_14"), 14) );
 
         // cars
         allItems.add( new DonateItem("Lamborghini Urus", CATEGORY_CARS, 8250, getResId("auc_veh_579"), 579) );
@@ -390,6 +392,7 @@ public class Donate {
         allItems.add( new DonateItem("Крылья", CATEGORY_ACS, 3000, getResId("inv_wings"), 17979) );
 
         // other
+        allItems.add( new DonateItem("Ролики ( анимация ходьбы )", CATEGORY_OTHER, 2000, getResId("inv_rollers"), DONATE_OTHER_ROLLERS) );
         allItems.add( new DonateItem("Слот для дома\n(От 1000)", CATEGORY_OTHER, 1000, getResId("house_slot"), DONATE_OTHER_HOUSE_SLOT) );
         allItems.add( new DonateItem("Слот для Бизнеса", CATEGORY_OTHER, 5000, getResId("biz_slot"), DONATE_OTHER_BIZ_SLOT) );
         allItems.add( new DonateItem("Снять варн", CATEGORY_OTHER, 100, getResId("donate_warn"), DONATE_OTHER_WARN) );

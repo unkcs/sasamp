@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.liverussia.cr.R;
 import com.liverussia.cr.gui.util.FadingEdgeLayout;
+import com.liverussia.launcher.storage.Storage;
 import com.nvidia.devtech.NvEventQueueActivity;
 
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
     private SwitchCompat mSwitchHpArmour;
     SwitchCompat switch_damageinformer;
     SwitchCompat switch_3dtext_show;
+    SwitchCompat switch_androidkeyboard;
     private SeekBar chat_line_count;
     private SeekBar chat_font_size;
 
@@ -142,6 +144,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         mSwitchHpArmour = mRootView.findViewById(R.id.switch_info_bar);
         switch_damageinformer = mRootView.findViewById(R.id.switch_damageinformer);
         switch_3dtext_show = mRootView.findViewById(R.id.switch_3dtext_show);
+        switch_androidkeyboard = mRootView.findViewById(R.id.switch_androidkeyboard);
         mSwitchOutfit = mRootView.findViewById(R.id.switch_outfit_weapons);
         chat_line_count = mRootView.findViewById(R.id.chat_line_count);
         chat_line_count.setProgress(mContext.findViewById(R.id.chat).getLayoutParams().height);
@@ -217,6 +220,13 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
             }
         });
 
+        switch_androidkeyboard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Storage.setBoolean("isAndroidKeyboard", b);
+            }
+        });
+
         mSwitchFPSCounter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -238,6 +248,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         mSwitchHpArmour.setChecked( getNativeHpArmourText() );
         switch_damageinformer.setChecked(getNativeDamageInformer());
         switch_3dtext_show.setChecked(getNativeShow3dText());
+        switch_androidkeyboard.setChecked( Storage.getBoolean("isAndroidKeyboard") );
         mSwitchOutfit.setChecked( getNativeOutfitGunsSettings() );
         fps_text.setText(String.format("%d", getNativeFpsLimit()));
 

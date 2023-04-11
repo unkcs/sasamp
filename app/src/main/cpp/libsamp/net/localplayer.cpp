@@ -183,6 +183,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CMedic.h"
 #include "java_systems/CTab.h"
 #include "java_systems/CDailyReward.h"
+#include "java_systems/CStyling.h"
 #include "java_systems/CDialog.h"
 #include "java_systems/CTechInspect.h"
 #include "java_systems/casino/CBaccarat.h"
@@ -207,8 +208,7 @@ bool CLocalPlayer::Process()
 						  m_pPlayerPed->drunk_level / 100);
 		}
 		// handle dead
-		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH ||
-			m_pPlayerPed->IsDead()) {
+		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH || m_pPlayerPed->IsDead()) {
 			ToggleSpectating(false);
 			m_pPlayerPed->FlushAttach();
 			// reset tasks/anims
@@ -472,7 +472,7 @@ bool CLocalPlayer::Process()
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow || CTireShop::bIsShow)
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow)
 	{
 		needDrawableHud = false;
 	}
@@ -485,22 +485,6 @@ bool CLocalPlayer::Process()
         return true;
     }
 
-    // handle needs to respawn
-    if(m_bIsWasted && (m_pPlayerPed->GetActionTrigger() != ACTION_WASTED) && (m_pPlayerPed->GetActionTrigger() != ACTION_DEATH) )
-    {
-        if( m_bClearedToSpawn && !m_bWantsAnotherClass && pNetGame->GetGameState() == GAMESTATE_CONNECTED)
-        {
-            if(m_pPlayerPed->GetHealth() > 0.0f)
-                Spawn();
-        }
-        else
-        {
-            m_bIsWasted = false;
-            HandleClassSelection();
-            m_bWantsAnotherClass = false;
-        }
-        return true;
-    }
     return true;
 }
 
@@ -598,7 +582,7 @@ void CLocalPlayer::SendNextClass()
 	if(m_iSelectedClass == (pNetGame->m_iSpawnsAvailable - 1)) m_iSelectedClass = 0;
 	else m_iSelectedClass++;
 
-	pGame->PlaySound(1052, matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z);
+	pGame->PlaySound(1052, matPlayer.pos.x, matPlayer.pos.y, matPlayer.pos.z);
 	RequestClass(m_iSelectedClass);
 }
 
@@ -610,7 +594,7 @@ void CLocalPlayer::SendPrevClass()
 	if(m_iSelectedClass == 0) m_iSelectedClass = (pNetGame->m_iSpawnsAvailable - 1);
 	else m_iSelectedClass--;		
 
-	pGame->PlaySound(1053,matPlayer.pos.X,matPlayer.pos.Y,matPlayer.pos.Z);
+	pGame->PlaySound(1053,matPlayer.pos.x,matPlayer.pos.y,matPlayer.pos.z);
 	RequestClass(m_iSelectedClass);
 }
 
@@ -686,10 +670,10 @@ void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 	m_bHasSpawnInfo = true;
 }
 
-bool CLocalPlayer::Spawn()
+bool CLocalPlayer::Spawn(const CVector pos, float rot)
 {
-	if(!m_bHasSpawnInfo) return false;
-	m_pPlayerPed->SetInterior(0);
+	//if(!m_bHasSpawnInfo) return false;
+	//m_pPlayerPed->SetInterior(interior);
 
     //g_pJavaWrapper->ShowSpeed();
 
@@ -698,7 +682,7 @@ bool CLocalPlayer::Spawn()
 	CCamera *pGameCamera = pGame->GetCamera();
 	pGameCamera->Restore();
 	pGameCamera->SetBehindPlayer();
-	pGame->DisplayWidgets(true);
+	//pGame->DisplayWidgets(true);
 	//pGame->DisplayHUD(true);
 	m_pPlayerPed->TogglePlayerControllable(true);
 	
@@ -709,30 +693,29 @@ bool CLocalPlayer::Spawn()
 
 	bFirstSpawn = false;
 
-	pGame->RefreshStreamingAt(m_SpawnInfo.vecPos.X,m_SpawnInfo.vecPos.Y);
+	pGame->RefreshStreamingAt(pos.x,pos.y);
 
-	m_pPlayerPed->RestartIfWastedAt(&m_SpawnInfo.vecPos, m_SpawnInfo.fRotation);
-	m_pPlayerPed->SetModelIndex(m_SpawnInfo.iSkin);
-	m_pPlayerPed->ClearAllWeapons();
+	m_pPlayerPed->RestartIfWastedAt(pos, rot);
+	//m_pPlayerPed->SetModelIndex(skin);
+	//m_pPlayerPed->ClearAllWeapons();
 	m_pPlayerPed->ResetDamageEntity();
 
-	pGame->DisableTrainTraffic();
+	//pGame->DisableTrainTraffic();
 
 	// CCamera::Fade
 	CHook::WriteMemory(g_libGTASA + 0x36EA2C, "\x70\x47", 2); // bx lr
 
-	m_pPlayerPed->TeleportTo(m_SpawnInfo.vecPos.X,
-		m_SpawnInfo.vecPos.Y, (m_SpawnInfo.vecPos.Z + 0.5f));
+	m_pPlayerPed->TeleportTo(pos.x,pos.y, (pos.z + 0.5f));
 
-	m_pPlayerPed->ForceTargetRotation(m_SpawnInfo.fRotation);
+	m_pPlayerPed->ForceTargetRotation(rot);
 
 	m_bIsWasted = false;
 	m_bIsActive = true;
 	m_bWaitingForSpawnRequestReply = false;
 
-	RakNet::BitStream bsSendSpawn;
-	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
-		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
+//	RakNet::BitStream bsSendSpawn;
+//	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
+//		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
 
 	return true;
 }
@@ -785,7 +768,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 {
 	RakNet::BitStream bsPlayerSync;
 	RwMatrix matPlayer;
-	VECTOR vecMoveSpeed;
+	CVector vecMoveSpeed;
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
 
@@ -797,9 +780,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 	ofSync.lrAnalog = lrAnalog;
 	ofSync.udAnalog = udAnalog;
 	ofSync.wKeys = wKeys;
-	ofSync.vecPos.X = matPlayer.pos.X;
-	ofSync.vecPos.Y = matPlayer.pos.Y;
-	ofSync.vecPos.Z = matPlayer.pos.Z;
+	ofSync.vecPos = matPlayer.pos;
 
 	ofSync.quat.SetFromMatrix(matPlayer);
 	ofSync.quat.Normalize();
@@ -829,27 +810,13 @@ void CLocalPlayer::SendOnFootFullSyncData()
 		ofSync.byteSpecialAction = m_pPlayerPed->m_iCurrentSpecialAction;
 	}
 
-	ofSync.vecMoveSpeed.X = vecMoveSpeed.X;
-	ofSync.vecMoveSpeed.Y = vecMoveSpeed.Y;
-	ofSync.vecMoveSpeed.Z = vecMoveSpeed.Z;
+	ofSync.vecMoveSpeed = vecMoveSpeed;
 
-	ofSync.vecSurfOffsets.X = 0.0f;
-	ofSync.vecSurfOffsets.Y = 0.0f;
-	ofSync.vecSurfOffsets.Z = 0.0f;
+	ofSync.vecSurfOffsets = 0.0f;
+
 	ofSync.wSurfInfo = 0;
 
 	ofSync.dwAnimation = 0;
-	//ofSync.dwAnimation = GetCurrentAnimationIndexFlag();
-//	ofSync.animation.flags.lockY = m_pPlayerPed->animFlagLockY;
-//	ofSync.animation.flags.lockX = m_pPlayerPed->animFlagLockX;
-//	ofSync.animation.flags.time = m_pPlayerPed->animFlagTime;
-//	ofSync.animation.flags.loop = m_pPlayerPed->animFlagLoop;
-//	ofSync.animation.flags.freeze = m_pPlayerPed->animFlagFreeze;
-//	m_pPlayerPed->animFlagTime = 0;
-//	m_pPlayerPed->animFlagLoop = false;
-//	m_pPlayerPed->animFlagFreeze = false;
-//	ofSync.animation.flags.lockY = false;
-//	ofSync.animation.flags.lockX = false;
 
 	if( (GetTickCount() - m_dwLastUpdateOnFootData) > 500 || memcmp(&m_OnFootData, &ofSync, sizeof(ONFOOT_SYNC_DATA)))
 	{
@@ -919,7 +886,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 	if(!m_pPlayerPed || !m_pPlayerPed->m_pPed)return;
 
 	RwMatrix matPlayer;
-	VECTOR vecMoveSpeed;
+	CVector vecMoveSpeed;
 
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
@@ -954,13 +921,10 @@ void CLocalPlayer::SendInCarFullSyncData()
 	}
 
 	// pos
-	icSync.vecPos.X = matPlayer.pos.X;
-	icSync.vecPos.Y = matPlayer.pos.Y;
-	icSync.vecPos.Z = matPlayer.pos.Z;
+	icSync.vecPos = matPlayer.pos;
+
 	// move speed
-	icSync.vecMoveSpeed.X = vecMoveSpeed.X;
-	icSync.vecMoveSpeed.Y = vecMoveSpeed.Y;
-	icSync.vecMoveSpeed.Z = vecMoveSpeed.Z;
+	icSync.vecMoveSpeed = vecMoveSpeed;
 
 	icSync.fCarHealth = pVehicle->GetHealth();
 	icSync.bytePlayerHealth = (uint8_t)m_pPlayerPed->GetHealth();
@@ -992,9 +956,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 			pTrailer->GetMatrix(&matTrailer);
 			trSync.trailerID = icSync.TrailerID;
 
-			trSync.vecPos.X = matTrailer.pos.X;
-			trSync.vecPos.Y = matTrailer.pos.Y;
-			trSync.vecPos.Z = matTrailer.pos.Z;
+			trSync.vecPos = matTrailer.pos;
 
 			CQuaternion syncQuat;
 			syncQuat.SetFromMatrix(matTrailer);
@@ -1043,12 +1005,10 @@ void CLocalPlayer::SendPassengerFullSyncData()
 
 	psSync.byteDriveBy = 0;//m_bPassengerDriveByMode;
 
-	psSync.byteCurrentWeapon = 0;//m_pPlayerPed->GetCurrentWeapon();
+	psSync.byteCurrentWeapon = m_pPlayerPed->GetCurrentWeapon();//m_pPlayerPed->GetCurrentWeapon();
 
 	m_pPlayerPed->GetMatrix(&mat);
-	psSync.vecPos.X = mat.pos.X;
-	psSync.vecPos.Y = mat.pos.Y;
-	psSync.vecPos.Z = mat.pos.Z;
+	psSync.vecPos = mat.pos;
 
 	// send
 	if((GetTickCount() - m_dwLastUpdatePassengerData) > 500 || memcmp(&m_PassengerData, &psSync, sizeof(PASSENGER_SYNC_DATA)))
@@ -1080,7 +1040,7 @@ void CLocalPlayer::SendAimSyncData()
     aimSync.aspect_ratio = /*GameGetAspectRatio() * */ 255.0f;
     aimSync.byteCamExtZoom = (uint8_t)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);
 
-    WEAPON_SLOT_TYPE* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
+    CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
     if (pwstWeapon->dwState == 2) {
         aimSync.byteWeaponState = WS_RELOADING;
     }
@@ -1109,9 +1069,8 @@ void CLocalPlayer::ProcessSpectating()
 
 	if(!pPlayerPool || !pVehiclePool) return;
 
-	spSync.vecPos.X = matPos.pos.X;
-	spSync.vecPos.Y = matPos.pos.Y;
-	spSync.vecPos.Z = matPos.pos.Z;
+	spSync.vecPos = matPos.pos;
+
 	spSync.lrAnalog = lrAnalog;
 	spSync.udAnalog = udAnalog;
 	spSync.wKeys = wKeys;
@@ -1131,7 +1090,7 @@ void CLocalPlayer::ProcessSpectating()
 	}
 
 	m_pPlayerPed->SetHealth(100.0f);
-	GetPlayerPed()->TeleportTo(spSync.vecPos.X, spSync.vecPos.Y, spSync.vecPos.Z + 20.0f);
+	GetPlayerPed()->TeleportTo(spSync.vecPos.x, spSync.vecPos.y, spSync.vecPos.z + 20.0f);
 
 	// handle spectate player left the server
 	if(m_byteSpectateType == SPECTATE_TYPE_PLAYER &&
@@ -1196,8 +1155,8 @@ void CLocalPlayer::ProcessSpectating()
 
 void CLocalPlayer::ToggleSpectating(bool bToggle)
 {
-	if(m_bIsSpectating && !bToggle)
-		Spawn();
+//	if(m_bIsSpectating && !bToggle)
+//		Spawn();
 
 	m_bIsSpectating = bToggle;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;

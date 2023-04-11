@@ -106,6 +106,8 @@
 #define RPC_SHOW_DONATE 	70
 #define RPC_FACILITY_WAR    71
 #define RPC_TUNING_WHEELS    72
+#define RPC_STYLING_CENTER    74
+#define RPC_SPAWN_AT		75
 
 
 // Packet 252
@@ -272,6 +274,8 @@ public:
 	static void packetFacilityWar(Packet *p);
 
 	static void packetTireShop(Packet *p);
+
+	static void packetStylingCenter(Packet *p);
 };
 
 extern CNetGame *pNetGame;

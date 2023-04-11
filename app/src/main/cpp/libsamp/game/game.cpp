@@ -5,6 +5,7 @@
 #include "java_systems/CHUD.h"
 #include "util/patch.h"
 #include "CGtaWidgets.h"
+#include "game/Models/ModelInfo.h"
 
 void ApplyPatches();
 void ApplyInGamePatches();
@@ -62,7 +63,7 @@ void CGame::exitGame()
 	//delete pNetGame;
     //exit(0);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+   // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	g_pJavaWrapper->ExitGame();
 }
@@ -104,7 +105,7 @@ void CGame::RemovePlayer(CPlayerPed* pPlayer)
 	}
 }
 
-CObject *CGame::NewObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRot, float fDrawDistance)
+CObject *CGame::NewObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance)
 {
 	CObject *pObjectNew = new CObject(iModel, fPosX, fPosY, fPosZ, vecRot, fDrawDistance);
 	return pObjectNew;
@@ -116,19 +117,19 @@ uint32_t CGame::CreatePickup(int iModel, int iType, float fX, float fY, float fZ
 
 	if(iModel > 0 && iModel < 20000)
 	{
-		uintptr_t *dwModelArray = (uintptr_t*)(g_libGTASA+0x87BF48);
+		auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
     	if(dwModelArray[iModel] == 0)
     		iModel = 18631;
 	}
 	else iModel = 18631;
 
-	if(!ScriptCommand(&is_model_available, iModel))
-	{
-		ScriptCommand(&request_model, iModel);
-		ScriptCommand(&load_requested_models);
-		while(!ScriptCommand(&is_model_available, iModel))
-			usleep(1000);
-	}
+//	if(!ScriptCommand(&is_model_available, iModel))
+//	{
+//		ScriptCommand(&request_model, iModel);
+//		ScriptCommand(&load_requested_models);
+//		while(!ScriptCommand(&is_model_available, iModel))
+//			usleep(1000);
+//	}
 
 	ScriptCommand(&create_pickup, iModel, iType, fX, fY, fZ, &hnd);
 

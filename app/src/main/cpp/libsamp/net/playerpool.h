@@ -72,6 +72,8 @@ public:
 
 	void ApplyCollisionChecking();
 
+// REMOTE
+CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
 private:
 	// LOCAL
 	PLAYERID		m_LocalPlayerID;
@@ -80,8 +82,6 @@ private:
 	int				m_iLocalPlayerScore;
 	uint32_t		m_dwLocalPlayerPing;
 
-	// REMOTE
-	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
 	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	char			m_szPlayerNames[MAX_PLAYERS][MAX_PLAYER_NAME+1];
 	int				m_iPlayerScores[MAX_PLAYERS];

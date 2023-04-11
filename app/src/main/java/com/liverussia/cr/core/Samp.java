@@ -1,5 +1,6 @@
 package com.liverussia.cr.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -7,21 +8,28 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.liverussia.cr.R;
 import com.liverussia.cr.gui.AucContainer;
 import com.liverussia.cr.gui.Casino;
 import com.liverussia.cr.gui.CasinoBaccarat;
 import com.liverussia.cr.gui.CasinoDice;
 import com.liverussia.cr.gui.DailyReward;
-import com.liverussia.cr.gui.HudManager;
-import com.liverussia.cr.gui.donate.Donate;
+import com.liverussia.cr.gui.hud.HudManager;
 import com.liverussia.cr.gui.tab.Tab;
+import com.liverussia.cr.gui.util.Utils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Samp extends GTASA
 {
+    public static Activity activity;
+
     public static native void playUrlSound(String url);
     public static DecimalFormat formatter = null;
     public static SoundPool soundPool = null;
@@ -30,6 +38,7 @@ public class Samp extends GTASA
 
     @Override
     public void onCreate(Bundle bundle) {
+        activity = this;
 
         Log.i("java", "calling initSAMP");
         initSAMP(getExternalFilesDir(null).toString() + "/");
@@ -79,5 +88,20 @@ public class Samp extends GTASA
             }
         });
 
+    }
+
+    public void hideLoadingScreen() {
+        TimerTask task = new TimerTask() {
+            public void run() {
+                activity.runOnUiThread(() -> {
+                    ConstraintLayout loadscreen_main_layout = activity.findViewById(R.id.loadscreen_main_layout);
+                    Utils.HideLayout(loadscreen_main_layout, true);
+                });
+
+            }
+        };
+        Timer timer = new Timer("Timer");
+
+        timer.schedule(task, 900L);
     }
 }

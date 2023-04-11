@@ -8,6 +8,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="colorAccent">#ffF6D20F</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="colorSurface">#ffF6D20F</item>
     </style>
 
     <style name="AppBaseTheme" parent="Theme.MaterialComponents.Light" />

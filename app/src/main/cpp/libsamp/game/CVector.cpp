@@ -84,14 +84,6 @@ void CVector::Difference(const CVector& left, const CVector &right)
     z = left.z - right.z;
 }
 
-
-void CVector::operator= (const CVector& right)
-{
-    x = right.x;
-    y = right.y;
-    z = right.z;
-}
-
 // Adds value from the second vector.
 void CVector::operator+=(const CVector& right)
 {

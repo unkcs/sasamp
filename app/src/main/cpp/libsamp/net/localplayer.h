@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../game/common.h"
+#include "../game/quaternion.h"
+#include "../game/playerped.h"
+
 // spectate
 #define SPECTATE_TYPE_NONE				0
 #define SPECTATE_TYPE_PLAYER			1
@@ -56,14 +60,14 @@ typedef struct _ONFOOT_SYNC_DATA
 	uint16_t lrAnalog;				// +0
 	uint16_t udAnalog;				// +2
 	uint16_t wKeys;					// +4
-	VECTOR vecPos;					// +6
+	CVector vecPos;					// +6
 	CQuaternion quat;				// +18
 	uint8_t byteHealth;				// +34
 	uint8_t byteArmour;				// +35
 	uint8_t byteCurrentWeapon;		// +36
 	uint8_t byteSpecialAction;		// +37
-	VECTOR vecMoveSpeed;			// +38
-	VECTOR vecSurfOffsets;			// +50
+	CVector vecMoveSpeed;			// +38
+	CVector vecSurfOffsets;			// +50
 	uint16_t wSurfInfo;				// +62
 	union {
 		struct {
@@ -94,10 +98,10 @@ typedef struct _ONFOOT_SYNC_DATA
 typedef struct _TRAILER_SYNC_DATA
 {
 	VEHICLEID trailerID;
-	VECTOR vecPos;
+	CVector vecPos;
 	CQuaternion quat;
-	VECTOR vecMoveSpeed;
-	VECTOR vecTurnSpeed;
+	CVector vecMoveSpeed;
+	CVector vecTurnSpeed;
 } TRAILER_SYNC_DATA;
 
 typedef struct _INCAR_SYNC_DATA
@@ -107,8 +111,8 @@ typedef struct _INCAR_SYNC_DATA
 	uint16_t udAnalog;				// +4
 	uint16_t wKeys;					// +6
 	CQuaternion quat;				// +8
-	VECTOR vecPos;					// +24
-	VECTOR vecMoveSpeed;			// +36
+	CVector vecPos;					// +24
+	CVector vecMoveSpeed;			// +36
 	float fCarHealth;				// +48
 	uint8_t bytePlayerHealth;		// +52
 	uint8_t bytePlayerArmour;		// +53
@@ -128,15 +132,22 @@ typedef struct _INCAR_SYNC_DATA
 typedef struct _PASSENGER_SYNC_DATA
 {
 	VEHICLEID VehicleID;			// +0
-	uint8_t byteSeatFlags : 7;
-	uint8_t byteDriveBy : 1;		// +2
-	uint8_t byteCurrentWeapon;		// +3
+	union {
+		uint16_t DriveBySeatAdditionalKeyWeapon;
+		struct
+		{
+			uint8_t byteSeatFlags : 2;
+			uint8_t byteDriveBy : 6;
+			uint8_t byteCurrentWeapon : 6;
+			uint8_t AdditionalKey : 2;
+		};
+	};
 	uint8_t bytePlayerHealth;		// +4
 	uint8_t bytePlayerArmour;		// +5
 	uint16_t lrAnalog;				// +6
 	uint16_t udAnalog;				// +8
 	uint16_t wKeys;					// +10
-	VECTOR vecPos;					// +12
+	CVector vecPos;					// +12
 } PASSENGER_SYNC_DATA;				// size = 24
 
 enum eWeaponState
@@ -153,7 +164,7 @@ typedef struct _SPECTATOR_SYNC_DATA
 	uint16_t lrAnalog;
 	uint16_t udAnalog;
 	uint16_t wKeys;
-	VECTOR vecPos;
+	CVector vecPos;
 } SPECTATOR_SYNC_DATA;
 
 class CLocalPlayer
@@ -186,7 +197,7 @@ public:
 	void SendExitVehicleNotification(VEHICLEID VehicleID);
 	void UpdateRemoteInterior(uint8_t byteInterior);
 	void SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn);
-	bool Spawn();
+	bool Spawn(const CVector pos, float rot);
 	int GetOptimumOnFootSendRate();
 	uint8_t DetermineNumberOfPlayersInLocalRange();
 	int GetOptimumInCarSendRate();

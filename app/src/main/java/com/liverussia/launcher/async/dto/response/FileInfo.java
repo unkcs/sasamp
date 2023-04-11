@@ -13,4 +13,5 @@ public class FileInfo {
     private String path;
     private long ver;
     private long size;
+    private String hash;
 }

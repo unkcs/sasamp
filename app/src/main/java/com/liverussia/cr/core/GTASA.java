@@ -10,7 +10,7 @@ import com.liverussia.launcher.utils.MainUtils;
 import com.wardrumstudios.utils.WarMedia;
 
 public class GTASA extends WarMedia {
-    public static GTASA gtasaSelf = null;
+   // public static GTASA gtasaSelf = null;
     static String vmVersion;
     private boolean once = false;
 
@@ -30,11 +30,11 @@ public class GTASA extends WarMedia {
 
     public static void staticEnterSocialClub()
     {
-        gtasaSelf.EnterSocialClub();
+      //  gtasaSelf.EnterSocialClub();
     }
 
     public static void staticExitSocialClub() {
-        gtasaSelf.ExitSocialClub();
+        //gtasaSelf.ExitSocialClub();
     }
 
     public void AfterDownloadFunction() {
@@ -79,8 +79,7 @@ public class GTASA extends WarMedia {
         }
 
         System.out.println("GTASA onCreate");
-        gtasaSelf = this;
-        wantsMultitouch = true;
+      //  gtasaSelf = this;
       //  wantsAccelerometer = true;
         MainUtils.currentContext = this;
 

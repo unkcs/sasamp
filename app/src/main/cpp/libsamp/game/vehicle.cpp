@@ -5,6 +5,8 @@ extern CGame* pGame;
 #include "..//CDebugInfo.h"
 #include "..//net/netgame.h"
 #include "CVector.h"
+#include "game/Models/VehicleModelInfo.h"
+#include "game/Models/ModelInfo.h"
 
 extern CNetGame* pNetGame;
 
@@ -62,13 +64,13 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 			m_bIsLocked = false;
 
 			GetMatrix(&mat);
-			mat.pos.X = fPosX;
-			mat.pos.Y = fPosY;
-			mat.pos.Z = fPosZ;
+			mat.pos.x = fPosX;
+			mat.pos.y = fPosY;
+			mat.pos.z = fPosZ;
 
 			if (GetVehicleSubtype() != VEHICLE_SUBTYPE_BIKE &&
 				GetVehicleSubtype() != VEHICLE_SUBTYPE_PUSHBIKE)
-				mat.pos.Z += 0.25f;
+				mat.pos.z += 0.25f;
 
 			SetMatrix(mat);
 		}
@@ -271,26 +273,23 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 {
     m_bIsOnRightTurnLight = toggle;
 
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
 
-	uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
+	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
-	CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
-
-	VECTOR vecFront;
+	CVector vecFront;
 	// 0 - front light
-	vecFront.X = m_avDummyPos[0].x + 0.1;
-	vecFront.Y = m_avDummyPos[0].y;
-	vecFront.Z = m_avDummyPos[0].z;
+	vecFront.x = m_avDummyPos[0].x + 0.1;
+	vecFront.y = m_avDummyPos[0].y;
+	vecFront.z = m_avDummyPos[0].z;
 
-	VECTOR vecRear;
-	vecRear.X = m_avDummyPos[1].x + 0.1;
-	vecRear.Y = m_avDummyPos[1].y;
-	vecRear.Z = m_avDummyPos[1].z;
+	CVector vecRear;
+	vecRear.x = m_avDummyPos[1].x + 0.1;
+	vecRear.y = m_avDummyPos[1].y;
+	vecRear.z = m_avDummyPos[1].z;
 
-	VECTOR vec;
-	vec.X = vec.Y = vec.Z = 0;
+	CVector vec;
+	vec.x = vec.y = vec.z = 0;
 
 	if(m_pRightFrontTurnLighter != nullptr)
 	{
@@ -317,25 +316,22 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 
 void CVehicle::toggleReverseLight(bool toggle)
 {
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
 
-	uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
+	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
-	CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
+	CVector vecRight;
+	vecRight.x = m_avDummyPos[1].x;
+	vecRight.y = m_avDummyPos[1].y;
+	vecRight.z = m_avDummyPos[1].z;
 
-	VECTOR vecRight;
-	vecRight.X = m_avDummyPos[1].x;
-	vecRight.Y = m_avDummyPos[1].y;
-	vecRight.Z = m_avDummyPos[1].z;
+	CVector vecLeft;
+	vecLeft.x = -m_avDummyPos[1].x;
+	vecLeft.y = m_avDummyPos[1].y;
+	vecLeft.z = m_avDummyPos[1].z;
 
-	VECTOR vecLeft;
-	vecLeft.X = -m_avDummyPos[1].x;
-	vecLeft.Y = m_avDummyPos[1].y;
-	vecLeft.Z = m_avDummyPos[1].z;
-
-	VECTOR vec;
-	vec.X = vec.Y = vec.Z = 0;
+	CVector vec;
+	vec.x = vec.y = vec.z = 0;
 
 	if(m_pLeftReverseLight != nullptr)
 	{
@@ -364,26 +360,23 @@ void CVehicle::toggleLeftTurnLight(bool toggle)
 {
     m_bIsOnLeftTurnLight = toggle;
 
-    uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
-    uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
 
-    uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
+	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
-    CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
-
-    VECTOR vecFront;
+	CVector vecFront;
     // 0 - front light
-    vecFront.X = -(m_avDummyPos[0].x + 0.1f);
-    vecFront.Y = m_avDummyPos[0].y;
-    vecFront.Z = m_avDummyPos[0].z;
+    vecFront.x = -(m_avDummyPos[0].x + 0.1f);
+    vecFront.y = m_avDummyPos[0].y;
+    vecFront.z = m_avDummyPos[0].z;
 
-    VECTOR vecRear;
-    vecRear.X = -(m_avDummyPos[1].x + 0.1f);
-    vecRear.Y = m_avDummyPos[1].y;
-    vecRear.Z = m_avDummyPos[1].z;
+	CVector vecRear;
+    vecRear.x = -(m_avDummyPos[1].x + 0.1f);
+    vecRear.y = m_avDummyPos[1].y;
+    vecRear.z = m_avDummyPos[1].z;
 
-    VECTOR vec;
-    vec.X = vec.Y = vec.Z = 0;
+	CVector vec;
+    vec.x = vec.y = vec.z = 0;
 
     if(m_pLeftFrontTurnLighter != nullptr)
     {
@@ -553,9 +546,9 @@ void CVehicle::RemoveEveryoneFromVehicle()
 	if(!m_dwGTAId)return;
 	if (!GamePool_Vehicle_GetAt(m_dwGTAId)) return;
 
-	float fPosX = m_pVehicle->entity.mat->pos.X;
-	float fPosY = m_pVehicle->entity.mat->pos.Y;
-	float fPosZ = m_pVehicle->entity.mat->pos.Z;
+	float fPosX = m_pVehicle->entity.mat->pos.x;
+	float fPosY = m_pVehicle->entity.mat->pos.y;
+	float fPosZ = m_pVehicle->entity.mat->pos.z;
 
 	int iPlayerID = 0;
 	if (m_pVehicle->pDriver)
@@ -782,7 +775,7 @@ void* GetSuspensionLinesFromModel(int nModelIndex, int& numWheels)
 
 uint8_t* GetCollisionDataFromModel(int nModelIndex)
 {
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[nModelIndex];
 
 	if (!pModelInfoStart)
@@ -823,7 +816,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		m_pCustomHandling = new tHandlingData;
 	}
 
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
 	if (!pModelInfoStart)
 	{
@@ -987,7 +980,7 @@ void CVehicle::ResetVehicleHandling()
 	{
 		m_pCustomHandling = new tHandlingData;
 	}
-	uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
 
 	if (!pModelInfoStart)
@@ -1351,9 +1344,9 @@ void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int
 	VECTOR vecOut;
 	RwMatrixMultiplyByVector(&vecOut, &(m_vInitialWheelMatrix[iID]), &vecOffset);
 
-	pFrame->modelling.pos.X = vecOut.X;
-	pFrame->modelling.pos.Y = vecOut.Y;
-	pFrame->modelling.pos.Z = vecOut.Z;
+	pFrame->modelling.pos.x = vecOut.X;
+	pFrame->modelling.pos.y = vecOut.Y;
+	pFrame->modelling.pos.z = vecOut.Z;
 }
 
 void CVehicle::SetComponentAngle(bool bUnk, int iID, float angle)
@@ -1875,8 +1868,4 @@ void CVehicle::ProcessDamage()
 			}
 		}
 	}
-}
-
-int32_t CVehicle::AddVehicleUpgrade(int32_t modelId) {
-	return ( ( int32_t(*)(VEHICLE_TYPE*, int32_t) )(g_libGTASA + 0x00516090 + 1) )(m_pVehicle, modelId);
 }

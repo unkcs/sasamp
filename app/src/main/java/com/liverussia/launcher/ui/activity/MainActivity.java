@@ -357,7 +357,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        Servers servers = MainUtils.SERVERS.get(position);
 
-        int serverLockedValue = Integer.parseInt(Storage.getProperty(StorageElements.SERVER_LOCKED, this));
+        String tmp = Storage.getProperty(StorageElements.SERVER_LOCKED, this);
+        int serverLockedValue = 0;
+        if(tmp != null)
+            serverLockedValue = Integer.parseInt(tmp);
 
         String password = NativeStorage.getClientProperty(NativeStorageElements.LOCKED_SERVER_PASSWORD, this);
 

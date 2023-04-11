@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../game/common.h"
+#include "../game/vehicle.h"
+#include "../game/playerped.h"
+
 typedef struct _NEW_VEHICLE
 {
 	VEHICLEID 	VehicleID;

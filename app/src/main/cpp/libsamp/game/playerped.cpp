@@ -6,8 +6,9 @@
 
 #include "..//CDebugInfo.h"
 #include "util/patch.h"
-#include "ePedState.h"
+#include "/Enums/ePedState.h"
 #include "CWorld.h"
+#include "game/Models/ModelInfo.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -67,9 +68,9 @@ CPlayerPed::CPlayerPed(uint8_t bytePlayerNumber, int iSkin, float fX, float fY, 
 	ForceTargetRotation(fRotation);
 	RwMatrix mat;
 	GetMatrix(&mat);
-	mat.pos.X = fX;
-	mat.pos.Y = fY;
-	mat.pos.Z = fZ+ 0.15f;
+	mat.pos.x = fX;
+	mat.pos.y = fY;
+	mat.pos.z = fZ+ 0.15f;
 	SetMatrix(mat);
 	
 	for (int i = 0; i < MAX_ATTACHED_OBJECTS; i++)
@@ -97,7 +98,7 @@ CPlayerPed::~CPlayerPed()
 	if (m_pPed && IsValidGamePed(m_pPed) && m_pPed->entity.vtable != (g_libGTASA + 0x5C7358))
 	{
 		FlushAttach();
-		if (IN_VEHICLE(m_pPed)) {
+		if (m_pPed->bInVehicle) {
 			RemoveFromVehicleAndPutAt(100.0f, 100.0f, 20.0f);
 
 		//	ClearAllTasks();
@@ -159,7 +160,7 @@ void CPlayerPed::ApplyCrouch()
 		return;
 	}
 
-	if (!(m_pPed->dwStateFlags & 256))
+	if (!(m_pPed->bIsDucking))
 	{
 		if (!IsCrouching())
 		{
@@ -182,7 +183,7 @@ void CPlayerPed::ResetCrouch()
 	{
 		return;
 	}
-	m_pPed->dwStateFlags &= 0xFBFFFFFF;
+	m_pPed->bIsDucking = false;
 	if (m_pPed->pPedIntelligence)
 	{
 		((int (*)(CPedIntelligence*))(g_libGTASA + 0x0044E164 + 1))(m_pPed->pPedIntelligence);
@@ -201,7 +202,7 @@ bool CPlayerPed::IsCrouching()
 	{
 		return false;
 	}
-	return IS_CROUCHING(m_pPed);
+	return m_pPed->bIsDucking;
 }
 
 void CPlayerPed::SetCameraExtendedZoom(float fZoom)
@@ -230,7 +231,7 @@ void CPlayerPed::SetDead()
 	RwMatrix mat;
 	GetMatrix(&mat);
 	// will reset the tasks
-	TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+	TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 	m_pPed->fHealth = 0.0f;
 
 	uint8_t old = CWorld::PlayerInFocus;
@@ -244,10 +245,7 @@ bool CPlayerPed::IsInVehicle()
 {
 	if(!m_pPed) return false;
 
-	if(IN_VEHICLE(m_pPed))
-		return true;
-
-	return false;
+	return m_pPed->bInVehicle;
 }
 int GameGetWeaponModelIDFromWeaponID(int iWeaponID)
 {
@@ -521,8 +519,8 @@ BYTE CPlayerPed::GetCurrentWeapon()
 // 0.3.7
 bool CPlayerPed::IsAPassenger()
 {
-	//if(m_pPed->dwAction == PEDSTATE_PASSENGER) return true;
-	if(m_pPed->pVehicle && IN_VEHICLE(m_pPed))
+	//if(m_pPed->m_nPedState == PEDSTATE_PASSENGER) return true;
+	if(m_pPed->pVehicle && m_pPed->bInVehicle)
 	{
 		VEHICLE_TYPE *pVehicle = (VEHICLE_TYPE *)m_pPed->pVehicle;
 
@@ -554,7 +552,7 @@ void CPlayerPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
 		return;
 	}
 	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
-	if(m_pPed && IN_VEHICLE(m_pPed))
+	if(m_pPed && m_pPed->bInVehicle)
 		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, fX, fY, fZ);
 }
 
@@ -618,7 +616,7 @@ void CPlayerPed::SetInterior(uint8_t byteID, bool refresh)
 		if(refresh) {
 			RwMatrix mat;
 			this->GetMatrix(&mat);
-			ScriptCommand(&refresh_streaming_at, mat.pos.X, mat.pos.Y);
+			ScriptCommand(&refresh_streaming_at, mat.pos.x, mat.pos.y);
 		}
 	}
 }
@@ -729,7 +727,7 @@ void CPlayerPed::ExitCurrentVehicle()
 
 	//VEHICLE_TYPE* ThisVehicleType = 0;
 
-	if(IN_VEHICLE(m_pPed))
+	if(m_pPed->bInVehicle)
 	{
 		ScriptCommand(&TASK_LEAVE_ANY_CAR, m_dwGTAId);
 
@@ -872,7 +870,7 @@ void CPlayerPed::ClearAnimations()
 	//ClearAllTasks();
 	RwMatrix mat;
 	GetMatrix(&mat);
-	TeleportTo(mat.pos.X,mat.pos.Y,mat.pos.Z);
+	TeleportTo(mat.pos.x,mat.pos.y,mat.pos.z);
 
 	Log("ClearAnimations");
 }
@@ -882,9 +880,9 @@ void CPlayerPed::DestroyFollowPedTask()
 
 }
 
-int Weapon_FireSniper(WEAPON_SLOT_TYPE* pWeaponSlot, PED_TYPE* pPed)
+int Weapon_FireSniper(CWeapon* pWeaponSlot, PED_TYPE* pPed)
 {
-	return ((int (*)(WEAPON_SLOT_TYPE*, PED_TYPE*))(g_libGTASA + 0x0056668C + 1))(pWeaponSlot, pPed);
+	return ((int (*)(CWeapon*, PED_TYPE*))(g_libGTASA + 0x0056668C + 1))(pWeaponSlot, pPed);
 }
 
 void CPlayerPed::ClearAllWeapons()
@@ -909,7 +907,7 @@ VECTOR* CPlayerPed::GetCurrentWeaponFireOffset() {
 		return nullptr;
 	}
 
-	WEAPON_SLOT_TYPE* pSlot = GetCurrentWeaponSlot();
+	CWeapon* pSlot = GetCurrentWeaponSlot();
 	if (pSlot) {
 		return (VECTOR*)(GetWeaponInfo(pSlot->dwType, 1) + 0x24);
 	}
@@ -946,8 +944,8 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 	}
 }
 
-extern uint32_t (*CWeapon__FireInstantHit)(WEAPON_SLOT_TYPE* thiz, PED_TYPE* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
-extern uint32_t (*CWeapon__FireSniper)(WEAPON_SLOT_TYPE *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
+extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, PED_TYPE* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
+extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
 
 void CPlayerPed::FireInstant() {
 	if(!m_pPed || !GamePool_Ped_GetAt(m_dwGTAId)) {
@@ -975,20 +973,26 @@ void CPlayerPed::FireInstant() {
 		g_pCurrentBulletData = nullptr;
 	}
 
-	WEAPON_SLOT_TYPE *pSlot = GetCurrentWeaponSlot();
+	CWeapon *pSlot = GetCurrentWeaponSlot();
 	if(pSlot) {
-		if(GetCurrentWeapon() == WEAPON_SNIPER) {
-			if(pSlot) {
-				Weapon_FireSniper(pSlot, m_pPed);
-			} else {
-				Weapon_FireSniper(nullptr, nullptr);
-			}
-		} else {
+		if(GetCurrentWeapon() == WEAPON_SNIPER)
+		{
+			if(m_pPed)
+				CWeapon__FireSniper(pSlot, m_pPed, nullptr, nullptr);
+			else
+				CWeapon__FireSniper(nullptr, m_pPed, nullptr, nullptr);
+		}
+		else
+		{
 			VECTOR vecBonePos;
 			VECTOR vecOut;
 
-			GetWeaponInfoForFire(false, &vecBonePos, &vecOut);
-			CWeapon__FireInstantHit(pSlot, m_pPed, &vecBonePos, &vecOut, nullptr, nullptr, nullptr, 0, 1);
+			GetWeaponInfoForFire(true, &vecBonePos, &vecOut);
+
+			if(m_pPed)
+				CWeapon__FireInstantHit(pSlot, m_pPed, &vecBonePos, &vecOut, nullptr, nullptr, nullptr, 0, 1);
+			else
+				CWeapon__FireInstantHit(nullptr, m_pPed, &vecBonePos, &vecOut, nullptr, nullptr, nullptr, 0, 1);
 		}
 	}
 
@@ -1011,9 +1015,9 @@ void CPlayerPed::ResetDamageEntity()
 }
 
 // 0.3.7
-void CPlayerPed::RestartIfWastedAt(VECTOR *vecRestart, float fRotation)
+void CPlayerPed::RestartIfWastedAt(const CVector vec, float fRotation)
 {	
-	ScriptCommand(&restart_if_wasted_at, vecRestart->X, vecRestart->Y, vecRestart->Z, fRotation, 0);
+	ScriptCommand(&restart_if_wasted_at, vec.x, vec.y, vec.z, fRotation, 0);
 }
 
 // 0.3.7
@@ -1040,12 +1044,12 @@ void CPlayerPed::SetRotation(float fRotation)
 // 0.3.7
 uint8_t CPlayerPed::GetActionTrigger()
 {
-	return (uint8_t)m_pPed->dwAction;
+	return (uint8_t)m_pPed->m_nPedState;
 }
 
-void CPlayerPed::SetActionTrigger(uint8_t action)
+void CPlayerPed::SetActionTrigger(ePedState action)
 {
-	m_pPed->dwAction = (uint32_t)action;
+	m_pPed->m_nPedState = action;
 }
 
 int GetInternalBoneIDFromSampID(int sampid);
@@ -1059,8 +1063,8 @@ void CPlayerPed::AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot)
 	memcpy((void*)& m_aAttachedObjects[iSlot], (const void*)pInfo, sizeof(ATTACHED_OBJECT_INFO));
 	RwMatrix matPos;
 	GetMatrix(&matPos);
-	VECTOR vecRot{ 0.0f, 0.0f, 0.0f };
-	m_aAttachedObjects[iSlot].pObject = new CObject(pInfo->dwModelId, matPos.pos.X, matPos.pos.Y, matPos.pos.Z, vecRot, 200.0f);
+	CVector vecRot{ 0.0f, 0.0f, 0.0f };
+	m_aAttachedObjects[iSlot].pObject = new CObject(pInfo->dwModelId, matPos.pos.x, matPos.pos.y, matPos.pos.z, vecRot, 200.0f);
 	*(uint32_t*)((uintptr_t)m_aAttachedObjects[iSlot].pObject->m_pEntity + 28) &= 0xFFFFFFFE; // disable collision
 	m_aAttachedObjects[iSlot].bState = true;
 
@@ -1114,9 +1118,9 @@ RwMatrix* RwMatrixMultiplyByVector(VECTOR* out, RwMatrix* a2, VECTOR* in)
 
 	result = a2;
 	v4 = in;
-	out->X = a2->at.X * in->Z + a2->up.X * in->Y + a2->right.X * in->X + a2->pos.X;
-	out->Y = result->at.Y * v4->Z + result->up.Y * v4->Y + result->right.Y * v4->X + result->pos.Y;
-	out->Z = result->at.Z * v4->Z + result->up.Z * v4->Y + a2->right.Z * in->X + result->pos.Z;
+	out->X = a2->at.X * in->Z + a2->up.X * in->Y + a2->right.X * in->X + a2->pos.x;
+	out->Y = result->at.Y * v4->Z + result->up.Y * v4->Y + result->right.Y * v4->X + result->pos.y;
+	out->Z = result->at.Z * v4->Z + result->up.Z * v4->Y + a2->right.Z * in->X + result->pos.z;
 	return result;
 }
 
@@ -1173,9 +1177,9 @@ void CPlayerPed::ProcessAttach()
 			VECTOR vecOut;
 			RwMatrixMultiplyByVector(&vecOut, &outMat, &m_aAttachedObjects[i].vecOffset);
 
-			outMat.pos.X = vecOut.X;
-			outMat.pos.Y = vecOut.Y;
-			outMat.pos.Z = vecOut.Z;
+			outMat.pos.x = vecOut.X;
+			outMat.pos.y = vecOut.Y;
+			outMat.pos.z = vecOut.Z;
 
 			VECTOR axis = { 1.0f, 0.0f, 0.0f };
 			if (m_aAttachedObjects[i].vecRotation.X != 0.0f)
@@ -1196,9 +1200,9 @@ void CPlayerPed::ProcessAttach()
 			RwMatrixScale(&outMat, &m_aAttachedObjects[i].vecScale);
 			*(uint32_t*)((uintptr_t)pObject->m_pEntity + 28) &= 0xFFFFFFFE; // disable collision
 
-			if (outMat.pos.X >= 10000.0f || outMat.pos.X <= -10000.0f ||
-				outMat.pos.Y >= 10000.0f || outMat.pos.Y <= -10000.0f ||
-				outMat.pos.Z >= 10000.0f || outMat.pos.Z <= -10000.0f)
+			if (outMat.pos.x >= 10000.0f || outMat.pos.x <= -10000.0f ||
+				outMat.pos.y >= 10000.0f || outMat.pos.y <= -10000.0f ||
+				outMat.pos.z >= 10000.0f || outMat.pos.z <= -10000.0f)
 			{
 				continue;
 			}
@@ -1366,7 +1370,7 @@ void CPlayerPed::PlayAnimByIdx(int idx, float BlendData, bool loop, bool freeze,
 	{
 		RwMatrix mat;
 		GetMatrix(&mat);
-		TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+		TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 		return;
 	}
 	std::string szAnim;
@@ -1422,9 +1426,10 @@ bool IsBlendAssocGroupLoaded(int iGroup)
 void CPlayerPed::SetMoveAnim(int iAnimGroup)
 {
 	Log("SetMoveAnim %d", iAnimGroup);
-	if (iAnimGroup == 0)
+	if (iAnimGroup == ANIM_GROUP_DEFAULT)
 	{
-		return;
+		auto pModel = reinterpret_cast<CPedModelInfo*>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
+		iAnimGroup = pModel->m_nAnimType;
 	}
 
 	// Find which anim block to load
@@ -1503,8 +1508,7 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 		Log("animgrp %d loaded", iAnimGroup);
 	}
 
-	uintptr_t ped = (uintptr_t)m_pPed;
-	*(int*)(ped + 1244) = iAnimGroup;
+	m_pPed->m_motionAnimGroup = static_cast<AssocGroupId>(iAnimGroup);
 
 	((void(*)(PED_TYPE* thiz))(g_libGTASA + 0x004544F4 + 1))(m_pPed); // ReApplyMoveAnims
 }
@@ -1645,15 +1649,15 @@ ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
 	char buf[100];
 
 	if(!m_pPed) return nullptr;
-	if( IN_VEHICLE(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId))
+	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
 		return 0;
 
-	vecStart.X = m_pPed->entity.mat->pos.X;
-	vecStart.Y = m_pPed->entity.mat->pos.Y;
-	vecStart.Z = m_pPed->entity.mat->pos.Z - 0.25f;
+	vecStart.X = m_pPed->entity.mat->pos.x;
+	vecStart.Y = m_pPed->entity.mat->pos.y;
+	vecStart.Z = m_pPed->entity.mat->pos.z - 0.25f;
 
-	vecEnd.X = m_pPed->entity.mat->pos.X;
-	vecEnd.Y = m_pPed->entity.mat->pos.Y;
+	vecEnd.X = m_pPed->entity.mat->pos.x;
+	vecEnd.Y = m_pPed->entity.mat->pos.y;
 	vecEnd.Z = vecStart.Z - 1.75f;
 
 	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
@@ -1761,7 +1765,7 @@ uint16_t CPlayerPed::GetKeys(uint16_t *lrAnalog, uint16_t *udAnalog)
 	return wRet;
 }
 
-WEAPON_SLOT_TYPE * CPlayerPed::GetCurrentWeaponSlot()
+CWeapon * CPlayerPed::GetCurrentWeaponSlot()
 {
 	if (m_pPed) 
 	{
@@ -1961,9 +1965,9 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 												}
 												else
 												{
-													btData->vecOffset.X = btData->pEntity->mat->pos.X + btData->vecOffset.X;
-													btData->vecOffset.Y = btData->pEntity->mat->pos.Y + btData->vecOffset.Y;
-													btData->vecOffset.Z = btData->pEntity->mat->pos.Z + btData->vecOffset.Z;
+													btData->vecOffset.X = btData->pEntity->mat->pos.x + btData->vecOffset.X;
+													btData->vecOffset.Y = btData->pEntity->mat->pos.y + btData->vecOffset.Y;
+													btData->vecOffset.Z = btData->pEntity->mat->pos.z + btData->vecOffset.Z;
 												}
 											}
 											else

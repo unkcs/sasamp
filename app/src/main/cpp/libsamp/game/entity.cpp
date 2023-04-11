@@ -17,7 +17,7 @@ void CEntity::Add()
 
 	if (!m_pEntity->dwUnkModelRel)
 	{
-		VECTOR vec = { 0.0f,0.0f,0.0f };
+		CVector vec = { 0.0f,0.0f,0.0f };
 		SetMoveSpeedVector(vec);
 		SetTurnSpeedVector(vec);
 
@@ -25,7 +25,7 @@ void CEntity::Add()
 
 		RwMatrix mat;
 		GetMatrix(&mat);
-		TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+		TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 	}
 }
 
@@ -139,9 +139,7 @@ void CEntity::GetMatrix(RwMatrix* Matrix)
 	Matrix->at.Y = m_pEntity->mat->at.Y;
 	Matrix->at.Z = m_pEntity->mat->at.Z;
 
-	Matrix->pos.X = m_pEntity->mat->pos.X;
-	Matrix->pos.Y = m_pEntity->mat->pos.Y;
-	Matrix->pos.Z = m_pEntity->mat->pos.Z;
+	Matrix->pos = m_pEntity->mat->pos;
 }
 
 // 0.3.7
@@ -162,43 +160,33 @@ void CEntity::SetMatrix(RwMatrix Matrix)
 	m_pEntity->mat->at.Y = Matrix.at.Y;
 	m_pEntity->mat->at.Z = Matrix.at.Z;
 
-	m_pEntity->mat->pos.X = Matrix.pos.X;
-	m_pEntity->mat->pos.Y = Matrix.pos.Y;
-	m_pEntity->mat->pos.Z = Matrix.pos.Z;
+	m_pEntity->mat->pos = Matrix.pos;
 }
 
 // 0.3.7
-void CEntity::GetMoveSpeedVector(PVECTOR Vector)
+void CEntity::GetMoveSpeedVector(CVector *vec)
 {
 	if (!m_pEntity) return;
-	Vector->X = m_pEntity->vecMoveSpeed.X;
-	Vector->Y = m_pEntity->vecMoveSpeed.Y;
-	Vector->Z = m_pEntity->vecMoveSpeed.Z;
+	*vec = m_pEntity->vecMoveSpeed;
 }
 
 // 0.3.7
-void CEntity::SetMoveSpeedVector(VECTOR Vector)
+void CEntity::SetMoveSpeedVector(CVector Vector)
 {
 	if (!m_pEntity) return;
-	m_pEntity->vecMoveSpeed.X = Vector.X;
-	m_pEntity->vecMoveSpeed.Y = Vector.Y;
-	m_pEntity->vecMoveSpeed.Z = Vector.Z;
+	m_pEntity->vecMoveSpeed = Vector;
 }
 
-void CEntity::GetTurnSpeedVector(PVECTOR Vector)
+void CEntity::GetTurnSpeedVector(CVector* vec)
 {
 	if (!m_pEntity) return;
-	Vector->X = m_pEntity->vecTurnSpeed.X;
-	Vector->Y = m_pEntity->vecTurnSpeed.Y;
-	Vector->Z = m_pEntity->vecTurnSpeed.Z;
+	*vec = m_pEntity->vecTurnSpeed;
 }
 
-void CEntity::SetTurnSpeedVector(VECTOR Vector)
+void CEntity::SetTurnSpeedVector(const CVector vec)
 {
 	if (!m_pEntity) return;
-	m_pEntity->vecTurnSpeed.X = Vector.X;
-	m_pEntity->vecTurnSpeed.Y = Vector.Y;
-	m_pEntity->vecTurnSpeed.Z = Vector.Z;
+	m_pEntity->vecTurnSpeed = vec;
 }
 
 // 0.3.7
@@ -282,9 +270,9 @@ float CEntity::GetDistanceFromCamera()
 
 	this->GetMatrix(&matEnt);
 	
-	float tmpX = (matEnt.pos.X - *(float*)(g_libGTASA+0x8B1134));
-	float tmpY = (matEnt.pos.Y - *(float*)(g_libGTASA+0x8B1138));
-	float tmpZ = (matEnt.pos.Z - *(float*)(g_libGTASA+0x8B113C));
+	float tmpX = (matEnt.pos.x - *(float*)(g_libGTASA+0x8B1134));
+	float tmpY = (matEnt.pos.y - *(float*)(g_libGTASA+0x8B1138));
+	float tmpZ = (matEnt.pos.z - *(float*)(g_libGTASA+0x8B113C));
 
 	return sqrt( tmpX*tmpX + tmpY*tmpY + tmpZ*tmpZ );
 }
@@ -319,9 +307,9 @@ float CEntity::GetDistanceFromLocalPlayerPed()
 		pLocalPlayerPed->GetMatrix(&matFromPlayer);
 	}
 
-	fSX = (matThis.pos.X - matFromPlayer.pos.X) * (matThis.pos.X - matFromPlayer.pos.X);
-	fSY = (matThis.pos.Y - matFromPlayer.pos.Y) * (matThis.pos.Y - matFromPlayer.pos.Y);
-	fSZ = (matThis.pos.Z - matFromPlayer.pos.Z) * (matThis.pos.Z - matFromPlayer.pos.Z);
+	fSX = (matThis.pos.x - matFromPlayer.pos.x) * (matThis.pos.x - matFromPlayer.pos.x);
+	fSY = (matThis.pos.y - matFromPlayer.pos.y) * (matThis.pos.y - matFromPlayer.pos.y);
+	fSZ = (matThis.pos.z - matFromPlayer.pos.z) * (matThis.pos.z - matFromPlayer.pos.z);
 
 	return (float)sqrt(fSX + fSY + fSZ);
 }
@@ -332,9 +320,9 @@ float CEntity::GetDistanceFromPoint(float X, float Y, float Z)
 	float		fSX,fSY,fSZ;
 
 	GetMatrix(&matThis);
-	fSX = (matThis.pos.X - X) * (matThis.pos.X - X);
-	fSY = (matThis.pos.Y - Y) * (matThis.pos.Y - Y);
-	fSZ = (matThis.pos.Z - Z) * (matThis.pos.Z - Z);
+	fSX = (matThis.pos.x - X) * (matThis.pos.x - X);
+	fSY = (matThis.pos.y - Y) * (matThis.pos.y - Y);
+	fSZ = (matThis.pos.z - Z) * (matThis.pos.z - Z);
 	
 	return (float)sqrt(fSX + fSY + fSZ);
 }

@@ -1,6 +1,15 @@
 #pragma once
 #include <string>
 #include "bass.h"
+#include "game/Core/Vector.h"
+#include "RwMatrix.h"
+#include "game/Entity/Placeable.h"
+#include "Weapon.h"
+#include "game/Entity/Entity.h"
+#include "game/Entity/Ped.h"
+#include "game/RW/rwlpcore.h"
+
+#include "tHandlingData.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -32,7 +41,6 @@ typedef unsigned short PLAYERID;
 
 #define PADDING(x,y) uint8_t x[y]
 
-#define IN_VEHICLE(x) ((x->dwStateFlags & 0x100) >> 8)
 #define IS_CROUCHING(x) ((x->dwStateFlags >> 26) & 1)
 
 #define BIT_SET(byte,nbit)   ((byte) |=  (1<<(nbit)))
@@ -69,11 +77,7 @@ typedef unsigned short PLAYERID;
 #pragma message "Compiling for GTASA"
 #endif
 
-#pragma pack(1)
-typedef struct _VECTOR 
-{
-	float X,Y,Z;
-} VECTOR, *PVECTOR;
+
 
 enum eLights
 {
@@ -145,38 +149,9 @@ enum eSecondaryTasks //array indexes
 	TASK_SECONDARY_MAX
 };
 
-class CTaskManager
-{
-public:
-	void* m_aPrimaryTasks[5];
-	void* m_aSecondaryTasks[6];
-	class CPed* m_pPed;
-};
-
-class CPedIntelligence
-{
-public:
-	class CPed* m_pPed;
-	CTaskManager   m_TaskMgr;
-};
 
 
 #pragma pack(pop)
-
-#pragma pack(1)
-struct RwMatrixTag
-{
-	VECTOR right;		// 0-12 	; r11 r12 r13
-	uint32_t  flags;	// 12-16
-	VECTOR up;			// 16-28	; r21 r22 r23
-	float  pad_u;		// 28-32
-	VECTOR at;			// 32-44	; r31 r32 r33
-	float  pad_a;		// 44-48
-	VECTOR pos;			// 48-60
-	float  pad_p;		// 60-64
-};
-typedef RwMatrixTag RwMatrix;
-
 
 //-----------------------------------------------------------
 
@@ -190,15 +165,6 @@ struct RwListEntry
 struct RwList
 {
 	RwListEntry root;
-};
-
-struct RwObject
-{
-	unsigned char type;
-	unsigned char subtype;
-	unsigned char flags;
-	unsigned char privateFlags;
-	void* parent;            // should be RwFrame with RpClump
 };
 
 struct RwFrame
@@ -227,12 +193,6 @@ struct SHandlingData
 	int iValue;
 	SHandlingData(uint8_t uFlag, float fvalue, int ivalue) : flag(uFlag), fValue(fvalue), iValue(ivalue) {}
 };
-
-typedef struct _CVector2D
-{
-	int X;
-	int Y;
-} CVector2D;
 
 typedef struct _CVector2DFloat
 {
@@ -287,130 +247,7 @@ struct MaterialInfo
 	struct RwTexture* pTex;
 };
 
-#pragma pack(1)
-typedef struct _ENTITY_TYPE
-{
-	uint32_t vtable;
-
-	PADDING(_pad0, 12);
-
-	float fRotZBeforeMat;
-
-	RwMatrix *mat;
-	union {
-		uintptr_t m_pRwObject;
-		uintptr_t m_pRpClump;
-		uintptr_t m_pRpAtomic;
-		uintptr_t pdwRenderWare;    // 24-28	;rwObject
-	};
-
-	union {
-		uint32_t m_nEntityFlags;
-		struct {
-			uint32_t m_bUsesCollision : 1;
-			uint32_t m_bCollisionProcessed : 1;
-			uint32_t m_bIsStatic : 1;
-			uint32_t m_bHasContacted : 1;
-			uint32_t m_bIsStuck : 1;
-			uint32_t m_bIsInSafePosition : 1;
-			uint32_t m_bWasPostponed : 1;
-			uint32_t m_bIsVisible : 1;
-
-			uint32_t m_bIsBIGBuilding : 1;
-			uint32_t m_bRenderDamaged : 1;
-			uint32_t m_bStreamingDontDelete : 1;
-			uint32_t m_bRemoveFromWorld : 1;
-			uint32_t m_bHasHitWall : 1;
-			uint32_t m_bImBeingRendered : 1;
-			uint32_t m_bDrawLast :1;
-			uint32_t m_bDistanceFade : 1;
-
-			uint32_t m_bDontCastShadowsOn : 1;
-			uint32_t m_bOffscreen : 1;
-			uint32_t m_bIsStaticWaitingForCollision : 1;
-			uint32_t m_bDontStream : 1;
-			uint32_t m_bUnderwater : 1;
-			uint32_t m_bHasPreRenderEffects : 1;
-			uint32_t m_bIsTempBuilding : 1;
-			uint32_t m_bDontUpdateHierarchy : 1;
-
-			uint32_t m_bHasRoadsignText : 1;
-			uint32_t m_bDisplayedSuperLowLOD : 1;
-			uint32_t m_bIsProcObject : 1;
-			uint32_t m_bBackfaceCulled : 1;
-			uint32_t m_bLightObject : 1;
-			uint32_t m_bUnimportantStream : 1;
-			uint32_t m_bTunnel : 1;
-			uint32_t m_bTunnelTransition : 1;
-		} nEntityFlags;
-	};
-
-	PADDING(_pad1, 2);
-
-	uint16_t nModelIndex;
-
-	PADDING(_pad2, 32);
-
-	VECTOR vecMoveSpeed;
-	VECTOR vecTurnSpeed;
-
-	PADDING(_pad3, 88);
-
-	uint32_t dwUnkModelRel;
-} ENTITY_TYPE;
-
 //-----------------------------------------------------------
-
-#pragma pack(1)
-typedef struct _WEAPON_SLOT_TYPE
-{
-	uint32_t dwType;
-	uint32_t dwState;
-	uint32_t dwAmmoInClip;
-	uint32_t dwAmmo;
-	PADDING(_pwep1,12);
-} WEAPON_SLOT_TYPE;  // MUST BE EXACTLY ALIGNED TO 28 bytes
-
-#pragma pack(1)
-typedef struct _PED_TYPE
-{
-	ENTITY_TYPE entity; 		// 0000-0184	;entity
-	PADDING(_pad106, 174);		// 0184-0358
-	uint32_t _pad107;			// 0358-0362	;dwPedType
-	PADDING(_pad101, 722);		// 0362-1084
-	CPedIntelligence* pPedIntelligence; // 1084-1088
-	PADDING(_pad100, 8);		// 1088-1096
-	uint32_t dwAction;			// 1096-1100	;Action
-	PADDING(_pad102, 52);		// 1100-1152
-	uint32_t dwStateFlags; 		// 1152-1156	;StateFlags
-
-	uintptr_t dwInvulFlags; // 1136-1140		0x1000 = can_decap
-	PADDING(_pad228, 8); // 1140-1148
-	uintptr_t Tasks; // 1148-1152
-	uintptr_t dwPlayerInfoOffset; // 1152-1156
-
-	PADDING(_pad103, 168);		// 1156-1344
-	float fHealth;		 		// 1344-1348	;Health
-	float fMaxHealth;			// 1348-1352	;MaxHealth
-	float fArmour;				// 1352-1356	;Armour
-	float fAim;
-	PADDING(_pad104, 8);		// 1356-1368
-	float m_fCurrentRotation;			// 1368-1372	;Rotation1
-	float m_fAimingRotation;			// 1372-1376	;Rotation2
-	PADDING(_pad105, 44);		// 1376-1420
-	uint32_t pVehicle;			// 1420-1424	;pVehicle
-	PADDING(_pad108, 8);		// 1424-1432
-	uint32_t dwPedType;			// 1432-1436	;dwPedType
-	uint32_t dwUnk1;	 // 1436-1440
-	WEAPON_SLOT_TYPE WeaponSlots[13]; // 1440-1804
-	PADDING(_pad270, 12); // 1804-1816
-	uint8_t byteCurWeaponSlot; // 1816-1817
-	PADDING(_pad280, 23); // 1817-1840
-	uint32_t pFireObject;	 // 1840-1844
-	PADDING(_pad281, 44); // 1844-1888
-	uint32_t  dwWeaponUsed; // 1888-1892
-	uintptr_t pdwDamageEntity; // 1892-1896
-} PED_TYPE;
 
 enum eDoors
 {
@@ -516,208 +353,6 @@ typedef struct _BULLET_DATA {
 	ENTITY_TYPE* pEntity;
 } BULLET_DATA;
 
-enum eVehicleLightsSize : unsigned char {
-	LIGHTS_LONG,
-	LIGHTS_SMALL,
-	LIGHTS_BIG,
-	LIGHTS_TALL
-};
-
-enum eVehicleHandlingFlags : unsigned int {
-	VEHICLE_HANDLING_1G_BOOST = 0x1,
-	VEHICLE_HANDLING_2G_BOOST = 0x2,
-	VEHICLE_HANDLING_NPC_ANTI_ROLL = 0x4,
-	VEHICLE_HANDLING_NPC_NEUTRAL_HANDL = 0x8,
-	VEHICLE_HANDLING_NO_HANDBRAKE = 0x10,
-	VEHICLE_HANDLING_STEER_REARWHEELS = 0x20,
-	VEHICLE_HANDLING_HB_REARWHEEL_STEER = 0x40,
-	VEHICLE_HANDLING_ALT_STEER_OPT = 0x80,
-	VEHICLE_HANDLING_WHEEL_F_NARROW2 = 0x100,
-	VEHICLE_HANDLING_WHEEL_F_NARROW = 0x200,
-	VEHICLE_HANDLING_WHEEL_F_WIDE = 0x400,
-	VEHICLE_HANDLING_WHEEL_F_WIDE2 = 0x800,
-	VEHICLE_HANDLING_WHEEL_R_NARROW2 = 0x1000,
-	VEHICLE_HANDLING_WHEEL_R_NARROW = 0x2000,
-	VEHICLE_HANDLING_WHEEL_R_WIDE = 0x4000,
-	VEHICLE_HANDLING_WHEEL_R_WIDE2 = 0x8000,
-	VEHICLE_HANDLING_HYDRAULIC_GEOM = 0x10000,
-	VEHICLE_HANDLING_HYDRAULIC_INST = 0x20000,
-	VEHICLE_HANDLING_HYDRAULIC_NONE = 0x40000,
-	VEHICLE_HANDLING_NOS_INST = 0x80000,
-	VEHICLE_HANDLING_OFFROAD_ABILITY = 0x100000,
-	VEHICLE_HANDLING_OFFROAD_ABILITY2 = 0x200000,
-	VEHICLE_HANDLING_HALOGEN_LIGHTS = 0x400000,
-	VEHICLE_HANDLING_PROC_REARWHEEL_1ST = 0x800000,
-	VEHICLE_HANDLING_USE_MAXSP_LIMIT = 0x1000000,
-	VEHICLE_HANDLING_LOW_RIDER = 0x2000000,
-	VEHICLE_HANDLING_STREET_RACER = 0x4000000,
-	VEHICLE_HANDLING_SWINGING_CHASSIS = 0x10000000
-};
-
-enum eVehicleHandlingModelFlags : unsigned int {
-	VEHICLE_HANDLING_MODEL_IS_VAN = 0x1,
-	VEHICLE_HANDLING_MODEL_IS_BUS = 0x2,
-	VEHICLE_HANDLING_MODEL_IS_LOW = 0x4,
-	VEHICLE_HANDLING_MODEL_IS_BIG = 0x8,
-	VEHICLE_HANDLING_MODEL_REVERSE_BONNET = 0x10,
-	VEHICLE_HANDLING_MODEL_HANGING_BOOT = 0x20,
-	VEHICLE_HANDLING_MODEL_TAILGATE_BOOT = 0x40,
-	VEHICLE_HANDLING_MODEL_NOSWING_BOOT = 0x80,
-	VEHICLE_HANDLING_MODEL_NO_DOORS = 0x100,
-	VEHICLE_HANDLING_MODEL_TANDEM_SEATS = 0x200,
-	VEHICLE_HANDLING_MODEL_SIT_IN_BOAT = 0x400,
-	VEHICLE_HANDLING_MODEL_CONVERTIBLE = 0x800,
-	VEHICLE_HANDLING_MODEL_NO_EXHAUST = 0x1000,
-	VEHICLE_HANDLING_MODEL_DOUBLE_EXHAUST = 0x2000,
-	VEHICLE_HANDLING_MODEL_NO1FPS_LOOK_BEHIND = 0x4000,
-	VEHICLE_HANDLING_MODEL_FORCE_DOOR_CHECK = 0x8000,
-	VEHICLE_HANDLING_MODEL_AXLE_F_NOTILT = 0x10000,
-	VEHICLE_HANDLING_MODEL_AXLE_F_SOLID = 0x20000,
-	VEHICLE_HANDLING_MODEL_AXLE_F_MCPHERSON = 0x40000,
-	VEHICLE_HANDLING_MODEL_AXLE_F_REVERSE = 0x80000,
-	VEHICLE_HANDLING_MODEL_AXLE_R_NOTILT = 0x100000,
-	VEHICLE_HANDLING_MODEL_AXLE_R_SOLID = 0x200000,
-	VEHICLE_HANDLING_MODEL_AXLE_R_MCPHERSON = 0x400000,
-	VEHICLE_HANDLING_MODEL_AXLE_R_REVERSE = 0x800000,
-	VEHICLE_HANDLING_MODEL_IS_BIKE = 0x1000000,
-	VEHICLE_HANDLING_MODEL_IS_HELI = 0x2000000,
-	VEHICLE_HANDLING_MODEL_IS_PLANE = 0x4000000,
-	VEHICLE_HANDLING_MODEL_IS_BOAT = 0x8000000,
-	VEHICLE_HANDLING_MODEL_BOUNCE_PANELS = 0x10000000,
-	VEHICLE_HANDLING_MODEL_DOUBLE_RWHEELS = 0x20000000,
-	VEHICLE_HANDLING_MODEL_FORCE_GROUND_CLEARANCE = 0x40000000,
-	VEHICLE_HANDLING_MODEL_IS_HATCHBACK = 0x80000000
-};
-
-#pragma pack(push, 4)
-struct tTransmissionGear
-{
-	float m_fMaxVelocity;
-	float m_fChangeUpVelocity;
-	float m_fChangeDownVelocity;
-};
-
-class cTransmission {
-public:
-	tTransmissionGear m_aGears[6];
-	unsigned char m_nDriveType; // F/R/4
-	unsigned char m_nEngineType; // P/D/E
-	unsigned char m_nNumberOfGears; // 1 to 6
-	char field_4B;
-	unsigned int  m_nHandlingFlags;
-	float         m_fEngineAcceleration; // 0.1 to 10.0
-	float         m_fEngineInertia; // 0.0 to 50.0
-	float         m_fMaxGearVelocity; // 5.0 to 150.0
-	int field_5C;
-	float         m_fMinGearVelocity;
-	float         m_fCurrentSpeed;
-};
-
-struct tHandlingData {
-	int           	m_nVehicleId;
-	float         	m_fMass; // 1.0 to 50000.0
-	float 			field_8;
-	float         	m_fTurnMass;
-	float         	m_fDragMult;
-	VECTOR       	m_vecCentreOfMass; // x, y, z - 1.0 to 50000.0
-	unsigned char 	m_nPercentSubmerged; // 10 to 120 (> 100% vehicle sinks)
-	PADDING(pad_0, 3);
-	float         	m_fBuoyancyConstant;
-	float         	m_fTractionMultiplier; // 0.5 to 2.0
-	cTransmission 	m_transmissionData;
-	float         	m_fBrakeDeceleration; // 0.1 to 10.0
-	float         	m_fBrakeBias; // 0.0 > x > 1.0
-	char          	m_bABS; // 0/1
-	char 			field_9D;
-	char 			field_9E;
-	char 			field_9F;
-	float         	m_fSteeringLock; // 10.0 to 40.0
-	float         	m_fTractionLoss;
-	float         	m_fTractionBias;
-	float         	m_fSuspensionForceLevel; // not [L/M/H]
-	float         	m_fSuspensionDampingLevel; // not [L/M/H]
-	float         	m_fSuspensionHighSpdComDamp; // often zero - 200.0 or more for bouncy vehicles
-	float         	m_fSuspensionUpperLimit;
-	float         	m_fSuspensionLowerLimit;
-	float         	m_fSuspensionBiasBetweenFrontAndRear;
-	float         	m_fSuspensionAntiDiveMultiplier;
-	float         	m_fCollisionDamageMultiplier; // 0.2 to 5.0
-	union {
-		eVehicleHandlingModelFlags m_nModelFlags;
-		struct {
-			unsigned int m_bIsVan : 1;
-			unsigned int m_bIsBus : 1;
-			unsigned int m_bIsLow : 1;
-			unsigned int m_bIsBig : 1;
-			unsigned int m_bReverseBonnet : 1;
-			unsigned int m_bHangingBoot : 1;
-			unsigned int m_bTailgateBoot : 1;
-			unsigned int m_bNoswingBoot : 1;
-			unsigned int m_bNoDoors : 1;
-			unsigned int m_bTandemSeats : 1;
-			unsigned int m_bSitInBoat : 1;
-			unsigned int m_bConvertible : 1;
-			unsigned int m_bNoExhaust : 1;
-			unsigned int m_bDoubleExhaust : 1;
-			unsigned int m_bNo1fpsLookBehind : 1;
-			unsigned int m_bForceDoorCheck : 1;
-			unsigned int m_bAxleFNotlit : 1;
-			unsigned int m_bAxleFSolid : 1;
-			unsigned int m_bAxleFMcpherson : 1;
-			unsigned int m_bAxleFReverse : 1;
-			unsigned int m_bAxleRNotlit : 1;
-			unsigned int m_bAxleRSolid : 1;
-			unsigned int m_bAxleRMcpherson : 1;
-			unsigned int m_bAxleRReverse : 1;
-			unsigned int m_bIsBike : 1;
-			unsigned int m_bIsHeli : 1;
-			unsigned int m_bIsPlane : 1;
-			unsigned int m_bIsBoat : 1;
-			unsigned int m_bBouncePanels : 1;
-			unsigned int m_bDoubleRwheels : 1;
-			unsigned int m_bForceGroundClearance : 1;
-			unsigned int m_bIsHatchback : 1;
-		};
-	};
-	union {
-		eVehicleHandlingFlags m_nHandlingFlags;
-		struct {
-			unsigned int m_b1gBoost : 1;
-			unsigned int m_b2gBoost : 1;
-			unsigned int m_bNpcAntiRoll : 1;
-			unsigned int m_bNpcNeutralHandl : 1;
-			unsigned int m_bNoHandbrake : 1;
-			unsigned int m_bSteerRearwheels : 1;
-			unsigned int m_bHbRearwheelSteer : 1;
-			unsigned int m_bAltSteerOpt : 1;
-			unsigned int m_bWheelFNarrow2 : 1;
-			unsigned int m_bWheelFNarrow : 1;
-			unsigned int m_bWheelFWide : 1;
-			unsigned int m_bWheelFWide2 : 1;
-			unsigned int m_bWheelRNarrow2 : 1;
-			unsigned int m_bWheelRNarrow : 1;
-			unsigned int m_bWheelRWide : 1;
-			unsigned int m_bWheelRWide2 : 1;
-			unsigned int m_bHydraulicGeom : 1;
-			unsigned int m_bHydraulicInst : 1;
-			unsigned int m_bHydraulicNone : 1;
-			unsigned int m_bNosInst : 1;
-			unsigned int m_bOffroadAbility : 1;
-			unsigned int m_bOffroadAbility2 : 1;
-			unsigned int m_bHalogenLights : 1;
-			unsigned int m_bProcRearwheelFirst : 1;
-			unsigned int m_bUseMaxspLimit : 1;
-			unsigned int m_bLowRider : 1;
-			unsigned int m_bStreetRacer : 1;
-			unsigned int m_bSwingingChassis : 1;
-		};
-	};
-	float              m_fSeatOffsetDistance; // // ped seat position offset towards centre of car
-	unsigned int       m_nMonetaryValue; // 1 to 100000
-	eVehicleLightsSize m_nFrontLights;
-	eVehicleLightsSize m_nRearLights;
-	unsigned char      m_nAnimGroup;
-};
 #pragma pack(pop)
 
 #pragma pack(1)

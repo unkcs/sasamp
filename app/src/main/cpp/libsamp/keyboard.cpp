@@ -43,9 +43,6 @@ char CKeyBoard::m_utf8Input[MAX_INPUT_LEN * 3 + 0xF];
 int CKeyBoard::m_iInputOffset;
 CKeyBoardHistory *CKeyBoard::m_pkHistory;
 
-bool CKeyBoard::m_bNewKeyboard;
-DataStructures::SingleProducerConsumer<std::string> CKeyBoard::bufferedStrings;
-
 void CKeyBoard::init()
 {
 	Log("Initalizing KeyBoard..");
@@ -86,14 +83,12 @@ void CKeyBoard::init()
 	InitRU();
 	InitNUM();
 
-	m_bNewKeyboard = true;
-
 	Log("KeyBoard inited");
 }
 
 void CKeyBoard::Render()
 {
-	if (!m_bEnable || m_bNewKeyboard)
+	if (!m_bEnable)
 		return;
 
 	ImGuiIO &io = ImGui::GetIO();
@@ -304,6 +299,7 @@ void CKeyBoard::Open()
 
 void CKeyBoard::Close()
 {
+	if(!m_bEnable)return;
 
 	m_bEnable = false;
 
@@ -313,6 +309,8 @@ void CKeyBoard::Close()
 	m_utf8Input[0] = 0;
 	m_iCase = LOWER_CASE;
 	m_iPushedKey = -1;
+
+	CHUD::ToggleChatInput(false);
 
 	CHUD::toggleServerLogo(true);
 	if (pGame->m_bRaceCheckpointsEnabled)
@@ -324,8 +322,6 @@ void CKeyBoard::Close()
 	if(CAdminRecon::bIsToggle) CAdminRecon::tempToggle(true);
 	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(true);
 	//g_pJavaWrapper->ShowVoice();
-
-	return;
 }
 #include "util/CJavaWrapper.h"
 #include "chatwindow.h"
@@ -334,6 +330,8 @@ void CKeyBoard::Close()
 #include "java_systems/CDuelsGui.h"
 #include "util/patch.h"
 #include "game/CVector.h"
+#include "java_systems/CStyling.h"
+#include "game/Models/ModelInfo.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -602,19 +600,7 @@ void CKeyBoard::Send()
 		}
 	}
 
-	m_bEnable = false;
-	CHUD::ToggleChatInput(false);
-
-	CHUD::toggleServerLogo(true);
-	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(true);
-	if(pGame->isCasinoDiceActive)g_pJavaWrapper->TempToggleCasinoDice(true);
-	if(CBaccarat::bIsShow) CBaccarat::tempToggle(true);
-	if(CAdminRecon::bIsToggle) CAdminRecon::tempToggle(true);
-	if (pGame->m_bRaceCheckpointsEnabled)
-	{
-		CHUD::toggleGps(true);
-	}
-	//g_pJavaWrapper->ShowVoice();
+	CKeyBoard::Close();
 }
 
 kbKey *CKeyBoard::GetKeyFromPos(int x, int y)
@@ -2313,24 +2299,8 @@ void CKeyBoard::Flush()
 	m_sInput.clear();
 	CHUD::SetChatInput(m_sInput.c_str());
 	m_iInputOffset = 0;
-	CChatWindow::cursorStart = 0;
-	CChatWindow::cursorEnd = 0;
+
 	memset(m_utf8Input, 0, sizeof(m_utf8Input) - 1);
-}
-
-void CKeyBoard::EnableNewKeyboard()
-{
-	m_bNewKeyboard = true;
-}
-
-void CKeyBoard::EnableOldKeyboard()
-{
-	m_bNewKeyboard = false;
-}
-
-bool CKeyBoard::IsNewKeyboard()
-{
-	return m_bNewKeyboard;
 }
 
 extern void ApplyFPSPatch(uint8_t fps);
@@ -2349,11 +2319,6 @@ bool ProcessLocalCommands(const char str[])
 		return true;
 	}
 
-	if (strcmp(str, "/q") == 0)
-	{
-		pGame->exitGame();
-		return true;
-	}
 	if (strstr(str, "/save "))
 	{
 		std::string msg;
@@ -2382,9 +2347,9 @@ bool ProcessLocalCommands(const char str[])
 			ScriptCommand(&get_car_z_angle, m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),
-					pVehicle->entity.mat->pos.X,
-					pVehicle->entity.mat->pos.Y,
-					pVehicle->entity.mat->pos.Z,
+					pVehicle->entity.mat->pos.x,
+					pVehicle->entity.mat->pos.y,
+					pVehicle->entity.mat->pos.z,
 					fZAngle
 			);
 			CChatWindow::AddInfoMessage("-> InCar position saved.");
@@ -2396,9 +2361,9 @@ bool ProcessLocalCommands(const char str[])
 			ScriptCommand(&get_actor_z_angle, pPlayer->m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),
-					pActor->entity.mat->pos.X,
-					pActor->entity.mat->pos.Y,
-					pActor->entity.mat->pos.Z,
+					pActor->entity.mat->pos.x,
+					pActor->entity.mat->pos.y,
+					pActor->entity.mat->pos.z,
 					fZAngle
 			);
 			CChatWindow::AddInfoMessage("-> OnFoot position saved.");
@@ -2426,7 +2391,7 @@ bool ProcessLocalCommands(const char str[])
 		CPlayerPed *pPlayer = pGame->FindPlayerPed();
 		CVehicle* pVehicle = pPlayer->GetCurrentVehicle();
 
-		uintptr_t* dwModelarray = (uintptr_t*)(g_libGTASA + 0x87BF48);
+		auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
 		uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[pVehicle->m_pVehicle->entity.nModelIndex];
 
 		if (!pModelInfoStart)
@@ -2436,13 +2401,13 @@ bool ProcessLocalCommands(const char str[])
 
 		uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
 
-		CVector* m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
+		auto m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
 
-		VECTOR vec;
+		CVector vec;
 		// 0 - front light
-		vec.X = m_avDummyPos[size].x;
-		vec.Y = m_avDummyPos[size].y;
-		vec.Z = m_avDummyPos[size].z;
+		vec.x = m_avDummyPos[size].x;
+		vec.y = m_avDummyPos[size].y;
+		vec.z = m_avDummyPos[size].z;
 		//float x;
 
 
@@ -2462,8 +2427,8 @@ bool ProcessLocalCommands(const char str[])
 //										 x, y, z, 30.0f, 0, INVALID_PLAYER_ID, pPlayer->GetCurrentSampVehicleID());
 //		}
 		CObjectPool* pObjectPool = pNetGame->GetObjectPool();
-		VECTOR vec11;
-		vec11.X = vec11.Y = vec11.Z = 0.0;
+		CVector vec11;
+		vec11.x = vec11.y = vec11.z = 0.0;
 		pObjectPool->New(555, 19294, vec11, vec11, 300.0f);
 
 		CObject* pObject = pObjectPool->GetAt(555);
@@ -2471,7 +2436,7 @@ bool ProcessLocalCommands(const char str[])
 		pObject->AttachToVehicle(pPlayer->GetCurrentSampVehicleID(), &vec, &vec11);
 
 
-		CChatWindow::AddInfoMessage("%.3f, %.3f, %.3f", vec.X, vec.Y, vec.Z);
+		CChatWindow::AddInfoMessage("%.3f, %.3f, %.3f", vec.x, vec.y, vec.z);
 		return true;
 	}
 
@@ -2520,13 +2485,23 @@ bool ProcessLocalCommands(const char str[])
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_SendChatButton(JNIEnv *env, jobject thiz, jint button_id) {
+Java_com_liverussia_cr_gui_hud_Chat_SendChatButton(JNIEnv *env, jobject thiz, jint button_id) {
 	CKeyBoard::dop_butt = button_id;
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_HudManager_ChatSetCursor(JNIEnv *env, jobject thiz, jint start,
-                                                    jint end) {
-    CChatWindow::cursorStart = start;
-	CChatWindow::cursorEnd = end;
+Java_com_liverussia_cr_gui_hud_Chat_toggleNativeKeyboard(JNIEnv *env, jobject thiz, jboolean toggle) {
+	if (toggle) {
+		CKeyBoard::Open();
+	} else {
+		CKeyBoard::Close();
+	}
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_hud_Chat_clickHistoryButt(JNIEnv *env, jobject thiz, jint butt_id) {
+	if(butt_id)
+		CKeyBoard::m_pkHistory->PageUp();
+	else
+		CKeyBoard::m_pkHistory->PageDown();
 }

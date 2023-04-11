@@ -1,5 +1,8 @@
 #pragma once
 
+#include "entity.h"
+#include "RGB.h"
+
 enum E_CUSTOM_COMPONENTS
 {
 	ccBumperF = 0,
@@ -143,6 +146,7 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
+	CRGB color;
 	enum eTurnState
 	{
 		TURN_OFF,
@@ -232,6 +236,8 @@ public:
 	bool m_bLightsOn;
 	bool m_bEngineOn;
 
+	uint8_t colorToner[3];
+
 	// Damage status
 	uint8_t			m_byteTyreStatus;
 	uint8_t			m_byteLightStatus;
@@ -283,9 +289,6 @@ public:
 	void toggleAllTurnLight(bool toggle);
 
 	void toggleReverseLight(bool toggle);
-
-//	void AddVehicleUpgrade(uint32_t vehId);
-	int32_t AddVehicleUpgrade(int32_t modelId);
 };
 
 enum eVehicleOverrideLightsState {

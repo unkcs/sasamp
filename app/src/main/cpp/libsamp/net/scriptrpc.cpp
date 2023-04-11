@@ -590,7 +590,7 @@ void ScrPutPlayerInVehicle(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrPutPlayerInVehicle");
 
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
@@ -611,7 +611,7 @@ void ScrPutPlayerInVehicle(RPCParameters *rpcParams)
 	if(pPed->IsInVehicle()) {
 		RwMatrix mat;
 		pPed->GetMatrix(&mat);
-		pPed->RemoveFromVehicleAndPutAt(mat.pos.X, mat.pos.Y, mat.pos.Z);
+		pPed->RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z);
 	}
 	CVehicle *pVehicle = pNetGame->GetVehiclePool()->GetAt(vehicleid);
 	if(!pVehicle)return;
@@ -680,16 +680,16 @@ void ScrVehicleParamsEx(RPCParameters* rpcParams)
 void ScrHaveSomeMoney(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrHaveSomeMoney");
-
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	int iAmmount;
-	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-	bsData.Read(iAmmount);
-
-
-	pGame->AddToLocalMoney(iAmmount);
+//
+//	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+//	int iBitLength = rpcParams->numberOfBitsOfData;
+//
+//	int iAmmount;
+//	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
+//	bsData.Read(iAmmount);
+//
+//
+//	pGame->AddToLocalMoney(iAmmount);
 }
 
 void ScrResetMoney(RPCParameters *rpcParams)
@@ -774,18 +774,18 @@ void ScrSetVehicleVelocity(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrSetVehicleVelocity");
 
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
 
 	uint8_t turn = false;
-	VECTOR vecMoveSpeed;
+	CVector vecMoveSpeed;
 	bsData.Read(turn);
-	bsData.Read(vecMoveSpeed.X);
-	bsData.Read(vecMoveSpeed.Y);
-	bsData.Read(vecMoveSpeed.Z);
-	Log("X: %f, Y: %f, Z: %f", vecMoveSpeed.X, vecMoveSpeed.Y, vecMoveSpeed.Z);
+	bsData.Read(vecMoveSpeed.x);
+	bsData.Read(vecMoveSpeed.y);
+	bsData.Read(vecMoveSpeed.z);
+	Log("X: %f, Y: %f, Z: %f", vecMoveSpeed.x, vecMoveSpeed.y, vecMoveSpeed.z);
 
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 	CPlayerPed *pPlayerPed = pGame->FindPlayerPed();
@@ -943,26 +943,26 @@ void ScrCreateObject(RPCParameters* rpcParams)
 	uint16_t wObjectID;
 	unsigned long ModelID;
 	float fDrawDistance;
-	VECTOR vecPos, vecRot;
+	CVector vecPos, vecRot;
 
 	uint8_t bNoCameraCol;
 	int16_t attachedVehicleID;
 	int16_t attachedObjectID;
-	VECTOR vecAttachedOffset;
-	VECTOR vecAttachedRotation;
+	CVector vecAttachedOffset;
+	CVector vecAttachedRotation;
 	uint8_t bSyncRot;
 	uint8_t iMaterialCount;
 
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
 	bsData.Read(wObjectID);
 	bsData.Read(ModelID);
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
 
-	bsData.Read(vecRot.X);
-	bsData.Read(vecRot.Y);
-	bsData.Read(vecRot.Z);
+	bsData.Read(vecRot.x);
+	bsData.Read(vecRot.y);
+	bsData.Read(vecRot.z);
 
 	bsData.Read(fDrawDistance);
 
@@ -1172,19 +1172,19 @@ void ScrAttachObjectToPlayer(RPCParameters* rpcParams)
 void ScrPlaySound(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrPlaySound");
-
-	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-
-	int iSound;
-	float fX, fY, fZ;
-	bsData.Read(iSound);
-	bsData.Read(fX);
-	bsData.Read(fY);
-	bsData.Read(fZ);
-	pGame->PlaySound(iSound, fX, fY, fZ);
+//
+//	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+//	int iBitLength = rpcParams->numberOfBitsOfData;
+//
+//	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
+//
+//	int iSound;
+//	float fX, fY, fZ;
+//	bsData.Read(iSound);
+//	bsData.Read(fX);
+//	bsData.Read(fY);
+//	bsData.Read(fZ);
+//	pGame->PlaySound(iSound, fX, fY, fZ);
 }
 
 void ScrSetPlayerWantedLevel(RPCParameters *rpcParams)
@@ -1701,10 +1701,38 @@ void ScrSetObjectRotation(RPCParameters* rpcParams)
 	}
 }
 
+void ScrSetPlayerTeam(RPCParameters *rpcParams)
+{
+	Log("RPC: ScrSetPlayerTeam");
+	auto * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	int iBitLength = rpcParams->numberOfBitsOfData;
+
+	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
+
+	PLAYERID playerId;
+	uint8_t teamId;
+
+	bsData.Read(playerId);
+	bsData.Read(teamId);
+
+	if(teamId == 255)
+		return;
+
+	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
+	if(playerId == pPlayerPool->GetLocalPlayerID())
+		pPlayerPool->GetLocalPlayer()->GetPlayerPed()->SetMoveAnim(teamId);
+	else
+	{
+		if(pPlayerPool->m_pPlayers[playerId] && pPlayerPool->GetAt(playerId)->GetPlayerPed())
+			pPlayerPool->GetAt(playerId)->GetPlayerPed()->SetMoveAnim(teamId);
+	}
+}
+
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
 {
 	Log("Registering ScriptRPC's..");
 
+	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerTeam, ScrSetPlayerTeam);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrDisplayGameText, ScrDisplayGameText);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetGravity, ScrSetGravity);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrForceSpawnSelection,ScrForceSpawnSelection);

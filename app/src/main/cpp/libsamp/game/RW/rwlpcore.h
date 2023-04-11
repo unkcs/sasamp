@@ -710,3 +710,62 @@ struct RpGeometry
 
 	struct RpMorphTarget* morphTarget;    /* The Morph Target */
 };
+
+/* Doubly linked list. End marked as start (its a ring) */
+
+typedef struct RwLLLink  RwLLLink;                     /*** RwLLLink ***/
+
+struct RwLLLink
+{
+    RwLLLink *next;
+    RwLLLink *prev;
+};
+
+/**
+ * \ingroup rwresources
+ * \struct RwResEntry
+ * RwResEntry object. Instanced data block in resources arena.
+ * This should be considered an opaque
+ * type. Use the RwResEntry API functions to access.
+ */
+
+typedef struct RwResEntry RwResEntry;
+
+#ifndef RWADOXYGENEXTERNAL
+/**
+ * \ingroup rwresources
+ * \ref RwResEntryDestroyNotify type represents the function
+ * called from \ref RwResourcesFreeResEntry (and indirectly from
+ * \ref RwResourcesEmptyArena) immediately before the memory used by the
+ * specified resources entry is released.
+ *
+ * \param  resEntry   Pointer to the instanced data.
+ */
+#endif /* RWADOXYGENEXTERNAL */
+typedef void        (*RwResEntryDestroyNotify) (RwResEntry * resEntry);
+
+struct RwResEntry
+{
+    RwLLLink            link;   /* Node in the list of resource elements */
+    RwInt32             size;   /* Size of this node */
+    void               *owner;  /* Owner of this node */
+    RwResEntry        **ownerRef; /* Pointer to pointer to this (enables de-alloc) */
+    RwResEntryDestroyNotify destroyNotify; /* This is called right before destruction */
+};
+
+typedef struct RwLinkList RwLinkList;
+
+struct RwLinkList
+{
+    RwLLLink link;
+};
+
+struct RwObject
+{
+    RwUInt8 type;                /**< Internal Use */
+    RwUInt8 subType;             /**< Internal Use */
+    RwUInt8 flags;               /**< Internal Use */
+    RwUInt8 privateFlags;        /**< Internal Use */
+    void   *parent;              /**< Internal Use */
+    /* Often a Frame  */
+};

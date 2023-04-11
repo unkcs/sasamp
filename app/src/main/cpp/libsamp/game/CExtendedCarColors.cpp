@@ -41,20 +41,20 @@ static void DWORD2RGBA(uint32_t dwColor, CRGBA& rgba)
 {
 	CRGBA tmp; /* why did you declare it static??? */
 
-	rgba.A = dwColor & 0xFF; dwColor >>= 8;
-	rgba.B = dwColor & 0xFF; dwColor >>= 8;
-	rgba.G = dwColor & 0xFF; dwColor >>= 8;
-	rgba.R = dwColor & 0xFF; /* dwColor >>= 8; */
+	rgba.a = dwColor & 0xFF; dwColor >>= 8;
+	rgba.r = dwColor & 0xFF; dwColor >>= 8;
+	rgba.g = dwColor & 0xFF; dwColor >>= 8;
+	rgba.b = dwColor & 0xFF; /* dwColor >>= 8; */
 }
 
 void CExtendedCarColors::ApplyPatches_level0()
 {
 	for (int i = 0; i < 256; i++)
 	{
-		ms_vehicleColourTable[i].A = 0;
-		ms_vehicleColourTable[i].R = 0;
-		ms_vehicleColourTable[i].G = 0;
-		ms_vehicleColourTable[i].B = 0;
+		ms_vehicleColourTable[i].a = 0;
+		ms_vehicleColourTable[i].r = 0;
+		ms_vehicleColourTable[i].g = 0;
+		ms_vehicleColourTable[i].b = 0;
 	}
 
 	for (int i = 128; i < 256; i++)

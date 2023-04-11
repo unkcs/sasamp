@@ -260,9 +260,9 @@ void RequestSpawn(RPCParameters *rpcParams)
 
 	if(pLocalPlayer)
 	{
-		if(byteRequestOutcome == 2 || (byteRequestOutcome && pLocalPlayer->m_bWaitingForSpawnRequestReply))
-			 pLocalPlayer->Spawn();
-		else
+		//if(byteRequestOutcome == 2 || (byteRequestOutcome && pLocalPlayer->m_bWaitingForSpawnRequestReply))
+			// pLocalPlayer->Spawn();
+	//	else
 			pLocalPlayer->m_bWaitingForSpawnRequestReply = false;
 	}
 }
@@ -798,7 +798,7 @@ void RemoveBuildingByPtr(uintptr_t pBuild)
 	if (*(uintptr_t*)(pBuild + 20))
 	{
 		RwMatrix* matt = (RwMatrix*) * (uintptr_t*)(pBuild + 20);
-		matt->pos.Z -= 2000.0f;
+		matt->pos.z -= 2000.0f;
 		//*(uint32_t*)((uintptr_t)matt + 12) &= 0xFFFDFFFC;
 	}
 }
@@ -818,200 +818,9 @@ void* GetDummyPool()
 	return (void*) * (uintptr_t*)(g_libGTASA + 0x008B93C4);
 }
 
-
-void RemoveOccluders(float X, float Y, float Z, float fRad)
-{
-	uintptr_t* numOccluders = (uintptr_t*)(g_libGTASA + 0x009A0FEC);
-	if (*numOccluders > 0)
-	{
-		char* v5 = (char*)(g_libGTASA + 0x009A0FF4);
-		for (int i = 0; i < *numOccluders; i++)
-		{
-			double v6 = (double) * (int16_t*)v5 * 0.25;
-			double v7 = (double) * ((int16_t*)v5 - 1) * 0.25;
-			double v8 = (double) * ((int16_t*)v5 - 2) * 0.25;
-			VECTOR f = { (float)v8, (float)v7, (float)v6 };
-			VECTOR s = { X, Y, Z };
-			if (GetDistanceBetween3DPoints(&f, &s) < fRad)
-			{
-				*((int16_t*)v5 - 2) = 0;
-				*((int16_t*)v5 - 1) = 0;
-				*(int16_t*)v5 = 0;
-				*((int16_t*)v5 + 1) = 0;
-				*((int16_t*)v5 + 2) = 0;
-				*((int16_t*)v5 + 3) = 0;
-			}
-			v5 += 18;
-		}
-	}
-}
-
-void ResetPoolsMatrix()
-{
-	uintptr_t pBuild = *(uintptr_t*)GetBuildingPool();
-
-	for (int i = 0; i < 14000; i++)
-	{
-		*(uintptr_t*)(pBuild + 20) = 0;
-		pBuild += 0x38;
-	}
-	pBuild = *(uintptr_t*)GetDummyPool();
-	for (int i = 0; i < 3500; i++)
-	{
-		*(uintptr_t*)(pBuild + 20) = 0;
-		pBuild += 0x38;
-	}
-
-	pBuild = *(uintptr_t*)GetObjectPool();
-	for (int i = 0; i < 350; i++)
-	{
-		*(uintptr_t*)(pBuild + 20) = 0;
-		pBuild += 0x1A0;
-	}
-}
-
-void ProcessRemoveBuilding(int uModelID, VECTOR pos, float fRad)
-{
-	uintptr_t pBuild = *(uintptr_t*)GetBuildingPool();
-	uintptr_t pState = *(uintptr_t*)((uintptr_t)GetBuildingPool() + 4);
-	// pBuild + 34 = nModelIndex
-	// 0x38 - sizeof(CBuilding)
-	// pBuild + 4 - CSimpleTransform
-	// pBuild + 20 - RwMatrix*
-
-	RemoveOccluders(pos.X, pos.Y, pos.Z, 500.0);
-
-	for (int i = 0; i < 14000; i++)
-	{
-		uintptr_t vtable = *(uintptr_t*)(pBuild);
-		vtable -= g_libGTASA;
-		if (vtable == 0x5C7358 || (*(uint8_t*)pState & 0x80))
-		{
-			pBuild += 0x38;
-			pState++;
-			continue;
-		}
-		if (*(uint16_t*)(pBuild + 34) == uModelID || uModelID == -1)
-		{
-			if (*(uintptr_t*)(pBuild + 20) && (*(uintptr_t*)(pBuild + 20) != 0xffffff)
-				&& (*(uintptr_t*)(pBuild + 20) != 0xffffffff))
-			{
-				RwMatrix* matt = (RwMatrix*) * (uintptr_t*)(pBuild + 20);
-				if (GetDistanceBetween3DPoints(&pos, &matt->pos) <= fRad)
-				{
-					RemoveBuildingByPtr(pBuild);
-				}
-			}
-			else
-			{
-				VECTOR* vecObjectPos = (VECTOR*)(pBuild + 4);
-				if (GetDistanceBetween3DPoints(&pos, vecObjectPos) <= fRad)
-				{
-					RemoveBuildingByPtr(pBuild);
-				}
-			}
-		}
-		pBuild += 0x38;
-		pState++;
-	}
-	pBuild = *(uintptr_t*)GetDummyPool();
-	pState = *(uintptr_t*)((uintptr_t)GetDummyPool() + 4);
-	for (int i = 0; i < 3500; i++)
-	{
-		uintptr_t vtable = *(uintptr_t*)(pBuild);
-		vtable -= g_libGTASA;
-		if (vtable == 0x5C7358 || (*(uint8_t*)pState & 0x80))
-		{
-			pBuild += 0x38;
-			pState++;
-			continue;
-		}
-		if (*(uint16_t*)(pBuild + 34) == uModelID || uModelID == -1)
-		{
-			if (*(uintptr_t*)(pBuild + 20) && (*(uintptr_t*)(pBuild + 20) != 0xffffff)
-				&& (*(uintptr_t*)(pBuild + 20) != 0xffffffff))
-			{
-				RwMatrix* matt = (RwMatrix*) * (uintptr_t*)(pBuild + 20);
-				if (GetDistanceBetween3DPoints(&pos, &matt->pos) <= fRad)
-				{
-					RemoveBuildingByPtr(pBuild);
-				}
-			}
-			else
-			{
-				VECTOR* vecObjectPos = (VECTOR*)(pBuild + 4);
-				if (GetDistanceBetween3DPoints(&pos, vecObjectPos) <= fRad)
-				{
-					RemoveBuildingByPtr(pBuild);
-				}
-			}
-		}
-		pBuild += 0x38;
-		pState++;
-	}
-
-	pBuild = *(uintptr_t*)GetObjectPool();
-	pState = *(uintptr_t*)((uintptr_t)GetObjectPool() + 4);
-	for (int i = 0; i < 350; i++)
-	{
-		uintptr_t vtable = *(uintptr_t*)(pBuild);
-		vtable -= g_libGTASA;
-		if (vtable == 0x5C7358 || (*(uint8_t*)pState & 0x80))
-		{
-			pBuild += 0x1A0;
-			pState++;
-			continue;
-		}
-		if (*(uint16_t*)(pBuild + 34) == uModelID || uModelID == -1)
-		{
-			if (*(uintptr_t*)(pBuild + 20) && (*(uintptr_t*)(pBuild + 20) != 0xffffff)
-				&& (*(uintptr_t*)(pBuild + 20) != 0xffffffff))
-			{
-				RwMatrix* matt = (RwMatrix*) * (uintptr_t*)(pBuild + 20);
-				if (GetDistanceBetween3DPoints(&pos, &matt->pos) <= fRad)
-				{
-					RemoveBuildingByPtr(pBuild);
-				}
-			}
-			else
-			{
-				VECTOR* vecObjectPos = (VECTOR*)(pBuild + 4);
-				if (GetDistanceBetween3DPoints(&pos, vecObjectPos) <= fRad)
-				{
-					RemoveBuildingByPtr(pBuild);
-				}
-			}
-		}
-		pBuild += 0x1A0;
-		pState++;
-	}
-}
-
-extern int RemoveModelIDs[1200];
-extern VECTOR RemovePos[1200];
-extern float RemoveRad[1200];
-extern int iTotalRemovedObjects;
-
 void RemoveBuilding(RPCParameters* rpcParams)
 {
-	uint8_t* Data = reinterpret_cast<uint8_t*>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-	//PlayerID sender = rpcParams->sender;
-
-	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
-
-	int uModelID;
-	VECTOR pos;
-	float fRad;
-
-	bsData.Read(uModelID);
-	bsData.Read((char*)& pos, sizeof(VECTOR));
-	bsData.Read(fRad);
-	RemoveModelIDs[iTotalRemovedObjects] = uModelID;
-	RemovePos[iTotalRemovedObjects] = pos;
-	RemoveRad[iTotalRemovedObjects] = fRad;
-	iTotalRemovedObjects++;
-	ProcessRemoveBuilding(uModelID, pos, fRad);
+	//
 }
 #include "..//gui/gui.h"
 #include "../playertags.h"
@@ -1053,20 +862,20 @@ void SetPlayerChatBubble(RPCParameters* rpcParams)
 
 void WorldPlayerDeath(RPCParameters* rpcParams)
 {
-	uint8_t* Data = reinterpret_cast<uint8_t*>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
-	PLAYERID playerId;
-	bsData.Read(playerId);
-	if (pNetGame->GetPlayerPool())
-	{
-		CRemotePlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(playerId);
-		if (pPlayer)
-		{
-			pPlayer->HandleDeath();
-		}
-	}
+//	uint8_t* Data = reinterpret_cast<uint8_t*>(rpcParams->input);
+//	int iBitLength = rpcParams->numberOfBitsOfData;
+//
+//	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
+//	PLAYERID playerId;
+//	bsData.Read(playerId);
+//	if (pNetGame->GetPlayerPool())
+//	{
+//		CRemotePlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(playerId);
+//		if (pPlayer)
+//		{
+//			pPlayer->HandleDeath();
+//		}
+//	}
 }
 
 void DamageVehicle(RPCParameters* rpcParams)
@@ -1277,7 +1086,7 @@ void ClearActorAnimations(RPCParameters* rpcParams)
 		{
 			RwMatrix mat;
 			pActorPool->GetAt(actorId)->GetMatrix(&mat);
-			pActorPool->GetAt(actorId)->TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+			pActorPool->GetAt(actorId)->TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 		}
 	}
 }
@@ -1364,6 +1173,7 @@ void RegisterRPCs(RakClientInterface* pRakClient)
 void UnRegisterRPCs(RakClientInterface* pRakClient)
 {
 	Log("UnRegistering RPC's..");
+	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrSetPlayerTeam);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_UpdateScoresPingsIPs);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_InitGame);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ServerJoin);

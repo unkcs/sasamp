@@ -1,5 +1,7 @@
 package com.liverussia.cr.gui.styling;
 
+import static android.provider.Settings.System.getString;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -54,6 +56,7 @@ public class Styling {
     private ConstraintLayout arrowLeft;
 
     native void toStock();
+
     native void exitClick();
 
     native void sendChoosedColor(int type, int r, int g, int b);
@@ -62,8 +65,10 @@ public class Styling {
 
     native void sendClickedCameraArrow(int rightorleft);
 
-    public Styling(Activity activity, int money, int total, int price1, int price2, int price3, int price4)
-    {
+    // temp
+    native void changeTonerColor(int r, int g, int b, int a);
+
+    public Styling(Activity activity, int money, int total, int price1, int price2, int price3, int price4) {
         this.activity = activity;
 
         this.activity.runOnUiThread(new Runnable() {
@@ -76,7 +81,7 @@ public class Styling {
                 tonerLayout = activity.findViewById(R.id.toner_layout);
                 colorLayout = activity.findViewById(R.id.color_layout);
 
-                moneyText = (TextView)activity.findViewById(R.id.styling_money);
+                moneyText = (TextView) activity.findViewById(R.id.styling_money);
 
                 exitLayout = activity.findViewById(R.id.styling_exit);
                 exitImage = activity.findViewById(R.id.styling_exit_image);
@@ -151,8 +156,34 @@ public class Styling {
                     @Override
                     public void onClick(View view) {
                         view.startAnimation(animation);
+                        new ColorPickerDialog.Builder(activity)
+                                .setTitle("ColorPicker Dialog")
+                                .setPreferenceName("MyColorPickerDialog")
+                                .setPositiveButton("ok",
+                                        new ColorEnvelopeListener() {
+                                            @Override
+                                            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
+                                                changeTonerColor(
+                                                        envelope.getArgb()[1],
+                                                        envelope.getArgb()[2],
+                                                        envelope.getArgb()[3],
+                                                        envelope.getArgb()[0]
+                                                );
+                                            }
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.dismiss();
+                                            }
+                                        })
+                                .attachAlphaSlideBar(true) // the default value is true.
+                                .attachBrightnessSlideBar(true)  // the default value is true.
+                                .setBottomSpace(12) // set a bottom space between the last slidebar and buttons.
+                                .show();
                         //showColorPicker(2);
-                        Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -185,8 +216,7 @@ public class Styling {
         howMuchText.setText(df1.format(total));
     }
 
-    void showColorPicker(int type)
-    {
+    void showColorPicker(int type) {
         new StylingColorPickerDialog(this, type);
         /*ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(activity)
                 .setTitle("Выбор цвета")

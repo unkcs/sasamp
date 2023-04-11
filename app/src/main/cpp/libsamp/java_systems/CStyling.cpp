@@ -134,3 +134,18 @@ Java_com_liverussia_cr_gui_styling_Styling_sendClickedCameraArrow(JNIEnv *env, j
 
     pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_styling_Styling_changeTonerColor(JNIEnv *env, jobject thiz, jint r,
+                                                            jint g, jint b, jint a) {
+    auto pPed = pGame->FindPlayerPed();
+
+    if(!pPed->IsInVehicle()) return;
+
+    auto pVehicle = pPed->GetCurrentVehicle();
+
+    pVehicle->toner.a = a;
+    pVehicle->toner.r = r;
+    pVehicle->toner.g = g;
+    pVehicle->toner.b = b;
+}

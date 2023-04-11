@@ -146,6 +146,7 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
+	CRGBA toner;
 	CRGB color;
 	enum eTurnState
 	{

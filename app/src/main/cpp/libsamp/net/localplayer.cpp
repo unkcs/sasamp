@@ -597,24 +597,12 @@ void CLocalPlayer::SendPrevClass()
 	RequestClass(m_iSelectedClass);
 }
 
-void CLocalPlayer::SendSpawn()
-{
-	RequestSpawn();
-	m_bWaitingForSpawnRequestReply = true;
-}
-
 void CLocalPlayer::RequestClass(int iClass)
 {
 	RakNet::BitStream bsSpawnRequest;
 	bsSpawnRequest.Write(iClass);
 	pNetGame->GetRakClient()->RPC(&RPC_RequestClass, &bsSpawnRequest, HIGH_PRIORITY, RELIABLE, 0, false, UNASSIGNED_NETWORK_ID,
                                   nullptr);
-}
-
-void CLocalPlayer::RequestSpawn()
-{
-	RakNet::BitStream bsSpawnRequest;
-	pNetGame->GetRakClient()->RPC(&RPC_RequestSpawn, &bsSpawnRequest, HIGH_PRIORITY, RELIABLE, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
 }
 
 uint32_t CLocalPlayer::GetPlayerColorAsARGB()
@@ -1154,9 +1142,6 @@ void CLocalPlayer::ProcessSpectating()
 
 void CLocalPlayer::ToggleSpectating(bool bToggle)
 {
-//	if(m_bIsSpectating && !bToggle)
-//		Spawn();
-
 	m_bIsSpectating = bToggle;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
 	m_SpectateID = 0xFFFFFFFF;

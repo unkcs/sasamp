@@ -190,8 +190,6 @@ public:
 	uint32_t GetPlayerColor();
 	void SetPlayerColor(uint32_t dwColor);
 	void RequestClass(int iClass);
-	void RequestSpawn();
-	bool HandlePassengerEntry();
 	void UpdateSurfing();
 	void SendEnterVehicleNotification(VEHICLEID VehicleID, bool bPassenger);
 	void SendExitVehicleNotification(VEHICLEID VehicleID);

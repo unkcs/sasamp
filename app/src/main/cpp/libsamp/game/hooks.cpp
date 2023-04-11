@@ -1651,7 +1651,13 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 				}
 			}
 		}
-		//int v11 = *(DWORD *)&color & 0xFFFFFF;
+		if(material->color.red == 255 && material->color.green == 255 && material->color.blue == 0){
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(material->color)), *reinterpret_cast<unsigned int*>(&(material->color)));
+			material->color.alpha = pVeh->toner.a;
+			material->color.green = pVeh->toner.g;
+			material->color.blue = pVeh->toner.b;
+			material->color.red = pVeh->toner.r;
+		}
 		if ( color == 0xFF3C )
 		{ // first color
 			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(material->color)), *reinterpret_cast<unsigned int*>(&(material->color)));

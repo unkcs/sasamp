@@ -77,10 +77,6 @@ public class Styling {
                 colorLayout = activity.findViewById(R.id.color_layout);
 
                 moneyText = (TextView)activity.findViewById(R.id.styling_money);
-                DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-                dfs.setGroupingSeparator(' ');
-                DecimalFormat df = new DecimalFormat("###,###,###", dfs);
-                moneyText.setText(df.format(money));
 
                 exitLayout = activity.findViewById(R.id.styling_exit);
                 exitImage = activity.findViewById(R.id.styling_exit_image);
@@ -107,10 +103,6 @@ public class Styling {
 
                 buyLayout = activity.findViewById(R.id.styling_buy_layout);
                 howMuchText = activity.findViewById(R.id.styling_howmuch);
-                DecimalFormatSymbols dfs1 = new DecimalFormatSymbols();
-                dfs.setGroupingSeparator('.');
-                DecimalFormat df1 = new DecimalFormat("###,###,###", dfs1);
-                howMuchText.setText(df1.format(total));
 
                 buyLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -173,10 +165,24 @@ public class Styling {
                     }
                 });
 
+                updateEverything(money, total);
+
                 mainLayout = activity.findViewById(R.id.main_layout);
                 mainLayout.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    void updateEverything(int money, int total) {
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setGroupingSeparator(' ');
+        DecimalFormat df = new DecimalFormat("###,###,###", dfs);
+        moneyText.setText(df.format(money));
+
+        DecimalFormatSymbols dfs1 = new DecimalFormatSymbols();
+        dfs1.setGroupingSeparator('.');
+        DecimalFormat df1 = new DecimalFormat("###,###,###", dfs1);
+        howMuchText.setText(df1.format(total));
     }
 
     void showColorPicker(int type)

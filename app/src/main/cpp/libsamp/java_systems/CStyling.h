@@ -13,7 +13,11 @@ public:
     static jclass clazz;
     static jobject thiz;
 
+    static bool bIsShow;
+
     static void show(int money, int total, int price1, int price2, int price3, int price4);
+
+    static void update(int money, int total);
 };
 
 #endif //LIVERUSSIA_CSTYLING_H

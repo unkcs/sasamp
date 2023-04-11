@@ -1651,8 +1651,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 				}
 			}
 		}
-		if(material->color.red == 255 && material->color.green == 255 && material->color.blue == 0)
-		{// toner
+		if(material->color.red == 255 && material->color.green == 255 && material->color.blue == 0){
 			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(material->color)), *reinterpret_cast<unsigned int*>(&(material->color)));
 			material->color.alpha = pVeh->toner.a;
 			material->color.green = pVeh->toner.g;

@@ -49,6 +49,7 @@
         <include layout="@layout/casino_bc" />
         <include layout="@layout/technical_inspection" />
         <include layout="@layout/donate"/>
+            <include layout="@layout/tire_shop"/>
         <include layout="@layout/sd_dialog" />
         <include layout="@layout/notification" />
 

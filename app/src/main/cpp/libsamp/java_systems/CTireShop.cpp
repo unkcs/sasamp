@@ -8,6 +8,9 @@
 #include "../game/game.h"
 #include "net/netgame.h"
 #include "util/CJavaWrapper.h"
+#include "CSpeedometr.h"
+
+#include "CHUD.h"
 
 jclass CTireShop::clazz = nullptr;
 jobject CTireShop::thiz = nullptr;
@@ -36,9 +39,10 @@ void CTireShop::show(bool toggle, uint32_t price) {
     if(CTireShop::thiz == nullptr)return;
 
     JNIEnv *env = g_pJavaWrapper->GetEnv();
+    int currentBalance = CHUD::iLocalMoney;
 
-    jmethodID method = env->GetMethodID(clazz, "showRendering", "(ZI)V");
-    env->CallVoidMethod(CTireShop::thiz, method, toggle, price);
+    jmethodID method = env->GetMethodID(clazz, "showRendering", "(ZII)V");
+    env->CallVoidMethod(CTireShop::thiz, method, toggle, price, currentBalance);
 
     if (toggle) {
         CTireShop::bIsShow = true;
@@ -132,10 +136,10 @@ Java_com_liverussia_cr_gui_tire_1shop_TireShop_chooseDisk(JNIEnv *env, jobject t
 
     // ------------ сидит в машине
 
-    CPlayerPed *pPlayerPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
-    CVehicle* pVehicle = pPlayerPed->GetCurrentVehicle();
-
-    pVehicle->AddVehicleUpgrade(disk_id);
+//    CPlayerPed *pPlayerPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
+//    CVehicle* pVehicle = pPlayerPed->GetCurrentVehicle();
+//
+//    pVehicle->AddVehicleUpgrade(disk_id);
 
 
 //    jmethodID method = env->GetMethodID(clazz, "clearKillList", "()V");

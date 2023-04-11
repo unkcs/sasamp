@@ -468,6 +468,9 @@ bool CLocalPlayer::Process()
 	}
 	////////////////////////////
 	bool needDrawableHud = true;
+	bool needDrawableChat = true;
+//	bool needDrawableMoney = true;
+
 	if(CDialog::bIsShow || pGame->isCasinoDiceActive || CTab::bIsShow || pGame->isAutoShopActive
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
@@ -477,7 +480,11 @@ bool CLocalPlayer::Process()
 		needDrawableHud = false;
 	}
 
-	CHUD::toggleAll(needDrawableHud);
+	if (CTireShop::bIsShow) {
+		needDrawableChat = false;
+	}
+
+	CHUD::toggleAll(needDrawableHud, needDrawableChat);
 
     if(m_bIsSpectating && !m_bIsActive)
     {

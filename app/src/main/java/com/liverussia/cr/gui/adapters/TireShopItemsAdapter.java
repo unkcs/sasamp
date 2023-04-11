@@ -97,6 +97,7 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
             dialogTitle.setText(itemInfo.getItemName());
 
             tireShop.setDialogItemInfo(itemInfo);
+            tireShop.resetBar();
         }
 
         notifyDataSetChanged();

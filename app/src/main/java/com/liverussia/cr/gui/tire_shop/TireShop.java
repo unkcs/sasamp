@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.liverussia.cr.R;
+import com.liverussia.cr.core.Samp;
 import com.liverussia.cr.gui.adapters.TireShopItemsAdapter;
 
 import java.text.DecimalFormat;
@@ -27,12 +28,20 @@ import lombok.Setter;
 public class TireShop implements View.OnClickListener {
 
     private static final String COST_TEXT_POSTFIX = " РУБ.";
+    private static final int EMPTY_BUTTON_VALUE = 0;
+    private static final int BAR_INITIAL_VALUE = 0;
+    private static final int BUY_BUTTON_ID = 1;
+    private static final int EXIT_BUTTON_ID = 7;
+    private static final int STOCK_BUTTON_ID = 8;
+    private static final int LEFT_CURSOR_BUTTON_ID = 9;
+    private static final int RIGHT_CURSOR_BUTTON_ID = 10;
 
     private Activity activity;
 
     private ConstraintLayout tireShopHud;
     private ConstraintLayout dialog;
     private TextView costText;
+    private TextView balanceText;
     private RecyclerView recyclerItems;
     private ImageView closeBtn;
     private ImageView goBackBtn;
@@ -61,7 +70,7 @@ public class TireShop implements View.OnClickListener {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
         otherSymbols.setGroupingSeparator('.');
         costFormat = new DecimalFormat("###,###.###", otherSymbols);
-        tireShopBarProgress = 0;
+        tireShopBarProgress = BAR_INITIAL_VALUE;
     }
 
     native void sendClickItem(int buttonId, float value);
@@ -77,6 +86,7 @@ public class TireShop implements View.OnClickListener {
             animation = AnimationUtils.loadAnimation(activity, R.anim.button_click);
 
             costText = activity.findViewById(R.id.cost_text);
+            balanceText = activity.findViewById(R.id.tire_shop_balance_text);
 
             goBackBtn = activity.findViewById(R.id.go_back_btn);
             goBackBtn.setOnClickListener(this);
@@ -129,7 +139,7 @@ public class TireShop implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.close_btn:
                 v.startAnimation(animation);
-                sendClickItem(7, 0);
+                sendClickItem(EXIT_BUTTON_ID, EMPTY_BUTTON_VALUE);
                 break;
             case R.id.go_back_btn:
                 v.startAnimation(animation);
@@ -137,32 +147,41 @@ public class TireShop implements View.OnClickListener {
                 break;
             case R.id.stock_btn:
                 v.startAnimation(animation);
-                sendClickItem(8, 0);
+                doStockButtonAction();
                 break;
             case R.id.dialog_cancel_btn:
                 v.startAnimation(animation);
-                dialog.setVisibility(View.GONE);
+                doDialogCancelButtonAction();
                 break;
             case R.id.dialog_continue_btn:
                 v.startAnimation(animation);
-                dialog.setVisibility(View.GONE);
                 doDialogContinueButtonAction();
                 break;
             case R.id.buy_btn:
                 v.startAnimation(animation);
-                sendClickItem(1, 0);
+                sendClickItem(BUY_BUTTON_ID, EMPTY_BUTTON_VALUE);
                 break;
             case R.id.left_cursor:
                 v.startAnimation(animation);
-                sendClickItem(9, 0);
+                sendClickItem(LEFT_CURSOR_BUTTON_ID, EMPTY_BUTTON_VALUE);
                 break;
             case R.id.right_cursor:
                 v.startAnimation(animation);
-                sendClickItem(10, 0);
+                sendClickItem(RIGHT_CURSOR_BUTTON_ID, EMPTY_BUTTON_VALUE);
                 break;
             default:
                 break;
         }
+    }
+
+    private void doStockButtonAction() {
+        sendClickItem(STOCK_BUTTON_ID, EMPTY_BUTTON_VALUE);
+        stockUi();
+    }
+
+    private void stockUi() {
+        resetBar();
+        doGoBackButtonAction();
     }
 
     private void doGoBackButtonAction() {
@@ -171,18 +190,23 @@ public class TireShop implements View.OnClickListener {
         tireShopItemsAdapter = new TireShopItemsAdapter(activity, viewPagerItems, this);
         recyclerItems.setAdapter(tireShopItemsAdapter);
 
-        //todo почему-то npe
-//                tireShopItemsAdapter.setItems(ItemInfo.getMainMenuItems());
-//                tireShopItemsAdapter.notifyDataSetChanged();
+//        todo почему-то npe
+//        tireShopItemsAdapter.setItems(ItemInfo.getMainMenuItems());
+//        tireShopItemsAdapter.notifyDataSetChanged();
 
         closeBtn.setVisibility(View.VISIBLE);
         goBackBtn.setVisibility(View.GONE);
     }
 
     private void doDialogContinueButtonAction() {
+        dialog.setVisibility(View.GONE);
         sendClickItem(dialogItemInfo.getTypeId(), tireShopBarProgress);
-        tireShopBarProgress = 0;
-        tireShopBar.setProgress(0);
+        resetBar();
+    }
+
+    private void doDialogCancelButtonAction() {
+        dialog.setVisibility(View.GONE);
+        resetBar();
     }
 
     public void handleConcreteItemInCategoryAction(ItemInfo itemInfo) {
@@ -192,57 +216,36 @@ public class TireShop implements View.OnClickListener {
         }
     }
 
-    public void showRendering(boolean toggle, int price) {
+    public void showRendering(boolean toggle, int price, int currentBalance) {
         activity.runOnUiThread(()-> {
             if (toggle) {
+
+                //todo разобраться почему появляется если отключать через нативку
+                ConstraintLayout speedometer = activity.findViewById(R.id.speedometer_main_layout);
+                speedometer.setVisibility(View.GONE);
+
                 if (View.VISIBLE == tireShopHud.getVisibility()) {
                     costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
+                    balanceText.setText(String.format("%s", Samp.formatter.format(currentBalance)));
                     return;
                 }
 
+                balanceText.setText(String.format("%s", Samp.formatter.format(currentBalance)));
                 costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
                 tireShopHud.setVisibility(View.VISIBLE);
                 closeBtn.setVisibility(View.VISIBLE);
                 viewPagerItems.addAll(ItemInfo.getMainMenuItems());
 
                 addItemsIntoViewPager();
-
-                updateVisibilitySpeedometerAndHood(View.GONE);
             } else {
+                resetBar();
                 tireShopHud.setVisibility(View.GONE);
+                dialog.setVisibility(View.GONE);
 
-                updateVisibilitySpeedometerAndHood(View.VISIBLE);
+                ConstraintLayout speedometer = activity.findViewById(R.id.speedometer_main_layout);
+                speedometer.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private void updateVisibilitySpeedometerAndHood(int visibility) {
-//        ConstraintLayout hud = activity.findViewById(R.id.hud_main);
-        ConstraintLayout chat = activity.findViewById(R.id.chat_input_layout);
-        chat.setVisibility(visibility);
-//        hud.setVisibility(visibility);
-
-        ImageView hudMenu = activity.findViewById(R.id.hud_menu);
-        hudMenu.setVisibility(visibility);
-
-        ConstraintLayout hudStars = activity.findViewById(R.id.hud_stars);
-        hudStars.setVisibility(visibility);
-
-        ConstraintLayout hudDownLayout = activity.findViewById(R.id.hud_down_layout);
-        hudDownLayout.setVisibility(visibility);
-
-        ImageView hudBg = activity.findViewById(R.id.hud_bg);
-        hudBg.setVisibility(visibility);
-
-        ConstraintLayout hudCenterBg = activity.findViewById(R.id.hud_center_bg);
-        hudCenterBg.setVisibility(visibility);
-
-//        ConstraintLayout hudLogo = activity.findViewById(R.id.hud_logo_img_layout);
-//        hudLogo.setVisibility(visibility);
-
-
-        ConstraintLayout speedometer = activity.findViewById(R.id.speedometer_main_layout);
-        speedometer.setVisibility(visibility);
     }
 
     private void addItemsIntoViewPager() {
@@ -252,5 +255,10 @@ public class TireShop implements View.OnClickListener {
 
     private int getResId(String res) {
         return activity.getResources().getIdentifier(res, "drawable", activity.getPackageName());
+    }
+
+    public void resetBar() {
+        tireShopBarProgress = BAR_INITIAL_VALUE;
+        tireShopBar.setProgress(BAR_INITIAL_VALUE);
     }
 }

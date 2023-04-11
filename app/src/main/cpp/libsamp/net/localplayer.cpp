@@ -207,7 +207,7 @@ bool CLocalPlayer::Process()
 						  m_pPlayerPed->drunk_level / 100);
 		}
 		// handle dead
-		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH || m_pPlayerPed->IsDead()) {
+		if (!m_bIsWasted && m_pPlayerPed->GetHealth() <= 0/*m_pPlayerPed->GetActionTrigger() == ACTION_DEATH || m_pPlayerPed->IsDead()*/) {
 			ToggleSpectating(false);
 			m_pPlayerPed->FlushAttach();
 			// reset tasks/anims
@@ -220,7 +220,7 @@ bool CLocalPlayer::Process()
 						m_pPlayerPed->GetGtaVehicle());
 			}
 
-			m_pPlayerPed->SetHealth(0.0f);
+	//		m_pPlayerPed->SetHealth(0.0f);
 			m_pPlayerPed->SetDead();
 			SendWastedNotification();
 
@@ -711,11 +711,7 @@ bool CLocalPlayer::Spawn(int skin, const CVector pos, float rot, int interior)
 	m_bIsWasted = false;
 	m_bIsActive = true;
 	m_bWaitingForSpawnRequestReply = false;
-
-	RakNet::BitStream bsSendSpawn;
-	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
-		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
-
+	
 	return true;
 }
 

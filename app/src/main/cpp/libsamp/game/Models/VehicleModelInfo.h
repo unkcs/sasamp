@@ -10,6 +10,7 @@
 #include "game/Enums/eVehicleClass.h"
 #include "../quaternion.h"
 #include "../CVector.h"
+#include "game/RW/rpworld.h"
 
 enum eVehicleDummy {
     DUMMY_LIGHT_FRONT_MAIN      = 0,
@@ -111,6 +112,7 @@ struct CVehicleModelInfo : public CClumpModelInfo {
         char* m_animBlockFileName;
         unsigned int m_dwAnimBlockIndex;
     };
+
 };
 
 

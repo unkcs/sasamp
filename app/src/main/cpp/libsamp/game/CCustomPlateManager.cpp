@@ -65,10 +65,10 @@ RwTexture* CCustomPlateManager::ProcessUaPlate(SCustomPlate& plate)
 	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
 
 	CRGBA white;
-	white.A = 255;
-	white.R = 255;
-	white.G = 255;
-	white.B = 255;
+	white.a = 255;
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
 
 	m_pRenderTarget->Begin();
 	m_pUaSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
@@ -119,10 +119,10 @@ RwTexture* CCustomPlateManager::ProcessBuPlate(SCustomPlate& plate)
 	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
 
 	CRGBA white;
-	white.A = 255;
-	white.R = 255;
-	white.G = 255;
-	white.B = 255;
+	white.a = 255;
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
 
 	m_pRenderTarget->Begin();
 	m_pBuSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
@@ -204,10 +204,10 @@ RwTexture* CCustomPlateManager::ProcessKzPlate(SCustomPlate& plate)
 	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
 
 	CRGBA white;
-	white.A = 255;
-	white.R = 255;
-	white.G = 255;
-	white.B = 255;
+	white.a = 255;
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
 
 	m_pRenderTarget->Begin();
 	m_pKzSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
@@ -282,10 +282,10 @@ RwTexture* CCustomPlateManager::ProcessRuPolicePlate(SCustomPlate& plate)
 	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
 
 	CRGBA white;
-	white.A = 255;
-	white.R = 255;
-	white.G = 255;
-	white.B = 255;
+	white.a = 255;
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
 
 	m_pRenderTarget->Begin();
 	m_pRuPoliceSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
@@ -369,10 +369,10 @@ RwTexture* CCustomPlateManager::ProcessRuPlate(SCustomPlate& plate)
 	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
 
 	CRGBA white;
-	white.A = 255;
-	white.R = 255;
-	white.G = 255;
-	white.B = 255;
+	white.a = 255;
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
 
 	m_pRenderTarget->Begin();
 	m_pRuSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);

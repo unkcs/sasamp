@@ -1620,20 +1620,18 @@ int _rwFreeListFreeReal_hook(int a1, unsigned int a2)
 	}
 }
 
-uintptr_t* CTouchInterface__m_bWidgets;
-
-
 std::list<std::pair<unsigned int*, unsigned int>> resetEntriesVehicle;
 
 
 RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 {
+	int color = *(int*)&material->color & 0xFFFFFF;
+	auto pVeh = (CVehicle*)data;
+
 	if (material)
 	{
 		if (material->texture)
 		{
-			CVehicle* pVeh = (CVehicle*)data;
-
 			for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
 			{
 				if (pVeh->m_bReplaceTextureStatus[i])
@@ -1653,17 +1651,22 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
 				}
 			}
 		}
+		//int v11 = *(DWORD *)&color & 0xFFFFFF;
+		if ( color == 0xFF3C )
+		{ // first color
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(material->color)), *reinterpret_cast<unsigned int*>(&(material->color)));
+			material->color.alpha = 255;
+			material->color.green = pVeh->color.g;
+			material->color.blue = pVeh->color.b;
+			material->color.red = pVeh->color.r;
+		}
 	}
 	return material;
 }
 
 RpAtomic* CVehicle__SetupRenderCB(RpAtomic* atomic, void* data)
 {
-	if (atomic->geometry)
-	{
-		((RpGeometry * (*)(RpGeometry*, uintptr_t, void*))(g_libGTASA + 0x001E284C + 1))(atomic->geometry, (uintptr_t)CVehicle__SetupRenderMatCB, (void*)data); // RpGeometryForAllMaterials
-	}
-
+	RpGeometryForAllMaterials(RpAtomicGetGeometry(atomic), CVehicle__SetupRenderMatCB, data);
 	return atomic;
 }
 #include "..//cryptors/MODELINFO_EDITABLE_result.h"
@@ -1681,8 +1684,9 @@ void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
 			{
 				if (pVehicle->m_bReplacedTexture)
 				{
-					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
-					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(clump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
+					RpClumpForAllAtomics(clump, CVehicle__SetupRenderCB, &pVehicle);
+//					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
+//					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(clump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
 				}
 			}
 		}

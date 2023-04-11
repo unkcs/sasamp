@@ -1,5 +1,6 @@
 package com.liverussia.launcher.async.task;
 
+import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.UiThread;
@@ -18,6 +19,7 @@ import com.liverussia.launcher.error.apiException.ApiException;
 import com.liverussia.launcher.error.apiException.ErrorContainer;
 import com.liverussia.launcher.service.ActivityService;
 import com.liverussia.launcher.service.impl.ActivityServiceImpl;
+import com.liverussia.launcher.utils.MD5;
 import com.techyourchance.threadposter.BackgroundThreadPoster;
 import com.techyourchance.threadposter.UiThreadPoster;
 
@@ -191,6 +193,7 @@ public class CacheChecker implements Listener<FileInfo[]> {
                 .concat("/")
                 .concat(filePath)
         );
+    //    !MD5.checkMD5(fileInfo.getHash(), file)
         return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
     }
 

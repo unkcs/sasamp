@@ -1,94 +1,103 @@
-#include "rgba.h"
+/*
+    Plugin-SDK file
+    Authors: GTA Community. See more here
+    https://github.com/DK22Pac/plugin-sdk
+    Do not delete this comment block. Respect others' work!
+*/
 
-CRGBA::CRGBA(unsigned char red, unsigned char green, unsigned blue)
+#include "RGBA.h"
+
+CRGBA::CRGBA(RwRGBAReal rgba) :
+        CRGBA{
+                (uint8_t)(rgba.red * 255.f),
+                (uint8_t)(rgba.green * 255.f),
+                (uint8_t)(rgba.blue * 255.f),
+                (uint8_t)(rgba.alpha * 255.f)
+        }
 {
-    Set(red, green, blue, 255);
 }
 
-CRGBA::CRGBA(unsigned char red, unsigned char green, unsigned blue, unsigned char alpha)
-{
-    Set(red, green, blue, alpha);
+void CRGBA::Set(uint8_t red, uint8_t green, uint8_t blue) {
+    r = red;
+    g = green;
+    b = blue;
 }
 
-CRGBA::CRGBA(CRGBA const &rhs)
-{
-    Set(rhs);
-}
-
-CRGBA::CRGBA(unsigned int intValue)
-{
-    Set(intValue);
-}
-
-CRGBA::CRGBA(){}
-
-void CRGBA::Set(unsigned char red, unsigned char green, unsigned blue)
-{
-    R = red;
-    G = green;
-    B = blue;
-}
-
-void CRGBA::Set(unsigned char red, unsigned char green, unsigned blue, unsigned char alpha)
-{
+void CRGBA::Set(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     Set(red, green, blue);
-    A = alpha;
-}  
-
-void CRGBA::Set(CRGBA const &rhs)
-{
-    Set(rhs.R, rhs.G, rhs.B, rhs.A);
+    a = alpha;
 }
 
-void CRGBA::Set(CRGBA const &rhs, unsigned char alpha)
-{
-    Set(rhs.R, rhs.G, rhs.B, alpha);
+void CRGBA::Set(uint32_t intValue) {
+    r = (uint8_t)(intValue >> 24);
+    g = (uint8_t)(intValue >> 16);
+    b = (uint8_t)(intValue >> 8 );
+    a = (uint8_t)(intValue >> 0 );
 }
 
-void CRGBA::Set(unsigned int intValue)
-{
-    R = (intValue >> 24) & 0xFF;
-    G = (intValue >> 16) & 0xFF;
-    B = (intValue >> 8) & 0xFF;
-    A = intValue & 0xFF;
+void CRGBA::Set(const CRGBA& rhs) {
+    Set(rhs.r, rhs.g, rhs.b, rhs.a);
 }
 
-CRGBA CRGBA::ToRGB() const
-{
-    return CRGBA(R, G, B, 255);
+void CRGBA::Set(const CRGBA& rhs, uint8_t alpha) {
+    Set(rhs.r, rhs.g, rhs.b, alpha);
 }
 
-unsigned int CRGBA::ToInt() const
-{
-    return A | (B << 8) | (G << 16) | (R << 24);
+void CRGBA::Set(const RwRGBA& rwcolor) {
+    Set(rwcolor.red, rwcolor.green, rwcolor.blue, rwcolor.alpha);
 }
 
-unsigned int CRGBA::ToIntARGB() const
-{
-    return B | (G << 8) | (R << 16) | (A << 24);
+uint32_t CRGBA::ToInt() const { // RGBA (msb(r) -> lsb(a))
+    return a | (b << 8) | (g << 16) | (r << 24);
 }
 
-void CRGBA::Invert()
-{
-    Set(255 - R, 255 - G, 255 - B);
+uint32_t CRGBA::ToIntARGB() const {
+    return b | (g << 8) | (r << 16) | (a << 24);
 }
 
-CRGBA CRGBA::Inverted() const
-{
+RwRGBA CRGBA::ToRwRGBA() const {
+    return { r, g, b, a };
+}
+
+void CRGBA::FromRwRGBA(const RwRGBA& rwcolor) {
+    Set(rwcolor);
+}
+
+void CRGBA::FromARGB(uint32_t intValue) {
+    a = (intValue >> 24) & 0xFF;
+    r = (intValue >> 16) & 0xFF;
+    g = (intValue >> 8) & 0xFF;
+    b = intValue & 0xFF;
+}
+
+CRGBA CRGBA::FromInt32(int32_t red, int32_t green, int32_t blue, int32_t alpha) {
+    return {
+            static_cast<uint8_t>(red),
+            static_cast<uint8_t>(green),
+            static_cast<uint8_t>(blue),
+            static_cast<uint8_t>(alpha),
+    };
+}
+
+void CRGBA::Invert() {
+    Set(255 - r, 255 - g, 255 - b);
+}
+
+CRGBA CRGBA::Inverted() const {
     CRGBA invertedColor = *this;
     invertedColor.Invert();
     return invertedColor;
 }
 
-bool CRGBA::operator==(CRGBA const &rhs) const
-{
-
+bool CRGBA::operator==(const CRGBA& rhs) const {
+    return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
 }
 
-CRGBA &CRGBA::operator=(CRGBA const &rhs)
-{
-	this->A = rhs.A;
-	this->B = rhs.B;
-	this->G = rhs.G;
-	this->R = rhs.R;
+CRGBA& CRGBA::operator=(const CRGBA& rhs) {
+    Set(rhs);
+    return *this;
+}
+
+CRGBA CRGBA::ToRGB() const {
+    return CRGBA(r, g, b, 255);
 }

@@ -59,10 +59,10 @@ void CWidget::Draw()
 	if (!m_pSprite) return;
 	if (!m_bShouldBeDrawn) return;
 	CRGBA col;
-	col.A = 255;
-	col.B = 255;
-	col.G = 255;
-	col.R = 255;
+	col.a = 255;
+	col.b = 255;
+	col.g = 255;
+	col.r = 255;
 	if (m_iState == 2)
 	{
 		if (GetTickCount() - m_dwLastTickClicked >= 75)
@@ -73,10 +73,10 @@ void CWidget::Draw()
 	if (m_iState == 1)
 	{
 		//9CCF9C
-		col.A = 255;
-		col.B = 0x9C;
-		col.G = 0xCF;
-		col.R = 0x9C;
+		col.a = 255;
+		col.b = 0x9C;
+		col.g = 0xCF;
+		col.r = 0x9C;
 	}
 	if (m_bColoured)
 	{
@@ -96,10 +96,10 @@ bool CWidget::IsXYInRect(float x, float y)
 
 void CWidget::SetColor(uint8_t a, uint8_t r, uint8_t g, uint8_t b)
 {
-	color.A = a;
-	color.R = r;
-	color.G = g;
-	color.B = b;
+	color.a = a;
+	color.r = r;
+	color.g = g;
+	color.b = b;
 	m_bColoured = true;
 }
 

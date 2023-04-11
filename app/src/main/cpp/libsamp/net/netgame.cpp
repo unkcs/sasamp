@@ -598,9 +598,9 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			bs.Read(pos.y);
 			bs.Read(pos.z);
 			bs.Read(rotation);
-			bs.Read(interior);
+			//bs.Read(interior);
 
-			m_pPlayerPool->GetLocalPlayer()->Spawn(pos, rotation, interior);
+			m_pPlayerPool->GetLocalPlayer()->Spawn(pos, rotation);
 			break;
 		}
 		case RPC_SHOW_FACTORY_GAME:

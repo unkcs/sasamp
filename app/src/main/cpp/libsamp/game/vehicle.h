@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.h"
+#include "RGB.h"
 
 enum E_CUSTOM_COMPONENTS
 {
@@ -145,6 +146,7 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
+	CRGB color;
 	enum eTurnState
 	{
 		TURN_OFF,

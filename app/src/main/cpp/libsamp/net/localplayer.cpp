@@ -669,10 +669,10 @@ void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 	m_bHasSpawnInfo = true;
 }
 
-bool CLocalPlayer::Spawn(const CVector pos, float rot, int interior)
+bool CLocalPlayer::Spawn(const CVector pos, float rot)
 {
 	//if(!m_bHasSpawnInfo) return false;
-	m_pPlayerPed->SetInterior(interior);
+	//m_pPlayerPed->SetInterior(interior);
 
     //g_pJavaWrapper->ShowSpeed();
 

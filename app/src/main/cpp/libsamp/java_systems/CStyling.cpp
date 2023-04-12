@@ -58,16 +58,11 @@ void CNetGame::packetStylingCenter(Packet* p)
     bs.Read(price_4);
 
     if(toggle && !CStyling::bIsShow) {
-        CStyling::bIsShow = true;
         CStyling::show(balance, total, price_1, price_2, price_3, price_4);
     }
     else if(toggle && CStyling::bIsShow)
     {
         CStyling::update(balance, total);
-    }
-    else if(!toggle && CStyling::bIsShow)
-    {
-        CStyling::bIsShow = false;
     }
 }
 
@@ -75,6 +70,8 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_styling_Styling_exitClick(JNIEnv *env, jobject thiz) {
     // TODO: implement exitClick()
+    CStyling::bIsShow = false;
+
     RakNet::BitStream bsSend;
     bsSend.Write(ID_CUSTOM_RPC);
     bsSend.Write(RPC_STYLING_CENTER);
@@ -133,4 +130,17 @@ Java_com_liverussia_cr_gui_styling_Styling_sendClickedCameraArrow(JNIEnv *env, j
         bsSend.Write((uint8_t)4);
 
     pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject thiz, jint type,
+                                                         jint r, jint g, jint b, jint a) {
+    auto pPed = pGame->FindPlayerPed();
+
+    if(!pPed->IsInVehicle()) return;
+
+    auto pVehicle = pPed->GetCurrentVehicle();
+
+    pVehicle->color.Set(r, g, b, 255);
 }

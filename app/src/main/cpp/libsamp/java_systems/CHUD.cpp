@@ -83,23 +83,6 @@ void CHUD::toggleAll(bool toggle, bool withchat)
     {
         return;
     }
-    if(pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->IsInVehicle())
-    {
-        if(!toggle)
-        {
-            if(CSpeedometr::bIsShow)
-            {
-                CSpeedometr::tempToggle(false);
-            }
-        }
-        else
-        {
-            if(CSpeedometr::bIsShow)
-            {
-                CSpeedometr::tempToggle(true);
-            }
-        }
-    }
 
     bIsShow = toggle;
 

@@ -74,6 +74,13 @@ public class StylingColorPickerDialog extends MaterialAlertDialogBuilder impleme
             public void onColorSelected(ColorEnvelope colorEnvelope, boolean z) {
                 RGB1 = new RGB();
                 RGB1 = colorConverter(Long.decode("#" + colorEnvelope.getHexCode()));
+                styling.onChangeColor(
+                        type,
+                        colorEnvelope.getArgb()[1],
+                        colorEnvelope.getArgb()[2],
+                        colorEnvelope.getArgb()[3],
+                        colorEnvelope.getArgb()[0]
+                );
                 Log.d("x1y2z", " " + RGB1.r + " " + RGB1.g + " " + RGB1.b);
             }
         });

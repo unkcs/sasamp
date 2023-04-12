@@ -73,7 +73,7 @@ void CVehiclePool::Process()
 						pVehicle->toggleReverseLight(false);
 					}
 				}
-				if(pVehicle->m_iTurnState == CVehicle::eTurnState::TURN_RIGHT)
+				if(pVehicle->m_iTurnState == eTurnState::TURN_RIGHT)
 				{
 					if( !pVehicle->m_bIsOnRightTurnLight ) {
 						pVehicle->toggleLeftTurnLight(false);
@@ -81,21 +81,21 @@ void CVehiclePool::Process()
 					}
 
 				}
-				else if(pVehicle->m_iTurnState == CVehicle::eTurnState::TURN_LEFT)
+				else if(pVehicle->m_iTurnState == eTurnState::TURN_LEFT)
 				{
 					if( !pVehicle->m_bIsOnLeftTurnLight ) {
 						pVehicle->toggleRightTurnLight(false);
 						pVehicle->toggleLeftTurnLight(true);
 					}
 				}
-				else if(pVehicle->m_iTurnState == CVehicle::eTurnState::TURN_ALL)
+				else if(pVehicle->m_iTurnState == eTurnState::TURN_ALL)
 				{
 					if( !pVehicle->m_bIsOnAllTurnLight )
 					{
 						pVehicle->toggleLeftTurnLight(true);
 						pVehicle->toggleRightTurnLight(true);
 						pVehicle->m_bIsOnAllTurnLight = true;
-                        pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_ALL;
+                        pVehicle->m_iTurnState = eTurnState::TURN_ALL;
 					}
 
 				}
@@ -113,7 +113,7 @@ void CVehiclePool::Process()
 
 					}
 					pVehicle->m_bIsOnAllTurnLight = false;
-					pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_OFF;
+					pVehicle->m_iTurnState = eTurnState::TURN_OFF;
 				}
 
 				pVehicle->SetEngineState(pVehicle->m_bEngineOn);

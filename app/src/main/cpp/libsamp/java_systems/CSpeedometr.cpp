@@ -12,13 +12,13 @@
 jclass  CSpeedometr::clazz = nullptr;
 jobject CSpeedometr::thiz = nullptr;
 bool    CSpeedometr::bIsShow = false;
-bool    CSpeedometr::bIsNoNeedDraw = false;
+//bool    CSpeedometr::bIsNoNeedDraw = false;
 float   CSpeedometr::fFuel = 0.0f;
 int     CSpeedometr::iMilliage = 0;
 
 void CSpeedometr::show()
 {
-    if( CSpeedometr::bIsShow ) return;
+    if( CSpeedometr::bIsShow) return;
 
     JNIEnv* env = g_pJavaWrapper->GetEnv();
     // construct
@@ -30,17 +30,17 @@ void CSpeedometr::show()
     CSpeedometr::bIsShow = true;
 }
 
-void CSpeedometr::tempToggle(bool toggle)
-{
-    if( !CSpeedometr::bIsShow ) return;
-
-    bIsNoNeedDraw = !toggle;
-
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-
-    jmethodID method = env->GetMethodID(CSpeedometr::clazz, "tempToggle", "(Z)V");
-    env->CallVoidMethod(CSpeedometr::thiz, method, toggle);
-}
+//void CSpeedometr::tempToggle(bool toggle)
+//{
+//    if( !CSpeedometr::bIsShow ) return;
+//
+//    bIsNoNeedDraw = !toggle;
+//
+//    JNIEnv* env = g_pJavaWrapper->GetEnv();
+//
+//    jmethodID method = env->GetMethodID(CSpeedometr::clazz, "tempToggle", "(Z)V");
+//    env->CallVoidMethod(CSpeedometr::thiz, method, toggle);
+//}
 
 void CSpeedometr::hide()
 {
@@ -109,10 +109,10 @@ Java_com_liverussia_cr_gui_Speedometer_sendClick(JNIEnv *env, jobject thiz, jint
             CPlayerPed *pPlayerPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
             CVehicle* pVehicle = pPlayerPed->GetCurrentVehicle();
 
-            if(pVehicle->m_iTurnState == CVehicle::eTurnState::TURN_LEFT)
-                pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_OFF;
+            if(pVehicle->m_iTurnState == eTurnState::TURN_LEFT)
+                pVehicle->m_iTurnState = eTurnState::TURN_OFF;
             else
-                pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_LEFT;
+                pVehicle->m_iTurnState = eTurnState::TURN_LEFT;
 
             break;
         }
@@ -121,10 +121,10 @@ Java_com_liverussia_cr_gui_Speedometer_sendClick(JNIEnv *env, jobject thiz, jint
             CPlayerPed *pPlayerPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
             CVehicle* pVehicle = pPlayerPed->GetCurrentVehicle();
 
-            if(pVehicle->m_iTurnState == CVehicle::eTurnState::TURN_RIGHT)
-                pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_OFF;
+            if(pVehicle->m_iTurnState == eTurnState::TURN_RIGHT)
+                pVehicle->m_iTurnState = eTurnState::TURN_OFF;
             else
-                pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_RIGHT;
+                pVehicle->m_iTurnState = eTurnState::TURN_RIGHT;
 
             break;
         }
@@ -133,10 +133,10 @@ Java_com_liverussia_cr_gui_Speedometer_sendClick(JNIEnv *env, jobject thiz, jint
             CPlayerPed *pPlayerPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
             CVehicle* pVehicle = pPlayerPed->GetCurrentVehicle();
 
-            if(pVehicle->m_iTurnState == CVehicle::eTurnState::TURN_ALL)
-                pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_OFF;
+            if(pVehicle->m_iTurnState == eTurnState::TURN_ALL)
+                pVehicle->m_iTurnState = eTurnState::TURN_OFF;
             else
-                pVehicle->m_iTurnState = CVehicle::eTurnState::TURN_ALL;
+                pVehicle->m_iTurnState = eTurnState::TURN_ALL;
 
             break;
         }

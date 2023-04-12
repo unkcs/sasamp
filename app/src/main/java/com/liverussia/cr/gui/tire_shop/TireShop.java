@@ -220,10 +220,6 @@ public class TireShop implements View.OnClickListener {
         activity.runOnUiThread(()-> {
             if (toggle) {
 
-                //todo разобраться почему появляется если отключать через нативку
-                ConstraintLayout speedometer = activity.findViewById(R.id.speedometer_main_layout);
-                speedometer.setVisibility(View.GONE);
-
                 if (View.VISIBLE == tireShopHud.getVisibility()) {
                     costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
                     balanceText.setText(String.format("%s", Samp.formatter.format(currentBalance)));
@@ -241,9 +237,6 @@ public class TireShop implements View.OnClickListener {
                 resetBar();
                 tireShopHud.setVisibility(View.GONE);
                 dialog.setVisibility(View.GONE);
-
-                ConstraintLayout speedometer = activity.findViewById(R.id.speedometer_main_layout);
-                speedometer.setVisibility(View.VISIBLE);
             }
         });
     }

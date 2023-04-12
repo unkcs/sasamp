@@ -69,8 +69,8 @@ void CNetGame::packetStylingCenter(Packet* p)
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_styling_Styling_exitClick(JNIEnv *env, jobject thiz) {
-    // TODO: implement exitClick()
     CStyling::bIsShow = false;
+    CStyling::thiz = nullptr;
 
     RakNet::BitStream bsSend;
     bsSend.Write(ID_CUSTOM_RPC);
@@ -142,5 +142,26 @@ Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject th
 
     auto pVehicle = pPed->GetCurrentVehicle();
 
-    pVehicle->color.Set(r, g, b, 255);
+    switch(type) {
+        case 1: {
+            // light
+            pVehicle->lightColor.Set(r, g, b, 50);
+            break;
+        }
+        case 2: {
+            // toner
+            pVehicle->tonerColor.Set(r, g, b, 255);
+            break;
+        }
+        case 3: {
+            // body
+            pVehicle->mainColor.Set(r, g, b, 255);
+            break;
+        }
+        case 0: {
+            // neon
+            pVehicle->SetCustomShadow(r, g, b, 5.0, 5.0, nullptr);
+        }
+    }
+
 }

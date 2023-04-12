@@ -9,7 +9,7 @@
 
 #include "TimeInfo.h"
 
-enum ModelInfoType : unsigned char {
+enum ModelInfoType : uint8_t {
     MODEL_INFO_ATOMIC = 1,
     MODEL_INFO_TIME = 3,
     MODEL_INFO_WEAPON = 4,
@@ -18,6 +18,19 @@ enum ModelInfoType : unsigned char {
     MODEL_INFO_PED = 7,
     MODEL_INFO_LOD = 8
 };
+
+class CTimeInfo;
+
+class CAtomicModelInfo;
+class CClumpModelInfo;
+class CDamageAtomicModelInfo;
+class CLodAtomicModelInfo;
+class CLodTimeModelInfo;
+class CPedModelInfo;
+class CTimeModelInfo;
+class CVehicleModelInfo;
+class CWeaponModelInfo;
+struct RwObject;
 
 struct CBaseModelInfo {
     uintptr_t 	vtable;
@@ -80,6 +93,10 @@ struct CBaseModelInfo {
         uintptr_t *m_pRwClump;
         struct RpAtomic *m_pRwAtomic;
     };
+
+    CVehicleModelInfo* AsVehicleModelInfoPtr() { return reinterpret_cast<CVehicleModelInfo*>(this); }
+    CPedModelInfo*     AsPedModelInfoPtr()     { return reinterpret_cast<CPedModelInfo*>(this); }
+    CWeaponModelInfo*  AsWeaponModelInfoPtr()  { return reinterpret_cast<CWeaponModelInfo*>(this); }
 };
 // sizeof=0x38
 

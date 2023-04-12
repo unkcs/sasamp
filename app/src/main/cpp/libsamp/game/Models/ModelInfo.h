@@ -29,6 +29,8 @@ public:
     static CVehicleModelInfo *AddVehicleModel(int index);
 
     static CBaseModelInfo* GetModelInfo(int index) { return ms_modelInfoPtrs[index]; }
+    static auto GetPedModelInfo(int32_t index) { return GetModelInfo(index)->AsPedModelInfoPtr(); }
+    static auto GetVehicleModelInfo(int32_t index) { return GetModelInfo(index)->AsVehicleModelInfoPtr(); }
     static void SetModelInfo(int index, CBaseModelInfo* pInfo) { ms_modelInfoPtrs[index] = pInfo; }
 };
 

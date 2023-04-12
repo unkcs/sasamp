@@ -1626,44 +1626,43 @@ std::list<std::pair<unsigned int*, unsigned int>> resetEntriesVehicle;
 RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 {
 	auto pVeh = (CVehicle*)data;
-
+	int color = *(int*)&mat->color;
 	if (mat)
 	{
-		if (mat->texture)
+		if(mat->texture)
 		{
-			for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
+			if (!strcmp(mat->texture->name, "remap_plate"))
 			{
-				if (pVeh->m_bReplaceTextureStatus[i])
-				{
-					if (!strcmp(&(mat->texture->name[0]), &(pVeh->m_szReplacedTextures[i].szOld[0])))
-					{
-						if (pVeh->m_szReplacedTextures[i].pTexture)
-						{
-							resetEntriesVehicle.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&(mat->texture)), *reinterpret_cast<unsigned int*>(&(mat->texture))));
-							mat->texture = pVeh->m_szReplacedTextures[i].pTexture;
-							if (strstr(pVeh->m_szReplacedTextures[i].szOld, "ret_t"))
-							{
-								mat->color.alpha = 255;
-							}
-						}
-					}
+				resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->texture)), *reinterpret_cast<unsigned int*>(&(mat->texture)));
+				if(pVeh->pPlateTexture) {
+					mat->texture = pVeh->pPlateTexture;
+				} else{
+					mat->texture = CCustomPlateManager::pNoPlateTex;
 				}
+				mat->color.alpha = 255;
+
+				return mat;
 			}
 		}
-		if(mat->color.red == 255 && mat->color.green == 255 && mat->color.blue == 0){
+		if(mat->color.red == 255 && mat->color.green == 255 && mat->color.blue == 0)
+		{ // toner
 			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
-			mat->color.alpha = pVeh->toner.a;
-			mat->color.green = pVeh->toner.g;
-			mat->color.blue = pVeh->toner.b;
-			mat->color.red = pVeh->toner.r;
+			mat->color.alpha = pVeh->tonerColor.a;
+			mat->color.green = pVeh->tonerColor.g;
+			mat->color.blue = pVeh->tonerColor.b;
+			mat->color.red = pVeh->tonerColor.r;
+
+			return mat;
 		}
-		if ( mat->color.red == 60 && mat->color.green == 255 && mat->color.blue == 0 )
+		if ( color == 0xff00ff3c )
 		{ // first color
 			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
 			mat->color.alpha = 255;
-			mat->color.green = pVeh->color.g;
-			mat->color.blue = pVeh->color.b;
-			mat->color.red = pVeh->color.r;
+			mat->color.green = pVeh->mainColor.g;
+			mat->color.blue = pVeh->mainColor.b;
+			mat->color.red = pVeh->mainColor.r;
+
+			return mat;
 		}
 	}
 	return mat;
@@ -1683,16 +1682,11 @@ void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
 	{
 		if (pNetGame->GetVehiclePool())
 		{
-			VEHICLEID vehId = pNetGame->GetVehiclePool()->FindIDFromRwObject(&clump->object);
-			CVehicle *pVehicle = pNetGame->GetVehiclePool()->GetAt(vehId);
+			auto vehId = pNetGame->GetVehiclePool()->FindIDFromRwObject(&clump->object);
+			auto pVehicle = pNetGame->GetVehiclePool()->GetAt(vehId);
 			if (pVehicle)
 			{
-				if (pVehicle->m_bReplacedTexture)
-				{
-					RpClumpForAllAtomics(clump, CVehicle__SetupRenderCB, pVehicle);
-//					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
-//					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(clump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
-				}
+				RpClumpForAllAtomics(clump, CVehicle__SetupRenderCB, pVehicle);
 			}
 		}
 	}
@@ -1738,7 +1732,7 @@ void CGame__Process_hook()
 		once = true;
 	}
 
-	CCustomPlateManager::Process();
+	//CCustomPlateManager::Process();
 }
 
 #include "..//cryptors/AUTOMOBILE_COLLISION_result.h"
@@ -1790,14 +1784,6 @@ void CAutomobile__ProcessEntityCollision_hook(VEHICLE_TYPE* a1, ENTITY_TYPE* a2,
 	}
 }
 
-//void MainMenuScreen__OnExit(uintptr_t* thiz)
-//{
-//	pGame->bIsGameExiting = true;
-//
-//	//delete pNetGame;
-//
-//	//g_pJavaWrapper->ExitGame();
-//}
 void (*MainMenuScreen__OnExit)();
 void MainMenuScreen__OnExit_hook()
 {
@@ -1809,8 +1795,8 @@ void MainMenuScreen__OnExit_hook()
 }
 
 // TODO: VEHICLE RESET SUSPENSION
-void (*CShadows__StoreCarLightShadow)(VEHICLE_TYPE* vehicle, int id, RwTexture* texture, VECTOR* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle);
-void CShadows__StoreCarLightShadow_hook(VEHICLE_TYPE* vehicle, int id, RwTexture* texture, VECTOR* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle)
+void (*CShadows__StoreCarLightShadow)(VEHICLE_TYPE* vehicle, int id, RwTexture* texture, CVector* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle);
+void CShadows__StoreCarLightShadow_hook(VEHICLE_TYPE* vehicle, int id, RwTexture* texture, CVector* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle)
 {
 	uint8_t r, g, b;
 	r = red;
@@ -1853,7 +1839,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 	float v18; // s15
 	float v19; // ST08_4
 
-	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
+	uintptr_t* dwModelarray = (uintptr_t*)CModelInfo::ms_modelInfoPtrs;
 
 	v2 = pVeh->m_pVehicle;
 	v3 = *((uintptr_t*)v2 + 5);
@@ -1880,21 +1866,21 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 
 	v19 = v15 * v18;
 
-	VECTOR pos;
+	CVector pos;
 	memcpy(&pos, &(v2->entity.mat->pos), sizeof(VECTOR));
-	pos.Z += 2.0f;
+	pos.z += 2.0f;
 
 	CShadows__StoreCarLightShadow(
-		v2,
-		(uintptr_t)v2 + 24,
-		pVeh->m_Shadow.pTexture,
-		&pos,
-		(float)(v15 + v15) * v17 * pVeh->m_Shadow.fSizeX,
-		(float)(v15 + v15) * v18 * pVeh->m_Shadow.fSizeX,
-		v19 * pVeh->m_Shadow.fSizeY,
-		-(float)(v15 * v17) * pVeh->m_Shadow.fSizeY,
-		pVeh->m_Shadow.r, pVeh->m_Shadow.g, pVeh->m_Shadow.b,
-		7.0f);
+			v2,
+			(uintptr_t)v2 + 24,
+			pVeh->m_Shadow.pTexture,
+			&pos,
+			(float)(v15 + v15) * v17 * pVeh->m_Shadow.fSizeX,
+			(float)(v15 + v15) * v18 * pVeh->m_Shadow.fSizeX,
+			v19 * pVeh->m_Shadow.fSizeY,
+			-(float)(v15 * v17) * pVeh->m_Shadow.fSizeY,
+			pVeh->m_Shadow.r, pVeh->m_Shadow.g, pVeh->m_Shadow.b,
+			7.0f);
 }
 
 void (*CVehicle__DoHeadLightBeam)(VEHICLE_TYPE* vehicle, int arg0, RwMatrix& matrix, unsigned char arg2);

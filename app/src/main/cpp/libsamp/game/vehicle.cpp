@@ -83,15 +83,6 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		}
 	}
 
-	for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
-	{
-		m_bReplaceTextureStatus[i] = false;
-		memset(&(m_szReplacedTextures[i].szOld[0]), 0, MAX_REPLACED_TEXTURE_NAME);
-		m_szReplacedTextures[i].pTexture = nullptr;
-	}
-
-	m_bReplacedTexture = false;
-
 	bHasSuspensionLines = false;
 	m_pSuspensionLines = nullptr;
 	if (GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR)
@@ -139,19 +130,10 @@ CVehicle::~CVehicle()
 
 	if(!m_pVehicle)return;
 
-	m_bReplacedTexture = false;
 
-	for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
-	{
-		if (m_bReplaceTextureStatus[i] && m_szReplacedTextures[i].pTexture)
-		{
-			m_bReplaceTextureStatus[i] = false;
-			RwTextureDestroy(m_szReplacedTextures[i].pTexture);
-		}
-
-		m_bReplaceTextureStatus[i] = false;
-		memset(&(m_szReplacedTextures[i].szOld[0]), 0, MAX_REPLACED_TEXTURE_NAME);
-		m_szReplacedTextures[i].pTexture = nullptr;
+	if(pPlateTexture) {
+		RwTextureDestroy(pPlateTexture);
+		pPlateTexture = nullptr;
 	}
 
 	if(IsTrailer()){
@@ -934,54 +916,14 @@ void CVehicle::ResetVehicleHandling()
 	Log("Reseted to defaults");
 }
 
-void CVehicle::ApplyVinyls(uint8_t bSlot1, uint8_t bSlot2)
+void CVehicle::setPlate(ePlateType type, char* szNumber, char* szRegion)
 {
-	if (bSlot1 == 0)
-	{
-		RemoveTexture("remap_cbody_0");
-		return;
-	}
-	if (bSlot2 == 0)
-	{
-		RemoveTexture("remap_cbody_0");
-		return;
+	if(pPlateTexture) {
+		RwTextureDestroy(pPlateTexture);
+		pPlateTexture = nullptr;
 	}
 
-	char szTex[MAX_REPLACED_TEXTURE_NAME];
-
-	if (bSlot1 != 255)
-	{
-		sprintf(&szTex[0], "v_cust_body_%d", bSlot1);
-		ApplyTexture("remap_cbody_0", &szTex[0]);
-	}
-
-	if (bSlot2 != 255)
-	{
-		sprintf(&szTex[0], "v_cust_body_%d", bSlot2);
-		ApplyTexture("remap_cbody_0", &szTex[0]);
-	}
-
-}
-
-void CVehicle::ApplyToner(uint8_t bSlot, uint8_t bID)
-{
-	char szOld[MAX_REPLACED_TEXTURE_NAME];
-	char szNew[MAX_REPLACED_TEXTURE_NAME];
-
-	if (bID == 0)
-	{
-		sprintf(&szOld[0], "remap_toner_%d", bSlot);
-		RemoveTexture(&szOld[0]);
-		return;
-	}
-	if (bID == 255)
-	{
-		return;
-	}
-
-	sprintf(&szOld[0], "remap_toner_%d", bSlot);
-	sprintf(&szNew[0], "v_cust_t_%d", bID);
-	ApplyTexture(&szOld[0], &szNew[0]);
+	pPlateTexture = CCustomPlateManager::createTexture(type, szNumber, szRegion);
 }
 
 RwObject* GetAllAtomicObjectCB(RwObject* object, void* data)
@@ -999,100 +941,6 @@ void GetAllAtomicObjects(RwFrame* frame, std::vector<RwObject*>& result)
 	((uintptr_t(*)(RwFrame*, void*, uintptr_t))(g_libGTASA + 0x001AEE2C + 1))(frame, (void*)GetAllAtomicObjectCB, (uintptr_t)& result);
 }
 
-void CVehicle::ApplyTexture(const char* szTexture, const char* szNew)
-{
-	if (IsRetextured(szTexture))
-	{
-		RemoveTexture(szTexture);
-	}
-
-	uint8_t bID = 255;
-	for (uint8_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
-	{
-		if (m_bReplaceTextureStatus[i] == false)
-		{
-			bID = i;
-			break;
-		}
-	}
-
-	if (bID == 255)
-	{
-		return;
-	}
-
-	m_bReplaceTextureStatus[bID] = true;
-	strcpy(&(m_szReplacedTextures[bID].szOld[0]), szTexture);
-	m_szReplacedTextures[bID].pTexture = (RwTexture*)LoadTextureFromDB("samp", szNew);
-
-	m_bReplacedTexture = true;
-}
-
-void CVehicle::ApplyTexture(const char* szTexture, RwTexture* pTexture)
-{
-	if (IsRetextured(szTexture))
-	{
-		RemoveTexture(szTexture);
-	}
-	//CChatWindow::AddDebugMessage("apply tex %s", szTexture);
-	uint8_t bID = 255;
-	for (uint8_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
-	{
-		if (m_bReplaceTextureStatus[i] == false)
-		{
-			bID = i;
-			break;
-		}
-	}
-
-	if (bID == 255)
-	{
-		return;
-	}
-
-	m_bReplaceTextureStatus[bID] = true;
-	strcpy(&(m_szReplacedTextures[bID].szOld[0]), szTexture);
-	m_szReplacedTextures[bID].pTexture = pTexture;
-
-	m_bReplacedTexture = true;
-}
-
-void CVehicle::RemoveTexture(const char* szOldTexture)
-{
-	for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
-	{
-		if (m_bReplaceTextureStatus[i])
-		{
-			if (!strcmp(m_szReplacedTextures[i].szOld, szOldTexture))
-			{
-				m_bReplaceTextureStatus[i] = false;
-
-				if (m_szReplacedTextures[i].pTexture)
-				{
-					RwTextureDestroy(m_szReplacedTextures[i].pTexture);
-					m_szReplacedTextures[i].pTexture = nullptr;
-				}
-				break;
-			}
-		}
-	}
-}
-
-bool CVehicle::IsRetextured(const char* szOldTexture)
-{
-	for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
-	{
-		if (m_bReplaceTextureStatus[i])
-		{
-			if (!strcmp(m_szReplacedTextures[i].szOld, szOldTexture))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 void CVehicle::SetHeadlightsColor(uint8_t r, uint8_t g, uint8_t b)
 {
 	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR)
@@ -1100,10 +948,9 @@ void CVehicle::SetHeadlightsColor(uint8_t r, uint8_t g, uint8_t b)
 		return;
 	}
 
-	m_bHeadlightsColor = true;
-	m_bHeadlightsR = r;
-	m_bHeadlightsG = g;
-	m_bHeadlightsB = b;
+	lightColor.r = r;
+	lightColor.g = g;
+	lightColor.b = b;
 }
 
 void CVehicle::ProcessHeadlightsColor(uint8_t& r, uint8_t& g, uint8_t& b)
@@ -1113,12 +960,9 @@ void CVehicle::ProcessHeadlightsColor(uint8_t& r, uint8_t& g, uint8_t& b)
 		return;
 	}
 
-	if (m_bHeadlightsColor)
-	{
-		r = m_bHeadlightsR;
-		g = m_bHeadlightsG;
-		b = m_bHeadlightsB;
-	}
+	r = lightColor.r;
+	g = lightColor.g;
+	b = lightColor.b;
 }
 
 void CVehicle::SetWheelAlignment(int iWheel, float angle)
@@ -1241,16 +1085,15 @@ void CVehicle::ProcessWheelsOffset()
 
 void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, float fSizeY, const char* szTex)
 {
+	if (m_Shadow.pTexture)
+	{
+		RwTextureDestroy(m_Shadow.pTexture);
+		m_Shadow.pTexture = nullptr;
+	}
+
 	if (fSizeX == 0.0f || fSizeY == 0.0f)
 	{
 		m_bShadow = false;
-
-		if (m_Shadow.pTexture)
-		{
-			RwTextureDestroy(m_Shadow.pTexture);
-			m_Shadow.pTexture = nullptr;
-		}
-
 		return;
 	}
 
@@ -1261,7 +1104,7 @@ void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, fl
 	m_Shadow.b = b;
 	m_Shadow.fSizeX = fSizeX;
 	m_Shadow.fSizeY = fSizeY;
-	m_Shadow.pTexture = (RwTexture*)LoadTextureFromDB("samp", szTex);
+	m_Shadow.pTexture = (RwTexture*)LoadTextureFromDB("samp", "neonaper3");
 }
 
 void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID)

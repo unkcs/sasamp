@@ -2,6 +2,7 @@
 
 #include "entity.h"
 #include "RGB.h"
+#include "CCustomPlateManager.h"
 
 enum E_CUSTOM_COMPONENTS
 {
@@ -63,8 +64,8 @@ struct SCustomCarShadow
 	uint8_t r {};
 	uint8_t g {};
 	uint8_t b {};
-	float fSizeX {0.0f};
-	float fSizeY {0.0f};
+	uint8_t fSizeX {};
+	uint8_t fSizeY {};
 };
 
 enum eTurnState
@@ -124,7 +125,6 @@ public:
 	void ResetVehicleHandling();
 
 	void ApplyVinyls(uint8_t bSlot1, uint8_t bSlot2);
-	void ApplyToner(uint8_t bSlot, uint8_t bID);
 
 	void ApplyTexture(const char* szTexture, const char* szNew);
 	void ApplyTexture(const char* szTexture, RwTexture* pTexture);
@@ -149,8 +149,11 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
-	CRGBA toner{};
-	CRGBA color{};
+	CRGBA tonerColor{0, 0, 0, 120};
+	CRGBA mainColor{};
+	CRGBA secondColor{};
+	CRGBA lightColor{255, 255, 255, 100};
+	RwTexture* pPlateTexture = nullptr;
 
 	VEHICLE_TYPE* 	m_pVehicle;
 
@@ -179,17 +182,12 @@ public:
 
 	tHandlingData* m_pCustomHandling = nullptr;
 
-	SReplacedTexture m_szReplacedTextures[MAX_REPLACED_TEXTURES];
-	bool m_bReplaceTextureStatus[MAX_REPLACED_TEXTURES];
-	bool m_bReplacedTexture;
+//	SReplacedTexture m_szReplacedTextures[MAX_REPLACED_TEXTURES];
+//	bool m_bReplaceTextureStatus[MAX_REPLACED_TEXTURES];
+//	bool m_bReplacedTexture;
 
 	void* m_pSuspensionLines;
 	bool bHasSuspensionLines;
-
-	bool m_bHeadlightsColor = false;
-	uint8_t m_bHeadlightsR {};
-	uint8_t m_bHeadlightsG {};
-	uint8_t m_bHeadlightsB {};
 
 	bool m_bWheelAlignmentX;
 	float m_fWheelAlignmentX = 0.0f;
@@ -280,6 +278,8 @@ public:
 	void toggleAllTurnLight(bool toggle);
 
 	void toggleReverseLight(bool toggle);
+
+	void setPlate(ePlateType type, char *szNumber, char *szRegion);
 };
 
 enum eVehicleOverrideLightsState {

@@ -2372,6 +2372,14 @@ bool ProcessLocalCommands(const char str[])
 		fclose(fileOut);
 		return true;
 	}
+	if (strcmp(str, "/plate") == 0) {
+		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
+		auto pVeh = pPed->GetCurrentVehicle();
+
+		pVeh->setPlate(NUMBERPLATE_TYPE_UA, "test", "AA");
+
+		return true;
+	}
 	if (strcmp(str, "/cameditgui") == 0)
 	{
 		CHUD::bIsCamEditGui = !CHUD::bIsCamEditGui;

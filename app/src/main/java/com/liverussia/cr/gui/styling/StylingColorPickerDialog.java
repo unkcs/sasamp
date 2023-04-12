@@ -81,7 +81,7 @@ public class StylingColorPickerDialog extends MaterialAlertDialogBuilder impleme
                         colorEnvelope.getArgb()[3],
                         colorEnvelope.getArgb()[0]
                 );
-                Log.d("x1y2z", " " + RGB1.r + " " + RGB1.g + " " + RGB1.b);
+             //   Log.d("x1y2z", " " + RGB1.r + " " + RGB1.g + " " + RGB1.b);
             }
         });
 

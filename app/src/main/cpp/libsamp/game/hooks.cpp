@@ -745,7 +745,7 @@ void CTimer__StartUserPause_hook()
 
 		g_pJavaWrapper->SetPauseState(true);
 
-		CSpeedometr::tempToggle(false);
+		//CSpeedometr::tempToggle(false);
 	}
 
 	*(uint8_t*)(g_libGTASA + 0x008C9BA3) = 1;
@@ -758,7 +758,7 @@ void CTimer__EndUserPause_hook()
 	if (g_pJavaWrapper)
 	{
 		g_pJavaWrapper->SetPauseState(false);
-		CSpeedometr::tempToggle(true);
+	//	CSpeedometr::tempToggle(true);
 	}
 
 	*(uint8_t*)(g_libGTASA + 0x008C9BA3) = 0;
@@ -1623,45 +1623,50 @@ int _rwFreeListFreeReal_hook(int a1, unsigned int a2)
 std::list<std::pair<unsigned int*, unsigned int>> resetEntriesVehicle;
 
 
-RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* material, void* data)
+RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 {
-	int color = *(int*)&material->color & 0xFFFFFF;
 	auto pVeh = (CVehicle*)data;
 
-	if (material)
+	if (mat)
 	{
-		if (material->texture)
+		if (mat->texture)
 		{
 			for (size_t i = 0; i < MAX_REPLACED_TEXTURES; i++)
 			{
 				if (pVeh->m_bReplaceTextureStatus[i])
 				{
-					if (!strcmp(&(material->texture->name[0]), &(pVeh->m_szReplacedTextures[i].szOld[0])))
+					if (!strcmp(&(mat->texture->name[0]), &(pVeh->m_szReplacedTextures[i].szOld[0])))
 					{
 						if (pVeh->m_szReplacedTextures[i].pTexture)
 						{
-							resetEntriesVehicle.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&(material->texture)), *reinterpret_cast<unsigned int*>(&(material->texture))));
-							material->texture = pVeh->m_szReplacedTextures[i].pTexture;
+							resetEntriesVehicle.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&(mat->texture)), *reinterpret_cast<unsigned int*>(&(mat->texture))));
+							mat->texture = pVeh->m_szReplacedTextures[i].pTexture;
 							if (strstr(pVeh->m_szReplacedTextures[i].szOld, "ret_t"))
 							{
-								material->color.alpha = 255;
+								mat->color.alpha = 255;
 							}
 						}
 					}
 				}
 			}
 		}
-		//int v11 = *(DWORD *)&color & 0xFFFFFF;
-		if ( color == 0xFF3C )
+		if(mat->color.red == 255 && mat->color.green == 255 && mat->color.blue == 0){
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
+			mat->color.alpha = pVeh->toner.a;
+			mat->color.green = pVeh->toner.g;
+			mat->color.blue = pVeh->toner.b;
+			mat->color.red = pVeh->toner.r;
+		}
+		if ( mat->color.red == 60 && mat->color.green == 255 && mat->color.blue == 0 )
 		{ // first color
-			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(material->color)), *reinterpret_cast<unsigned int*>(&(material->color)));
-			material->color.alpha = 255;
-			material->color.green = pVeh->color.g;
-			material->color.blue = pVeh->color.b;
-			material->color.red = pVeh->color.r;
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
+			mat->color.alpha = 255;
+			mat->color.green = pVeh->color.g;
+			mat->color.blue = pVeh->color.b;
+			mat->color.red = pVeh->color.r;
 		}
 	}
-	return material;
+	return mat;
 }
 
 RpAtomic* CVehicle__SetupRenderCB(RpAtomic* atomic, void* data)
@@ -1684,7 +1689,7 @@ void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
 			{
 				if (pVehicle->m_bReplacedTexture)
 				{
-					RpClumpForAllAtomics(clump, CVehicle__SetupRenderCB, &pVehicle);
+					RpClumpForAllAtomics(clump, CVehicle__SetupRenderCB, pVehicle);
 //					// RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* pData);
 //					((RpClump * (*)(RpClump *, uintptr_t, void *))(g_libGTASA + 0x1E0EA0 + 1))(clump, (uintptr_t)CVehicle__SetupRenderCB, (void *)pVehicle); // RpClumpForAllAtomics
 				}

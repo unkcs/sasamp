@@ -62,6 +62,8 @@ public class Styling {
 
     native void sendClickedCameraArrow(int rightorleft);
 
+    native void onChangeColor(int type, int r, int g, int b, int a);
+
     public Styling(Activity activity, int money, int total, int price1, int price2, int price3, int price4)
     {
         this.activity = activity;
@@ -151,8 +153,8 @@ public class Styling {
                     @Override
                     public void onClick(View view) {
                         view.startAnimation(animation);
-                        //showColorPicker(2);
-                        Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
+                        showColorPicker(2);
+                        // Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -160,8 +162,8 @@ public class Styling {
                     @Override
                     public void onClick(View view) {
                         view.startAnimation(animation);
-                        //showColorPicker(3);
-                        Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
+                        showColorPicker(3);
+                      //  Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
                     }
                 });
 

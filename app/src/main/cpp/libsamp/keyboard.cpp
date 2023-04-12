@@ -288,7 +288,7 @@ void CKeyBoard::Open()
 	if(CBaccarat::bIsShow) CBaccarat::tempToggle(false);
 	CHUD::toggleServerLogo(false);
 
-	if(CSpeedometr::bIsShow) CSpeedometr::tempToggle(false);
+	//if(CSpeedometr::bIsShow) CSpeedometr::tempToggle(false);
 
 	if (pGame->m_bRaceCheckpointsEnabled)
 	{
@@ -2477,6 +2477,11 @@ bool ProcessLocalCommands(const char str[])
 	if (strcmp(str, "/fpsinfo") == 0)
 	{
 		CDebugInfo::ToggleDebugDraw();
+		return true;
+	}
+	if (strcmp(str, "/style") == 0)
+	{
+		CStyling::show(0, 0, 0, 0, 0, 0);
 		return true;
 	}
 

@@ -16,21 +16,9 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 
 	CDebugInfo::uiStreamedVehicles++;
 	RwMatrix mat;
-	uint32_t dwRetID = 0;
-
-	m_pCustomHandling = nullptr;
-
-	m_pLeftFrontTurnLighter = nullptr;
-	m_pRightFrontTurnLighter = nullptr;
-	m_pLeftRearTurnLighter = nullptr;
-	m_pRightRearTurnLighter = nullptr;
-
-	m_pLeftReverseLight = nullptr;
-	m_pRightReverseLight = nullptr;
 
 	m_pVehicle = nullptr;
 	m_dwGTAId = 0;
-	m_pTrailer = nullptr;
 
 	if ((iType != TRAIN_PASSENGER_LOCO) &&
 		(iType != TRAIN_FREIGHT_LOCO) &&
@@ -45,16 +33,14 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 			pGame->LoadRequestedModels();
 			while (!pGame->IsModelLoaded(iType)) usleep(10);
 		}
-        m_bHasSiren = 0;
-		ScriptCommand(&create_car, iType, fPosX, fPosY, fPosZ, &dwRetID);
-		ScriptCommand(&set_car_z_angle, dwRetID, fRotation);
-		ScriptCommand(&car_gas_tank_explosion, dwRetID, 0);
-		ScriptCommand(&set_car_hydraulics, dwRetID, 0);
-		ScriptCommand(&toggle_car_tires_vulnerable, dwRetID, 1);
-		ScriptCommand(&set_car_immunities, dwRetID, 0, 0, 0, 0, 0);
-		m_pVehicle = (VEHICLE_TYPE*)GamePool_Vehicle_GetAt(dwRetID);
+		ScriptCommand(&create_car, iType, fPosX, fPosY, fPosZ, &m_dwGTAId);
+		ScriptCommand(&set_car_z_angle, m_dwGTAId, fRotation);
+		ScriptCommand(&car_gas_tank_explosion, m_dwGTAId, 0);
+		ScriptCommand(&set_car_hydraulics, m_dwGTAId, 0);
+		ScriptCommand(&toggle_car_tires_vulnerable, m_dwGTAId, 1);
+		ScriptCommand(&set_car_immunities, m_dwGTAId, 0, 0, 0, 0, 0);
+		m_pVehicle = (VEHICLE_TYPE*)GamePool_Vehicle_GetAt(m_dwGTAId);
 		m_pEntity = (ENTITY_TYPE*)m_pVehicle;
-		m_dwGTAId = dwRetID;
 
 		if (m_pVehicle)
 		{
@@ -75,23 +61,7 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 			SetMatrix(mat);
 		}
 	}
-	else if ((iType == TRAIN_PASSENGER_LOCO) ||
-			 (iType == TRAIN_FREIGHT_LOCO) ||
-			 (iType == TRAIN_TRAM))
-	{
-		// train locomotives
-	}
-	else if ((iType == TRAIN_PASSENGER) ||
-			 iType == TRAIN_FREIGHT)
-	{
 
-	}
-
-	m_byteObjectiveVehicle = 0;
-	m_bSpecialMarkerEnabled = false;
-	m_bIsLocked = false;
-	m_dwMarkerID = 0;
-	m_bIsInvulnerable = false;
 	uint8_t defComp = 0;
 	BIT_SET(defComp, 0);
 	for (int i = 0; i < E_CUSTOM_COMPONENTS::ccMax; i++)
@@ -129,7 +99,6 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		CopyGlobalSuspensionLinesToPrivate();
 	}
 
-	m_bHeadlightsColor = false;
 	m_bWheelSize = false;
 	m_bWheelWidth = false;
 	m_bWheelAlignmentX = false;
@@ -144,9 +113,6 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 	m_bWasWheelOffsetProcessedX = true;
 	m_bWasWheelOffsetProcessedY = true;
 	m_uiLastProcessedWheelOffset = 0;
-
-	m_bShadow = false;
-	m_Shadow.pTexture = nullptr;
 
 	RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
 	RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
@@ -432,10 +398,6 @@ void CVehicle::SetColor(int iColor1, int iColor2)
 			m_pVehicle->m_nSecondaryColor = (uint8_t)iColor2;
 		}
 	}
-
-	m_byteColor1 = (uint8_t)iColor1;
-	m_byteColor2 = (uint8_t)iColor2;
-	m_bColorChanged = true;
 }
 
 void CVehicle::AttachTrailer()
@@ -465,23 +427,6 @@ void CVehicle::SetTrailer(CVehicle* pTrailer)
 }
 
 //-----------------------------------------------------------
-
-CVehicle* CVehicle::GetTrailer()
-{
-	if (!m_pVehicle) return nullptr;
-
-	return m_pTrailer;
-//	// Try to find associated trailer
-//	uint32_t dwTrailerGTAPtr = m_pVehicle->dwTrailer;
-//
-//	if (pNetGame && dwTrailerGTAPtr) {
-//		CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
-//		VEHICLEID TrailerID = (VEHICLEID)pVehiclePool->FindIDFromGtaPtr((VEHICLE_TYPE*)dwTrailerGTAPtr);
-//		if (TrailerID < MAX_VEHICLES && pVehiclePool->GetSlotState(TrailerID)) {
-//			return pVehiclePool->GetAt(TrailerID);
-//		}
-//	}
-}
 
 void CVehicle::SetHealth(float fHealth)
 {
@@ -528,13 +473,6 @@ bool CVehicle::IsDriverLocalPlayer()
 	}
 
 	return false;
-}
-
-// 0.3.7
-bool CVehicle::HasSunk()
-{
-	if (!m_pVehicle) return false;
-	return ScriptCommand(&has_car_sunk, m_dwGTAId);
 }
 
 bool IsValidGamePed(PED_TYPE* pPed);
@@ -661,10 +599,6 @@ void CVehicle::SetDoorState(int iState)
 		m_bIsLocked = false;
 		CVehicle::fDoorState = 0;
 	}
-}
-
-int CVehicle::GetDoorState(){
-	return CVehicle::fDoorState;
 }
 
 void CVehicle::SetLightsState(bool iState)

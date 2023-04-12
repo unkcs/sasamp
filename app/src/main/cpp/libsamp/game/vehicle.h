@@ -53,18 +53,26 @@ enum E_HANDLING_PARAMS
 
 struct SReplacedTexture
 {
-	char szOld[MAX_REPLACED_TEXTURE_NAME];
-	RwTexture* pTexture;
+	char szOld[MAX_REPLACED_TEXTURE_NAME] {};
+	RwTexture* pTexture {nullptr};
 };
 
 struct SCustomCarShadow
 {
-	RwTexture* pTexture;
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	float fSizeX;
-	float fSizeY;
+	RwTexture* pTexture {nullptr};
+	uint8_t r {};
+	uint8_t g {};
+	uint8_t b {};
+	float fSizeX {0.0f};
+	float fSizeY {0.0f};
+};
+
+enum eTurnState
+{
+	TURN_OFF,
+	TURN_LEFT,
+	TURN_RIGHT,
+	TURN_ALL
 };
 
 void* GetSuspensionLinesFromModel(int nModelIndex, int& numWheels);
@@ -89,27 +97,22 @@ public:
 	void SetInvulnerable(bool bInv);
 	// 0.3.7
 	bool IsDriverLocalPlayer();
-	// 0.3.7
-	bool HasSunk();
 
 	void ProcessMarkers();
 
 	void RemoveEveryoneFromVehicle();
 
 	void SetDoorState(int iState);
-	int GetDoorState();
 
 	void UpdateDamageStatus(uint32_t dwPanelDamage, uint32_t dwDoorDamage, uint8_t byteLightDamage, uint8_t byteTireDamage);
 
 	void AttachTrailer();
 	void DetachTrailer();
 	void SetTrailer(CVehicle* pTrailer);
-	CVehicle* GetTrailer();
 
 	unsigned int GetVehicleSubtype();
 
 	void SetEngineState(bool bEnable);
-	int GetEngineState();
 	void SetLightsState(bool iState);
 	bool GetLightsState();
 	void SetBootAndBonnetState(int iBoot, int iBonnet);
@@ -146,45 +149,35 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
-	CRGB color;
-	enum eTurnState
-	{
-		TURN_OFF,
-		TURN_LEFT,
-		TURN_RIGHT,
-		TURN_ALL
-	};
+	CRGBA toner{};
+	CRGBA color{};
+
 	VEHICLE_TYPE* 	m_pVehicle;
 
 	// поворотники
-	CObject*		m_pLeftFrontTurnLighter;
-	CObject*		m_pRightFrontTurnLighter;
-	CObject*		m_pLeftRearTurnLighter;
-	CObject*		m_pRightRearTurnLighter;
-	eTurnState 		m_iTurnState;
-	bool 			m_bIsOnRightTurnLight;
-	bool  			m_bIsOnAllurnLight;
-	bool 			m_bIsOnLeftTurnLight;
-	bool 			m_bIsOnAllTurnLight;
+	CObject*		m_pLeftFrontTurnLighter = nullptr;
+	CObject*		m_pRightFrontTurnLighter = nullptr;
+	CObject*		m_pLeftRearTurnLighter = nullptr;
+	CObject*		m_pRightRearTurnLighter = nullptr;
+	eTurnState 		m_iTurnState = TURN_OFF;
+	bool 			m_bIsOnRightTurnLight = false;
+	bool 			m_bIsOnLeftTurnLight = false;
+	bool 			m_bIsOnAllTurnLight = false;
 
 	// задний ход
-	CObject*		m_pLeftReverseLight;
-	CObject*		m_pRightReverseLight;
+	CObject*		m_pLeftReverseLight = nullptr;
+	CObject*		m_pRightReverseLight = nullptr;
 
-	bool 			m_bHasSiren;
-	bool 			m_bIsSirenOn;
-	bool 			m_bIsLocked;
-	CVehicle* 		m_pTrailer;
-	uint32_t		m_dwMarkerID;
-	bool 			m_bIsInvulnerable;
-	uint8_t			m_byteObjectiveVehicle; // Is this a special objective vehicle? 0/1
-	uint8_t			m_bSpecialMarkerEnabled;
+	bool 			m_bHasSiren = false;
+	bool 			m_bIsSirenOn = false;
+	bool 			m_bIsLocked = false;
+	CVehicle* 		m_pTrailer = nullptr;
+	uint32_t		m_dwMarkerID = 0;
+	bool 			m_bIsInvulnerable = false;
+	uint8_t			m_byteObjectiveVehicle = 0; // Is this a special objective vehicle? 0/1
+	bool			m_bSpecialMarkerEnabled = false;
 
-	uint8_t			m_byteColor1;
-	uint8_t			m_byteColor2;
-	bool 			m_bColorChanged;
-
-	tHandlingData* m_pCustomHandling;
+	tHandlingData* m_pCustomHandling = nullptr;
 
 	SReplacedTexture m_szReplacedTextures[MAX_REPLACED_TEXTURES];
 	bool m_bReplaceTextureStatus[MAX_REPLACED_TEXTURES];
@@ -193,31 +186,31 @@ public:
 	void* m_pSuspensionLines;
 	bool bHasSuspensionLines;
 
-	bool m_bHeadlightsColor;
-	uint8_t m_bHeadlightsR;
-	uint8_t m_bHeadlightsG;
-	uint8_t m_bHeadlightsB;
+	bool m_bHeadlightsColor = false;
+	uint8_t m_bHeadlightsR {};
+	uint8_t m_bHeadlightsG {};
+	uint8_t m_bHeadlightsB {};
 
 	bool m_bWheelAlignmentX;
-	float m_fWheelAlignmentX;
+	float m_fWheelAlignmentX = 0.0f;
 
 	bool m_bWheelAlignmentY;
-	float m_fWheelAlignmentY;
+	float m_fWheelAlignmentY = 0.0f;
 
 	bool m_bWheelSize;
-	float m_fWheelSize;
+	float m_fWheelSize = 0.0f;
 
 	bool m_bWheelWidth;
-	float m_fWheelWidth;
+	float m_fWheelWidth = 0.0f;
 
 	bool m_bWheelOffsetX;
-	float m_fWheelOffsetX;
+	float m_fWheelOffsetX = 0.0f;
 
 	bool m_bWheelOffsetY;
-	float m_fWheelOffsetY;
+	float m_fWheelOffsetY = 0.0f;
 
-	float m_fNewOffsetX;
-	float m_fNewOffsetY;
+	float m_fNewOffsetX = 0.0f;
+	float m_fNewOffsetY = 0.0f;
 
 	bool m_bWasWheelOffsetProcessedX;
 	bool m_bWasWheelOffsetProcessedY;
@@ -226,23 +219,21 @@ public:
 	RwMatrix m_vInitialWheelMatrix[4];
 
 	SCustomCarShadow m_Shadow;
-	bool m_bShadow;
+	bool m_bShadow = false;
 	//int bEngine;
-	int fDoorState;
+	int fDoorState = 0;
 	//int bLights;
 
 	bool IsTrailer();
 
-	bool m_bLightsOn;
-	bool m_bEngineOn;
-
-	uint8_t colorToner[3];
+	bool m_bLightsOn = false;
+	bool m_bEngineOn = false;
 
 	// Damage status
-	uint8_t			m_byteTyreStatus;
-	uint8_t			m_byteLightStatus;
-	uint32_t		m_dwDoorStatus;
-	uint32_t		m_dwPanelStatus;
+	uint8_t			m_byteTyreStatus = 0;
+	uint8_t			m_byteLightStatus = 0;
+	uint32_t		m_dwDoorStatus = 0;
+	uint32_t		m_dwPanelStatus = 0;
 
 	bool HasDamageModel();
 

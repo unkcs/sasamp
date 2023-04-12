@@ -247,24 +247,7 @@ void Weather(RPCParameters *rpcParams)
 
 void RequestSpawn(RPCParameters *rpcParams)
 {
-	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	uint32_t byteRequestOutcome = 0;
-	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-	bsData.Read(byteRequestOutcome);
-
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-	CLocalPlayer *pLocalPlayer = 0;
-	if(pPlayerPool) pLocalPlayer = pPlayerPool->GetLocalPlayer();
-
-	if(pLocalPlayer)
-	{
-		//if(byteRequestOutcome == 2 || (byteRequestOutcome && pLocalPlayer->m_bWaitingForSpawnRequestReply))
-			// pLocalPlayer->Spawn();
-	//	else
-			pLocalPlayer->m_bWaitingForSpawnRequestReply = false;
-	}
+	// hueta
 }
 
 void WorldTime(RPCParameters *rpcParams)

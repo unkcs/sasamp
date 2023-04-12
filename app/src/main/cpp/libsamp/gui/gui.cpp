@@ -111,10 +111,7 @@ CGUI::~CGUI()
 	ImGui::DestroyContext();
 }
 #include "..//CServerManager.h"
-bool g_IsVoiceServer()
-{
-	return true;
-}
+#include "../java_systems/CHUD.h"
 
 #include "..//CDebugInfo.h"
 #include "java_systems/CDialog.h"
@@ -138,7 +135,8 @@ void CGUI::Render()
 		pNetGame->GetLabelPool()->Draw();
 	}
 
-	if(pGame->FindPlayerPed()->IsInVehicle() && !pGame->FindPlayerPed()->IsAPassenger() && !CKeyBoard::IsOpen() && !CDialog::bIsShow)
+	if(pGame->FindPlayerPed()->IsInVehicle() && !pGame->FindPlayerPed()->IsAPassenger()
+	&& !CKeyBoard::IsOpen() && !CDialog::bIsShow && CHUD::bIsShow && *(uint8_t*)(g_libGTASA + 0x008C9BA3) == 0)
 	{
 		if(!CSpeedometr::bIsShow)
 		{

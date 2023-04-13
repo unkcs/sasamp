@@ -27,14 +27,17 @@ void CGtaWidgets::setEnabled(int thiz, bool bEnabled)
     *(BYTE *)(thiz + 0x4D) = bEnabled; // this->m_bEnabled
 }
 
-//bool (*CWidget__IsTouched)(uintptr_t* thiz, CVector2D *pVecOut);
-//bool CWidget__IsTouched_hook(uintptr_t* thiz, CVector2D *pVecOut)
-//{
+bool (*CWidget__IsTouched)(uintptr_t* thiz, CVector2D *pVecOut);
+bool CWidget__IsTouched_hook(uintptr_t* thiz, CVector2D *pVecOut)
+{
 //    if(*thiz == CGtaWidgets::pWidgets[WIDGET_POSITION_HORN]) {
 //        return true;
 //    }
-//    return CWidget__IsTouched(thiz, pVecOut);
-//}
+    if(!CHUD::bIsShow)
+        return false;
+
+    return CWidget__IsTouched(thiz, pVecOut);
+}
 
 void (*CWidgetButton__Update)(int result, int a2, int a3, int a4);
 void CWidgetButton__Update_hook(int result, int a2, int a3, int a4)
@@ -57,7 +60,7 @@ void CGtaWidgets::init()
 {
     CGtaWidgets::pWidgets = (uintptr_t*)(g_libGTASA + 0x00657E48);
 
-   // CHook::InlineHook(g_libGTASA, 0x00274218, &CWidget__IsTouched_hook, &CWidget__IsTouched);
+    CHook::InlineHook(g_libGTASA, 0x00274218, &CWidget__IsTouched_hook, &CWidget__IsTouched);
     CHook::InlineHook(g_libGTASA, 0x00274AB4, &CWidgetButton__Update_hook, &CWidgetButton__Update);
     CHook::SetUpHook(g_libGTASA + 0x00274748, (uintptr_t)CWidgetButton__Draw_hook, (uintptr_t*)&CWidgetButton__Draw);
 }

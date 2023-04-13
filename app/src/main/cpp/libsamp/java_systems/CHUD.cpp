@@ -86,7 +86,7 @@ void CHUD::toggleAll(bool toggle, bool withchat)
 
     bIsShow = toggle;
 
-    pGame->ToggleHUDElement(HUD_ELEMENT_BUTTONS, toggle);
+   // pGame->ToggleHUDElement(HUD_ELEMENT_BUTTONS, toggle);
 
    // pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->TogglePlayerControllable(toggle, true);
     pGame->ToggleHUDElement(HUD_ELEMENT_FPS, toggle);

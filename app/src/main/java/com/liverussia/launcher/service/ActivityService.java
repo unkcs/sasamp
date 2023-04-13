@@ -3,11 +3,11 @@ package com.liverussia.launcher.service;
 import android.app.Activity;
 import android.content.Context;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public interface ActivityService {
 
-    void showMessage(String message, Context context);
+    void showErrorMessage(String message, Activity activity);
+
+    void showInfoMessage(String message, Activity activity);
 
     boolean isGameFileInstall(Activity activity, String filePath);
 

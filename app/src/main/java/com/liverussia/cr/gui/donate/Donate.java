@@ -1,12 +1,15 @@
 package com.liverussia.cr.gui.donate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.util.Log;
+import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,6 +21,16 @@ import com.factor.bouncy.BouncyRecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.Samp;
+import com.liverussia.launcher.config.Config;
+import com.liverussia.launcher.domain.enums.NativeStorageElements;
+import com.liverussia.launcher.domain.enums.StorageElements;
+import com.liverussia.launcher.domain.messages.ErrorMessage;
+import com.liverussia.launcher.service.ActivityService;
+import com.liverussia.launcher.service.impl.ActivityServiceImpl;
+import com.liverussia.launcher.storage.NativeStorage;
+import com.liverussia.launcher.storage.Storage;
+import com.liverussia.launcher.ui.dialogs.ReCaptchaDialog;
+import com.liverussia.launcher.utils.Validator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +38,7 @@ import java.util.List;
 
 public class Donate {
     ConstraintLayout donate_main_layout;
+    ConstraintLayout donate_buy_lc_layout;
 
     ConstraintLayout donate_category_buy_all;
     ConstraintLayout donate_category_my_item;
@@ -39,11 +53,21 @@ public class Donate {
     TextView donate_balance_text;
     ImageView donate_exit_button;
     MaterialButton donate_check_butt;
+    MaterialButton donate_deposit_butt;
     MaterialButton donate_history_butt;
     MaterialButton donate_change_butt;
+    MaterialButton donate_buy_lc_buy_btn;
+    MaterialButton donate_buy_lc_buy_via_qiwi_btn;
+    MaterialButton donate_byu_lc_cancel_btn;
+    EditText donate_buy_lc_email_input;
+    EditText donate_buy_lc_sum_input;
+    CheckBox iAmNotRobotCheckBox;
+
 
     int active_category_type = -1;
     View active_caterory_view = null;
+    String captchaToken;
+    ActivityService activityService;
 
     static final int CATEGORY_ALL = 0;
     static final int CATEGORY_CARS = 1;
@@ -78,6 +102,7 @@ public class Donate {
     static final int DONATE_OTHER_VEH_FAMILY_SLOT = 12;
     static final int DONATE_OTHER_GIVE_FAMILY_SLOT = 13;
     static final int DONATE_OTHER_ROLLERS = 14;
+    static final String CONTACTS_VIEW_ACTION = "android.intent.action.VIEW";
 
     static final int BUTTTON_BUY = 0;
     static final int BUTTTON_INFO = 1;
@@ -89,7 +114,9 @@ public class Donate {
 
         activity.runOnUiThread(() ->
         {
+            activityService = new ActivityServiceImpl();
             registerAllItems();
+            initBuyLcDialog();
 
             donate_change_butt = activity.findViewById(R.id.donate_change_butt);
             donate_change_butt.setOnClickListener(view -> {
@@ -201,6 +228,95 @@ public class Donate {
             donate_main_layout = activity.findViewById(R.id.donate_main_layout);
             donate_main_layout.setVisibility(View.VISIBLE);
         });
+    }
+
+    private void initBuyLcDialog() {
+
+        donate_buy_lc_layout = activity.findViewById(R.id.donate_buy_lc_layout);
+        donate_buy_lc_layout.setVisibility(View.GONE);
+
+        donate_deposit_butt = activity.findViewById(R.id.donate_deposit_butt);
+        donate_deposit_butt.setOnClickListener(view -> {
+            donate_buy_lc_layout.setVisibility(View.VISIBLE);
+        });
+
+        donate_buy_lc_buy_btn = activity.findViewById(R.id.donate_buy_lc_buy_btn);
+        donate_buy_lc_buy_btn.setOnClickListener(view -> {
+            doBuyBtnAction();
+        });
+
+        donate_buy_lc_buy_via_qiwi_btn = activity.findViewById(R.id.donate_buy_lc_buy_via_qiwi_btn);
+        donate_buy_lc_buy_via_qiwi_btn.setOnClickListener(view -> {
+            doQiwiBuyBtnAction();
+        });
+
+        donate_byu_lc_cancel_btn = activity.findViewById(R.id.donate_byu_lc_cancel_btn);
+        donate_byu_lc_cancel_btn.setOnClickListener(view -> {
+            donate_buy_lc_layout.setVisibility(View.GONE);
+        });
+
+        donate_buy_lc_email_input = activity.findViewById(R.id.donate_buy_lc_email_input);
+
+        donate_buy_lc_sum_input = activity.findViewById(R.id.donate_buy_lc_sum_input);
+
+        iAmNotRobotCheckBox = activity.findViewById(R.id.donate_buy_lc_i_am_not_robot_checkbox);
+        iAmNotRobotCheckBox.setOnClickListener(view -> {
+            try {
+                performIAmNotRobotCheckBoxAction();
+            } catch (Exception ignored) {
+
+            }
+        });
+    }
+
+    private void doQiwiBuyBtnAction() {
+        if (!isValidBuyDialogInputs()) {
+            return;
+        }
+
+        activity.startActivity(new Intent(CONTACTS_VIEW_ACTION, Uri.parse(createUri())));
+    }
+
+    private String createUri() {
+        String nickname = NativeStorage.getClientProperty(NativeStorageElements.NICKNAME, activity);
+        String email = donate_buy_lc_email_input.getText().toString();
+        String serverId = NativeStorage.getClientProperty(NativeStorageElements.SERVER, activity);
+        String serverName = Storage.getProperty(StorageElements.SERVER_NAME, activity);
+        String sum = donate_buy_lc_sum_input.getText().toString();
+        String captcha = captchaToken;
+
+        return Config.createBillingUri(serverId, serverName, sum, nickname, email, captcha);
+    }
+
+    private void performIAmNotRobotCheckBoxAction() {
+        if (iAmNotRobotCheckBox.isChecked()) {
+            iAmNotRobotCheckBox.setChecked(false);
+            ReCaptchaDialog reCaptchaDialog = new ReCaptchaDialog(activity);
+            reCaptchaDialog.setOnDialogCloseListener(this::performCaptchaSuccessAction);
+            reCaptchaDialog.createDialog();
+        } else {
+            activityService.showErrorMessage(ErrorMessage.CAPTCHA_NOT_PASSED.getText(), activity);
+        }
+    }
+
+    public void performCaptchaSuccessAction(String token) {
+        captchaToken = token;
+        iAmNotRobotCheckBox.setChecked(true);
+    }
+
+    //todo мб сделать когда разберусь почему киви не рисуется в webview
+    private void doBuyBtnAction() {
+        if (!isValidBuyDialogInputs()) {
+            return;
+        }
+
+
+    }
+
+    private boolean isValidBuyDialogInputs() {
+        return Validator.isValidEmail(donate_buy_lc_email_input.getText().toString(), activity)
+                && Validator.isValidDonateSum(donate_buy_lc_sum_input.getText().toString(), activity)
+                && Validator.isValidCaptchaToken(captchaToken, activity);
     }
 
     void updateBalance(int balance)

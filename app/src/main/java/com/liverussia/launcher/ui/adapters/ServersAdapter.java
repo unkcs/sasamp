@@ -1,10 +1,9 @@
 package com.liverussia.launcher.ui.adapters;
 
+import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.animation.AnimationUtils;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.liverussia.launcher.domain.enums.StorageElements;
 import com.liverussia.launcher.domain.messages.InfoMessage;
 import com.liverussia.launcher.async.dto.response.Servers;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
@@ -28,14 +25,10 @@ import com.liverussia.launcher.service.ActivityService;
 import com.liverussia.launcher.service.impl.ActivityServiceImpl;
 import com.liverussia.launcher.storage.NativeStorage;
 import com.liverussia.launcher.storage.Storage;
-import com.liverussia.launcher.ui.dialogs.EnterLockedServerPasswordDialog;
-
-import org.apache.commons.lang3.StringUtils;
-import org.ini4j.Wini;
 
 public class ServersAdapter extends RecyclerView.Adapter<ServersAdapter.ServersViewHolder> {
 
-	private Context context;
+	private Activity context;
 	private List<Servers> servers;
 	private int selectedItem;
 
@@ -46,7 +39,7 @@ public class ServersAdapter extends RecyclerView.Adapter<ServersAdapter.ServersV
 		activityService = new ActivityServiceImpl();
 	}
 
-	public ServersAdapter(Context context, List<Servers> servers){
+	public ServersAdapter(Activity context, List<Servers> servers){
 		 this.context = context;
 		 this.servers = servers;
 		 try {
@@ -108,7 +101,7 @@ public class ServersAdapter extends RecyclerView.Adapter<ServersAdapter.ServersV
 			NativeStorage.addClientProperty(NativeStorageElements.SERVER, servers.getServerID(), context);
 			saveServerInfoToStorage(servers);
 
-			activityService.showMessage(InfoMessage.SERVER_SELECTED.getText(), context);
+			activityService.showInfoMessage(InfoMessage.SERVER_SELECTED.getText(), context);
 		});
     }
 

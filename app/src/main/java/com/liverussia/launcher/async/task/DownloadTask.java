@@ -411,7 +411,7 @@ public class DownloadTask implements Listener<TaskStatus> {
                 .map(ErrorContainer::getMessage)
                 .orElse(StringUtils.EMPTY);
 
-        activityService.showMessage(errorMessage, loaderActivity);
+        activityService.showErrorMessage(errorMessage, loaderActivity);
     }
 
     private void onAsyncErrorDo() {

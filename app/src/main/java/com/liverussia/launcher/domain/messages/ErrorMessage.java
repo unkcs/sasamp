@@ -15,7 +15,7 @@ public enum ErrorMessage {
     NICKNAME_IS_TOO_LONG("Длина никнейма должна быть меньше 20 символов"),
     EMAIL_IS_TOO_LONG("Длина E-mail должна быть меньше 100 символов"),
     NICKNAME_DOES_NOT_MATCH_PATTERN("Никнейм не соответствует формату: \"Имя_Фамилия\""),
-    EMAIL_DOES_NOT_MATCH_PATTERN("Никнейм не соответствует формату: \"example@example.com\""),
+    EMAIL_DOES_NOT_MATCH_PATTERN("E-mail не соответствует формату: \"example@example.com\""),
     PASSWORD_IS_EMPTY("Введите пароль"),
     PASSWORD_IS_TOO_LONG("Длина пароля должна быть меньше 17 символов"),
     PASSWORD_IS_TOO_SHORT("Длина пароля должна быть больше 5 символов"),

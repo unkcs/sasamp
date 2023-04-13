@@ -1,12 +1,10 @@
 package com.liverussia.launcher.ui.activity;
 
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Build;
 
 import android.os.Handler;
-import android.util.Log;
 import android.widget.*;
 import android.graphics.PorterDuff;
 
@@ -24,11 +22,9 @@ import android.view.animation.Animation;
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.Samp;
 import com.liverussia.launcher.domain.enums.StorageElements;
-import com.liverussia.launcher.domain.messages.InfoMessage;
 import com.liverussia.launcher.storage.Storage;
 import com.liverussia.launcher.ui.dialogs.EnterLockedServerPasswordDialog;
 import com.liverussia.launcher.utils.MainUtils;
-import com.liverussia.cr.core.GTASA;
 import com.liverussia.launcher.async.task.CacheChecker;
 import com.liverussia.launcher.async.dto.response.FileInfo;
 import com.liverussia.cr.gui.MineGame3;
@@ -342,13 +338,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String selectedServer = NativeStorage.getClientProperty(NativeStorageElements.SERVER, this);
 
         if (StringUtils.isBlank(nickname)) {
-            activityService.showMessage(ErrorMessage.INPUT_NICKNAME_BEFORE_SERVER_CONNECT.getText(), this);
+            activityService.showErrorMessage(ErrorMessage.INPUT_NICKNAME_BEFORE_SERVER_CONNECT.getText(), this);
             onClickSettings();
             return;
         }
 
         if (StringUtils.isBlank(selectedServer)) {
-            activityService.showMessage(ErrorMessage.SERVER_NOT_SELECTED.getText(), this);
+            activityService.showErrorMessage(ErrorMessage.SERVER_NOT_SELECTED.getText(), this);
             onClickMonitoring();
             return;
         }
@@ -382,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void saveServerPassword(String password) {
         if (StringUtils.isBlank(password)) {
-            activityService.showMessage(ErrorMessage.TEST_SERVER_PASSWORD_NOT_INPUT.getText(), this);
+            activityService.showErrorMessage(ErrorMessage.TEST_SERVER_PASSWORD_NOT_INPUT.getText(), this);
             return;
         }
 

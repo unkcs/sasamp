@@ -106,7 +106,7 @@ public class SplashActivity extends AppCompatActivity {
 
 			@Override
 			public void onFailure(Call<MonitoringData> call, Throwable t) {
-				activityService.showMessage(ErrorContainer.SERVER_CONNECT_ERROR.getMessage(), SplashActivity.this);
+				activityService.showErrorMessage(ErrorContainer.SERVER_CONNECT_ERROR.getMessage(), SplashActivity.this);
 				startApp();
 			}
 		});

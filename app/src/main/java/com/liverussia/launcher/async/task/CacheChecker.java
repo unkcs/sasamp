@@ -1,6 +1,5 @@
 package com.liverussia.launcher.async.task;
 
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.UiThread;
@@ -19,7 +18,6 @@ import com.liverussia.launcher.error.apiException.ApiException;
 import com.liverussia.launcher.error.apiException.ErrorContainer;
 import com.liverussia.launcher.service.ActivityService;
 import com.liverussia.launcher.service.impl.ActivityServiceImpl;
-import com.liverussia.launcher.utils.MD5;
 import com.techyourchance.threadposter.BackgroundThreadPoster;
 import com.techyourchance.threadposter.UiThreadPoster;
 
@@ -30,14 +28,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -260,7 +252,7 @@ public class CacheChecker implements Listener<FileInfo[]> {
                 .map(ErrorContainer::getMessage)
                 .orElse(StringUtils.EMPTY);
 
-        activityService.showMessage(errorMessage, activity);
+        activityService.showErrorMessage(errorMessage, activity);
     }
 
     private void onAsyncErrorDo() {

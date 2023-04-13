@@ -61,7 +61,7 @@ public class MonitoringFragment extends Fragment {
 		recyclerServers.setLayoutManager(layoutManagerr);
 
 		this.servers = MainUtils.SERVERS;
-		serversAdapter = new ServersAdapter(getContext(), this.servers);
+		serversAdapter = new ServersAdapter(getActivity(), this.servers);
 		recyclerServers.setAdapter(serversAdapter);
 	}
 

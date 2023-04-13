@@ -152,13 +152,13 @@ public class AuthenticationDialog extends DialogFragment implements View.OnClick
             reCaptchaDialog.setOnDialogCloseListener(this::performCaptchaSuccessAction);
             reCaptchaDialog.createDialog();
         } else {
-            activityService.showMessage(ErrorMessage.CAPTCHA_NOT_PASSED.getText(), fragment.getActivity());
+            activityService.showErrorMessage(ErrorMessage.CAPTCHA_NOT_PASSED.getText(), fragment.getActivity());
         }
     }
 
     //TODO
     private void performCaptchaFailureAction(Exception exception) {
-        activityService.showMessage(ErrorMessage.CAPTCHA_COMPLETING_PROBLEMS.getText(), fragment.getActivity());
+        activityService.showErrorMessage(ErrorMessage.CAPTCHA_COMPLETING_PROBLEMS.getText(), fragment.getActivity());
         iAmNotRobotCheckBox.setChecked(false);
 
         Log.d("Captcha failed reason: ", exception.getMessage());

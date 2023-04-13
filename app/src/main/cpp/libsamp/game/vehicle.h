@@ -153,7 +153,7 @@ public:
 	CRGBA mainColor{};
     CRGBA wheelColor{0, 0, 0, 0};
 	CRGBA secondColor{};
-	CRGBA lightColor{255, 255, 255, 100};
+	CRGBA lightColor{255, 255, 255, 120};
 	RwTexture* pPlateTexture = nullptr;
 
 	VEHICLE_TYPE* 	m_pVehicle;

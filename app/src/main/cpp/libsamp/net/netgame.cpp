@@ -511,6 +511,10 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			packetShowDonat(p);
 			break;
 		}
+		case RPC_TUNING_WHEELS: {
+			packetTireShop(p);
+			break;
+		}
 		case RPC_UPDATE_SATIETY: {
 			packetUpdateSatiety(p);
 			break;

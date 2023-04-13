@@ -601,7 +601,7 @@ public class HudManager extends Chat {
             }
         });
     }
-    public void toggleAll(boolean toggle)
+    public void toggleAll(boolean toggle, boolean isWithChat)
     {
         if(!toggle)
         {
@@ -610,6 +610,18 @@ public class HudManager extends Chat {
         else
         {
             activity.runOnUiThread(() -> hud_main.setVisibility(View.VISIBLE) );
+        }
+
+        if (!isWithChat) {
+            activity.runOnUiThread(() -> {
+                chat_box.setVisibility(View.GONE);
+                hide_chat.setVisibility(View.GONE);
+            });
+        } else {
+            activity.runOnUiThread(() -> {
+                chat_box.setVisibility(View.VISIBLE);
+                hide_chat.setVisibility(View.VISIBLE);
+            });
         }
     }
 

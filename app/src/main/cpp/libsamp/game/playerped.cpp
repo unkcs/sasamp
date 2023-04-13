@@ -6,7 +6,7 @@
 
 #include "..//CDebugInfo.h"
 #include "util/patch.h"
-#include "/Enums/ePedState.h"
+#include "Enums/ePedState.h"
 #include "CWorld.h"
 #include "game/Models/ModelInfo.h"
 

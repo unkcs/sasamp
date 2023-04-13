@@ -187,6 +187,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CDialog.h"
 #include "java_systems/CTechInspect.h"
 #include "java_systems/casino/CBaccarat.h"
+#include "java_systems/CTireShop.h"
 
 CAMERA_AIM* caAim = new CAMERA_AIM();
 
@@ -467,16 +468,23 @@ bool CLocalPlayer::Process()
 	}
 	////////////////////////////
 	bool needDrawableHud = true;
+	bool needDrawableChat = true;
+//	bool needDrawableMoney = true;
+
 	if(CDialog::bIsShow || pGame->isCasinoDiceActive || CTab::bIsShow || pGame->isAutoShopActive
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow)
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow)
 	{
 		needDrawableHud = false;
 	}
 
-	CHUD::toggleAll(needDrawableHud);
+	if (CTireShop::bIsShow) {
+		needDrawableChat = false;
+	}
+
+	CHUD::toggleAll(needDrawableHud, needDrawableChat);
 
     if(m_bIsSpectating && !m_bIsActive)
     {

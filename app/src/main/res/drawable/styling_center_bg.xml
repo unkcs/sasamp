@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:aapt="http://schemas.android.com/aapt">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <corners android:radius="9dp"/>
+            <corners android:radius="5dp"/>
             <gradient
-                android:startColor="#00262C"
-                android:centerColor="#005864"
-                android:endColor="#000000"
+                android:startColor="#B200262C"
+                android:centerColor="#B3005864"
+                android:endColor="#B3000000"
                 android:angle="90"
                 android:type="linear"/>
         </shape>

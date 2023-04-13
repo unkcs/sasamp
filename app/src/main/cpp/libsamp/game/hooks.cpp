@@ -1664,8 +1664,8 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 
 			return mat;
 		}
-        if ( mat->color.red == 255 && mat->color.green == 0 && mat->color.blue == 255 )
-        { // first color
+        if ( mat->color.red == 125 && mat->color.green == 100 && mat->color.blue == 0 )
+        { // wheel
             resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
             mat->color.alpha = 255;
             mat->color.red = pVeh->wheelColor.r;
@@ -2815,8 +2815,7 @@ void InstallHooks()
 
 	PROTECT_CODE_INSTALLHOOKS;
 
-	//
-	CHook::InlineHook(g_libGTASA, 0x003C1500, &World__remove_hook, &World__remove);
+	//CHook::InlineHook(g_libGTASA, 0x00298088, )
 
     // Fixing a crosshair by very stupid math ( JPATCH )
 	m_f3rdPersonCHairMultX = (float*)(g_libGTASA + 0x008B07FC);

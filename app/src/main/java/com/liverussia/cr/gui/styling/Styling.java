@@ -42,16 +42,14 @@ public class Styling {
     private LinearLayout stockLayout;
     private ImageView stockImage;
 
-    private ImageView arrowRightImg;
-    private ImageView arrowLeftImg;
-
     private ConstraintLayout neonLayout;
+    ConstraintLayout wheel_layout;
     private ConstraintLayout lightsLayout;
     private ConstraintLayout tonerLayout;
     private ConstraintLayout colorLayout;
-    private ConstraintLayout buyLayout;
-    private ConstraintLayout arrowRight;
-    private ConstraintLayout arrowLeft;
+    private ImageView styling_buy_butt;
+    private ImageView arrowRight;
+    private ImageView arrowLeft;
 
     native void toStock();
     native void exitClick();
@@ -73,6 +71,7 @@ public class Styling {
             public void run() {
                 animation = AnimationUtils.loadAnimation(activity, R.anim.button_click);
 
+                wheel_layout = activity.findViewById(R.id.wheel_layout);
                 neonLayout = activity.findViewById(R.id.neon_layout);
                 lightsLayout = activity.findViewById(R.id.lights_layout);
                 tonerLayout = activity.findViewById(R.id.toner_layout);
@@ -103,10 +102,10 @@ public class Styling {
                     }
                 });
 
-                buyLayout = activity.findViewById(R.id.styling_buy_layout);
+                styling_buy_butt = activity.findViewById(R.id.styling_buy_butt);
                 howMuchText = activity.findViewById(R.id.styling_howmuch);
 
-                buyLayout.setOnClickListener(new View.OnClickListener() {
+                styling_buy_butt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         view.startAnimation(animation);
@@ -115,21 +114,19 @@ public class Styling {
                 });
 
                 arrowRight = activity.findViewById(R.id.styling_arrow_right);
-                arrowRightImg = activity.findViewById(R.id.styling_arrow_right_img);
                 arrowRight.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        arrowRightImg.startAnimation(animation);
+                        view.startAnimation(animation);
                         sendClickedCameraArrow(1);
                     }
                 });
 
                 arrowLeft = activity.findViewById(R.id.styling_arrow_left);
-                arrowLeftImg = activity.findViewById(R.id.styling_arrow_left_img);
                 arrowLeft.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        arrowLeftImg.startAnimation(animation);
+                        view.startAnimation(animation);
                         sendClickedCameraArrow(0);
                     }
                 });
@@ -165,6 +162,11 @@ public class Styling {
                         showColorPicker(3);
                       //  Toast.makeText(activity, "Скоро...", Toast.LENGTH_SHORT).show();
                     }
+                });
+
+                wheel_layout.setOnClickListener(view -> {
+                    view.startAnimation(animation);
+                    showColorPicker(4);
                 });
 
                 updateEverything(money, total);

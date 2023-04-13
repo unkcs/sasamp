@@ -158,6 +158,10 @@ Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject th
             pVehicle->mainColor.Set(r, g, b, 255);
             break;
         }
+        case 4: {
+            pVehicle->wheelColor.Set(r, g, b, 255);
+            break;
+        }
         case 0: {
             // neon
             pVehicle->SetCustomShadow(r, g, b, 5.0, 5.0, nullptr);

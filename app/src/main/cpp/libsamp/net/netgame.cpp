@@ -1062,6 +1062,11 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			bs.Read(pVeh->secondColor.g);
 			bs.Read(pVeh->secondColor.b);
 
+			// wheel coolor
+			bs.Read(pVeh->wheelColor.r);
+			bs.Read(pVeh->wheelColor.g);
+			bs.Read(pVeh->wheelColor.b);
+
 			//
 			bs.Read(pVeh->tonerColor.r);
 			bs.Read(pVeh->tonerColor.g);

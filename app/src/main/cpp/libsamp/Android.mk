@@ -35,7 +35,6 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/java_systems/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/java_systems/casino/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/util/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/gui/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/cryptors/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../santrope-tea-gtasa/encryption/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../santrope-tea-gtasa/encryption/*.c)
 

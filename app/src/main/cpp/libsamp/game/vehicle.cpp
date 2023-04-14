@@ -1119,12 +1119,8 @@ void CVehicle::SetComponentAngle(bool bUnk, int iID, float angle)
 	}
 }
 
-#include "..//cryptors/COMPONENT_VISIBLE_INTERNAL_result.h"
-
 void CVehicle::SetComponentVisibleInternal(const char* szComponent, bool bVisible)
 {
-
-	PROTECT_CODE_COMPONENT_VISIBLE_INTERNAL;
 	if (!m_pVehicle || !m_dwGTAId)
 	{
 		return;

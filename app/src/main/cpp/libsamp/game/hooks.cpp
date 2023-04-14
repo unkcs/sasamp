@@ -1628,7 +1628,6 @@ RpAtomic* CVehicle__SetupRenderCB(RpAtomic* atomic, void* data)
 	RpGeometryForAllMaterials(RpAtomicGetGeometry(atomic), CVehicle__SetupRenderMatCB, data);
 	return atomic;
 }
-#include "..//cryptors/MODELINFO_EDITABLE_result.h"
 
 void (*CVehicleModelInfo__SetEditableMaterials)(RpClump* clump);
 void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
@@ -1649,13 +1648,9 @@ void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
 	CVehicleModelInfo__SetEditableMaterials(clump);
 }
 
-#include "..//cryptors/RESET_AFTER_RENDER_result.h"
-
 void (*CVehicle__ResetAfterRender)(uintptr_t);
 void CVehicle__ResetAfterRender_hook(uintptr_t thiz)
 {
-	PROTECT_CODE_RESET_AFTER_RENDER;
-
 	for (auto& p : resetEntriesVehicle)
 	{
 		*p.first = p.second;
@@ -1690,15 +1685,11 @@ void CGame__Process_hook()
 	//CCustomPlateManager::Process();
 }
 
-#include "..//cryptors/AUTOMOBILE_COLLISION_result.h"
-
 uint16_t g_usLastProcessedModelIndexAutomobile = 0;
 int g_iLastProcessedModelIndexAutoEnt = 0;
 void (*CAutomobile__ProcessEntityCollision)(VEHICLE_TYPE* a1, ENTITY_TYPE* a2, int a3);
 void CAutomobile__ProcessEntityCollision_hook(VEHICLE_TYPE* a1, ENTITY_TYPE* a2, int a3)
 {
-	PROTECT_CODE_AUTOMOBILE_COLLISION;
-
 	g_usLastProcessedModelIndexAutomobile = a1->entity.nModelIndex;
 	g_iLastProcessedModelIndexAutoEnt = a2->nModelIndex;
 
@@ -1952,46 +1943,37 @@ void CAutomobile__UpdateWheelMatrix_hook(VEHICLE_TYPE* thiz, int nodeIndex, int 
 void (*CAutomobile__PreRender)(VEHICLE_TYPE* thiz);
 void CAutomobile__PreRender_hook(VEHICLE_TYPE* thiz)
 {
-	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[thiz->entity.nModelIndex];
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(thiz->entity.nModelIndex);
 
-	float fOldFront = *(float*)(pModelInfoStart + 88);
-	float fOldRear = *(float*)(pModelInfoStart + 92);
-	CVehicle* pVeh = nullptr;
-	if (pNetGame)
-	{
-		if (pNetGame->GetVehiclePool())
-		{
-			uint16_t vehid = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(thiz);
-			pVeh = pNetGame->GetVehiclePool()->GetAt(vehid);
-			if (pVeh)
+	float fOldFront = pModelInfoStart->m_fWheelSizeFront;
+	float fOldRear = pModelInfoStart->m_fWheelSizeRear;
+
+	if (pNetGame->GetVehiclePool()) {
+		uint16_t vehid = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(thiz);
+		auto pVeh = pNetGame->GetVehiclePool()->GetAt(vehid);
+		if (pVeh) {
+			pVeh->ProcessWheelsOffset();
+			g_pLastProcessedVehicleMatrix = pVeh;
+
+			if (pVeh->m_bWheelSize)
 			{
-				pVeh->ProcessWheelsOffset();
-				g_pLastProcessedVehicleMatrix = pVeh;
-
-				if (pVeh->m_bWheelSize)
-				{
-					*(float*)(pModelInfoStart + 92) = pVeh->m_fWheelSize;
-					*(float*)(pModelInfoStart + 88) = pVeh->m_fWheelSize;
-				}
-				if (pVeh->m_bShadow && pVeh->m_Shadow.pTexture)
-				{
-					CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->entity.mat);
-				}
+				pModelInfoStart->m_fWheelSizeFront = pVeh->m_fWheelSize;
+				pModelInfoStart->m_fWheelSizeRear = pVeh->m_fWheelSize;
+			}
+			if (pVeh->m_bShadow && pVeh->m_Shadow.pTexture) {
+				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->entity.mat);
 			}
 		}
 	}
 
 	CAutomobile__PreRender(thiz);
 
-	*(float*)(pModelInfoStart + 88) = fOldFront;
-	*(float*)(pModelInfoStart + 92) = fOldRear;
+	pModelInfoStart->m_fWheelSizeFront = fOldFront;
+	pModelInfoStart->m_fWheelSizeRear = fOldRear;
 
 	g_pLastProcessedVehicleMatrix = nullptr;
 	g_iLastProcessedWheelVehicle = -1;
 }
-
-#include "..//cryptors/INSTALLHOOKS_result.h"
 
 void (*CTaskSimpleUseGun__RemoveStanceAnims)(void* thiz, void* ped, float a3);
 void CTaskSimpleUseGun__RemoveStanceAnims_hook(void* thiz, void* ped, float a3)
@@ -2462,15 +2444,6 @@ int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
 	return CTaskSimpleUseGun__SetPedPosition(thiz, a2);
 }
 
-int (*CTaskSimpleCarSetPedInAsDriver__ProcessPed)(uintptr_t *thiz, PED_TYPE *a2);
-int CTaskSimpleCarSetPedInAsDriver__ProcessPed_hook(uintptr_t *thiz, PED_TYPE *a2)
-{
-	if(!a2)return false;
-    if( !*((DWORD *)thiz + 4)  )return false;
-
-	return CTaskSimpleCarSetPedInAsDriver__ProcessPed(thiz, a2);
-}
-
 uint32_t (*CVehicle__GetVehicleLightsStatus)(VEHICLE_TYPE *_pVehicle);
 uint32_t CVehicle__GetVehicleLightsStatus_hook(VEHICLE_TYPE *_pVehicle)
 {
@@ -2741,8 +2714,6 @@ void InstallHooks()
 {
 	Log("InstallHooks");
 
-	PROTECT_CODE_INSTALLHOOKS;
-
 	//CHook::InlineHook(g_libGTASA, 0x00298088, )
 
     // Fixing a crosshair by very stupid math ( JPATCH )
@@ -2890,9 +2861,6 @@ void InstallHooks()
 	CHook::NOP(g_libGTASA + 0x266496, 2); // Game - AimMode
 	CHook::NOP(g_libGTASA + 0x261A50, 2); // Main - Language
 	CHook::NOP(g_libGTASA + 0x2665EE, 2); // Game - SocialClub
-
-	//
-//	CHook::InlineHook(g_libGTASA, 0x004904AC, &CTaskSimpleCarSetPedInAsDriver__ProcessPed_hook, &CTaskSimpleCarSetPedInAsDriver__ProcessPed);
 
 	// fix разрешения экрана
 	CHook::InlineHook(g_libGTASA, 0x0026CE30, &MobileSettings__GetMaxResWidth_hook, &MobileSettings__GetMaxResWidth);

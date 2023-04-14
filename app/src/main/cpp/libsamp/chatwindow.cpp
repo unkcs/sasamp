@@ -136,11 +136,7 @@ void InitBASSFuncs()
 BOOL returnedValue;
 #include "util/CJavaWrapper.h"
 
-#ifdef GAME_EDITION_CR
-uint32_t g_uiHeadMoveEnabled = 0;
-#else
 uint32_t g_uiHeadMoveEnabled = 1;
-#endif
 
 uint32_t g_uiBorderedText = 1;
 #include "CDebugInfo.h"

@@ -221,7 +221,8 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 {
     m_bIsOnRightTurnLight = toggle;
 
-	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
+
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->nModelIndex);
 
 	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
@@ -264,7 +265,7 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 
 void CVehicle::toggleReverseLight(bool toggle)
 {
-	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->nModelIndex);
 
 	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
@@ -308,7 +309,7 @@ void CVehicle::toggleLeftTurnLight(bool toggle)
 {
     m_bIsOnLeftTurnLight = toggle;
 
-	auto pModelInfoStart = static_cast<CVehicleModelInfo *>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->nModelIndex);
 
 	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
@@ -732,22 +733,14 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		m_pCustomHandling = new tHandlingData;
 	}
 
-	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
-	if (!pModelInfoStart)
+	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->entity.nModelIndex);
+
+	if (!pModel)
 	{
 		return;
 	}
 
-	//CChatWindow::AddDebugMessage("handling id %d", *(uint16_t*)(pModelInfoStart + 98));
-
-	CHandlingDefault::GetDefaultHandling(*(uint16_t*)(pModelInfoStart + 98), m_pCustomHandling);
-
-	/*CChatWindow::AddDebugMessage("mass %f", m_pCustomHandling->m_fMass);
-	CChatWindow::AddDebugMessage("turn %f", m_pCustomHandling->m_fTurnMass);
-	CChatWindow::AddDebugMessage("m_fEngineAcceleration %f", m_pCustomHandling->m_transmissionData.m_fEngineAcceleration);
-	CChatWindow::AddDebugMessage("m_fMaxGearVelocity %f", m_pCustomHandling->m_transmissionData.m_fMaxGearVelocity);
-	CChatWindow::AddDebugMessage("flags 0x%x", m_pCustomHandling->m_nHandlingFlags);*/
+	CHandlingDefault::GetDefaultHandling(pModel->m_nHandlingId, m_pCustomHandling);
 
 	bool bNeedRecalculate = false;
 
@@ -838,19 +831,12 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 
 	if (m_bWheelSize)
 	{
-		fOldFrontWheelSize = *(float*)(pModelInfoStart + 88);
-		*(float*)(pModelInfoStart + 88) = m_fWheelSize;
+		fOldFrontWheelSize = pModel->m_fWheelSizeFront;
+		pModel->m_fWheelSizeFront = m_fWheelSize;
 
-		fOldRearWheelSize = *(float*)(pModelInfoStart + 92);
-		*(float*)(pModelInfoStart + 92) = m_fWheelSize;
+		fOldRearWheelSize = pModel->m_fWheelSizeRear;
+		pModel->m_fWheelSizeRear = m_fWheelSize;
 	}
-
-	/*CChatWindow::AddDebugMessage("AFTER");
-	CChatWindow::AddDebugMessage("mass %f", m_pCustomHandling->m_fMass);
-	CChatWindow::AddDebugMessage("turn %f", m_pCustomHandling->m_fTurnMass);
-	CChatWindow::AddDebugMessage("m_fEngineAcceleration %f", m_pCustomHandling->m_transmissionData.m_fEngineAcceleration);
-	CChatWindow::AddDebugMessage("m_fMaxGearVelocity %f", m_pCustomHandling->m_transmissionData.m_fMaxGearVelocity);
-	CChatWindow::AddDebugMessage("flags 0x%x", m_pCustomHandling->m_nHandlingFlags);*/
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
 	m_pVehicle->pHandling = m_pCustomHandling;
@@ -864,15 +850,14 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 
 	if (m_bWheelSize)
 	{
-		*(float*)(pModelInfoStart + 88) = fOldFrontWheelSize;
-		*(float*)(pModelInfoStart + 92) = fOldRearWheelSize;
+		pModel->m_fWheelSizeFront = fOldFrontWheelSize;
+		pModel->m_fWheelSizeRear = fOldRearWheelSize;
 	}
 
 	if (bNeedRecalculate)
 	{
 		((void (*)(VEHICLE_TYPE*))(g_libGTASA + 0x004D6078 + 1))(m_pVehicle); // process suspension
 	}
-	//ScriptCommand(&set_car_heavy, m_dwGTAId, 1);
 }
 
 void CVehicle::ResetVehicleHandling()
@@ -896,15 +881,15 @@ void CVehicle::ResetVehicleHandling()
 	{
 		m_pCustomHandling = new tHandlingData;
 	}
-	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
-	uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[m_pVehicle->entity.nModelIndex];
+	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->entity.nModelIndex);
 
-	if (!pModelInfoStart)
+
+	if (!pModel)
 	{
 		return;
 	}
 
-	CHandlingDefault::GetDefaultHandling(*(uint16_t*)(pModelInfoStart + 98), m_pCustomHandling);
+	CHandlingDefault::GetDefaultHandling(pModel->m_nHandlingId, m_pCustomHandling);
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
 

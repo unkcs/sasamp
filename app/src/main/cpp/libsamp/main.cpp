@@ -47,10 +47,8 @@ void ApplyInGamePatches();
 void ApplyPatches_level0();
 void MainLoop();
 
-#ifdef GAME_EDITION_CR
 extern uint16_t g_usLastProcessedModelIndexAutomobile;
 extern int g_iLastProcessedModelIndexAutoEnt;
-#endif
 
 extern int g_iLastProcessedSkinCollision;
 extern int g_iLastProcessedEntityCollision;
@@ -132,11 +130,7 @@ void ObfuscatedForceExit3()
 	// CEntity::PreRender
 	
 }
-#ifdef GAME_EDITION_CR
-int g_iServer = 1;
-#else
-int g_iServer = 1;
-#endif
+
 #include "net/CUDPSocket.h"
 void InitInGame()
 {

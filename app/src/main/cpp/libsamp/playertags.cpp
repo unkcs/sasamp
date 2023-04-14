@@ -353,13 +353,4 @@ void CPlayerTags::Draw(VECTOR* vec, char* szName, uint32_t dwColor,
 
 	if (Out_voice.Z < 1.0f)
 		return;
-
-#ifdef GAME_EDITION_CR
-	if (bKeyboard && m_pKeyboard_icon)
-	{
-		ImVec2 a = ImVec2(pos.x + ImGui::CalcTextSize(szName).x + pGUI->GetFontSize() * 0.5f, pos.y);
-		ImVec2 b = ImVec2(a.x + (pGUI->GetFontSize() * 1.3f), a.y + (pGUI->GetFontSize() * 1.3f));
-		ImGui::GetOverlayDrawList()->AddImage((ImTextureID)m_pKeyboard_icon->raster, a, b);
-	}
-#endif
 }

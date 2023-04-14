@@ -1038,44 +1038,14 @@ void ScrCreateObject(RPCParameters* rpcParams)
 				pGame->LoadRequestedModels();
 				while (!pGame->IsModelLoaded(modelId)) sleep(1);
 			}
-			pObject->m_bMaterials = true;
-			pObject->m_pMaterials[slot].wModelID = modelId;
-			pObject->m_pMaterials[slot].pTex = (RwTexture*)GetTextureFromTXDStore(str, tex);
-			pObject->m_pMaterials[slot].m_bCreated = true;
-			pObject->m_pMaterials[slot].dwColor = col;
-			if (!strncmp(tex, "materialtext1", sizeof("materialtext1")))
-			{
-				tex = "MaterialText1";
-			}
-			if (!strncmp(tex, "sampblack", sizeof("sampblack")))
-			{
-				tex = "SAMPBlack";
-			}
-			if (!strncmp(tex, "carpet19-128x128", sizeof("carpet19-128x128")))
-			{
-				tex = "Carpet19-128x128";
-			}
 
-			if (!pObject->m_pMaterials[slot].pTex && strncmp(tex, "none", sizeof("none"))
-				&& strncmp(tex, "wall8", sizeof("wall8")))
-			{
-				pObject->m_pMaterials[slot].pTex = (RwTexture*)LoadTextureFromDB("samp", tex);
-			}
 			if (!GetModelReferenceCount(modelId) && pGame->IsModelLoaded(modelId))
 			{
 				ScriptCommand(&release_model, modelId);
 			}
-			//bsData.Read(pObject->m_pMaterials[i].dwColor);
-//			if (!GetModelReferenceCount(modelId) && pGame->IsModelLoaded(modelId))
-//			{
-//				ScriptCommand(&release_model, modelId);
-//			}
-			//pGame->ReleaseModel(pMaterials[i].wModelID);
+
 		}
 	}
-
-	//LOGI("id: %d model: %d x: %f y: %f z: %f", wObjectID, ModelID, vecPos.X, vecPos.Y, vecPos.Z);
-	//LOGI("vecRot: %f %f %f", vecRot.X, vecRot.Y, vecRot.Z);
 
 }
 
@@ -1511,15 +1481,7 @@ void ScrSetPlayerObjectMaterial(RPCParameters* rpcParams)
 	rightColor.cols[2] = temp;
 	col = rightColor.dwColor;
 
-	if (modelId == -1)
-	{
-		pObj->m_bMaterials = true;
-		pObj->m_pMaterials[matId].m_bCreated = true;
-		pObj->m_pMaterials[matId].wModelID = 0xFFFF;
-		pObj->m_pMaterials[matId].pTex = nullptr;
-		pObj->m_pMaterials[matId].dwColor = col;
-		return;
-	}
+
 	if (modelId < 0 || modelId > 20000)
 	{
 		modelId = 18631;
@@ -1530,29 +1492,7 @@ void ScrSetPlayerObjectMaterial(RPCParameters* rpcParams)
 		pGame->LoadRequestedModels();
 		while (!pGame->IsModelLoaded(modelId)) sleep(1);
 	}
-	pObj->m_bMaterials = true;
-	pObj->m_pMaterials[matId].m_bCreated = true;
-	pObj->m_pMaterials[matId].wModelID = modelId;
-	pObj->m_pMaterials[matId].pTex = (RwTexture*)GetTextureFromTXDStore(str, tex);
-	pObj->m_pMaterials[matId].dwColor = col;
 
-	if (!strncmp(tex, "materialtext1", sizeof("materialtext1")))
-	{
-		tex = "MaterialText1";
-	}
-	if (!strncmp(tex, "sampblack", sizeof("sampblack")))
-	{
-		tex = "SAMPBlack";
-	}
-	if (!strncmp(tex, "carpet19-128x128", sizeof("carpet19-128x128")))
-	{
-		tex = "Carpet19-128x128";
-	}
-	if (!pObj->m_pMaterials[matId].pTex && strncmp(tex, "none", sizeof("none"))
-		&& strncmp(tex, "wall8", sizeof("wall8")))
-	{
-		pObj->m_pMaterials[matId].pTex = (RwTexture*)LoadTextureFromDB("samp", tex);
-	}
 	if (!GetModelReferenceCount(modelId) && pGame->IsModelLoaded(modelId))
 	{
 		ScriptCommand(&release_model, modelId);

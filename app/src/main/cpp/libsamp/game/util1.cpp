@@ -2359,23 +2359,3 @@ uintptr_t LoadTexture(const char* texname)
 	Log("Texture %s not found!", texname);
 	return 0;
 }
-
-void DrawTextureUV(uintptr_t texture, RECT* rect, uint32_t dwColor, float* uv)
-{
-	if (texture)
-	{
-		RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERLINEAR);
-		// CSprite2d::Draw(CRect  const& posn, CRGBA  const& color, float u1, float v1, float u2, float v2, float u3, float v3, float u4, float v4);
-		((void(*)(uintptr_t, RECT*, uint32_t*, float, float, float, float, float, float, float, float))
-			(g_libGTASA + 0x5526CC + 1))(texture, rect, &dwColor, uv[0], uv[1], uv[2], uv[3], uv[4], uv[5], uv[6], uv[7]);
-	}
-}
-
-bool IsPointInRect(float x, float y, RECT* rect)
-{
-	if (x >= rect->fLeft && x <= rect->fRight &&
-		y >= rect->fBottom && y <= rect->fTop)
-		return true;
-
-	return false;
-}

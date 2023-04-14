@@ -21,12 +21,6 @@ public:
 	CQuaternion m_quatTarget;
 	CQuaternion m_quatStart;
 
-	MaterialInfo m_pMaterials[MAX_MATERIALS];
-	bool		m_bMaterials;
-
-	MaterialInfo m_MaterialTextTexture[MAX_MATERIALS];
-    bool		m_bMaterialsText;
-
 	VECTOR m_vecAttachedOffset;
 	VECTOR m_vecAttachedRotation;
 	uint16_t m_usAttachedVehicle;

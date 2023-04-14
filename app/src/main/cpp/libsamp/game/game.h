@@ -23,7 +23,6 @@
 #include "CActorPed.h"
 #include "CExtendedCarColors.h"
 #include "CWeaponsOutFit.h"
-#include "CRadarRect.h"
 #include "CFirstPersonCamera.h"
 #include "CStreaming.h"
 #include "TextureDatabaseRuntime.h"

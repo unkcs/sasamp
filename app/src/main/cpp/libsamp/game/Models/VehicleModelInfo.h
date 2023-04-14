@@ -11,6 +11,7 @@
 #include "../quaternion.h"
 #include "../CVector.h"
 #include "game/RW/rpworld.h"
+#include "game/Enums/eVehicleType.h"
 
 enum eVehicleDummy {
     DUMMY_LIGHT_FRONT_MAIN      = 0,
@@ -60,52 +61,52 @@ union tVehicleCompsUnion {
 };
 
 struct UpgradePosnDesc {
-    CVector     m_vPosition;
-    CQuaternion m_qRotation;
-    int32_t       m_nParentComponentId;
+    CVector         m_vPosition;
+    CQuaternion     m_qRotation;
+    int32_t         m_nParentComponentId;
 };
+static_assert(sizeof(UpgradePosnDesc) == 0x20, "Invalid size UpgradePosnDesc");
 
+#pragma pack(push, 4)
 struct CVehicleModelInfo : public CClumpModelInfo {
-    RpMaterial*        m_pPlateMaterial; // 3C
-    char               m_szPlateText[9]; // 40
-    unsigned char      m_nPlateType;    //  49
-    char               m_szGameName[8]; //  4a
-    char               _pad3A[2];       //  52
-    unsigned int       m_nVehicleType;  //  54
-    float              m_fWheelSizeFront;// 58
-    float              m_fWheelSizeRear;    //5C
-    short              m_nWheelModelIndex;  //60
-    short              m_nHandlingId;       // 62
-    // int8_t             field_4B;
-    unsigned char      m_nNumDoors;     //64
-    eVehicleClass      m_nVehicleClass; //65
-    unsigned char      m_nFlags;    //66
-    unsigned char      m_nWheelUpgradeClass;//67
-    unsigned char      m_nTimesUsed;    //68
-    char               field_51;    // 69
-    unsigned short     m_nFrq;      // 6A
-    tVehicleCompsUnion m_extraComps;    //6c
-    float              m_fBikeSteerAngle; // 70
+    RpMaterial*         m_pPlateMaterial; // 3C
+    char                m_szPlateText[9]; // 40
+    unsigned char       m_nPlateType;    //  49
+    char                m_szGameName[8]; //  4a
+    eVehicleType        m_nVehicleType;  //  54
+    float               m_fWheelSizeFront;// 58
+    float               m_fWheelSizeRear;    //5C
+    int16_t             m_nWheelModelIndex;  //60
+    int16_t             m_nHandlingId;       // 62
+    int8_t              m_nNumDoors;     //64
+    eVehicleClass       m_nVehicleClass; //65
+    int8_t              m_nFlags;    //66
+    int8_t              m_nWheelUpgradeClass;//67
+    int8_t              m_nTimesUsed;    //68
+    int16_t             m_freq;
+    tVehicleCompsUnion  m_extraComps;    //6c
+    float               m_fBikeSteerAngle; // 70
 
     struct {
-        CVector m_avDummyPos[15];
+        CVector         m_avDummyPos[15];
         UpgradePosnDesc m_aUpgrades[18];
-        RpAtomic* m_apExtras[6];
-        unsigned char m_nNumExtras;
-        unsigned int m_nMaskComponentsDamagable;
-    } * m_pVehicleStruct;   // 74
-    uint32_t m_firstColour[49];
-    uint32_t m_secondColour[33];
-    uint32_t m_thirdColour[17];
-    uint32_t m_fourthColour[17];
-    uintptr_t* m_apDirtMaterials[64];
-    uint8_t m_possibleColours[32];
-    uint8_t m_numPossibleColours;
-    uint8_t m_lastColUsed;
-    uintptr_t *m_lastCol;
-    int16_t   m_anUpgrades[18];
-    uint8_t skip_0[2];
-    uint32_t m_anRemapTxds[4];
+        RpAtomic*       m_apExtras[6];
+        RpAtomic*       m_pXtraAtomicLOD[6];
+        int8_t          m_nNumExtras;
+        uint32_t        m_nMaskComponentsDamagable;
+    } * m_pVehicleStruct;
+
+    RpMaterial* m_firstColour[49];
+    RpMaterial* m_secondColour[33];
+    RpMaterial* m_thirdColour[17];
+    RpMaterial* m_fourthColour[17];
+    RpMaterial* m_apDirtMaterials[64];
+    uint8_t     m_possibleColours[4][8];
+    uint8_t     m_numPossibleColours;
+    uint8_t     m_lastColUsed;
+    uint8_t     m_lastCol[4];
+    int16_t     m_anUpgrades[18];
+    const char* m_remaps[4];
 
     union {
         uintptr_t* m_pAnimBlock;
@@ -114,7 +115,8 @@ struct CVehicleModelInfo : public CClumpModelInfo {
     };
 
 };
-
+#pragma pack(pop)
+static_assert(sizeof(CVehicleModelInfo) == 0x3a8, "Invalid size cTransmission");
 
 
 #endif //LIVERUSSIA_VEHICLEMODELINFO_H

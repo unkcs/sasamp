@@ -1,15 +1,11 @@
 #pragma once
 #include <string>
-#include "bass.h"
 #include "game/Core/Vector.h"
 #include "RwMatrix.h"
-#include "game/Entity/Placeable.h"
-#include "Weapon.h"
-#include "game/Entity/Entity.h"
-#include "game/Entity/Ped.h"
 #include "game/RW/rwlpcore.h"
 
 #include "tHandlingData.h"
+#include "game/Entity/Entity.h"
 
 #define HUD_ELEMENT_MAP     1
 #define HUD_ELEMENT_TAGS    2
@@ -34,52 +30,17 @@
 typedef unsigned short VEHICLEID;
 typedef unsigned short PLAYERID;
 
-#define SA_MAJOR_VERSION	1
-#define SA_MINOR_VERSION	8
 #define SAMP_MAJOR_VERSION	2
 #define SAMP_MINOR_VERSION	0
 
 #define PADDING(x,y) uint8_t x[y]
 
-#define IS_CROUCHING(x) ((x->dwStateFlags >> 26) & 1)
-
 #define BIT_SET(byte,nbit)   ((byte) |=  (1<<(nbit)))
 #define BIT_CLEAR(byte,nbit) ((byte) &= ~(1<<(nbit)))
 #define BIT_CHECK(byte,nbit) ((byte) &   (1<<(nbit)))
 
-#define CUSTOM_PACKET_SERIAL_RESPONSE   0   // internal IDs
-#define CUSTOM_PACKET_ADDITIONAL_INFO	1
 
-#define LIB_CRASH_OFFSET(offset, value)	*(uint8_t*)(g_libGTASA + 0x001800AC + (offset)) = value
-
-//-----------------------------------------------------------
-
-#define MAKE_PROFILE(var, var_t) \
-	uint32_t (var) = GetTickCount(); \
-	static uint32_t (var_t) = GetTickCount();
-	
-
-#define LOG_PROFILE(var, var_t) \
-	if(GetTickCount() - (var_t) >= 5000) \
-	{ \
-		(var) = GetTickCount(); \
-		(var_t) = GetTickCount(); \
-	}
-
-
-//#define _CDEBUG
-
-#define GAME_EDITION_CR
-
-#ifdef GAME_EDITION_CR
-#pragma message "Compiling for CR"
-#else
-#pragma message "Compiling for GTASA"
-#endif
-
-
-
-enum eLights
+enum eLights :	uint8_t
 {
 	// these have to correspond to their respective panels
 	LEFT_HEADLIGHT = 0,
@@ -116,41 +77,6 @@ struct VehicleAudioPropertiesStruct
 	char field_15[3];			// 15: + 29, zeros
 	float field_16;			// 16: + 32
 };
-
-struct CRect
-{
-public:
-	float left;          // x1
-	float bottom;        // y1
-	float right;         // x2
-	float top;           // y2
-};
-
-#pragma pack(push, 1)
-
-enum ePrimaryTasks //array indexes
-{
-	TASK_PRIMARY_PHYSICAL_RESPONSE = 0,
-	TASK_PRIMARY_EVENT_RESPONSE_TEMP,
-	TASK_PRIMARY_EVENT_RESPONSE_NONTEMP,
-	TASK_PRIMARY_PRIMARY,
-	TASK_PRIMARY_DEFAULT,
-	TASK_PRIMARY_MAX
-};
-
-enum eSecondaryTasks //array indexes
-{
-	TASK_SECONDARY_ATTACK = 0,                // want duck to be after attack
-	TASK_SECONDARY_DUCK,                    // because attack controls ducking movement
-	TASK_SECONDARY_SAY,
-	TASK_SECONDARY_FACIAL_COMPLEX,
-	TASK_SECONDARY_PARTIAL_ANIM,
-	TASK_SECONDARY_IK,
-	TASK_SECONDARY_MAX
-};
-
-
-
 #pragma pack(pop)
 
 //-----------------------------------------------------------
@@ -194,11 +120,11 @@ struct SHandlingData
 	SHandlingData(uint8_t uFlag, float fvalue, int ivalue) : flag(uFlag), fValue(fvalue), iValue(ivalue) {}
 };
 
-typedef struct _CVector2DFloat
+struct CVector2DFloat
 {
 	float X;
 	float Y;
-} CVector2DFloat;
+};
 
 
 #pragma pack(1)
@@ -233,18 +159,6 @@ struct RpHAnimHierarchy
 	int32_t             numNodes;      /**< Number of nodes in the hierarchy  */
 
 	RwMatrix* pMatrixArray;   /**< Pointer to node matrices*/
-};
-
-
-#pragma pack(1)
-struct MaterialInfo
-{
-	uint8_t m_bCreated;
-	uint16_t wModelID;
-	uint32_t dwColor;
-
-	uint32_t oldFlags;
-	struct RwTexture* pTex;
 };
 
 //-----------------------------------------------------------
@@ -355,16 +269,6 @@ typedef struct _BULLET_DATA {
 } BULLET_DATA;
 
 #pragma pack(pop)
-
-
-
-typedef struct _RECT
-{
-	float fLeft;
-	float fBottom;
-	float fRight;
-	float fTop;
-} RECT, * PRECT;
 
 //-----------------------------------------------------------
 
@@ -489,9 +393,3 @@ typedef struct _RECT
 #define WEAPON_EXPLOSION				51
 #define WEAPON_DROWN                    53
 #define WEAPON_COLLISION                54
-
-#define OBJECT_PARACHUTE				3131
-#define OBJECT_CJ_CIGGY					1485
-#define OBJECT_DYN_BEER_1				1486
-#define OBJECT_CJ_BEER_B_2				1543
-#define OBJECT_CJ_PINT_GLASS			1546

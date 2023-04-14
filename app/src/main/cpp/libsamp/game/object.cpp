@@ -36,32 +36,14 @@ CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecR
 	m_bIsPlayerSurfing = false;
 	m_bNeedRotate = false;
 
-	m_bMaterials = false;
-
 	m_bAttachedType = 0;
 	m_usAttachedVehicle = 0xFFFF;
-
-	for (int i = 0; i < MAX_MATERIALS; i++)
-	{
-		m_pMaterials[i].m_bCreated = 0;
-		m_pMaterials[i].pTex = nullptr;
-	}
 
 	InstantRotate(vecRot.x, vecRot.y, vecRot.z);
 }
 // todo
 CObject::~CObject()
 {
-	m_bMaterials = false;
-	for (int i = 0; i < MAX_MATERIALS; i++)
-	{
-		if (m_pMaterials[i].m_bCreated && m_pMaterials[i].pTex)
-		{
-			m_pMaterials[i].m_bCreated = 0;
-			RwTextureDestroy(m_pMaterials[i].pTex);
-			m_pMaterials[i].pTex = nullptr;
-		}
-	}
 	m_pEntity = GamePool_Object_GetAt(m_dwGTAId);
 	if(m_pEntity)
 		ScriptCommand(&destroy_object, m_dwGTAId);

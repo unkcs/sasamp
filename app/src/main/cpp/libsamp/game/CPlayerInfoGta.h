@@ -7,6 +7,7 @@
 
 
 #include "common.h"
+#include "game/Entity/Ped.h"
 
 struct CPlayerInfoGta {
     PED_TYPE *m_pPed;

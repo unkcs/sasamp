@@ -1395,62 +1395,6 @@ static RwRGBA DWORD2RGBAinternal(uint32_t dwColor)
 	return tmp;
 }
 
-uintptr_t RwFrameForAllObjectsCALLBACK1(uintptr_t object, CObject* pObject)
-{
-	if (*(uint8_t*)object != 1)
-	{
-		return object;
-	}
-	uintptr_t pAtomic = object;
-	RpGeometry* pGeom = *(RpGeometry * *)(pAtomic + 24);
-	if (!pGeom)
-	{
-		return object;
-	}
-
-	int numMats = pGeom->matList.numMaterials;
-	if (numMats > 16)
-	{
-		numMats = 16;
-	}
-	for (int i = 0; i < numMats; i++)
-	{
-		RpMaterial* pMat = pGeom->matList.materials[i];
-		if (!pMat)
-		{
-			continue;
-		}
-		if (pObject->m_pMaterials[i].m_bCreated)
-		{
-			RpMaterial* pMat = pGeom->matList.materials[i];
-			if (!pMat)
-			{
-				continue;
-			}
-			if (pObject->m_pMaterials[i].pTex)
-			{
-				resetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&pMat->texture), *reinterpret_cast<unsigned int*>(&pMat->texture)));
-				pMat->texture = pObject->m_pMaterials[i].pTex;
-			}
-			if (pObject->m_pMaterials[i].dwColor)
-			{
-				//((int(*)())(g_libGTASA + 0x00559FC8 + 1))();
-				resetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&pGeom->flags), *reinterpret_cast<unsigned int*>(&pGeom->flags)));
-				pGeom->flags |= 0x00000040;
-				pGeom->flags &= 0xFFFFFFF7;
-				RwRGBA r = DWORD2RGBAinternal(pObject->m_pMaterials[i].dwColor);
-
-				resetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&pMat->color), *reinterpret_cast<unsigned int*>(&pMat->color)));
-				pMat->color = r;
-				pMat->surfaceProps.ambient = 1.0f;
-				pMat->surfaceProps.specular = 0.0f;
-				pMat->surfaceProps.diffuse = 1.0f;
-			}
-		}
-	}
-	return object;
-}
-
 int g_iLastRenderedObject;
 
 uintptr_t(*GetTexture_orig)(const char*);
@@ -1652,7 +1596,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 			mat->color.blue = pVeh->tonerColor.b;
 			mat->color.red = pVeh->tonerColor.r;
 
-            mat->surfaceProps.specular = 9.0f;
+           // mat->surfaceProps.specular = 9.0f;
 			return mat;
 		}
 		if ( color == 0xff00ff3c )
@@ -2069,23 +2013,6 @@ void CTaskSimpleUseGun__RemoveStanceAnims_hook(void* thiz, void* ped, float a3)
 	{
 		CTaskSimpleUseGun__RemoveStanceAnims(thiz, ped, a3);
 	}
-}
-
-float (*CRadar__LimitRadarPoint)(float* a1);
-float CRadar__LimitRadarPoint_hook(float* a1)
-{
-	if (*(uint8_t*)(g_libGTASA + 0x0063E0B4))
-	{
-		return sqrtf((float)(a1[1] * a1[1]) + (float)(*a1 * *a1));
-	}
-
-	if (!CRadarRect::IsEnabled())
-	{
-		return CRadar__LimitRadarPoint(a1);
-	}
-	float value = CRadarRect::CRadar__LimitRadarPoint_hook(a1);
-
-	return value;
 }
 
 void (*CCam__Process)(uintptr_t);

@@ -7,6 +7,7 @@
 
 #include "EntityGta.h"
 #include "../Enums/eVehicleType.h"
+#include "Ped.h"
 
 #pragma pack(push, 1)
 typedef struct _VEHICLE_TYPE

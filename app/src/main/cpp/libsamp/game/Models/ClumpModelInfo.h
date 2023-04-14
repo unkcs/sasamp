@@ -8,13 +8,15 @@
 
 #include "BaseModelInfo.h"
 
+#pragma pack(push, 4)
 struct CClumpModelInfo : public CBaseModelInfo {
     union {
         char *m_animFileName;
         unsigned int m_dwAnimFileIndex;
     };
 };
-// 0x3C
+static_assert(sizeof(CClumpModelInfo) == 0x3c, "Invalid size CClumpModelInfo");
+#pragma pack(pop)
 
 
 #endif //LIVERUSSIA_CLUMPMODELINFO_H

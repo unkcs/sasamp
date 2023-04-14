@@ -241,16 +241,6 @@ void ApplyPatches()
 	ApplyShadowPatch();
     ApplyDefaultPlatePatch();
 
-//	// allocate Atomic models pool
-//	ATOMIC_MODELS = new _ATOMIC_MODEL[120000];
-//	for (int i = 0; i < 120000; i++)
-//	{
-//		// CBaseModelInfo::CBaseModelInfo
-//		((void(*)(_ATOMIC_MODEL*))(g_libGTASA + 0x33559C + 1))(&ATOMIC_MODELS[i]);
-//		ATOMIC_MODELS[i].func_tbl = g_libGTASA + 0x5C6C68;
-//		memset(ATOMIC_MODELS[i].data, 0, sizeof(ATOMIC_MODELS->data));
-//	}
-
 	CHook::Write<uint32_t>(g_libGTASA + 0x8E87E4, 1);
 
 	CDebugInfo::ApplyDebugPatches();

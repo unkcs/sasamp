@@ -2,8 +2,7 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_BASEMODELINFO_H
-#define LIVERUSSIA_BASEMODELINFO_H
+#pragma once
 
 #include <cstdint>
 
@@ -32,65 +31,62 @@ class CVehicleModelInfo;
 class CWeaponModelInfo;
 struct RwObject;
 
+#pragma pack(push, 4)
 struct CBaseModelInfo {
     uintptr_t 	vtable;
-    unsigned int m_nKey;
-    char m_modelName[21];
-    char skip_1;
-    unsigned short m_nRefCount;
-    short m_nTxdIndex;
-    unsigned char m_nAlpha;
-    unsigned char m_n2dfxCount;
-    short m_n2dEffectIndex;
-    short m_nObjectInfoIndex;
+    uint32_t    m_nKey;
+    char        m_modelName[21];
+    int16_t     m_nRefCount;
+    int16_t     m_nTxdIndex;
+    uint8_t     m_nAlpha;
+    uint8_t     m_n2dfxCount;
+    int16_t     m_n2dEffectIndex;
+    int16_t     m_nObjectInfoIndex; // m_dynamicIndex
     union {
-        unsigned short m_nFlags;
-        struct {
-            unsigned char m_nFlagsUpperByte;
-            unsigned char m_nFlagsLowerByte;
-        };
+        uint16_t m_nFlags;
+
         struct {
             /* https://github.com/multitheftauto/mtasa-blue/blob/master/Client/game_sa/CModelInfoSA.h */
-            unsigned char bHasBeenPreRendered: 1; // we use this because we need to apply changes only once
-            unsigned char bDrawLast: 1;
-            unsigned char bAdditiveRender: 1;
-            unsigned char bDontWriteZBuffer: 1;
-            unsigned char bDontCastShadowsOn: 1;
-            unsigned char bDoWeOwnTheColModel: 1;
-            unsigned char bIsBackfaceCulled: 1;
-            unsigned char bIsLod: 1;
+            uint8_t bHasBeenPreRendered : 1; // we use this because we need to apply changes only once
+            uint8_t bDrawLast : 1;
+            uint8_t bAdditiveRender : 1;
+            uint8_t bDontWriteZBuffer : 1;
+            uint8_t bDontCastShadowsOn : 1;
+            uint8_t bDoWeOwnTheColModel : 1;
+            uint8_t bIsBackfaceCulled : 1;
+            uint8_t bIsLod : 1;
 
+            // 1st byte
             union {
                 struct { // Atomic flags
-                    unsigned char bIsRoad: 1;
-                    unsigned char : 1;
-                    unsigned char bDontCollideWithFlyer: 1;
-                    unsigned char nSpecialType: 4;
-                    unsigned char bWetRoadReflection: 1;
+                    uint8_t bIsRoad : 1;
+                    uint8_t bAtomicFlag0x200: 1;
+                    uint8_t bDontCollideWithFlyer : 1;
+                    uint8_t nSpecialType : 4;
+                    uint8_t bWetRoadReflection : 1;
                 };
                 struct { // Vehicle flags
-                    unsigned char bUsesVehDummy: 1;
-                    unsigned char : 1;
-                    unsigned char nCarmodId: 5;
-                    unsigned char bUseCommonVehicleDictionary: 1;
+                    uint8_t bUsesVehDummy : 1;
+                    uint8_t : 1;
+                    uint8_t nCarmodId : 5;
+                    uint8_t bUseCommonVehicleDictionary : 1;
                 };
                 struct { // Clump flags
-                    unsigned char bHasAnimBlend: 1;
-                    unsigned char bHasComplexHierarchy: 1;
-                    unsigned char bAnimSomething: 1;
-                    unsigned char bOwnsCollisionModel: 1;
-                    unsigned char : 3;
-                    unsigned char bTagDisabled: 1;
+                    uint8_t bHasAnimBlend : 1;
+                    uint8_t bHasComplexHierarchy : 1;
+                    uint8_t bAnimSomething : 1;
+                    uint8_t bOwnsCollisionModel : 1;
+                    uint8_t : 3;
+                    uint8_t bTagDisabled : 1;
                 };
             };
         };
     };
-    uint8_t ski_2[2];
-    uintptr_t *m_pColModel;      // 20
-    float m_fDrawDistance;  // 24
+    uintptr_t   *m_pColModel;     // CColModel
+    float       m_fDrawDistance;  // m_lodDistance
     union {
         struct RwObject *m_pRwObject;
-        uintptr_t *m_pRwClump;
+        struct RwClump  *m_pRwClump;
         struct RpAtomic *m_pRwAtomic;
     };
 
@@ -98,7 +94,6 @@ struct CBaseModelInfo {
     CPedModelInfo*     AsPedModelInfoPtr()     { return reinterpret_cast<CPedModelInfo*>(this); }
     CWeaponModelInfo*  AsWeaponModelInfoPtr()  { return reinterpret_cast<CWeaponModelInfo*>(this); }
 };
-// sizeof=0x38
+#pragma pack(pop)
 
-
-#endif //LIVERUSSIA_BASEMODELINFO_H
+static_assert(sizeof(CBaseModelInfo) == 0x38, "Invalid size CBaseModelInfo");

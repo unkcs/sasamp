@@ -45,7 +45,6 @@ void RwMatrixScale(RwMatrix* mat, VECTOR* vecScale);
 int GetFreeTextDrawTextureSlot();
 void DestroyTextDrawTexture(int index);
 uintptr_t LoadTexture(const char* texname);
-void DrawTextureUV(uintptr_t texture, RECT* rect, uint32_t dwColor, float* uv);
 
 void WorldAddEntity(uintptr_t pEnt);
 
@@ -56,7 +55,6 @@ void GetModelColSphereVecCenter(int iModel, VECTOR* vec);
 float GetModelColSphereRadius(int iModel);
 void RenderClumpOrAtomic(uintptr_t rwObject);
 uintptr_t ModelInfoCreateInstance(int iModel);
-bool IsPointInRect(float x, float y, RECT* rect);
 const char* GetAnimByIdx(int idx);
 int GetAnimIdxByName(const char* szName);
 struct RwRaster* GetRWRasterFromBitmap(uint8_t* pBitmap, size_t dwStride, size_t dwX, size_t dwY);

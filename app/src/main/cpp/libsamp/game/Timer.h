@@ -58,4 +58,6 @@ public:
     static bool GetIsCodePaused() { return m_CodePause; }
     static void SetCodePause(bool pause) { m_CodePause = pause; }
 
+    static float  GetTimeStep() { return ms_fTimeStep; }
+
 };

@@ -128,6 +128,8 @@ struct tHandlingData
     eVehicleLightsSize m_nFrontLights;
     eVehicleLightsSize m_nRearLights;
     uint8_t            m_nAnimGroup;
+
+    cTransmission& GetTransmission() { return m_transmissionData; }
 };
 #pragma pack(pop)
 static_assert(sizeof(tHandlingData) == 0xE0, "Invalid size tHandlingData");

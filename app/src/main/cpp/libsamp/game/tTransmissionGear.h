@@ -7,11 +7,11 @@
 #pragma once
 
 #pragma pack(push, 4)
-struct tGearRatio {
+struct tTransmissionGear {
     float m_maxVelocity;
     float m_changeUpVelocity;   // max velocity needed to change the current gear to higher
     float m_changeDownVelocity; // min velocity needed to change the current gear to lower
 };
 #pragma pack(pop)
 
-static_assert(sizeof(tGearRatio) == 0xC, "Invalid size tGearRatio");
+static_assert(sizeof(tTransmissionGear) == 0xC, "Invalid size tGearRatio");

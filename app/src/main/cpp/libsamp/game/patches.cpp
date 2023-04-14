@@ -225,6 +225,10 @@ void ApplyPatches()
 {
 	Log("Installing patches..");
 
+	// задние фары
+//	CHook::WriteMemory(g_libGTASA + 0x005197E0, (uintptr_t)"\x04", 1);
+//	CHook::WriteMemory(g_libGTASA + 0x005197BC, (uintptr_t)"\xFA", 1);
+
 	// fix invalid death id
 	CHook::NOP(g_libGTASA + 0x002FEAE6, 2);
 	CHook::NOP(g_libGTASA + 0x002FFAFC, 2);

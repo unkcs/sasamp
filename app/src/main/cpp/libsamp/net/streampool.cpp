@@ -162,14 +162,14 @@ void CStreamPool::SetStreamVolume(int iID, float fVolume)
 	bufferedCommands.WriteUnlock();
 }
 #include "netgame.h"
+#include "game/Timer.h"
 #include <jni.h>
 
 extern CNetGame* pNetGame;
 
 void CStreamPool::Process() // ready
 {
-	//if (*(uint8_t*)(g_libGTASA + 0x0063E06C) == 1)
-	if (*(uint8_t*)(g_libGTASA + 0x008C9BA3) == 1)// pause
+	if (CTimer::m_UserPause)// pause
 	{
 		for (int i = 0; i < MAX_STREAMS; i++)
 		{

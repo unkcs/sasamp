@@ -20,6 +20,7 @@ extern "C"
 #include "chatwindow.h"
 #include "../util/patch.h"
 #include "java_systems/CSpeedometr.h"
+#include "Timer.h"
 
 extern CGame* pGame;
 extern CPlayerPed *g_pCurrentFiredPed;
@@ -312,7 +313,7 @@ void TouchEvent_hook(int type, int num, int posX, int posY)
 {
 	//Log("TOUCH EVENT HOOK");
 
-	if (*(uint8_t*)(g_libGTASA + 0x008C9BA3) == 1)
+	if (CTimer::m_UserPause == true)
 	{
 		return TouchEvent(type, num, posX, posY);
 	}
@@ -734,36 +735,6 @@ size_t OS_FileRead_hook(FILE *a1, void *a2, size_t a3)
     }
 }
 
-void (*CTimer__StartUserPause)();
-void CTimer__StartUserPause_hook()
-{
-	Log("CTimer__StartUserPause_hook");
-	// process pause event
-	if (g_pJavaWrapper)
-	{
-		CKeyBoard::Close();
-
-		g_pJavaWrapper->SetPauseState(true);
-
-		//CSpeedometr::tempToggle(false);
-	}
-
-	*(uint8_t*)(g_libGTASA + 0x008C9BA3) = 1;
-}
-
-void (*CTimer__EndUserPause)();
-void CTimer__EndUserPause_hook()
-{
-	// process resume event
-	if (g_pJavaWrapper)
-	{
-		g_pJavaWrapper->SetPauseState(false);
-	//	CSpeedometr::tempToggle(true);
-	}
-
-	*(uint8_t*)(g_libGTASA + 0x008C9BA3) = 0;
-}
-
 extern char g_iLastBlock[512];
 int *(*LoadFullTexture)(uintptr_t *thiz, unsigned int a2);
 int *LoadFullTexture_hook(uintptr_t *thiz, unsigned int a2)
@@ -1060,10 +1031,16 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 
 #include "game/Models/ModelInfo.h"
 
+void InjectHooks()
+{
+	Log("InjectHooks");
+	CModelInfo::injectHooks();
+	CTimer::InjectHooks();
+}
+
 void InstallSpecialHooks()
 {
-	CModelInfo::injectHooks();
-
+	InjectHooks();
 	//CHook::WriteMemory(g_libGTASA + 0x52F4C6, (uintptr_t)"\x00\x22\xC4\xF2\xC8\x32", 6); // CEntity::ProcessLightsForEntity
 	//CHook::JMPCode(g_libGTASA + 0x3A9B10 + 0x1, g_libGTASA + 0x3A98AC + 0x1);
 	// Fix sky multitude
@@ -1102,9 +1079,6 @@ void InstallSpecialHooks()
 	//
 	CHook::NOP(g_libGTASA + 0x002F9E5C, 10); 	//LoadCutsceneData
 	CHook::NOP(g_libGTASA + 0x0040E536, 2);		//CCutsceneMgr::Initialise
-
-	CHook::InlineHook(g_libGTASA, 0x003BF784, &CTimer__StartUserPause_hook, &CTimer__StartUserPause);
-	CHook::InlineHook(g_libGTASA, 0x003BF7A0, &CTimer__EndUserPause_hook, &CTimer__EndUserPause);
 
 	CHook::NOP(g_libGTASA + 0x00398972, 2); // get out fucking roadblocks
 

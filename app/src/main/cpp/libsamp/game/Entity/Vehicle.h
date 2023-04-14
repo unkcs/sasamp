@@ -8,7 +8,7 @@
 #include "EntityGta.h"
 #include "../Enums/eVehicleType.h"
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct _VEHICLE_TYPE
 {
     ENTITY_TYPE entity;			// 0000-0184	;entity

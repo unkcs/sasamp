@@ -5,12 +5,11 @@
 #ifndef LIVERUSSIA_RWMATRIX_H
 #define LIVERUSSIA_RWMATRIX_H
 
-#pragma pack(1)
-
 #include "Core/Vector.h"
 #include "game/RW/rwlpcore.h"
 #include <stdint.h>
 
+#pragma pack(push, 1)
 struct RwMatrixTag
 {
     VECTOR right;		// 0-12 	; r11 r12 r13
@@ -23,5 +22,5 @@ struct RwMatrixTag
     float  pad_p;		// 60-64
 };
 typedef RwMatrixTag RwMatrix;
-
+#pragma pack(pop)
 #endif //LIVERUSSIA_RWMATRIX_H

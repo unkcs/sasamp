@@ -31,7 +31,7 @@ struct stPickupPool
 };
 */
 
-#pragma pack(1)
+#pragma pack(push, 1)
 class CPickupPool
 {
 private:
@@ -54,3 +54,4 @@ public:
 
 	int GetNumberFromID(int id);
 };
+#pragma pack(pop)

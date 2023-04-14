@@ -269,7 +269,7 @@ enum eDoorStatus
 	DT_DOOR_MISSING
 };
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct _RES_ENTRY_OBJ
 {
 	PADDING(_pad0, 48); 	// 0-48
@@ -277,7 +277,7 @@ typedef struct _RES_ENTRY_OBJ
 	PADDING(_pad1, 4); 		//52-56
 } RES_ENTRY_OBJ;
 static_assert(sizeof(_RES_ENTRY_OBJ) == 56);
-
+#pragma pack(pop)
 enum eWheelPosition
 {
 	FRONT_LEFT_WHEEL = 0,
@@ -321,7 +321,7 @@ enum eComponentStatus
 	DT_PANEL_MISSING
 };
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct _AIM_SYNC_DATA
 {
 	uint8_t	byteCamMode;
@@ -332,6 +332,7 @@ typedef struct _AIM_SYNC_DATA
 	uint8_t byteWeaponState : 2;
 	uint8_t aspect_ratio;
 } AIM_SYNC_DATA;
+#pragma pack(pop)
 //-----------------------------------------------------------
 
 #pragma pack(1)

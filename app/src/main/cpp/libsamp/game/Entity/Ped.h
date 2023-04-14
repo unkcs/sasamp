@@ -4,8 +4,6 @@
 
 #pragma once
 
-#pragma pack(1)
-
 #include "Entity.h"
 #include "../PedIntelligence.h"
 #include "../Weapon.h"
@@ -15,6 +13,7 @@
 #include "game/Enums/AnimationEnums.h"
 #include "game/Core/Vector2D.h"
 
+#pragma pack(push, 1)
 typedef struct _PED_TYPE
 {
     ENTITY_TYPE entity; 		// 0000-0184	;entity
@@ -206,3 +205,4 @@ typedef struct _PED_TYPE
     uint32_t  dwWeaponUsed; // 1888-1892
     uintptr_t pdwDamageEntity; // 1892-1896
 } PED_TYPE;
+#pragma pack(pop)

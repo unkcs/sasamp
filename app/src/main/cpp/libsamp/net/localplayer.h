@@ -55,6 +55,7 @@ typedef struct _PLAYER_SPAWN_INFO
 	int iSpawnWeaponsAmmo[3];
 } PLAYER_SPAWN_INFO;
 
+#pragma pack(push, 1)
 typedef struct _ONFOOT_SYNC_DATA
 {
 	uint16_t lrAnalog;				// +0
@@ -94,7 +95,6 @@ typedef struct _ONFOOT_SYNC_DATA
 
 } ONFOOT_SYNC_DATA;					// size = 68
 
-#pragma pack(1)
 typedef struct _TRAILER_SYNC_DATA
 {
 	VEHICLEID trailerID;
@@ -166,6 +166,7 @@ typedef struct _SPECTATOR_SYNC_DATA
 	uint16_t wKeys;
 	CVector vecPos;
 } SPECTATOR_SYNC_DATA;
+#pragma pack(pop)
 
 class CLocalPlayer
 {

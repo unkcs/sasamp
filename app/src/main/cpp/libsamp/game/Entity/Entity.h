@@ -4,11 +4,10 @@
 
 #pragma once
 
-#pragma pack(1)
-
 #include "Placeable.h"
 #include "game/CVector.h"
 
+#pragma pack(push, 1)
 typedef struct _ENTITY_TYPE : CPlaceable
 {
     union {
@@ -72,3 +71,4 @@ typedef struct _ENTITY_TYPE : CPlaceable
 
     uint32_t dwUnkModelRel;
 } ENTITY_TYPE;
+#pragma pack(pop)

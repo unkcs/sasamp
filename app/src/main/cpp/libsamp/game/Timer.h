@@ -6,6 +6,8 @@
 
 #include <cstdint>
 
+extern uint8_t* gTimerRunning;
+
 class CTimer {
     /*!
     * Thanks guys for figuring this out for me!
@@ -25,6 +27,12 @@ public:
     static bool m_UserPause;
     static uint32_t m_FrameCounter;
     static uint32_t m_snTimeInMilliseconds;
+    static uint32_t m_snPPPPreviousTimeInMilliseconds;
+    static uint32_t m_snPPPreviousTimeInMilliseconds;
+    static uint32_t m_snPPreviousTimeInMilliseconds;
+    static uint32_t m_snPreviousTimeInMilliseconds;
+    static uint32_t m_snTimeInMillisecondsNonClipped;
+    static uint32_t m_snPreviousTimeInMillisecondsNonClipped;
     static bool bSkipProcessThisFrame;
     static float ms_fTimeStep;
 

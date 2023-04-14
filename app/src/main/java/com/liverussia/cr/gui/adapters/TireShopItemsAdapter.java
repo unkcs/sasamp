@@ -78,7 +78,7 @@ public class TireShopItemsAdapter extends RecyclerView.Adapter<TireShopItemsAdap
 
     private void handleMainMenuAction(ItemInfo itemInfo) {
 
-        ConstraintLayout dialog = activity.findViewById(R.id.dialog);
+        ConstraintLayout dialog = activity.findViewById(R.id.tire_shop_dialog);
 
         if (ItemInfo.DISK_TYPE.equals(itemInfo)) {
             items.clear();

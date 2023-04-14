@@ -102,7 +102,7 @@ public class TireShop implements View.OnClickListener {
 
             tireShopHud = activity.findViewById(R.id.tire_shop_hud);
 
-            dialog = activity.findViewById(R.id.dialog);
+            dialog = activity.findViewById(R.id.tire_shop_dialog);
             tireShopBar = activity.findViewById(R.id.tire_shop_bar);
             dialogContinueBtn = activity.findViewById(R.id.dialog_continue_btn);
             dialogContinueBtn.setOnClickListener(this);

@@ -1,5 +1,6 @@
 package com.liverussia.launcher.async.task;
 
+import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.UiThread;
@@ -28,14 +29,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.zip.Adler32;
 
 import static com.liverussia.launcher.config.Config.FILE_INFO_URL;
+import static com.liverussia.launcher.ui.dialogs.AuthenticationDialog.TAG;
 
 public class CacheChecker implements Listener<FileInfo[]> {
 
@@ -187,6 +193,31 @@ public class CacheChecker implements Listener<FileInfo[]> {
         );
     //    !MD5.checkMD5(fileInfo.getHash(), file)
         return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
+    }
+
+    public static long checksum(File file) { // TODO:оценить скорость
+        try {
+            // Создаем поток для чтения файла
+            FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+
+            // Вычисляем контрольную сумму для данных из потока
+            Adler32 adler = new Adler32();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = bis.read(buffer)) != -1) {
+                adler.update(buffer, 0, bytesRead);
+            }
+
+            bis.close();
+            fis.close();
+
+            return adler.getValue();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     private GameFileInfoDto getGameFilesInfo() {

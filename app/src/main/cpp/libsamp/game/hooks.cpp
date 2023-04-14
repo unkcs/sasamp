@@ -1154,23 +1154,13 @@ enum ePedPieceTypes
 	PED_PIECE_HEAD
 };
 
-struct CPedDamageResponseInterface
-{
-	float fDamageHealth;
-	float fDamageArmor;
-	bool bUnk;
-	bool bForceDeath;
-	bool bDamageCalculated;
-	bool bUnk3;
-};
-
 struct CPedDamageResponseCalculatorInterface
 {
 	ENTITY_TYPE *pEntity;
 	float fDamage;
 	ePedPieceTypes bodyPart;
 	unsigned int weaponType;
-	bool bSpeak; // refers to a CPed::Say call (the dying scream?)
+	bool m_bJumpedOutOfMovingCar; // refers to a CPed::Say call (the dying scream?)
 };
 
 // thanks Codeesar
@@ -1458,48 +1448,6 @@ void CWidgetRegionLook__Update_hook(uintptr_t thiz)
 	}
 }
 
-void (*GivePedScriptedTask)(uintptr_t* thiz, int pedHandle, uintptr_t* a3, int commandID);
-void GivePedScriptedTask_hook(uintptr_t* thiz, int pedHandle, uintptr_t* a3, int commandID)
-{
-	//Log("pedHandle = %d, local = %d", pedHandle, pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->m_dwGTAId);
-	if(!pedHandle || !commandID || !a3)return;
-
-	if ( pedHandle == 0xFFFFFFFF ){
-		return GivePedScriptedTask(thiz, pedHandle, a3, commandID);
-	}
-	//if(!(pedHandle>>8))return;
-	uintptr_t tmp = *(uintptr_t*)(g_libGTASA + 0x008B93D4);
-
-	if(  !(*(const PED_TYPE**) tmp + 0x4 ) ) return; // CPools::ms_pPedPool
-
-	GivePedScriptedTask(thiz, pedHandle, a3, commandID);
-}
-
-int (*CObject__ProcessGarageDoorBehaviour)(uintptr_t, int);
-int CObject__ProcessGarageDoorBehaviour_hook(uintptr_t thiz, int a2)
-{
-	if (thiz)
-		if (!*(uintptr_t *)(thiz + 372))
-			return 0;
-	return CObject__ProcessGarageDoorBehaviour(thiz, a2);
-}
-
-int (*CTaskSimpleCarOpenDoorFromOutside__ComputeAnimID)(uintptr_t *thiz, int *a2, int *a3, int a4);
-int CTaskSimpleCarOpenDoorFromOutside__ComputeAnimID_hook(uintptr_t *thiz, int *a2, int *a3, int a4)
-{
-	if( !(*((DWORD *)thiz + 4)) )return 0;
-
-	return CTaskSimpleCarOpenDoorFromOutside__ComputeAnimID(thiz, a2, a3, a4);
-}
-
-int (*RpMaterialDestroy)(int a1, int a2, int a3, int a4);
-int RpMaterialDestroy_hook(int a1, int a2, int a3, int a4)
-{
-	if(!a1 || !a2 || !a3 || !a4)return 1;
-
-	return RpMaterialDestroy(a1, a2, a3, a4);
-}
-
 #include "..//crashlytics.h"
 
 char g_bufRenderQueueCommand[200];
@@ -1639,8 +1587,6 @@ void CVehicle__ResetAfterRender_hook(uintptr_t thiz)
 #include "..//gui/CFontRenderer.h"
 #include "CCustomPlateManager.h"
 
-static bool g_bFirstPersonOnFootEnabled = false;
-extern bool bDisableTestGovno;
 void (*CGame__Process)();
 void CGame__Process_hook()
 {

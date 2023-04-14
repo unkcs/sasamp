@@ -10,6 +10,7 @@
 #include "keyboard.h"
 #include "CSettings.h"
 #include "util/patch.h"
+#include "game/Timer.h"
 
 extern CGUI* pGUI;
 extern CGame *pGame;
@@ -41,8 +42,7 @@ void CDebugInfo::Draw()
 	ImVec2 pos;
 	if (m_uiDrawDebug || m_uiDrawFPS)
 	{
-		float* pFPS = (float*)(g_libGTASA + 0x00608E00);
-		snprintf(&szStr[0], 30, "FPS: %.0f", *pFPS);
+		snprintf(&szStr[0], 30, "FPS: %.0f", CTimer::game_FPS);
 		pos = ImVec2(pGUI->ScaleX(40.0f), pGUI->ScaleY(1080.0f - pGUI->GetFontSize() * 10));
 
 		pGUI->RenderText(pos, (ImU32)0xFFFFFFFF, true, &szStr[0]);

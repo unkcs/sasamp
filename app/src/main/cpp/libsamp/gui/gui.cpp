@@ -114,6 +114,7 @@ CGUI::~CGUI()
 #include "..//CDebugInfo.h"
 #include "java_systems/CDialog.h"
 #include "java_systems/CSpeedometr.h"
+#include "game/Timer.h"
 
 extern CGame* pGame;
 
@@ -134,7 +135,7 @@ void CGUI::Render()
 	}
 
 	if(pGame->FindPlayerPed()->IsInVehicle() && !pGame->FindPlayerPed()->IsAPassenger()
-	&& !CKeyBoard::IsOpen() && !CDialog::bIsShow && CHUD::bIsShow && *(uint8_t*)(g_libGTASA + 0x008C9BA3) == 0)
+	&& !CKeyBoard::IsOpen() && !CDialog::bIsShow && CHUD::bIsShow && !CTimer::m_UserPause)
 	{
 		if(!CSpeedometr::bIsShow)
 		{

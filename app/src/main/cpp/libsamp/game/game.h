@@ -21,7 +21,6 @@
 #include "widgetmanager.h"
 #include "CHandlingDefault.h"
 #include "CActorPed.h"
-#include "CExtendedCarColors.h"
 #include "CWeaponsOutFit.h"
 #include "CFirstPersonCamera.h"
 #include "CStreaming.h"

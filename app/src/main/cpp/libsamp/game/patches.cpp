@@ -4,7 +4,6 @@
 #include "../CSettings.h"
 #include "..//CDebugInfo.h"
 #include "game.h"
-#include "CExtendedCarColors.h"
 #include "util/patch.h"
 #include "chatwindow.h"
 #include "CPlayerInfoGta.h"
@@ -130,10 +129,6 @@ void ApplyPatches_level0()
 	// we need 200 col links(MALO LI!!!)
 	CHook::WriteMemory(g_libGTASA + 0x0029554A, (uintptr_t)"\x4f\xf4\x61\x60", 4); // allocate memory to 300 * sizeof(CCollisionLink)
 	CHook::WriteMemory(g_libGTASA + 0x00295556, (uintptr_t)"\x4f\xf4\x5b\x62", 4); // BUT MAKE INITIALIZED ONLY 292 DUE TO SHIT ARM ASM!! (292 * sizeof(CCollisionLink)
-
-	// col links limits end
-
-	CExtendedCarColors::ApplyPatches_level0();
 
 	CHook::SetUpHook(g_libGTASA + 0x0023768C, (uintptr_t)ANDRunThread_hook, (uintptr_t*)& ANDRunThread);
 

@@ -1,5 +1,6 @@
 package com.liverussia.launcher.ui.dialogs;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -18,12 +19,12 @@ import com.liverussia.launcher.web.ReCaptchaWebInterface;
 
 public class ReCaptchaDialog extends MaterialAlertDialogBuilder implements View.OnClickListener {
 
-    private final FragmentActivity activity;
+    private final Activity activity;
     private AlertDialog dialog;
 
     private OnDialogCloseListener<String> onDialogCloseListener;
 
-    public ReCaptchaDialog(FragmentActivity activity) {
+    public ReCaptchaDialog(Activity activity) {
         super(activity);
         this.activity = activity;
     }

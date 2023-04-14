@@ -88,7 +88,7 @@ public class SpinRouletteAsyncRestCall {
                 .map(ErrorContainer::getMessage)
                 .orElse(StringUtils.EMPTY);
 
-        activityService.showMessage(errorMessage, activity);
+        activityService.showErrorMessage(errorMessage, activity);
     }
 
     public void setOnAsyncSuccessListener(OnAsyncSuccessListenerWithResponse<SpinRouletteResponseDto> onClickListener) {

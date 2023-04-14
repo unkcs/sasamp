@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 import com.liverussia.cr.core.Samp;
 import com.liverussia.launcher.domain.messages.InfoMessage;
 import com.liverussia.launcher.utils.MainUtils;
-import com.liverussia.cr.core.GTASA;
 import com.liverussia.launcher.async.task.DownloadTask;
 import com.liverussia.launcher.domain.LoaderSliderItemData;
 import com.liverussia.launcher.async.dto.response.LoaderSliderInfoResponseDto;
@@ -215,13 +214,13 @@ public class LoaderActivity extends AppCompatActivity {
         String selectedServer = NativeStorage.getClientProperty(NativeStorageElements.SERVER, this);
 
         if (StringUtils.isBlank(nickname)) {
-            activityService.showMessage(InfoMessage.DOWNLOAD_SUCCESS_INPUT_YOUR_NICKNAME.getText(), this);
+            activityService.showInfoMessage(InfoMessage.DOWNLOAD_SUCCESS_INPUT_YOUR_NICKNAME.getText(), this);
             redirectToSettings();
             return;
         }
 
         if (StringUtils.isBlank(selectedServer)) {
-            activityService.showMessage(InfoMessage.DOWNLOAD_SUCCESS_SELECT_SERVER.getText(), this);
+            activityService.showInfoMessage(InfoMessage.DOWNLOAD_SUCCESS_SELECT_SERVER.getText(), this);
             redirectToMonitoring();
             return;
         }
@@ -397,7 +396,7 @@ public class LoaderActivity extends AppCompatActivity {
                 finish();
             }
             else {
-                activityService.showMessage(ErrorMessage.APK_UPDATE_FILE_NOT_FOUND.getText(), this);
+                activityService.showErrorMessage(ErrorMessage.APK_UPDATE_FILE_NOT_FOUND.getText(), this);
                 finish();
                 System.exit(EXIT_SUCCESS_STATUS);
             }

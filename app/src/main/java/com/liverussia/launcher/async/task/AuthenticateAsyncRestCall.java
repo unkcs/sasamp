@@ -114,7 +114,7 @@ public class AuthenticateAsyncRestCall {
                 .map(ErrorContainer::getMessage)
                 .orElse(StringUtils.EMPTY);
 
-        activityService.showMessage(errorMessage, activity);
+        activityService.showErrorMessage(errorMessage, activity);
     }
 
     public void setOnSuccessListener(OnAsyncSuccessListener onClickListener) {

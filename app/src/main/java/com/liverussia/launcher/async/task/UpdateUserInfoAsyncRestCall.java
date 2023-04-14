@@ -114,7 +114,7 @@ public class UpdateUserInfoAsyncRestCall {
                 .map(ErrorContainer::getMessage)
                 .orElse(StringUtils.EMPTY);
 
-        activityService.showMessage(errorMessage, activity);
+        activityService.showErrorMessage(errorMessage, activity);
     }
 
     public void setOnAsyncSuccessListener(OnAsyncSuccessListener onClickListener) {

@@ -342,6 +342,8 @@
             app:layout_constraintEnd_toEndOf="@+id/donate_recycle"
             app:layout_constraintTop_toTopOf="@+id/donate_search_latout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include layout="@layout/donate_byu_lc_dialog"/>
     
 
 </androidx.constraintlayout.widget.ConstraintLayout>

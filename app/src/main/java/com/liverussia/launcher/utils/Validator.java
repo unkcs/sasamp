@@ -1,8 +1,14 @@
 package com.liverussia.launcher.utils;
 
 import android.app.Activity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.liverussia.cr.R;
 import com.liverussia.launcher.domain.messages.ErrorMessage;
 import com.liverussia.launcher.async.dto.response.Servers;
 
@@ -116,7 +122,17 @@ public class Validator {
     }
 
     private static void showMessage(String message, Activity activity) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT)
-                .show();
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_error,
+                (ViewGroup) activity.findViewById(R.id.toast_layout_root));
+
+        TextView text = (TextView) layout.findViewById(R.id.br_not_text);
+        text.setText(message);
+
+        Toast toast = new Toast(activity.getApplicationContext());
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }

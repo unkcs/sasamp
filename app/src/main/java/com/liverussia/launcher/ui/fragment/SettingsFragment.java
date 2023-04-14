@@ -147,7 +147,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         List<FileInfo> filesToReloadList = Arrays.asList(fileToReloadArray);
 
         if (CollectionUtils.isEmpty(filesToReloadList)) {
-            activityService.showMessage(InfoMessage.GAME_FILES_VALID.getText(), getActivity());
+            activityService.showInfoMessage(InfoMessage.GAME_FILES_VALID.getText(), getActivity());
         } else {
             validateCache(filesToReloadList);
         }
@@ -171,7 +171,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!activityService.isGameFileInstall(getActivity(), SETTINGS_FILE_PATH)) {
-            activityService.showMessage(InfoMessage.INSTALL_GAME_FIRST.getText(), getActivity());
+            activityService.showInfoMessage(InfoMessage.INSTALL_GAME_FIRST.getText(), getActivity());
             return;
         }
 
@@ -179,9 +179,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         if (settingsFile.exists()) {
             settingsFile.delete();
-            activityService.showMessage(InfoMessage.SUCCESSFULLY_SETTINGS_RESET.getText(), getActivity());
+            activityService.showInfoMessage(InfoMessage.SUCCESSFULLY_SETTINGS_RESET.getText(), getActivity());
         } else {
-            activityService.showMessage(InfoMessage.SETTINGS_ALREADY_DEFAULT.getText(), getActivity());
+            activityService.showInfoMessage(InfoMessage.SETTINGS_ALREADY_DEFAULT.getText(), getActivity());
         }
     }
 

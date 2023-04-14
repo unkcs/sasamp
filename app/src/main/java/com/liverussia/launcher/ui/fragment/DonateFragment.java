@@ -95,7 +95,7 @@ public class DonateFragment extends Fragment implements View.OnClickListener, Ac
             reCaptchaDialog.setOnDialogCloseListener(this::performCaptchaSuccessAction);
             reCaptchaDialog.createDialog();
         } else {
-            activityService.showMessage(ErrorMessage.CAPTCHA_NOT_PASSED.getText(), this.getActivity());
+            activityService.showErrorMessage(ErrorMessage.CAPTCHA_NOT_PASSED.getText(), this.getActivity());
         }
     }
 

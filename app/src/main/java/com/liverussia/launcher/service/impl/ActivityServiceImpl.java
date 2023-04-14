@@ -1,26 +1,51 @@
 package com.liverussia.launcher.service.impl;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.liverussia.launcher.config.Config;
+import com.liverussia.cr.R;
 import com.liverussia.launcher.service.ActivityService;
 
 import java.io.File;
 
-import static com.liverussia.launcher.config.Config.SETTINGS_FILE_PATH;
-
 public class ActivityServiceImpl implements ActivityService {
 
     @Override
-    public void showMessage(String message, Context context) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT)
-                .show();
+    public void showErrorMessage(String message, Activity activity) {
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_error,
+                (ViewGroup) activity.findViewById(R.id.toast_layout_root));
+
+        TextView text = (TextView) layout.findViewById(R.id.br_not_text);
+        text.setText(message);
+
+        Toast toast = new Toast(activity.getApplicationContext());
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    @Override
+    public void showInfoMessage(String message, Activity activity) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_inform,
+                (ViewGroup) activity.findViewById(R.id.toast_layout_root));
+
+        TextView text = (TextView) layout.findViewById(R.id.br_not_text);
+        text.setText(message);
+
+        Toast toast = new Toast(activity.getApplicationContext());
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 
     @Override

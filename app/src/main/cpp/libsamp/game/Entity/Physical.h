@@ -5,7 +5,7 @@
 #include "EntityGta.h"
 #include "game/Enums/eSurfaceType.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CPhysical : public CEntityGta {
     float       m_fPrevDistFromCam;
     uint32_t    m_nLastCollisionTime;
@@ -67,6 +67,7 @@ struct CPhysical : public CEntityGta {
     uint8_t m_nFakePhysics;
     uint8_t m_nNumEntitiesCollided;
     eSurfaceType m_nContactSurface;
+    uint8_t pad_0;
     CEntityGta *m_apCollidedEntities[6];
     float m_fMovingSpeed; // ref @ CTheScripts::IsVehicleStopped
     float m_fDamageIntensity;
@@ -74,6 +75,7 @@ struct CPhysical : public CEntityGta {
     CVector m_vecLastCollisionImpactVelocity;
     CVector m_vecLastCollisionPosn;
     uint16_t m_nPieceType;
+    uint16_t pad_1;
     CEntityGta *m_pAttachedTo;
     CVector m_vecAttachOffset;
     CVector m_vecAttachedEntityRotation;

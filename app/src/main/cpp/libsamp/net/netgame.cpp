@@ -1030,7 +1030,8 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			//
 			uint16_t fWheelWidth;
 			bs.Read(fWheelWidth);
-			pVeh->SetWheelWidth((float)fWheelWidth / 100.0f);
+			if(fWheelWidth > 0)
+                pVeh->SetWheelWidth((float)fWheelWidth / 100.0f);
 
 			//
 			int8_t bWheelAlignX, bWheelAlignY;
@@ -1068,11 +1069,13 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			bs.Read(pVeh->wheelColor.b);
 
 			//
-			bs.Read(pVeh->tonerColor.r);
-			bs.Read(pVeh->tonerColor.g);
-			bs.Read(pVeh->tonerColor.b);
-			bs.Read(pVeh->tonerColor.a);
-
+			CRGBA tempToner;
+			bs.Read(tempToner.r);
+			bs.Read(tempToner.g);
+			bs.Read(tempToner.b);
+			bs.Read(tempToner.a);
+			if(tempToner.a > 110)
+				pVeh->tonerColor = tempToner;
 
 			// no use
 			uint8_t vinyls1, vinyls2;

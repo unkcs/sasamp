@@ -8,7 +8,7 @@
 #include "../RwMatrix.h"
 #include "game/SimpleTransform.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CPlaceable
 {
     uint32_t            vtable;

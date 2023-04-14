@@ -1652,6 +1652,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 			mat->color.blue = pVeh->tonerColor.b;
 			mat->color.red = pVeh->tonerColor.r;
 
+            mat->surfaceProps.specular = 9.0f;
 			return mat;
 		}
 		if ( color == 0xff00ff3c )

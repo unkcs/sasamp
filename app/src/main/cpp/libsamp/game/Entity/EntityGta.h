@@ -9,7 +9,7 @@
 #include "../Enums/eEntityStatus.h"
 #include "../Enums/eAreaCodes.h"
 
-#pragma pack(push, 2)
+#pragma pack(push, 1)
 struct CEntityGta : CPlaceable {
     union {
         struct RwObject *m_pRwObject;
@@ -80,6 +80,7 @@ struct CEntityGta : CPlaceable {
     uint8_t m_nNumLodChildrenRendered;
     eEntityType m_nType: 3;          // Mask: & 0x7  = 7
     eEntityStatus m_nStatus: 5;        // Mask: & 0xF8 = 248 (Remember: In the original code unless this was left shifted the value it's compared to has to be left shifted by 3!)
+    uint8_t pad_0;
 };
 #pragma pack(pop)
 

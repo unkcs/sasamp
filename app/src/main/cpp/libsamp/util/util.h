@@ -1,5 +1,7 @@
 #pragma once
 
+#include "game/Entity/Vehicle.h"
+
 static class CUtil {
 public:
     static bool IsValidGameVehicle(VEHICLE_TYPE *pVehicle);

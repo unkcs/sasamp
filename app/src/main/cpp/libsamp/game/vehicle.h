@@ -149,7 +149,7 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
-	CRGBA tonerColor{0, 0, 0, 120};
+	CRGBA tonerColor{255, 255, 255, 128};
 	CRGBA mainColor{};
     CRGBA wheelColor{0, 0, 0, 0};
 	CRGBA secondColor{};

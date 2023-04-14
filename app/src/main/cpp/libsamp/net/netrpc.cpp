@@ -729,7 +729,6 @@ void ProcessIncommingEvent(BYTE bytePlayerID, int iEventType, uint32_t dwParam1,
 			break;
 		}
 		ScriptCommand(&add_car_component, iVehicleID, iComponent, &v);
-		CChatWindow::AddDebugMessage("Added car component: %d",iComponent);
 		break;
 
 	case EVENT_TYPE_CARCOLOR:

@@ -1067,15 +1067,13 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			bs.Read(pVeh->wheelColor.r);
 			bs.Read(pVeh->wheelColor.g);
 			bs.Read(pVeh->wheelColor.b);
+			bs.Read(pVeh->wheelColor.a);
 
 			//
-			CRGBA tempToner;
-			bs.Read(tempToner.r);
-			bs.Read(tempToner.g);
-			bs.Read(tempToner.b);
-			bs.Read(tempToner.a);
-			if(tempToner.a > 110)
-				pVeh->tonerColor = tempToner;
+			bs.Read(pVeh->tonerColor.r);
+			bs.Read(pVeh->tonerColor.g);
+			bs.Read(pVeh->tonerColor.b);
+			bs.Read(pVeh->tonerColor.a);
 
 			// no use
 			uint8_t vinyls1, vinyls2;
@@ -1978,3 +1976,33 @@ void CNetGame::Packet_AimSync(Packet * p)
 		pPlayer->UpdateAimFromSyncData(&aimSync);
 	}
 }
+
+void CNetGame::sendTakeDamage(PLAYERID attacker, eWeaponType weaponId, float ammount, int bodyPart) {
+	RakNet::BitStream bs;
+
+	bs.Write((uint8_t)	ID_CUSTOM_RPC);
+	bs.Write((uint8_t)	RPC_TAKE_DAMAGE);
+	bs.Write((uint16_t)	attacker);
+	bs.Write((float)	ammount);
+	bs.Write((uint16_t)	weaponId);
+	bs.Write((uint16_t)	bodyPart);
+
+	pNetGame->GetRakClient()->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
+
+	pNetGame->m_pPlayerPool->GetLocalPlayer()->lastDamageId = attacker;
+	pNetGame->m_pPlayerPool->GetLocalPlayer()->lastDamageWeap = weaponId;
+}
+
+void CNetGame::sendGiveDamage(PLAYERID taker, int weaponId, float ammount, int bodyPart) {
+	RakNet::BitStream bs;
+
+	bs.Write((uint8_t)	ID_CUSTOM_RPC);
+	bs.Write((uint8_t)	RPC_GIVE_DAMAGE);
+	bs.Write((uint16_t)	taker);
+	bs.Write((float)	ammount);
+	bs.Write((uint16_t)	weaponId);
+	bs.Write((uint16_t)	bodyPart);
+
+	pNetGame->GetRakClient()->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
+}
+

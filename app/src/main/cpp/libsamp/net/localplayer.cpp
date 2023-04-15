@@ -71,7 +71,6 @@ CLocalPlayer::CLocalPlayer()
 	m_bIsSpectating = false;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
 	m_SpectateID = 0xFFFFFFFF;
-	FindDeathReasonPlayer = 0;
 
 	uint8_t i;
 	for (i = 0; i < 13; i++)
@@ -223,7 +222,7 @@ bool CLocalPlayer::Process()
 
 			m_pPlayerPed->SetHealth(0.0f);
 			m_pPlayerPed->SetDead();
-			SendWastedNotification();
+			sendDeath();
 
 			m_bIsActive = false;
 			m_bIsWasted = true;
@@ -495,39 +494,17 @@ bool CLocalPlayer::Process()
     return true;
 }
 
-void CLocalPlayer::GiveTakeDamage(bool bGiveOrTake, uint16_t wPlayerID, float damage_amount, uint32_t weapon_id, uint32_t bodypart)
+
+void CLocalPlayer::sendDeath()
 {
-	RakNet::BitStream bitStream;
+	RakNet::BitStream bs;
 
-	bitStream.Write((bool)bGiveOrTake);
-	bitStream.Write((uint16_t)wPlayerID);
-	bitStream.Write((float)damage_amount);
-	bitStream.Write((uint32_t)weapon_id);
+	bs.Write((uint8_t)	ID_CUSTOM_RPC);
+	bs.Write((uint8_t)	RPC_DEATH);
+	bs.Write((uint16_t)	pNetGame->m_pPlayerPool->GetLocalPlayer()->lastDamageId); // killerid
+	bs.Write((uint32_t)	pNetGame->m_pPlayerPool->GetLocalPlayer()->lastDamageWeap); // reason
 
-	if(bodypart < 3 || bodypart > 9) bodypart = 5; // omp fix?
-
-	bitStream.Write((uint32_t)bodypart);
-
-	FindDeathReasonPlayer = weapon_id;
-
-	// pChatWindow->AddDebugMessage("Id: %d, Weapon: %d, Damage: %d", wPlayerID, weapon_id, damage_amount);
-
-	pNetGame->GetRakClient()->RPC(&RPC_PlayerGiveTakeDamage, &bitStream, HIGH_PRIORITY, RELIABLE, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
-}
-
-void CLocalPlayer::SendWastedNotification()
-{
-	RakNet::BitStream bsPlayerDeath;
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-	if(pPlayerPool)
-	{
-		PLAYERID WhoWasResponsible = m_pPlayerPed->FindDeathResponsiblePlayer();
-		bsPlayerDeath.Write(FindDeathReasonPlayer);
-		bsPlayerDeath.Write(WhoWasResponsible);
-		pNetGame->GetRakClient()->RPC(&RPC_Death, &bsPlayerDeath, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
-		Log("SendWastedNotification");
-	}
-//
+	pNetGame->GetRakClient()->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 }
 
 void CLocalPlayer::GoEnterVehicle(bool passenger)
@@ -551,66 +528,6 @@ void CLocalPlayer::GoEnterVehicle(bool passenger)
 		}
 	}
 
-}
-
-void CLocalPlayer::HandleClassSelection()
-{
-	m_bClearedToSpawn = false;
-
-	if(m_pPlayerPed)
-	{
-		m_pPlayerPed->SetInitialState();
-		m_pPlayerPed->SetHealth(100.0f);
-		m_pPlayerPed->TogglePlayerControllable(false);
-	}
-	
-	RequestClass(m_iSelectedClass);
-
-	return;
-}
-
-// 0.3.7
-void CLocalPlayer::HandleClassSelectionOutcome()
-{
-	if(m_pPlayerPed)
-	{
-		m_pPlayerPed->ClearAllWeapons();
-		m_pPlayerPed->SetModelIndex(m_SpawnInfo.iSkin);
-	}
-
-	m_bClearedToSpawn = true;
-}
-
-void CLocalPlayer::SendNextClass()
-{
-	RwMatrix matPlayer;
-	m_pPlayerPed->GetMatrix(&matPlayer);
-
-	if(m_iSelectedClass == (pNetGame->m_iSpawnsAvailable - 1)) m_iSelectedClass = 0;
-	else m_iSelectedClass++;
-
-	pGame->PlaySound(1052, matPlayer.pos.x, matPlayer.pos.y, matPlayer.pos.z);
-	RequestClass(m_iSelectedClass);
-}
-
-void CLocalPlayer::SendPrevClass()
-{
-	RwMatrix matPlayer;
-	m_pPlayerPed->GetMatrix(&matPlayer);
-	
-	if(m_iSelectedClass == 0) m_iSelectedClass = (pNetGame->m_iSpawnsAvailable - 1);
-	else m_iSelectedClass--;		
-
-	pGame->PlaySound(1053,matPlayer.pos.x,matPlayer.pos.y,matPlayer.pos.z);
-	RequestClass(m_iSelectedClass);
-}
-
-void CLocalPlayer::RequestClass(int iClass)
-{
-	RakNet::BitStream bsSpawnRequest;
-	bsSpawnRequest.Write(iClass);
-	pNetGame->GetRakClient()->RPC(&RPC_RequestClass, &bsSpawnRequest, HIGH_PRIORITY, RELIABLE, 0, false, UNASSIGNED_NETWORK_ID,
-                                  nullptr);
 }
 
 uint32_t CLocalPlayer::GetPlayerColorAsARGB()

@@ -251,134 +251,134 @@ int GameGetWeaponModelIDFromWeaponID(int iWeaponID)
 {
 	switch (iWeaponID)
 	{
-	case WEAPON_BRASSKNUCKLE:
-		return WEAPON_MODEL_BRASSKNUCKLE;
+		case WEAPON_BRASSKNUCKLE:
+			return WEAPON_MODEL_BRASSKNUCKLE;
 
-	case WEAPON_GOLFCLUB:
-		return WEAPON_MODEL_GOLFCLUB;
+		case WEAPON_GOLFCLUB:
+			return WEAPON_MODEL_GOLFCLUB;
 
-	case WEAPON_NITESTICK:
-		return WEAPON_MODEL_NITESTICK;
+		case WEAPON_NIGHTSTICK:
+			return WEAPON_MODEL_NITESTICK;
 
-	case WEAPON_KNIFE:
-		return WEAPON_MODEL_KNIFE;
+		case WEAPON_KNIFE:
+			return WEAPON_MODEL_KNIFE;
 
-	case WEAPON_BAT:
-		return WEAPON_MODEL_BAT;
+		case WEAPON_BASEBALLBAT:
+			return WEAPON_MODEL_BAT;
 
-	case WEAPON_SHOVEL:
-		return WEAPON_MODEL_SHOVEL;
+		case WEAPON_SHOVEL:
+			return WEAPON_MODEL_SHOVEL;
 
-	case WEAPON_POOLSTICK:
-		return WEAPON_MODEL_POOLSTICK;
+		case WEAPON_POOL_CUE:
+			return WEAPON_MODEL_POOLSTICK;
 
-	case WEAPON_KATANA:
-		return WEAPON_MODEL_KATANA;
+		case WEAPON_KATANA:
+			return WEAPON_MODEL_KATANA;
 
-	case WEAPON_CHAINSAW:
-		return WEAPON_MODEL_CHAINSAW;
+		case WEAPON_CHAINSAW:
+			return WEAPON_MODEL_CHAINSAW;
 
-	case WEAPON_DILDO:
-		return WEAPON_MODEL_DILDO;
+		case WEAPON_DILDO1:
+			return WEAPON_MODEL_DILDO;
 
-	case WEAPON_DILDO2:
-		return WEAPON_MODEL_DILDO2;
+		case WEAPON_DILDO2:
+			return WEAPON_MODEL_DILDO2;
 
-	case WEAPON_VIBRATOR:
-		return WEAPON_MODEL_VIBRATOR;
+		case WEAPON_VIBE1:
+			return WEAPON_MODEL_VIBRATOR;
 
-	case WEAPON_VIBRATOR2:
-		return WEAPON_MODEL_VIBRATOR2;
+		case WEAPON_VIBE2:
+			return WEAPON_MODEL_VIBRATOR2;
 
-	case WEAPON_FLOWER:
-		return WEAPON_MODEL_FLOWER;
+		case WEAPON_FLOWERS:
+			return WEAPON_MODEL_FLOWER;
 
-	case WEAPON_CANE:
-		return WEAPON_MODEL_CANE;
+		case WEAPON_CANE:
+			return WEAPON_MODEL_CANE;
 
-	case WEAPON_GRENADE:
-		return WEAPON_MODEL_GRENADE;
+		case WEAPON_GRENADE:
+			return WEAPON_MODEL_GRENADE;
 
-	case WEAPON_TEARGAS:
-		return WEAPON_MODEL_TEARGAS;
+		case WEAPON_TEARGAS:
+			return WEAPON_MODEL_TEARGAS;
 
-	case WEAPON_MOLTOV:
-		return -1;
+		case WEAPON_MOLOTOV:
+			return -1;
 
-	case WEAPON_COLT45:
-		return WEAPON_MODEL_COLT45;
+		case WEAPON_PISTOL:
+			return WEAPON_MODEL_COLT45;
 
-	case WEAPON_SILENCED:
-		return WEAPON_MODEL_SILENCED;
+		case WEAPON_PISTOL_SILENCED:
+			return WEAPON_MODEL_SILENCED;
 
-	case WEAPON_DEAGLE:
-		return WEAPON_MODEL_DEAGLE;
+		case WEAPON_DESERT_EAGLE:
+			return WEAPON_MODEL_DEAGLE;
 
-	case WEAPON_SHOTGUN:
-		return WEAPON_MODEL_SHOTGUN;
+		case WEAPON_SHOTGUN:
+			return WEAPON_MODEL_SHOTGUN;
 
-	case WEAPON_SAWEDOFF:
-		return WEAPON_MODEL_SAWEDOFF;
+		case WEAPON_SAWNOFF_SHOTGUN:
+			return WEAPON_MODEL_SAWEDOFF;
 
-	case WEAPON_SHOTGSPA:
-		return WEAPON_MODEL_SHOTGSPA;
+		case WEAPON_SPAS12_SHOTGUN:
+			return WEAPON_MODEL_SHOTGSPA;
 
-	case WEAPON_UZI:
-		return WEAPON_MODEL_UZI;
+		case WEAPON_MICRO_UZI:
+			return WEAPON_MODEL_UZI;
 
-	case WEAPON_MP5:
-		return WEAPON_MODEL_MP5;
+		case WEAPON_MP5:
+			return WEAPON_MODEL_MP5;
 
-	case WEAPON_AK47:
-		return WEAPON_MODEL_AK47;
+		case WEAPON_AK47:
+			return WEAPON_MODEL_AK47;
 
-	case WEAPON_M4:
-		return WEAPON_MODEL_M4;
+		case WEAPON_M4:
+			return WEAPON_MODEL_M4;
 
-	case WEAPON_TEC9:
-		return WEAPON_MODEL_TEC9;
+		case WEAPON_TEC9:
+			return WEAPON_MODEL_TEC9;
 
-	case WEAPON_RIFLE:
-		return WEAPON_MODEL_RIFLE;
+		case WEAPON_COUNTRYRIFLE:
+			return WEAPON_MODEL_RIFLE;
 
-	case WEAPON_SNIPER:
-		return WEAPON_MODEL_SNIPER;
+		case WEAPON_SNIPERRIFLE:
+			return WEAPON_MODEL_SNIPER;
 
-	case WEAPON_ROCKETLAUNCHER:
-		return WEAPON_MODEL_ROCKETLAUNCHER;
+		case WEAPON_RLAUNCHER:
+			return WEAPON_MODEL_ROCKETLAUNCHER;
 
-	case WEAPON_HEATSEEKER:
-		return WEAPON_MODEL_HEATSEEKER;
+		case WEAPON_RLAUNCHER_HS:
+			return WEAPON_MODEL_HEATSEEKER;
 
-	case WEAPON_FLAMETHROWER:
-		return WEAPON_MODEL_FLAMETHROWER;
+		case WEAPON_FLAMETHROWER:
+			return WEAPON_MODEL_FLAMETHROWER;
 
-	case WEAPON_MINIGUN:
-		return WEAPON_MODEL_MINIGUN;
+		case WEAPON_MINIGUN:
+			return WEAPON_MODEL_MINIGUN;
 
-	case WEAPON_SATCHEL:
-		return WEAPON_MODEL_SATCHEL;
+		case WEAPON_REMOTE_SATCHEL_CHARGE:
+			return WEAPON_MODEL_SATCHEL;
 
-	case WEAPON_BOMB:
-		return WEAPON_MODEL_BOMB;
+		case WEAPON_DETONATOR:
+			return WEAPON_MODEL_BOMB;
 
-	case WEAPON_SPRAYCAN:
-		return WEAPON_MODEL_SPRAYCAN;
+		case WEAPON_SPRAYCAN:
+			return WEAPON_MODEL_SPRAYCAN;
 
-	case WEAPON_FIREEXTINGUISHER:
-		return WEAPON_MODEL_FIREEXTINGUISHER;
+		case WEAPON_EXTINGUISHER:
+			return WEAPON_MODEL_FIREEXTINGUISHER;
 
-	case WEAPON_CAMERA:
-		return WEAPON_MODEL_CAMERA;
+		case WEAPON_CAMERA:
+			return WEAPON_MODEL_CAMERA;
 
-	case -1:
-		return WEAPON_MODEL_NIGHTVISION;
+		case -1:
+			return WEAPON_MODEL_NIGHTVISION;
 
-	case -2:
-		return WEAPON_MODEL_INFRARED;
+		case -2:
+			return WEAPON_MODEL_INFRARED;
 
-	case WEAPON_PARACHUTE:
-		return WEAPON_MODEL_PARACHUTE;
+		case WEAPON_PARACHUTE:
+			return WEAPON_MODEL_PARACHUTE;
 
 	}
 
@@ -975,7 +975,7 @@ void CPlayerPed::FireInstant() {
 
 	CWeapon *pSlot = GetCurrentWeaponSlot();
 	if(pSlot) {
-		if(GetCurrentWeapon() == WEAPON_SNIPER)
+		if(GetCurrentWeapon() == WEAPON_SNIPERRIFLE)
 		{
 			if(m_pPed)
 				CWeapon__FireSniper(pSlot, m_pPed, nullptr, nullptr);
@@ -1572,8 +1572,6 @@ void CPlayerPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta
     if (!m_pPed) return;
     if (!GamePool_Ped_GetAt(m_dwGTAId)) return;
 
-    if (!strcasecmp(szAnimFile, "SEX")) return;
-
 	if(!pGame->IsAnimationLoaded(szAnimFile)) {
 		CGame::RequestAnimation(szAnimFile);
 
@@ -1586,50 +1584,6 @@ void CPlayerPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta
 //	animFlagLoop = bLoop;
 
 	ScriptCommand(&apply_animation, m_dwGTAId, szAnimName, szAnimFile, fDelta, bLoop, bLockX, bLockY, bFreeze, uiTime);
-}
-
-PLAYERID CPlayerPed::FindDeathResponsiblePlayer()
-{
-	CPlayerPool *pPlayerPool;
-	CVehiclePool *pVehiclePool;
-	PLAYERID PlayerIDWhoKilled = INVALID_PLAYER_ID;
-
-	if(pNetGame)
-	{
-		pVehiclePool = pNetGame->GetVehiclePool();
-		pPlayerPool = pNetGame->GetPlayerPool();
-	}
-	else
-	{ // just leave if there's no netgame.
-		return INVALID_PLAYER_ID;
-	}
-
-	if(m_pPed)
-	{
-		if(m_pPed->pdwDamageEntity)
-		{
-			PlayerIDWhoKilled = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE *)m_pPed->pdwDamageEntity);
-			if(PlayerIDWhoKilled != INVALID_PLAYER_ID)
-			{
-				// killed by another player with a weapon, this is all easy.
-				return PlayerIDWhoKilled;
-			}
-			else
-			{
-				if(pVehiclePool->FindIDFromGtaPtr((VEHICLE_TYPE *)m_pPed->pdwDamageEntity) != INVALID_VEHICLE_ID)
-				{
-					VEHICLE_TYPE *pGtaVehicle = (VEHICLE_TYPE *)m_pPed->pdwDamageEntity;
-					PlayerIDWhoKilled = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE *)pGtaVehicle->pDriver);
-
-					if(PlayerIDWhoKilled != INVALID_PLAYER_ID)
-					{
-						return PlayerIDWhoKilled;
-					}
-				}
-			}
-		}
-	}
-	return INVALID_PLAYER_ID;
 }
 
 // 0.3.7
@@ -1929,7 +1883,7 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 					if (pPlayerPed)
 					{
 						memset(&bulletSyncData, 0, sizeof(BULLET_SYNC));
-						if (pPlayerPed->GetCurrentWeapon() != WEAPON_SNIPER || btData->pEntity)
+						if (pPlayerPed->GetCurrentWeapon() != WEAPON_SNIPERRIFLE || btData->pEntity)
 						{
 							if (btData->pEntity)
 							{

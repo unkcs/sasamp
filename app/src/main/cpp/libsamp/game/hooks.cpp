@@ -659,14 +659,6 @@ void CStreaming__Init2_hook()
 	*(uint32_t*)(g_libGTASA + 0x5DE734) = 0x20000000;
 }
 
-void (*NvUtilInit)(void);
-void NvUtilInit_hook(void)
-{	
-	NvUtilInit();
-
-
-}
-
 signed int (*OS_FileOpen)(unsigned int a1, int *a2, const char *a3, int a4);
 signed int OS_FileOpen_hook(unsigned int a1, int *a2, const char *a3, int a4)
 {
@@ -1173,7 +1165,7 @@ struct stPedDamageResponse
 	ENTITY_TYPE* pEntity;
 	float fDamage;
 	int iBodyPart;
-	int iWeaponType;
+	eWeaponType iWeaponType;
 	bool bSpeak;
 };
 
@@ -1217,20 +1209,11 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
 	int bodypart = thiz->iBodyPart;
 
     auto pPlayerPool = pNetGame->GetPlayerPool();
-    if(pPlayerPool) {
-        if (thiz->iWeaponType < 0 || thiz->iWeaponType > 255 ||
-            (thiz->iWeaponType > 54 && thiz->iWeaponType < 200)
-            || (thiz->iWeaponType > 201 && thiz->iWeaponType < 255))
-            thiz->iWeaponType = 255; // suicide
-        else if (thiz->iWeaponType == 18)
-            thiz->iWeaponType = 37; // flamethower
-        else if (thiz->iWeaponType == 35 || thiz->iWeaponType == 16)
-            thiz->iWeaponType = 51; // explosion
+    if(pPlayerPool)
+	{
 
-        PLAYERID damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr(
-                (PED_TYPE *) thiz->pEntity); // отправитель урона
-        PLAYERID issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr(
-                (PED_TYPE *) pEntity); // получатель
+        auto damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE *) thiz->pEntity); // отправитель урона
+		auto issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE *) pEntity); // получатель
 
         PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
 
@@ -1239,17 +1222,16 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
 		pedTake->pdwDamageEntity = reinterpret_cast<uintptr_t>(pedTake);
 
         // player give damage
-        if (pedGive == pGame->FindPlayerPed()->m_pPed) {
+        if (pedGive == pGame->FindPlayerPed()->m_pPed)
+		{
             CHUD::addGiveDamageNotify(issuerid, thiz->iWeaponType, fDamage);
-            pPlayerPool->GetLocalPlayer()->GiveTakeDamage(false, issuerid, fDamage,
-                                                          thiz->iWeaponType,
-                                                          bodypart);
+			CNetGame::sendGiveDamage(issuerid, thiz->iWeaponType, fDamage, bodypart);
         }
 
         // player take damage
-        else if (pedTake == pGame->FindPlayerPed()->m_pPed) {
-            pPlayerPool->GetLocalPlayer()->GiveTakeDamage(true, damagedid, fDamage,
-                                                          thiz->iWeaponType, bodypart);
+        else if (pedTake == pGame->FindPlayerPed()->m_pPed)
+		{
+			CNetGame::sendTakeDamage(damagedid, thiz->iWeaponType, fDamage, bodypart);
 
             char nick[MAX_PLAYER_NAME];
             strcpy(nick, pPlayerPool->GetPlayerName(damagedid));
@@ -1514,8 +1496,12 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 				return mat;
 			}
 		}
+        // TODO: need switch
 		if(mat->color.red == 255 && mat->color.green == 255 && mat->color.blue == 0)
 		{ // toner
+            if(pVeh->tonerColor.a < 110)
+                return mat;
+
 			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
 			mat->color.alpha = pVeh->tonerColor.a;
 			mat->color.green = pVeh->tonerColor.g;
@@ -1527,7 +1513,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 		}
 		if ( color == 0xff00ff3c )
 		{ // first color
-			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat)), *reinterpret_cast<unsigned int*>(&(mat)));
 			mat->color.alpha = 255;
 			mat->color.green = pVeh->mainColor.g;
 			mat->color.blue = pVeh->mainColor.b;
@@ -1537,6 +1523,9 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 		}
         if ( mat->color.red == 125 && mat->color.green == 100 && mat->color.blue == 0 )
         { // wheel
+            if(pVeh->wheelColor.a == 0)
+                return mat;
+
             resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
             mat->color.alpha = 255;
             mat->color.red = pVeh->wheelColor.r;

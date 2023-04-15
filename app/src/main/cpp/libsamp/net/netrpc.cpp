@@ -94,7 +94,6 @@ void InitGame(RPCParameters *rpcParams)
 		pGame->DisableInteriorEnterExits();
 
 	pNetGame->SetGameState(GAMESTATE_CONNECTED);
-	if(pLocalPlayer) pLocalPlayer->HandleClassSelection();
 
 	pGame->SetWorldWeather(pNetGame->m_byteWeather);
 	pGame->ToggleCJWalk(pNetGame->m_bUseCJWalk);
@@ -203,33 +202,6 @@ void Chat(RPCParameters *rpcParams)
 		CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(playerId);
 		if(pRemotePlayer)
 			pRemotePlayer->Say(szText);
-	}
-}
-
-void RequestClass(RPCParameters *rpcParams)
-{
-	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-	uint8_t byteRequestOutcome = 0;
-	PLAYER_SPAWN_INFO SpawnInfo;
-
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-	CLocalPlayer *pLocalPlayer = 0;
-
-	if(pPlayerPool) pLocalPlayer = pPlayerPool->GetLocalPlayer();
-
-	bsData.Read(byteRequestOutcome);
-	bsData.Read((char*)&SpawnInfo, sizeof(PLAYER_SPAWN_INFO));
-
-	if(pLocalPlayer)
-	{
-		if(byteRequestOutcome)
-		{
-			pLocalPlayer->SetSpawnInfo(&SpawnInfo);
-			pLocalPlayer->HandleClassSelectionOutcome();
-		}
 	}
 }
 
@@ -1108,7 +1080,6 @@ void RegisterRPCs(RakClientInterface* pRakClient)
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ServerQuit, ServerQuit);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ClientMessage, ClientMessage);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_Chat, Chat);
-	pRakClient->RegisterAsRemoteProcedureCall(&RPC_RequestClass, RequestClass);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_RequestSpawn, RequestSpawn);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_Weather, Weather);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_WorldTime, WorldTime);

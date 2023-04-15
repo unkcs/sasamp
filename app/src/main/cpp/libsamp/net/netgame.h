@@ -108,7 +108,9 @@
 #define RPC_TUNING_WHEELS    72
 #define RPC_STYLING_CENTER    74
 #define RPC_SPAWN_AT		75
-
+#define RPC_TAKE_DAMAGE		76
+#define RPC_GIVE_DAMAGE		77
+#define RPC_DEATH			78
 
 // Packet 252
 #define RPC_TOGGLE_LOGIN (1)
@@ -151,6 +153,7 @@ public:
 	void ResetActorPool();
 	void ShutDownForGameRestart();
 
+	static void sendTakeDamage(PLAYERID attacker, eWeaponType weaponId, float ammount, int bodyPart);
 	void SendChatMessage(const char* szMsg);
 	void SendChatCommand(const char* szMsg);
 	void SendCustomPacket(uint8_t packet, uint8_t RPC, uint8_t Quantity);
@@ -168,8 +171,8 @@ public:
 	void UpdatePlayerScoresAndPings();
 
 	RakClientInterface* m_pRakClient;
-private:
 	CPlayerPool*		m_pPlayerPool;
+private:
 	CVehiclePool*		m_pVehiclePool;
 	CObjectPool*		m_pObjectPool;
 	CPickupPool* 		m_pPickupPool;
@@ -276,6 +279,8 @@ public:
 	static void packetTireShop(Packet *p);
 
 	static void packetStylingCenter(Packet *p);
+
+	static void sendGiveDamage(PLAYERID taker, int weaponId, float ammount, int bodyPart);
 };
 
 extern CNetGame *pNetGame;

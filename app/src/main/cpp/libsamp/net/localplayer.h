@@ -3,6 +3,7 @@
 #include "../game/common.h"
 #include "../game/quaternion.h"
 #include "../game/playerped.h"
+#include "game/Enums/eWeaponType.h"
 
 // spectate
 #define SPECTATE_TYPE_NONE				0
@@ -178,19 +179,12 @@ public:
 
 	bool Process();
 
-	void SendWastedNotification();
+	static void sendDeath();
 
-	void HandleClassSelection();
-	void HandleClassSelectionOutcome();
-
-	void SendNextClass();
-	void SendPrevClass();
-	void SendSpawn();
 	void GoEnterVehicle(bool passenger);
 	uint32_t GetPlayerColorAsARGB();
 	uint32_t GetPlayerColor();
 	void SetPlayerColor(uint32_t dwColor);
-	void RequestClass(int iClass);
 	void UpdateSurfing();
 	void SendEnterVehicleNotification(VEHICLEID VehicleID, bool bPassenger);
 	void SendExitVehicleNotification(VEHICLEID VehicleID);
@@ -221,10 +215,6 @@ public:
 
 	CPlayerPed			*m_pPlayerPed;
 
-	void
-	GiveTakeDamage(bool bGiveOrTake, uint16_t wPlayerID, float damage_amount, uint32_t weapon_id,
-				   uint32_t bodypart);
-
 	void SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, VECTOR vecHitPos);
 
 public:
@@ -239,8 +229,8 @@ public:
 	VEHICLEID			m_CurrentVehicle;
 	VEHICLEID 			m_LastVehicle;
 	bool				m_bIsActive;
-	bool 				lToggle;
-	uint8_t 			FindDeathReasonPlayer;
+	PLAYERID 			lastDamageId;
+	eWeaponType 		lastDamageWeap;
 
 private:
 	uint32_t			GetCurrentAnimationIndexFlag();
@@ -274,5 +264,4 @@ private:
 	uint8_t				m_byteLastWeapon[MAX_WEAPONS_SLOT];
 	uint32_t			m_dwLastAmmo[MAX_WEAPONS_SLOT];
 	uint32_t 			m_dwLastUpdateHudButtons;
-
 };

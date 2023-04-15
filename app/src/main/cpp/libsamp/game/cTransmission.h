@@ -2,9 +2,7 @@
 // Created by plaka on 09.04.2023.
 //
 
-#ifndef LIVERUSSIA_CTRANSMISSION_H
-#define LIVERUSSIA_CTRANSMISSION_H
-
+#pragma once
 
 #include <cstdint>
 #include "tTransmissionGear.h"
@@ -41,14 +39,22 @@ public:
 public:
     static void InjectHooks();
 
-    cTransmission() = default; // 0x6D0450
+    cTransmission() = default;
 
-    static void InitGearRatios(cTransmission* thiz);
-    //void DisplayGearRatios();
-    static void CalculateGearForSimpleCar(cTransmission*, float speed, uint8_t& currentGear); // todo: no static
-    static float CalculateDriveAcceleration(cTransmission* thiz, const float& gasPedal, uint8_t& currentGear, float& gearChangeCount, float& velocity, float* a6, float* a7, uint8_t allWheelsOnGround, uint8_t handlingType);
+    void InitGearRatios();
+    void CalculateGearForSimpleCar(float speed, uint8_t& currentGear);
+    float CalculateDriveAcceleration(const float& gasPedal, uint8_t& currentGear, float& gearChangeCount, float& velocity, float* a6, float* a7, uint8_t allWheelsOnGround, uint8_t handlingType);
+
+    //FIXME:del all _hooked
+    static void InitGearRatios_hooked(cTransmission* thiz) {
+        thiz->InitGearRatios();
+    }
+    static void CalculateGearForSimpleCar_hooked(cTransmission* thiz, float speed, uint8_t& currentGear) {
+        thiz->CalculateGearForSimpleCar(speed, currentGear);
+    }
+    static float CalculateDriveAcceleration_hooked(cTransmission* thiz, const float& gasPedal, uint8_t& currentGear, float& gearChangeCount, float& velocity, float* a6, float* a7, uint8_t allWheelsOnGround, uint8_t handlingType){
+        thiz->CalculateDriveAcceleration(gasPedal, currentGear, gearChangeCount, velocity, a6, a7, allWheelsOnGround, handlingType);
+    }
 };
 #pragma pack(pop)
 static_assert(sizeof(cTransmission) == 0x68, "Invalid size cTransmission");
-
-#endif //LIVERUSSIA_CTRANSMISSION_H

@@ -332,6 +332,7 @@ void CKeyBoard::Close()
 #include "game/CVector.h"
 #include "java_systems/CStyling.h"
 #include "game/Models/ModelInfo.h"
+#include "game/cHandlingDataMgr.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -2384,6 +2385,13 @@ bool ProcessLocalCommands(const char str[])
 	{
 		CHUD::bIsCamEditGui = !CHUD::bIsCamEditGui;
 		CHUD::toggleAll( CHUD::bIsCamEditGui );
+		return true;
+	}
+	if (strcmp(str, "/load") == 0)
+	{
+		//char VehicleNames[210][14] = *(char(*)[][])(g_libGTASA + 0x006B06AC);
+		Log("%s", *(char*)(g_libGTASA + 0x0060EF78));
+		cHandlingDataMgr::LoadHandlingData();
 		return true;
 	}
 

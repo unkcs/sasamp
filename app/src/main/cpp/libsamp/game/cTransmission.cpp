@@ -9,43 +9,43 @@
 #include "Timer.h"
 #include "util/patch.h"
 
-void cTransmission::InitGearRatios(cTransmission* thiz)
+void cTransmission::InitGearRatios()
 {
-    memset(thiz->m_aGears, 0, sizeof(m_aGears));
-    float averageHalfGearVelocity = 0.5f * thiz->m_fMaxGearVelocity / thiz->m_nNumberOfGears;
-    float maxGearVelocity = thiz->m_fMaxGearVelocity - averageHalfGearVelocity;
-    for (uint8_t i = 1; i <= thiz->m_nNumberOfGears; i++)
+    memset(m_aGears, 0, sizeof(m_aGears));
+    float averageHalfGearVelocity = 0.5f * m_fMaxGearVelocity / m_nNumberOfGears;
+    float maxGearVelocity = m_fMaxGearVelocity - averageHalfGearVelocity;
+    for (uint8_t i = 1; i <= m_nNumberOfGears; i++)
     {
         static tTransmissionGear* gear = nullptr;
         static tTransmissionGear* previousGear = nullptr;
-        gear = &thiz->m_aGears[i];
-        previousGear = &thiz->m_aGears[i - 1];
-        gear->m_maxVelocity = (static_cast<float>(i) * maxGearVelocity / thiz->m_nNumberOfGears) + averageHalfGearVelocity;
+        gear = &m_aGears[i];
+        previousGear = &m_aGears[i - 1];
+        gear->m_maxVelocity = (static_cast<float>(i) * maxGearVelocity / m_nNumberOfGears) + averageHalfGearVelocity;
         float velocityDifference = gear->m_maxVelocity - previousGear->m_maxVelocity;
-        if (i >= thiz->m_nNumberOfGears)
+        if (i >= m_nNumberOfGears)
         {
-            gear->m_changeUpVelocity = thiz->m_fMaxGearVelocity;
+            gear->m_changeUpVelocity = m_fMaxGearVelocity;
         }
         else
         {
-            tTransmissionGear& nextGear = thiz->m_aGears[i + 1];
+            tTransmissionGear& nextGear = m_aGears[i + 1];
             nextGear.m_changeDownVelocity = 0.42f * velocityDifference + previousGear->m_maxVelocity;
             gear->m_changeUpVelocity = 0.6667f * velocityDifference + previousGear->m_maxVelocity;
         }
     }
-    thiz->m_aGears[0].m_maxVelocity = thiz->m_maxReverseGearVelocity;
-    thiz->m_aGears[0].m_changeUpVelocity = -0.01f;
-    thiz->m_aGears[0].m_changeDownVelocity = thiz->m_maxReverseGearVelocity;
-    thiz->m_aGears[1].m_changeDownVelocity = -0.01f;
+    m_aGears[0].m_maxVelocity = m_maxReverseGearVelocity;
+    m_aGears[0].m_changeUpVelocity = -0.01f;
+    m_aGears[0].m_changeDownVelocity = m_maxReverseGearVelocity;
+    m_aGears[1].m_changeDownVelocity = -0.01f;
 }
 
-void cTransmission::CalculateGearForSimpleCar(cTransmission* thiz, float speed, uint8_t& currentGear)
+void cTransmission::CalculateGearForSimpleCar(float speed, uint8_t& currentGear)
 {
-    thiz->m_fCurrentSpeed = speed;
-    tTransmissionGear& gear = thiz->m_aGears[currentGear];
+    m_fCurrentSpeed = speed;
+    tTransmissionGear& gear = m_aGears[currentGear];
     if (speed > gear.m_changeUpVelocity)
     {
-        if (currentGear < thiz->m_nNumberOfGears)
+        if (currentGear < m_nNumberOfGears)
             currentGear++;
     }
     else if (speed < gear.m_changeDownVelocity)
@@ -55,19 +55,19 @@ void cTransmission::CalculateGearForSimpleCar(cTransmission* thiz, float speed, 
     }
 }
 
-float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float& gasPedal, uint8_t& currentGear, float& gearChangeCount, float& velocity, float* a6, float* a7, uint8_t allWheelsOnGround, uint8_t handlingCheat)
+float cTransmission::CalculateDriveAcceleration(const float& gasPedal, uint8_t& currentGear, float& gearChangeCount, float& velocity, float* a6, float* a7, uint8_t allWheelsOnGround, uint8_t handlingCheat)
 {
     static float cheatMultiplier = 0.0;      // TODO | STATICREF // = 0.0f;
     static float driveAcceleration = 0.0;    // TODO | STATICREF // = 0.0f;
     static float currentVelocity = 0.0;      // TODO | STATICREF // = 0.0f;
     currentVelocity = velocity;
-    if (currentVelocity < thiz->m_maxReverseGearVelocity)
+    if (currentVelocity < m_maxReverseGearVelocity)
         return 0.0f;
 
-    while (currentVelocity <= thiz->m_fMaxGearVelocity)
+    while (currentVelocity <= m_fMaxGearVelocity)
     {
-        thiz->m_fCurrentSpeed = currentVelocity;
-        tTransmissionGear& gear = thiz->m_aGears[currentGear];
+        m_fCurrentSpeed = currentVelocity;
+        tTransmissionGear& gear = m_aGears[currentGear];
         bool accelerate = false;
         bool shiftToLowerGear = false;
         if (currentVelocity > gear.m_changeUpVelocity)
@@ -90,18 +90,18 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
         {
             float speedMultiplier = 0.0f;
             float nitrosMultiplier = 0.0f;
-            if (thiz->m_nNumberOfGears == 1)
+            if (m_nNumberOfGears == 1)
             {
                 speedMultiplier = 1.0f;
                 nitrosMultiplier = 1.0f;
             }
             else if (currentGear >= 1)
             {
-                float gearNumber = 1.0f - (static_cast<float>(currentGear) - 1.0f) / (static_cast<float>(thiz->m_nNumberOfGears) - 1.0f);
+                float gearNumber = 1.0f - (static_cast<float>(currentGear) - 1.0f) / (static_cast<float>(m_nNumberOfGears) - 1.0f);
                 gearNumber *= gearNumber;
-                if (thiz->m_handlingFlags & VEHICLE_HANDLING_1G_BOOST)
+                if (m_handlingFlags & VEHICLE_HANDLING_1G_BOOST)
                     speedMultiplier = gearNumber * 5.0f;
-                else if (thiz->m_handlingFlags & VEHICLE_HANDLING_2G_BOOST)
+                else if (m_handlingFlags & VEHICLE_HANDLING_2G_BOOST)
                     speedMultiplier = gearNumber * 4.0f;
                 else
                     speedMultiplier = gearNumber * 3.0f;
@@ -118,7 +118,7 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
                 cheatMultiplier = TRANSMISSION_AI_CHEAT_MULT;
             else if (handlingCheat == CHEAT_HANDLING_NITROS)
                 nitrosMultiplier = TRANSMISSION_NITROS_MULT;
-            driveAcceleration = speedMultiplier * (cheatMultiplier * thiz->m_fEngineAcceleration) * nitrosMultiplier * 0.4f * gasPedal * CTimer::GetTimeStep();
+            driveAcceleration = speedMultiplier * (cheatMultiplier * m_fEngineAcceleration) * nitrosMultiplier * 0.4f * gasPedal * CTimer::GetTimeStep();
             if (a6 && a7)
             {
                 if (allWheelsOnGround)
@@ -130,9 +130,9 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
                         if (currentGear == 1)
                         {
                             currentDownVelocityDiff = currentVelocity
-                                                      + thiz->m_fMaxGearVelocity / static_cast<float>(thiz->m_nNumberOfGears) * (1.0f - 0.6667f);
-                            upDownVelocityDiff = thiz->m_fMaxGearVelocity / static_cast<float>(thiz->m_nNumberOfGears) * (1.0f - 0.6667f)
-                                                 + thiz->m_aGears[1].m_changeUpVelocity;
+                                                      + m_fMaxGearVelocity / static_cast<float>(m_nNumberOfGears) * (1.0f - 0.6667f);
+                            upDownVelocityDiff = m_fMaxGearVelocity / static_cast<float>(m_nNumberOfGears) * (1.0f - 0.6667f)
+                                                 + m_aGears[1].m_changeUpVelocity;
                         }
                         else
                         {
@@ -143,10 +143,10 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
                     else
                     {
                         // reverse gear
-                        currentDownVelocityDiff = thiz->m_fMaxGearVelocity / static_cast<float>(thiz->m_nNumberOfGears) * (1.0f - 0.6667f)
+                        currentDownVelocityDiff = m_fMaxGearVelocity / static_cast<float>(m_nNumberOfGears) * (1.0f - 0.6667f)
                                                   - currentVelocity;
-                        upDownVelocityDiff = thiz->m_fMaxGearVelocity / static_cast<float>(thiz->m_nNumberOfGears) * (1.0f - 0.6667f)
-                                             - thiz->m_aGears[0].m_changeDownVelocity;
+                        upDownVelocityDiff = m_fMaxGearVelocity / static_cast<float>(m_nNumberOfGears) * (1.0f - 0.6667f)
+                                             - m_aGears[0].m_changeDownVelocity;
                     }
                     const float velocityDiffRatio = currentDownVelocityDiff / upDownVelocityDiff;
                     float inertiaMultiplier = velocityDiffRatio - *a6;
@@ -158,7 +158,7 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
                     {
                         inertiaMultiplier *= TRANSMISSION_NITROS_INERTIA_MULT;
                     }
-                    float acceleration = 1.0f - inertiaMultiplier * thiz->m_fEngineInertia;
+                    float acceleration = 1.0f - inertiaMultiplier * m_fEngineInertia;
                     acceleration = std::clamp(acceleration, 0.1f, 1.0f);
                     *a6 = velocityDiffRatio;
                     *a7 = acceleration * (1.0f - TRANSMISSION_SMOOTHER_FRAC) + TRANSMISSION_SMOOTHER_FRAC * *a7;
@@ -166,7 +166,7 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
                 }
                 else
                 {
-                    *a6 += fabs(gasPedal) / thiz->m_fEngineInertia * CTimer::GetTimeStep() * TRANSMISSION_FREE_ACCELERATION;
+                    *a6 += fabs(gasPedal) / m_fEngineInertia * CTimer::GetTimeStep() * TRANSMISSION_FREE_ACCELERATION;
                     *a6 = std::min(*a6, 1.0f);
                     *a7 = 0.1f;
                 }
@@ -195,14 +195,14 @@ float cTransmission::CalculateDriveAcceleration(cTransmission* thiz, const float
         a7 = nullptr;
         allWheelsOnGround = false;
         handlingCheat = CHEAT_HANDLING_NONE;
-        if (currentVelocity < thiz->m_maxReverseGearVelocity)
+        if (currentVelocity < m_maxReverseGearVelocity)
             return 0.0f;
     }
     return 0.0f;
 }
 
 void cTransmission::InjectHooks() {
-    CHook::Redirect(g_libGTASA + 0x0050C028, &cTransmission::InitGearRatios);
-    CHook::Redirect(g_libGTASA + 0x0050C58C, &cTransmission::CalculateGearForSimpleCar);
-    CHook::Redirect(g_libGTASA + 0x0050C10C, &cTransmission::CalculateDriveAcceleration);
+//    CHook::Redirect(g_libGTASA + 0x0050C028, &cTransmission::InitGearRatios_hooked);
+//    CHook::Redirect(g_libGTASA + 0x0050C58C, &cTransmission::CalculateGearForSimpleCar_hooked);
+//    CHook::Redirect(g_libGTASA + 0x0050C10C, &cTransmission::CalculateDriveAcceleration_hooked);
 }

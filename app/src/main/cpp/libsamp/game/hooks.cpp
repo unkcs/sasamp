@@ -558,6 +558,12 @@ static char szLastBufferedName[40];
 int (*cHandlingDataMgr__FindExactWord)(uintptr_t thiz, char* line, char* nameTable, int entrySize, int entryCount);
 int cHandlingDataMgr__FindExactWord_hook(uintptr_t thiz, char* line, char* nameTable, int entrySize, int entryCount)
 {
+//	char (&VehicleNames)[210][14] = *(char(*)[210][14])(nameTable);
+//	for(int i = 0; i < 300; i++)
+//	{
+//		Log("\"%s\", ", VehicleNames[i]);
+//	}
+	//Log("dslkfjsakj = %s", nameTable[0]);
 	strncpy(&szLastBufferedName[0], line, entrySize);
 	return cHandlingDataMgr__FindExactWord(thiz, line, nameTable, entrySize, entryCount);
 }
@@ -1030,12 +1036,15 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 }
 
 #include "game/Models/ModelInfo.h"
+#include "cHandlingDataMgr.h"
 
 void InjectHooks()
 {
 	Log("InjectHooks");
 	CModelInfo::injectHooks();
 	CTimer::InjectHooks();
+	cTransmission::InjectHooks();
+	cHandlingDataMgr::InjectHooks();
 }
 
 void InstallSpecialHooks()

@@ -130,6 +130,8 @@ struct tHandlingData
     uint8_t            m_nAnimGroup;
 
     cTransmission& GetTransmission() { return m_transmissionData; }
+
+    int InitFromData(int id, const char *line);
 };
 #pragma pack(pop)
 static_assert(sizeof(tHandlingData) == 0xE0, "Invalid size tHandlingData");

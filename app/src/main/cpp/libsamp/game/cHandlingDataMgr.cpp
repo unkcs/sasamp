@@ -42,7 +42,7 @@ void cHandlingDataMgr::LoadHandlingData()
         if (sscanf(line, "%31s", name, std::size(name)) != 1) { // FIX_BUGS: Sized string read
             return;
         }
-        const auto id = 1;
+        const auto id = FindExactWord(name, &VehicleNames[0][0], std::size(VehicleNames[0]), std::size(VehicleNames));
         if (id == -1) {
             return; // Issue logged by `FindExactWord`, so no need to care about it here
         }

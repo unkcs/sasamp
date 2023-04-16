@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rwlpcore.h"
 /**
  * \ingroup rwraster
  * \ref RwRasterLockMode represents the options available for locking 

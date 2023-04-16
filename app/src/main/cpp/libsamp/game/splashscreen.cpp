@@ -13,7 +13,7 @@ RwTexture* splashTexture = nullptr;
 void LoadSplashTexture()
 {
 	Log("Loading hud bg texture..");
-	splashTexture = (RwTexture*)LoadTextureFromDB("txd", "hud_bg");
+	splashTexture = CUtil::LoadTextureFromDB("txd", "hud_bg");
 }
 
 void ImGui_ImplRenderWare_RenderDrawData(ImDrawData* draw_data);

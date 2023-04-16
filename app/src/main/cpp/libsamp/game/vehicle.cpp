@@ -1089,7 +1089,7 @@ void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, fl
 	m_Shadow.b = b;
 	m_Shadow.fSizeX = fSizeX;
 	m_Shadow.fSizeY = fSizeY;
-	m_Shadow.pTexture = (RwTexture*)LoadTextureFromDB("samp", "neonaper3");
+	m_Shadow.pTexture = CUtil::LoadTextureFromDB("samp", "neonaper3");
 }
 
 void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID)

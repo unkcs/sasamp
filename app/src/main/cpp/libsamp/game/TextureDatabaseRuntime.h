@@ -6,6 +6,7 @@
 #define LIVERUSSIA_TEXTUREDATABASERUNTIME_H
 
 #include <cstdint>
+#include "game/RW/rwcore.h"
 
 typedef uintptr_t TextureDatabase;
 
@@ -28,6 +29,8 @@ public:
     static TextureDatabase* Load(const char *withName, bool fullyLoad, TextureDatabaseFormat forcedFormat);
 
     static void Register(TextureDatabase *thiz);
+
+    static RwTexture *GetTexture(const char *name);
 };
 
 

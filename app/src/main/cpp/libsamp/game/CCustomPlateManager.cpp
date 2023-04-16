@@ -121,13 +121,13 @@ void CCustomPlateManager::Initialise()
 	m_pRuPoliceSprite = new CSprite2d();
 
 
-	m_pUaSprite->m_pRwTexture = (RwTexture*)LoadTextureFromDB("samp", "plate_ua");
-	m_pRuSprite->m_pRwTexture = (RwTexture*)LoadTextureFromDB("samp", "plate_ru");
-	m_pBuSprite->m_pRwTexture = (RwTexture*)LoadTextureFromDB("samp", "plate_bu");
-	m_pKzSprite->m_pRwTexture = (RwTexture*)LoadTextureFromDB("samp", "plate_kz");
-	m_pRuPoliceSprite->m_pRwTexture = (RwTexture*)LoadTextureFromDB("samp", "plate_ru_police");
+	m_pUaSprite->m_pRwTexture = CUtil::LoadTextureFromDB("samp", "plate_ua");
+	m_pRuSprite->m_pRwTexture = CUtil::LoadTextureFromDB("samp", "plate_ru");
+	m_pBuSprite->m_pRwTexture = CUtil::LoadTextureFromDB("samp", "plate_bu");
+	m_pKzSprite->m_pRwTexture = CUtil::LoadTextureFromDB("samp", "plate_kz");
+	m_pRuPoliceSprite->m_pRwTexture = CUtil::LoadTextureFromDB("samp", "plate_ru_police");
 
-	pNoPlateTex = (RwTexture*)LoadTextureFromDB("txd", "nomer");
+	pNoPlateTex = CUtil::LoadTextureFromDB("txd", "nomer");
 
 	m_pBitmap = new uint8_t[PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH];
 

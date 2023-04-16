@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game/Entity/Vehicle.h"
+#include "game/RW/rwcore.h"
 
 static class CUtil {
 public:
@@ -14,6 +15,10 @@ public:
     static const char *GetWeaponName(int iWeaponID);
 
     static int32_t FindPlayerSlotWithPedPointer(PED_TYPE *pPlayersPed);
+
+    static RwTexture* GetTexture(const char* name);
+
+    static RwTexture *LoadTextureFromDB(const char *dbname, const char *texture);
 };
 
 uintptr_t FindLibrary(const char* library);

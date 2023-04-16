@@ -13,11 +13,7 @@ extern CGUI *pGUI;
 CPlayerTags::CPlayerTags()
 {
 	Log("Loading afk_icon..");
-	m_pAfk_icon = (RwTexture*)LoadTextureFromDB("samp", "afk_icon");
-//	m_pVoice_icon = (RwTexture*)LoadTextureFromDB("samp", "micro_icon");
-
-//	m_pKeyboard_icon = (RwTexture*)LoadTextureFromDB("samp", "keyboard_icon");
-
+	m_pAfk_icon = CUtil::LoadTextureFromDB("samp", "afk_icon");
 	HealthBarBDRColor = ImColor( 0x00, 0x00, 0x00, 0xFF );
 
 	for (int i = 0; i < MAX_PLAYERS; i++)

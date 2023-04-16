@@ -22,8 +22,6 @@ void InitPlayerPedPtrRecords();
 void SetPlayerPedPtrRecord(uint8_t bytePlayer, uintptr_t dwPedPtr);
 uint8_t FindPlayerNumFromPedPtr(uintptr_t dwPedPtr);
 
-uintptr_t GetTexture(const char* texture);
-uintptr_t LoadTextureFromDB(const char* dbname, const char* texture);
 void DefinedState2d();
 void SetScissorRect(void* pRect);
 float DegToRad(float fDegrees);

@@ -1964,31 +1964,6 @@ uint8_t FindPlayerNumFromPedPtr(uintptr_t dwPedPtr)
 	return 0;
 }
 #include <thread>
-uintptr_t GetTexture(const char* texture)
-{
-	return (( uintptr_t (*)(const char*))(g_libGTASA+0x258910+1))(texture);
-}
-
-uintptr_t LoadTextureFromDB(const char* dbname, const char* texture)
-{
-	// TextureDatabaseRuntime::GetDatabase(dbname)
-	uintptr_t db_handle = (( uintptr_t (*)(const char*))(g_libGTASA+0x1BF530+1))(dbname);
-	if(!db_handle)
-	{
-		Log("Error: Database not found! (%s)", dbname);
-		return 0;
-	}
-	// TextureDatabaseRuntime::Register(db)
-	(( void (*)(uintptr_t))(g_libGTASA+0x1BE898+1))(db_handle);
-	uintptr_t tex = GetTexture(texture);
-
-	if(!tex) Log("Error: Texture (%s) not found in database (%s)", dbname, texture);
-
-	// TextureDatabaseRuntime::Unregister(db)
-	(( void (*)(uintptr_t))(g_libGTASA+0x1BE938+1))(db_handle);
-
-	return tex;
-}
 
 void DefinedState2d()
 {
@@ -2218,144 +2193,36 @@ void CUtil::WorldRemoveEntity(uintptr_t pEnt)
     ((void (*)(uintptr_t))(g_libGTASA + 0x3C1500 + 1)) (pEnt);
 }
 
-uintptr_t GetModelInfoByID(int iModelID)
+RwTexture* CUtil::GetTexture(const char* name)
 {
-	if (iModelID < 0 || iModelID > 20000) {
-		return false;
-	}
+    auto tex = TextureDatabaseRuntime::GetTexture(name);
+    if (!tex)
+    {
+        tex = TextureDatabaseRuntime::GetTexture("RepairLR");
+    }
+    ++tex->refCount;
 
-	auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
-	return reinterpret_cast<uintptr_t>(dwModelArray[iModelID]);
+    return tex;
 }
 
-
-uintptr_t ModelInfoCreateInstance(int iModel)
+RwTexture* CUtil::LoadTextureFromDB(const char* dbname, const char* texture)
 {
-	uintptr_t modelInfo = GetModelInfoByID(iModel);
-	if (modelInfo)
-	{
-		return ((uintptr_t(*)(uintptr_t)) * (uintptr_t*)(*(uintptr_t*)modelInfo + 0x2C))(modelInfo);
-	}
+    // TextureDatabaseRuntime::GetDatabase(dbname)
+    uintptr_t db_handle = (( uintptr_t (*)(const char*))(g_libGTASA+0x1BF530+1))(dbname);
+    if(!db_handle)
+    {
+        Log("Error: Database not found! (%s)", dbname);
+        return 0;
+    }
+    // TextureDatabaseRuntime::Register(db)
+    (( void (*)(uintptr_t))(g_libGTASA+0x1BE898+1))(db_handle);
 
-	return 0;
-}
+    auto tex = CUtil::GetTexture(texture);
 
-void RenderClumpOrAtomic(uintptr_t rwObject)
-{
-	if (rwObject)
-	{
-		if (*(uint8_t*)rwObject == 1)
-		{
-			// Atomic
-			((void(*)(uintptr_t))(*(uintptr_t*)(rwObject + 0x48)))(rwObject);
-		}
-		else if (*(uint8_t*)rwObject == 2)
-		{
-			// rpClumpRender
-			((void(*)(uintptr_t))(g_libGTASA + 0x1E0E60 + 1))(rwObject);
-		}
-	}
-}
+    if(!tex) Log("Error: Texture (%s) not found in database (%s)", dbname, texture);
 
+    // TextureDatabaseRuntime::Unregister(db)
+    (( void (*)(uintptr_t))(g_libGTASA+0x1BE938+1))(db_handle);
 
-float GetModelColSphereRadius(int iModel)
-{
-	uintptr_t modelInfo = GetModelInfoByID(iModel);
-
-	if (modelInfo)
-	{
-		uintptr_t colModel = *(uintptr_t*)(modelInfo + 0x2C);
-		if (colModel != 0) {
-			return *(float*)(colModel + 0x24);
-		}
-	}
-
-	return 0.0f;
-}
-
-
-void GetModelColSphereVecCenter(int iModel, VECTOR* vec)
-{
-	uintptr_t modelInfo = GetModelInfoByID(iModel);
-
-	if (modelInfo)
-	{
-		uintptr_t colModel = *(uintptr_t*)(modelInfo + 0x2C);
-		if (colModel != 0) {
-			VECTOR* v = (VECTOR*)(colModel + 0x18);
-
-			vec->X = v->X;
-			vec->Y = v->Y;
-			vec->Z = v->Z;
-		}
-	}
-}
-
-void DestroyAtomicOrClump(uintptr_t rwObject)
-{
-	if (rwObject)
-	{
-		int type = *(int*)(rwObject);
-
-		if (type == 1)
-		{
-			// RpAtomicDestroy
-			((void(*)(uintptr_t))(g_libGTASA + 0x1E10D4 + 1))(rwObject);
-
-			uintptr_t parent = *(uintptr_t*)(rwObject + 4);
-			if (parent)
-			{
-				// RwFrameDestroy
-				((void(*)(uintptr_t))(g_libGTASA + 0x1AEC84 + 1))(parent);
-			}
-
-		}
-		else if (type == 2)
-		{
-			// RpClumpDestroy
-			((void(*)(uintptr_t))(g_libGTASA + 0x1E1224 + 1))(rwObject);
-		}
-	}
-}
-
-bool bTextDrawTextureSlotState[200];
-uintptr_t TextDrawTexture[200];
-
-int GetFreeTextDrawTextureSlot()
-{
-	for (int i = 0; i < 200; i++)
-	{
-		if (bTextDrawTextureSlotState[i] == false) {
-			bTextDrawTextureSlotState[i] = true;
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-void DestroyTextDrawTexture(int index)
-{
-	if (index >= 0 && index < 200)
-	{
-		bTextDrawTextureSlotState[index] = false;
-		TextDrawTexture[index] = 0x0;
-	}
-}
-
-uintptr_t LoadTexture(const char* texname)
-{
-	static char* texdb[] = { "samp", "gta3", "gta_int", "player", "txd" };
-
-	for (int i = 0; i < 5; i++)
-	{
-		uintptr_t texture = LoadTextureFromDB(texdb[i], texname);
-		if (texture != 0) {
-			Log("%s loaded from %s", texname, texdb[i]);
-			return texture;
-		}
-	}
-
-	Log("Texture %s not found!", texname);
-	return 0;
+    return tex;
 }

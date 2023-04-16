@@ -1347,24 +1347,6 @@ static RwRGBA DWORD2RGBAinternal(uint32_t dwColor)
 
 int g_iLastRenderedObject;
 
-uintptr_t(*GetTexture_orig)(const char*);
-uintptr_t GetTexture_hook(const char* a1)
-{
-	//001BE990
-	uintptr_t tex = ((uintptr_t(*)(const char*))(g_libGTASA + 0x001BE990 + 1))(a1);
-	if (!tex)
-	{
-		Log("Texture %s was not found", a1);
-		return 0;
-	}
-	else
-	{
-	//	Log("Texture %s", a1);
-		++* (uintptr_t*)(tex + 84);
-		return tex;
-	}
-}
-
 int(*CPlayerInfo__Process)(uintptr_t *thiz, uintptr_t *a2);
 int CPlayerInfo__Process_hook(uintptr_t *thiz, uintptr_t *a2)
 {
@@ -2688,7 +2670,7 @@ void InstallHooks()
 	//SetUpHook(g_libGTASA + 0x00391E20, (uintptr_t)CObject__Render_hook, (uintptr_t*)& CObject__Render);
 
 	// gettexture fix crash
-	CHook::InlineHook(g_libGTASA, 0x00258910, &GetTexture_hook, &GetTexture_orig);
+	CHook::Redirect(g_libGTASA, 0x00258910, &CUtil::GetTexture);
 
 	// steal objects fix
 	CHook::InlineHook(g_libGTASA, 0x003AD8E0, &CPlayerInfo__Process_hook, &CPlayerInfo__Process);

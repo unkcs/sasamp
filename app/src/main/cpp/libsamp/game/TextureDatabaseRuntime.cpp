@@ -17,3 +17,7 @@ void TextureDatabaseRuntime::Register(TextureDatabase *thiz)
 {
     ((void (*)(TextureDatabase*))(g_libGTASA + 0x1BE898 + 1))(thiz);
 }
+
+RwTexture* TextureDatabaseRuntime::GetTexture(const char *name) {
+    return ((RwTexture*(*)(const char*))(g_libGTASA + 0x001BE990 + 1))(name);
+}

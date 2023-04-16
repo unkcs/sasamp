@@ -14,7 +14,7 @@ import com.liverussia.cr.R;
 import com.liverussia.cr.gui.AucContainer;
 import com.liverussia.cr.gui.Casino;
 import com.liverussia.cr.gui.CasinoBaccarat;
-import com.liverussia.cr.gui.CasinoDice;
+import com.liverussia.cr.gui.casino.Dice;
 import com.liverussia.cr.gui.DailyReward;
 import com.liverussia.cr.gui.hud.HudManager;
 import com.liverussia.cr.gui.tab.Tab;
@@ -29,7 +29,7 @@ import java.util.TimerTask;
 public class Samp extends GTASA
 {
     public static Activity activity;
-
+    public static final int INVALID_PLAYER_ID = 65535;
     public static native void playUrlSound(String url);
     public static DecimalFormat formatter = null;
     public static SoundPool soundPool = null;
@@ -61,7 +61,6 @@ public class Samp extends GTASA
         soundPool = new SoundPool.Builder().setAudioAttributes(attributes).build();
 
         new HudManager(this);
-        new CasinoDice(this);
         new CasinoBaccarat(this);
         new AucContainer(this);
         new DailyReward(this);

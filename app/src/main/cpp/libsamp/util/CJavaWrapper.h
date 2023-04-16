@@ -80,8 +80,6 @@ public:
 
 	void ShowRegistration(char *nick, int id);
 	void HideRegistration();
-	void TempToggleCasinoDice(bool toggle);
-	void ShowCasinoDice(bool show, int tableID, int tableBet, int tableBank, int money, char player1name[], int player1stat, char player2name[], int player2stat, char player3name[], int player3stat, char player4name[], int player4stat, char player5name[], int player5stat);
 
 	void ShowChooseSpawn(int organization, int station, int exit, int garage, int house);
 	void HideChooseSpawn();
@@ -103,7 +101,6 @@ public:
 
 	void ClearScreen();
 
-	jobject jCasinoDice;
 	jobject jCasino_LuckyWheel;
 
     void ShowCasinoLuckyWheel(int count, int time);

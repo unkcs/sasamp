@@ -13,6 +13,7 @@
 #include "java_systems/CAdminRecon.h"
 #include "java_systems/casino/CBaccarat.h"
 #include "java_systems/CSpeedometr.h"
+#include "java_systems/casino/Dice.h"
 
 extern CGUI *pGUI;
 extern CGame *pGame;
@@ -284,7 +285,7 @@ void CKeyBoard::Open()
 
 	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(false);
 	if(CAdminRecon::bIsToggle) CAdminRecon::tempToggle(false);
-	if(pGame->isCasinoDiceActive)g_pJavaWrapper->TempToggleCasinoDice(false);
+	if(CDice::bIsShow) CDice::tempToggle(false);
 	if(CBaccarat::bIsShow) CBaccarat::tempToggle(false);
 	CHUD::toggleServerLogo(false);
 
@@ -317,7 +318,7 @@ void CKeyBoard::Close()
 	{
 		CHUD::toggleGps(true);
 	}
-	if(pGame->isCasinoDiceActive)g_pJavaWrapper->TempToggleCasinoDice(true);
+	if(CDice::bIsShow) CDice::tempToggle(true);
 	if(CBaccarat::bIsShow) CBaccarat::tempToggle(true);
 	if(CAdminRecon::bIsToggle) CAdminRecon::tempToggle(true);
 	if(pNetGame->m_GreenZoneState) CHUD::toggleGreenZone(true);

@@ -29,7 +29,6 @@ enum PACKET_BACCARAT_TYPE
 
 void CBaccarat::updateLastWins(uint8_t* lastwins)
 {
-    Log("updateLastWins cpp");
     JNIEnv *env = g_pJavaWrapper->GetEnv();
 
     jclass clazz = env->GetObjectClass(thiz);

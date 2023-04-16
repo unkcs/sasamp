@@ -1,8 +1,9 @@
 #pragma once
 
 #include "entity.h"
-#include "RGB.h"
+#include "rgba.h"
 #include "CCustomPlateManager.h"
+#include "Entity/Vehicle.h"
 
 enum E_CUSTOM_COMPONENTS
 {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "main.h"
 #define NO_TEAM 255
 
 class CPlayerPool

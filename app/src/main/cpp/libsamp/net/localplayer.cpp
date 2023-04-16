@@ -184,6 +184,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CTechInspect.h"
 #include "java_systems/casino/CBaccarat.h"
 #include "java_systems/CTireShop.h"
+#include "java_systems/casino/Dice.h"
 
 CAMERA_AIM* caAim = new CAMERA_AIM();
 extern bool bFirstSpawn;
@@ -467,7 +468,7 @@ bool CLocalPlayer::Process()
 	bool needDrawableChat = true;
 //	bool needDrawableMoney = true;
 
-	if(CDialog::bIsShow || pGame->isCasinoDiceActive || CTab::bIsShow || pGame->isAutoShopActive
+	if(CDialog::bIsShow || CDice::bIsShow || CTab::bIsShow || pGame->isAutoShopActive
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||

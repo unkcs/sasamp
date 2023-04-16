@@ -281,6 +281,8 @@ public:
 	static void packetStylingCenter(Packet *p);
 
 	static void sendGiveDamage(PLAYERID taker, int weaponId, float ammount, int bodyPart);
+
+	static void packetDice(Packet *p);
 };
 
 extern CNetGame *pNetGame;

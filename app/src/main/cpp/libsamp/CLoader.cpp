@@ -13,6 +13,7 @@
 #include "java_systems/CEditobject.h"
 #include "java_systems/CStyling.h"
 #include "java_systems/CTireShop.h"
+#include "java_systems/casino/Dice.h"
 
 void InitBASSFuncs();
 void CLoader::loadBassLib()
@@ -80,5 +81,8 @@ void CLoader::initJavaClasses(JavaVM* pjvm)
 
     CTireShop::clazz = env->FindClass("com/liverussia/cr/gui/tire_shop/TireShop");
     CTireShop::clazz = (jclass) env->NewGlobalRef( CTireShop::clazz );
+
+    CDice::clazz = env->FindClass("com/liverussia/cr/gui/casino/Dice");
+    CDice::clazz = (jclass) env->NewGlobalRef( CDice::clazz );
 }
 

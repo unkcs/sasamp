@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     android:layout_width="match_parent"
     android:id="@+id/casino_dice_main_layout"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="gone">
 
-    <View
-        android:id="@+id/rectangle_3"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="400dp"
         android:layout_height="250dp"
         android:layout_alignParentLeft="true"
@@ -18,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
 
     <TextView
         android:id="@+id/casino_dice_table_num"
@@ -27,11 +26,35 @@
         android:layout_marginTop="16dp"
         android:text="Стол 3"
         android:fontFamily="@font/visby_round_cf_extra_bold"
+        android:includeFontPadding="false"
         android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
         android:textFontWeight="700"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
-        app:layout_constraintTop_toTopOf="@+id/rectangle_3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/casino_dice_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="До конца раунда: 15 сек."
+        android:includeFontPadding="false"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/_6sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/casino_dice_table_num"
+        app:layout_constraintEnd_toEndOf="@+id/casino_dice_line" />
+
+    <TextView
+        android:id="@+id/casino_dice_crup_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Крупье: Oxra_Litvinenko [877]"
+        android:includeFontPadding="false"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/_6sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/casino_dice_table_num"
+        app:layout_constraintStart_toStartOf="@+id/casino_dice_line" />
 
     <View
         android:id="@+id/casino_dice_line"
@@ -43,9 +66,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
         android:background="@drawable/casino_dice_line"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/casino_dice_table_num" />
 
     <TextView
@@ -58,9 +81,9 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/casino_dice_table_num" />
 
     <TextView
@@ -86,8 +109,8 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/casino_dice_text_bank" />
 
     <View
@@ -100,9 +123,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
         android:background="@drawable/casino_dice_line"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dice_text_balance" />
 
     <TextView
@@ -116,7 +139,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/casino_dice_line2" />
 
     <TextView
@@ -129,7 +152,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dice_text_player_name1" />
 
     <TextView
@@ -142,7 +165,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dice_text_player_name1" />
 
     <TextView
@@ -155,7 +178,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dice_text_player_name2" />
 
     <TextView
@@ -168,7 +191,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dice_text_player_name2" />
 
     <TextView
@@ -181,7 +204,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dice_text_player_name3" />
 
     <TextView
@@ -194,7 +217,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dice_text_player_name3" />
     <TextView
         android:id="@+id/dice_text_player_ready4"
@@ -206,7 +229,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dice_text_player_name4" />
 
     <TextView
@@ -219,7 +242,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dice_text_player_name4" />
     <TextView
         android:id="@+id/dice_text_player_ready5"
@@ -231,7 +254,7 @@
         android:textColor="@color/white"
         android:textFontWeight="700"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dice_text_player_name5" />
 
     <com.google.android.material.button.MaterialButton
@@ -276,8 +299,8 @@
         android:background="@drawable/exit"
         android:backgroundTint="@null"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/rectangle_3"
-        app:layout_constraintEnd_toEndOf="@+id/rectangle_3" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

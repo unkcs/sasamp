@@ -11,7 +11,7 @@
 #include "net/netgame.h"
 #include "java_systems/CHUD.h"
 #include "java_systems/CAdminRecon.h"
-#include "java_systems/casino/CBaccarat.h"
+#include "java_systems/casino/Baccarat.h"
 #include "java_systems/CSpeedometr.h"
 #include "java_systems/casino/Dice.h"
 

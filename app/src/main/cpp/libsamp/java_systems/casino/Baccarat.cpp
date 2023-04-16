@@ -2,7 +2,7 @@
 // Created by plaka on 19.01.2023.
 //
 
-#include "CBaccarat.h"
+#include "Baccarat.h"
 
 #include <jni.h>
 

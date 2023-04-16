@@ -21,6 +21,7 @@ void CDice::hide()
         jmethodID method = env->GetMethodID(clazz, "destroy", "()V");
         env->CallVoidMethod(thiz, method);
 
+        env->DeleteGlobalRef(thiz);
         thiz = nullptr;
     }
 }

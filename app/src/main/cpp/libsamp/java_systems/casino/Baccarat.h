@@ -2,8 +2,8 @@
 // Created by plaka on 19.01.2023.
 //
 
-#ifndef LIVERUSSIA_CBACCARAT_H
-#define LIVERUSSIA_CBACCARAT_H
+#ifndef LIVERUSSIA_BACCARAT_H
+#define LIVERUSSIA_BACCARAT_H
 
 
 #include <jni.h>
@@ -28,4 +28,4 @@ public:
 };
 
 
-#endif //LIVERUSSIA_CBACCARAT_H
+#endif //LIVERUSSIA_BACCARAT_H

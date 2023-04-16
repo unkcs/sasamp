@@ -52,6 +52,7 @@ void CSpeedometr::hide()
     env->CallVoidMethod(CSpeedometr::thiz, method);
 
     env->DeleteGlobalRef(CSpeedometr::thiz);
+    CSpeedometr::thiz = nullptr;
 
     CSpeedometr::bIsShow = false;
 }

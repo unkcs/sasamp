@@ -2,7 +2,7 @@
 // Created by plaka on 06.12.2022.
 //
 
-#include "CChip.h"
+#include "Chip.h"
 #include <jni.h>
 
 #include "main.h"

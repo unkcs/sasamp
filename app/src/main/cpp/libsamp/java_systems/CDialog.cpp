@@ -8,7 +8,7 @@
 #include "../game/game.h"
 #include "net/netgame.h"
 #include "util/CJavaWrapper.h"
-#include "java_systems/casino/CBaccarat.h"
+#include "java_systems/casino/Baccarat.h"
 
 jobject CDialog::thiz = nullptr;
 bool    CDialog::bIsShow = false;

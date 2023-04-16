@@ -2,8 +2,8 @@
 // Created by plaka on 06.12.2022.
 //
 
-#ifndef LIVERUSSIA_CCHIP_H
-#define LIVERUSSIA_CCHIP_H
+#ifndef LIVERUSSIA_CHIP_H
+#define LIVERUSSIA_CHIP_H
 
 
 static class CChip {
@@ -14,4 +14,4 @@ public:
 };
 
 
-#endif //LIVERUSSIA_CCHIP_H
+#endif //LIVERUSSIA_CHIP_H

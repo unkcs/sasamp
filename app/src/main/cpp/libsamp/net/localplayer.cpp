@@ -172,7 +172,7 @@ extern bool g_uiHeadMoveEnabled;
 
 #include "..//game/CWeaponsOutFit.h"
 #include "java_systems/CEditobject.h"
-#include "java_systems/casino/CChip.h"
+#include "java_systems/casino/Chip.h"
 #include "java_systems/CAucContainer.h"
 #include "util/patch.h"
 #include "java_systems/CAdminRecon.h"
@@ -182,7 +182,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CStyling.h"
 #include "java_systems/CDialog.h"
 #include "java_systems/CTechInspect.h"
-#include "java_systems/casino/CBaccarat.h"
+#include "java_systems/casino/Baccarat.h"
 #include "java_systems/CTireShop.h"
 #include "java_systems/casino/Dice.h"
 

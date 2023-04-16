@@ -6,9 +6,10 @@
 
 #include "Placeable.h"
 #include "game/CVector.h"
+#include "game/Reference.h"
 
 #pragma pack(push, 1)
-typedef struct _ENTITY_TYPE : CPlaceable
+struct ENTITY_TYPE : CPlaceable
 {
     union {
         uintptr_t m_pRwObject;
@@ -61,8 +62,8 @@ typedef struct _ENTITY_TYPE : CPlaceable
     uint16_t RandomSeed;
 
     uint16_t nModelIndex;
-
-    uint8_t _pad2[20];
+    CReference *pReferences;
+    uint8_t _pad2[16];
 
     float m_fPrevDistFromCam;
     uint32_t m_LastCollisionTime;
@@ -108,5 +109,5 @@ typedef struct _ENTITY_TYPE : CPlaceable
     uint8_t _pad3[88];
 
     uint32_t dwUnkModelRel;
-} ENTITY_TYPE;
+};
 #pragma pack(pop)

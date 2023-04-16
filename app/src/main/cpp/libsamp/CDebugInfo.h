@@ -8,10 +8,8 @@
 class CDebugInfo
 {
 	static uint32_t m_uiDrawDebug;
-	static uint32_t m_dwSpeedMode;
 	static uint32_t m_uiDrawFPS;
 
-	static uint32_t m_dwSpeedStart;
 public:
 	static uint32_t uiStreamedPeds;
 	static uint32_t uiStreamedVehicles;

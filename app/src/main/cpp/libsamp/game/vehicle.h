@@ -150,10 +150,10 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
-	CRGBA tonerColor{255, 255, 255, 0};
-	CRGBA mainColor{};
+	CRGBA tonerColor{255, 255, 255, 110};
+	CRGBA mainColor{0, 0, 0, 255};
     CRGBA wheelColor{0, 0, 0, 0};
-	CRGBA secondColor{};
+	CRGBA secondColor{0, 0, 0, 255};
 	CRGBA lightColor{255, 255, 255, 0};
 	RwTexture* pPlateTexture = nullptr;
 
@@ -183,10 +183,6 @@ public:
 	bool			m_bSpecialMarkerEnabled = false;
 
 	tHandlingData* m_pCustomHandling = nullptr;
-
-//	SReplacedTexture m_szReplacedTextures[MAX_REPLACED_TEXTURES];
-//	bool m_bReplaceTextureStatus[MAX_REPLACED_TEXTURES];
-//	bool m_bReplacedTexture;
 
 	void* m_pSuspensionLines;
 	bool bHasSuspensionLines;
@@ -220,9 +216,6 @@ public:
 
 	SCustomCarShadow m_Shadow;
 	bool m_bShadow = false;
-	//int bEngine;
-	int fDoorState = 0;
-	//int bLights;
 
 	bool IsTrailer();
 

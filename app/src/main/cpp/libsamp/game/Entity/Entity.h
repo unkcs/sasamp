@@ -62,7 +62,45 @@ typedef struct _ENTITY_TYPE : CPlaceable
 
     uint16_t nModelIndex;
 
-    uint8_t _pad2[32];
+    uint8_t _pad2[20];
+
+    float m_fPrevDistFromCam;
+    uint32_t m_LastCollisionTime;
+    struct
+    {
+        uint32_t bExtraHeavy : 1;
+        uint32_t bDoGravity : 1;
+        uint32_t bInfiniteMass : 1;
+        uint32_t bInfiniteMassFixed : 1;
+        uint32_t bPedPhysics : 1;
+        uint32_t bDoorPhysics : 1;
+        uint32_t bHangingPhysics : 1;
+        uint32_t bPoolBallPhysics : 1;
+        uint32_t bIsInWater : 1;
+        uint32_t bCollidedThisFrame : 1;
+        uint32_t bUnFreezable : 1;
+        uint32_t bTrainForceCol : 1;
+        uint32_t bSkipLineCol : 1;
+        uint32_t bCoorsFrozenByScript : 1;
+        uint32_t bDontLoadCollision : 1;
+        uint32_t bHalfSpeedCollision : 1;
+        uint32_t bForceHitReturnFalse : 1;
+        uint32_t bDontProcessCollisionOurSelves : 1;
+        uint32_t bNotDamagedByBullets : 1;
+        uint32_t bNotDamagedByFlames : 1;
+        uint32_t bNotDamagedByCollisions : 1;
+        uint32_t bNotDamagedByMelee : 1;
+        uint32_t bOnlyDamagedByPlayer : 1;
+        uint32_t bIgnoresExplosions : 1;
+        uint32_t bFlyer : 1;
+        uint32_t bNeverGoStatic : 1;
+        uint32_t bUsingSpecialColModel : 1;
+        uint32_t bForceFullWaterCheck : 1;
+        uint32_t bUsesCollisionRecords : 1;
+        uint32_t bRenderScorched : 1;
+        uint32_t bDoorHitEndStop : 1;
+        uint32_t bCarriedByRope : 1;
+    };
 
     CVector vecMoveSpeed;
     CVector vecTurnSpeed;

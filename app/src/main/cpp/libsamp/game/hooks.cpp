@@ -1478,29 +1478,19 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 				return mat;
 			}
 		}
-        // TODO: need switch
-		if(mat->color.red == 255 && mat->color.green == 255 && mat->color.blue == 0)
-		{ // toner
-            if(pVeh->tonerColor.a < 110)
-                return mat;
 
-			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
-			mat->color.alpha = pVeh->tonerColor.a;
-			mat->color.green = pVeh->tonerColor.g;
-			mat->color.blue = pVeh->tonerColor.b;
-			mat->color.red = pVeh->tonerColor.r;
-
-           // mat->surfaceProps.specular = 9.0f;
-			return mat;
-		}
 		if ( color == 0xff00ff3c )
 		{ // first color
 			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
-			mat->color.alpha = 255;
-			mat->color.green = pVeh->mainColor.g;
-			mat->color.blue = pVeh->mainColor.b;
-			mat->color.red = pVeh->mainColor.r;
 
+			mat->color = pVeh->mainColor;
+			return mat;
+		}
+		else if (color == 0xff00ffff)
+		{ // toner
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
+
+			mat->color = pVeh->tonerColor;
 			return mat;
 		}
         if ( mat->color.red == 125 && mat->color.green == 100 && mat->color.blue == 0 )
@@ -2595,16 +2585,6 @@ void DrawCrosshair_hook(uintptr_t* thiz)
 	*m_f3rdPersonCHairMultY = save2;
 }
 
-int (*World__remove)(uintptr_t* thiz, uintptr_t* entity);
-int World__remove_hook(uintptr_t* thiz, uintptr_t* entity)
-{
-	if (thiz == nullptr) {
-		return 0;
-	}
-
-	return World__remove(thiz, entity);
-}
-
 void InstallHooks()
 {
 	Log("InstallHooks");
@@ -2647,8 +2627,6 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);
 	CHook::InlineHook(g_libGTASA, 0x239D5C, &TouchEvent_hook, &TouchEvent);
     //
-
-//	CHook::InlineHook(g_libGTASA, 0x336690, &CModelInfo_AddPedModel_hook, &CModelInfo_AddPedModel); // hook is dangerous
 	CHook::InlineHook(g_libGTASA, 0x3DBA88, &CRadar__GetRadarTraceColor_hook, &CRadar__GetRadarTraceColor); // dangerous
 	CHook::InlineHook(g_libGTASA, 0x3DAF84, &CRadar__SetCoordBlip_hook, &CRadar__SetCoordBlip);
 	CHook::InlineHook(g_libGTASA, 0x3DE9A8, &CRadar__DrawRadarGangOverlay_hook, &CRadar__DrawRadarGangOverlay);

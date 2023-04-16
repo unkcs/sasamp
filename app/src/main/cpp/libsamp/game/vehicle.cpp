@@ -574,13 +574,11 @@ void CVehicle::SetDoorState(int iState)
 	{
 		m_pVehicle->dwDoorsLocked = 2;
 		m_bIsLocked = true;
-		CVehicle::fDoorState = 1;
 	}
 	else
 	{
 		m_pVehicle->dwDoorsLocked = 0;
 		m_bIsLocked = false;
-		CVehicle::fDoorState = 0;
 	}
 }
 

@@ -150,7 +150,7 @@ Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject th
         }
         case 2: {
             // toner
-            pVehicle->tonerColor.Set(r, g, b, 230);
+            pVehicle->tonerColor.Set(r, g, b, 240);
             break;
         }
         case 3: {

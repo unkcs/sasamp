@@ -7,6 +7,9 @@
 #include "Placeable.h"
 #include "game/CVector.h"
 #include "game/Reference.h"
+#include "../Core/Link.h"
+#include "game/Enums/eEntityStatus.h"
+#include "game/Enums/eEntityType.h"
 
 #pragma pack(push, 1)
 struct ENTITY_TYPE : CPlaceable
@@ -63,7 +66,16 @@ struct ENTITY_TYPE : CPlaceable
 
     uint16_t nModelIndex;
     CReference *pReferences;
-    uint8_t _pad2[16];
+    CLink<ENTITY_TYPE*> *m_pLastRenderedLink;
+    uint16_t m_nScanCode;
+    uint8_t m_iplIndex;
+    uint8_t m_areaCode;
+    ENTITY_TYPE *m_pLod;
+    uint8_t numLodChildren;
+    int8_t numLodChildrenRendered;
+    eEntityType   m_nType : 3;          // Mask: & 0x7  = 7
+    eEntityStatus m_nStatus : 5;        // Mask: & 0xF8 = 248 (Remember: In the original code unless this was left shifted the value it's compared to has to be left shifted by 3!)
+    uint8_t pad_0;
 
     float m_fPrevDistFromCam;
     uint32_t m_LastCollisionTime;

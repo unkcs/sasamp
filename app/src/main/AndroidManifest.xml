@@ -39,7 +39,7 @@
         android:appCategory="game"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:logo="@drawable/adtlogo"
+        android:logo="@drawable/logo_splash"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon"
        >

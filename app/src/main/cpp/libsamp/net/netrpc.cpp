@@ -654,7 +654,6 @@ void Update3DTextLabel(RPCParameters *rpcParams)
 		//pLabelsPool->Delete(LabelID);
 	}
 }
-extern bool bFirstSpawn;
 #define EVENT_TYPE_PAINTJOB			1
 #define EVENT_TYPE_CARCOMPONENT		2
 #define EVENT_TYPE_CARCOLOR			3

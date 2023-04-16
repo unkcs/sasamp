@@ -14,8 +14,6 @@
 
 extern CGame *pGame;
 
-bool bFirstSpawn = true;
-
 extern int iNetModeNormalOnfootSendRate;
 extern int iNetModeNormalInCarSendRate;
 extern bool bUsedPlayerSlots[];
@@ -48,7 +46,6 @@ CLocalPlayer::CLocalPlayer()
 
 	m_iSelectedClass = 0;
 	m_bHasSpawnInfo = false;
-	m_bWaitingForSpawnRequestReply = false;
 	m_bWantsAnotherClass = false;
 	m_bInRCMode = false;
 
@@ -189,7 +186,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/CTireShop.h"
 
 CAMERA_AIM* caAim = new CAMERA_AIM();
-
+extern bool bFirstSpawn;
 bool CLocalPlayer::Process()
 {
 	m_pPlayerPed->SetCurrentAim(caAim);
@@ -581,7 +578,7 @@ void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 	memcpy(&m_SpawnInfo, pSpawn, sizeof(PLAYER_SPAWN_INFO));
 	m_bHasSpawnInfo = true;
 }
-
+bool bFirstSpawn = true;
 bool CLocalPlayer::Spawn(const CVector pos, float rot)
 {
 	//if(!m_bHasSpawnInfo) return false;
@@ -594,16 +591,17 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 	CCamera *pGameCamera = pGame->GetCamera();
 	pGameCamera->Restore();
 	pGameCamera->SetBehindPlayer();
+
 	//pGame->DisplayWidgets(true);
 	//pGame->DisplayHUD(true);
 	m_pPlayerPed->TogglePlayerControllable(true);
 	
-	if(!bFirstSpawn)
+	//if(!bFirstSpawn)
 		m_pPlayerPed->SetInitialState();
-	else
-		bFirstSpawn = false;
-
+	//else
 	bFirstSpawn = false;
+
+//	bFirstSpawn = false;
 
 	pGame->RefreshStreamingAt(pos.x,pos.y);
 
@@ -623,7 +621,6 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 
 	m_bIsWasted = false;
 	m_bIsActive = true;
-	m_bWaitingForSpawnRequestReply = false;
 
 //	RakNet::BitStream bsSendSpawn;
 //	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,

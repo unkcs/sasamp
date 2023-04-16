@@ -596,13 +596,11 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			Log("RPC_SPAWN_AT");
 			CVector pos;
 			float rotation;
-			uint32_t interior;
 
 			bs.Read(pos.x);
 			bs.Read(pos.y);
 			bs.Read(pos.z);
 			bs.Read(rotation);
-			//bs.Read(interior);
 
 			m_pPlayerPool->GetLocalPlayer()->Spawn(pos, rotation);
 			break;
@@ -1067,7 +1065,7 @@ void CNetGame::Packet_CustomRPC(Packet* p)
 			bs.Read(pVeh->wheelColor.r);
 			bs.Read(pVeh->wheelColor.g);
 			bs.Read(pVeh->wheelColor.b);
-			bs.Read(pVeh->wheelColor.a);
+			//bs.Read(pVeh->wheelColor.a);
 
 			//
 			bs.Read(pVeh->tonerColor.r);

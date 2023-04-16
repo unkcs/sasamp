@@ -218,8 +218,6 @@ public:
 	void SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, VECTOR vecHitPos);
 
 public:
-	bool				m_bWaitingForSpawnRequestReply;
-
 	bool				m_bIsSpectating;
 	uint8_t				m_byteSpectateMode;
 	uint8_t				m_byteSpectateType;

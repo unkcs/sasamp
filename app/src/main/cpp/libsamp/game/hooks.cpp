@@ -1513,7 +1513,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 		}
 		if ( color == 0xff00ff3c )
 		{ // first color
-			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat)), *reinterpret_cast<unsigned int*>(&(mat)));
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
 			mat->color.alpha = 255;
 			mat->color.green = pVeh->mainColor.g;
 			mat->color.blue = pVeh->mainColor.b;

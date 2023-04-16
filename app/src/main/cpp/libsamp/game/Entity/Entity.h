@@ -117,8 +117,18 @@ struct ENTITY_TYPE : CPlaceable
 
     CVector vecMoveSpeed;
     CVector vecTurnSpeed;
-
-    uint8_t _pad3[88];
+    CVector m_vecMoveFriction;
+    CVector m_vecTurnFriction;
+    CVector m_vecAverageMoveSpeed;
+    CVector m_vecAverageTurnSpeed;
+    float m_fMass;
+    float m_fTurnMass;
+    float m_fMassMultiplier;
+    float m_fAirResistance;
+    float m_fElasticity;
+    float m_fBuoyancyConstant;
+    CVector m_vecCOM;
+    uint8_t _pad3[4];
 
     uint32_t dwUnkModelRel;
 };

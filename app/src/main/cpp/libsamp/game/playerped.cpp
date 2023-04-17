@@ -19,7 +19,7 @@ CPlayerPed::CPlayerPed()
 {
 	Log("CPlayerPed");
 	m_dwGTAId = 1;
-	m_pPed = (PED_TYPE*)GamePool_FindPlayerPed();
+	m_pPed = (CPedGta*)GamePool_FindPlayerPed();
 	m_pEntity = (CPhysical*)GamePool_FindPlayerPed();
 	m_bHaveBulletData = false;
 
@@ -82,7 +82,7 @@ CPlayerPed::CPlayerPed(uint8_t bytePlayerNumber, int iSkin, float fX, float fY, 
 	memset(&RemotePlayerKeys[m_bytePlayerNumber], 0, sizeof(PAD_KEYS));
 }
 
-bool IsValidGamePed(PED_TYPE* pPed);
+bool IsValidGamePed(CPedGta* pPed);
 
 CPlayerPed::~CPlayerPed()
 {
@@ -108,7 +108,7 @@ CPlayerPed::~CPlayerPed()
 		*(uint32_t*)(*(uintptr_t*)(dwPedPtr + 1088) + 76) = 0;
 		// CPlayerPed::Destructor
 
-		//(( void (*)(PED_TYPE*))(*(void**)(m_pPed->vtable+0x4)))(m_pPed);
+		//(( void (*)(CPedGta*))(*(void**)(m_pPed->vtable+0x4)))(m_pPed);
 		((void (*)(uintptr_t))(g_libGTASA+0x45D82C+1))((uintptr_t)m_pEntity);
 		//ScriptCommand(&DELETE_CHAR, m_dwGTAId);
 
@@ -523,7 +523,7 @@ bool CPlayerPed::IsAPassenger()
 	//if(m_pPed->m_nPedState == PEDSTATE_PASSENGER) return true;
 	if(m_pPed->pVehicle && m_pPed->bInVehicle)
 	{
-		VEHICLE_TYPE *pVehicle = (VEHICLE_TYPE *)m_pPed->pVehicle;
+		CVehicleGta *pVehicle = (CVehicleGta *)m_pPed->pVehicle;
 
 		if(	pVehicle->pDriver != m_pPed ||
 			pVehicle->nModelIndex == TRAIN_PASSENGER ||
@@ -535,9 +535,9 @@ bool CPlayerPed::IsAPassenger()
 }
 
 // 0.3.7
-VEHICLE_TYPE* CPlayerPed::GetGtaVehicle()
+CVehicleGta* CPlayerPed::GetGtaVehicle()
 {
-	return (VEHICLE_TYPE*)m_pPed->pVehicle;
+	return (CVehicleGta*)m_pPed->pVehicle;
 }
 
 // 0.3.7
@@ -561,7 +561,7 @@ void CPlayerPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
 int CPlayerPed::SetInitialState()
 {
 	Log("CPlayerPed::SetInitialState()1");
-	int a1 = (( int (*)(PED_TYPE*, bool))(g_libGTASA+0x458D1C+1))(m_pPed, 0);
+	int a1 = (( int (*)(CPedGta*, bool))(g_libGTASA + 0x458D1C + 1))(m_pPed, 0);
 
 	Log("CPlayerPed::SetInitialState()2");
 	return a1;
@@ -639,7 +639,7 @@ void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
 	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 
-    VEHICLE_TYPE *gtaVehicle = pVehicle->m_pVehicle;
+    CVehicleGta *gtaVehicle = pVehicle->m_pVehicle;
     if(!gtaVehicle)return;
     if(gtaVehicle->fHealth == 0.0f) return;
     // check is cplaceable
@@ -688,7 +688,7 @@ void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
 	}
 	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
-	VEHICLE_TYPE* ThisVehicleType;
+	CVehicleGta* ThisVehicleType;
 	if((ThisVehicleType = GamePool_Vehicle_GetAt(iVehicleID)) == 0) return;
 	if (ThisVehicleType->fHealth == 0.0f) return;
 	if (ThisVehicleType->vtable == g_libGTASA + 0x5C7358) return;
@@ -726,7 +726,7 @@ void CPlayerPed::ExitCurrentVehicle()
 	}
 	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
-	//VEHICLE_TYPE* ThisVehicleType = 0;
+	//CVehicleGta* ThisVehicleType = 0;
 
 	if(m_pPed->bInVehicle)
 	{
@@ -745,7 +745,7 @@ VEHICLEID CPlayerPed::GetCurrentSampVehicleID()
 	if(!pVehiclePool)return INVALID_VEHICLE_ID;
 	if(!m_pPed->pVehicle)return INVALID_VEHICLE_ID;
 
-	return pVehiclePool->FindIDFromGtaPtr((VEHICLE_TYPE *)m_pPed->pVehicle);
+	return pVehiclePool->FindIDFromGtaPtr((CVehicleGta *)m_pPed->pVehicle);
 }
 CVehicle* CPlayerPed::GetCurrentVehicle()
 {
@@ -757,7 +757,7 @@ CVehicle* CPlayerPed::GetCurrentVehicle()
 		if (pVehiclePool->GetSlotState(i)) {
 			CVehicle *pVehicle = pVehiclePool->GetAt(i);
 			if (pVehicle && pVehicle->IsAdded()) {
-				if (pVehicle->m_pVehicle == (VEHICLE_TYPE *) m_pPed->pVehicle) {
+				if (pVehicle->m_pVehicle == (CVehicleGta *) m_pPed->pVehicle) {
 					return pVehicle;
 				}
 			}
@@ -766,21 +766,21 @@ CVehicle* CPlayerPed::GetCurrentVehicle()
 	return nullptr;
 }
 
-VEHICLE_TYPE* CPlayerPed::GetCurrentGtaVehicle()
+CVehicleGta* CPlayerPed::GetCurrentGtaVehicle()
 {
 	if(!m_pPed) return nullptr;
 
-	return (VEHICLE_TYPE *)m_pPed->pVehicle;
+	return (CVehicleGta *)m_pPed->pVehicle;
 }
 
 uint32_t CPlayerPed::GetCurrentGTAVehicleID(){
 	if(!m_pPed) return 0;
-	return GamePool_Vehicle_GetIndex(reinterpret_cast<VEHICLE_TYPE *>(m_pPed->pVehicle));
+	return GamePool_Vehicle_GetIndex(reinterpret_cast<CVehicleGta *>(m_pPed->pVehicle));
 }
 
 int CPlayerPed::GetVehicleSeatID()
 {
-	auto *pVehicle = (VEHICLE_TYPE *)m_pPed->pVehicle;
+	auto *pVehicle = (CVehicleGta *)m_pPed->pVehicle;
 
 	if( pVehicle->pDriver == m_pPed) return 0;
 
@@ -881,9 +881,9 @@ void CPlayerPed::DestroyFollowPedTask()
 
 }
 
-int Weapon_FireSniper(CWeapon* pWeaponSlot, PED_TYPE* pPed)
+int Weapon_FireSniper(CWeapon* pWeaponSlot, CPedGta* pPed)
 {
-	return ((int (*)(CWeapon*, PED_TYPE*))(g_libGTASA + 0x0056668C + 1))(pWeaponSlot, pPed);
+	return ((int (*)(CWeapon*, CPedGta*))(g_libGTASA + 0x0056668C + 1))(pWeaponSlot, pPed);
 }
 
 void CPlayerPed::ClearAllWeapons()
@@ -936,17 +936,17 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 		}
 
 		// CPed::GetBonePosition
-		((void (*)(PED_TYPE*, VECTOR*, int, bool))(g_libGTASA + 0x00436590 + 1))(m_pPed, vecBone, bone_id, false);
+		((void (*)(CPedGta*, VECTOR*, int, bool))(g_libGTASA + 0x00436590 + 1))(m_pPed, vecBone, bone_id, false);
 
 		vecBone->Z += pFireOffset->Z + 0.15f;
 
 		// CPed::GetTransformedBonePosition
-		((void (*)(PED_TYPE*, VECTOR*, int, bool))(g_libGTASA + 0x004383C0 + 1))(m_pPed, vecOut, bone_id, false);
+		((void (*)(CPedGta*, VECTOR*, int, bool))(g_libGTASA + 0x004383C0 + 1))(m_pPed, vecOut, bone_id, false);
 	}
 }
 
-extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, PED_TYPE* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
-extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
+extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, CPedGta* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
+extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
 
 void CPlayerPed::FireInstant() {
 	if(!m_pPed || !GamePool_Ped_GetAt(m_dwGTAId)) {
@@ -1143,7 +1143,7 @@ void CPlayerPed::ProcessAttach()
 	}
 	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
-	((int(*)(PED_TYPE*))(g_libGTASA + 0x00391968 + 1))(m_pPed); // UpdateRPHAnim
+	((int(*)(CPedGta*))(g_libGTASA + 0x00391968 + 1))(m_pPed); // UpdateRPHAnim
 
 	if (IsAdded())
 	{
@@ -1325,7 +1325,7 @@ int CPlayerPed::GetCurrentAnimationIndex(float& blendData)
 	{
 		return 0;
 	}
-	sizeof(PED_TYPE);
+	sizeof(CPedGta);
 	CPedIntelligence* pIntelligence = m_pPed->pPedIntelligence;
 
 	if (pIntelligence)
@@ -1509,7 +1509,7 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 
 	m_pPed->m_motionAnimGroup = static_cast<AssocGroupId>(iAnimGroup);
 
-	((void(*)(PED_TYPE* thiz))(g_libGTASA + 0x004544F4 + 1))(m_pPed); // ReApplyMoveAnims
+	((void(*)(CPedGta* thiz))(g_libGTASA + 0x004544F4 + 1))(m_pPed); // ReApplyMoveAnims
 }
 
 
@@ -1591,7 +1591,7 @@ void CPlayerPed::GetBonePosition(int iBoneID, VECTOR* vecOut)
 	if(!m_pPed) return;
 	if(m_pEntity->vtable == g_libGTASA+0x5C7358) return;
 
-	(( void (*)(PED_TYPE*, VECTOR*, int, int))(g_libGTASA+0x436590+1))(m_pPed, vecOut, iBoneID, 0);
+	(( void (*)(CPedGta*, VECTOR*, int, int))(g_libGTASA + 0x436590 + 1))(m_pPed, vecOut, iBoneID, 0);
 }
 
 ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
@@ -1895,10 +1895,10 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 
 								if (pVehiclePool && pObjectPool)
 								{
-									PlayerID = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)btData->pEntity);
+									PlayerID = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta*)btData->pEntity);
 									if (PlayerID == INVALID_PLAYER_ID)
 									{
-										VehicleID = pVehiclePool->FindIDFromGtaPtr((VEHICLE_TYPE*)btData->pEntity);
+										VehicleID = pVehiclePool->FindIDFromGtaPtr((CVehicleGta*)btData->pEntity);
 										if (VehicleID == INVALID_VEHICLE_ID)
 										{
 											ObjectID = pObjectPool->FindIDFromGtaPtr(btData->pEntity);

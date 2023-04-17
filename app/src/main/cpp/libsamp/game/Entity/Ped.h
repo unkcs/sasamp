@@ -13,7 +13,7 @@
 #include "Physical.h"
 
 #pragma pack(push, 1)
-struct PED_TYPE : CPhysical
+struct CPedGta : CPhysical
 {
  //   CPhysical entity; 		// 0000-0184	;entity
     uint8_t _pad106[46];

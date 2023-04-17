@@ -1857,12 +1857,12 @@ const char g_szAnimBlockNames[][40] = {
 uintptr_t dwPlayerPedPtrs[PLAYER_PED_SLOTS];
 
 
-PED_TYPE* GamePool_FindPlayerPed()
+CPedGta* GamePool_FindPlayerPed()
 {
-	return *(PED_TYPE**)CWorld::Players;
+	return *(CPedGta**)CWorld::Players;
 }
 
-int32_t CUtil::FindPlayerSlotWithPedPointer(PED_TYPE* pPlayersPed)
+int32_t CUtil::FindPlayerSlotWithPedPointer(CPedGta* pPlayersPed)
 {
     for(int i = 0; i < MAX_PLAYERS; ++i)
     {
@@ -1873,24 +1873,24 @@ int32_t CUtil::FindPlayerSlotWithPedPointer(PED_TYPE* pPlayersPed)
 }
 
 
-PED_TYPE* GamePool_Ped_GetAt(int iID)
+CPedGta* GamePool_Ped_GetAt(int iID)
 {
-	return (( PED_TYPE* (*)(int))(g_libGTASA+0x41DD7C+1))(iID);
+	return (( CPedGta* (*)(int))(g_libGTASA + 0x41DD7C + 1))(iID);
 }
 
-int GamePool_Ped_GetIndex(PED_TYPE *pActor)
+int GamePool_Ped_GetIndex(CPedGta *pActor)
 {
-    return (( int (*)(PED_TYPE*))(g_libGTASA+0x41DD60+1))(pActor);
+    return (( int (*)(CPedGta*))(g_libGTASA + 0x41DD60 + 1))(pActor);
 }
 
-VEHICLE_TYPE *GamePool_Vehicle_GetAt(int iID)
+CVehicleGta *GamePool_Vehicle_GetAt(int iID)
 {
-	return (( VEHICLE_TYPE* (*)(int))(g_libGTASA+0x41DD44+1))(iID);
+	return (( CVehicleGta* (*)(int))(g_libGTASA + 0x41DD44 + 1))(iID);
 }
 
-int GamePool_Vehicle_GetIndex(VEHICLE_TYPE *pVehicle)
+int GamePool_Vehicle_GetIndex(CVehicleGta *pVehicle)
 {
-    return (( int (*)(VEHICLE_TYPE*))(g_libGTASA+0x41DD28+1))(pVehicle);
+    return (( int (*)(CVehicleGta*))(g_libGTASA + 0x41DD28 + 1))(pVehicle);
 }
 
 CPhysical *GamePool_Object_GetAt(int iID)

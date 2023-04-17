@@ -373,7 +373,7 @@ uint16_t CPad__GetAccelerate_hook(uintptr_t thiz)
 		{
 			if (pPlayerPed)
 			{
-				VEHICLE_TYPE* pGtaVehicle = pPlayerPed->GetGtaVehicle();
+				CVehicleGta* pGtaVehicle = pPlayerPed->GetGtaVehicle();
 				if (pGtaVehicle)
 				{
 					if (pGtaVehicle->m_nVehicleFlags.bEngineOn == 0)
@@ -512,7 +512,7 @@ void CPed__ProcessControl_hook(uintptr_t thiz)
 
 void AllVehicles__ProcessControl_hook(uintptr_t thiz)
 {
-	VEHICLE_TYPE *pVehicle = (VEHICLE_TYPE*)thiz;
+	CVehicleGta *pVehicle = (CVehicleGta*)thiz;
 	uintptr_t this_vtable = pVehicle->vtable;
 	this_vtable -= g_libGTASA;
 
@@ -606,7 +606,7 @@ void AllVehicles__ProcessControl_hook(uintptr_t thiz)
 	}
 
 	// VEHTYPE::ProcessControl()
-    (( void (*)(VEHICLE_TYPE*))(g_libGTASA+call_addr+1))(pVehicle);
+    (( void (*)(CVehicleGta*))(g_libGTASA + call_addr + 1))(pVehicle);
 }
 
 

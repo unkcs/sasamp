@@ -39,7 +39,7 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		ScriptCommand(&set_car_hydraulics, m_dwGTAId, 0);
 		ScriptCommand(&toggle_car_tires_vulnerable, m_dwGTAId, 1);
 		ScriptCommand(&set_car_immunities, m_dwGTAId, 0, 0, 0, 0, 0);
-		m_pVehicle = (VEHICLE_TYPE*)GamePool_Vehicle_GetAt(m_dwGTAId);
+		m_pVehicle = (CVehicleGta*)GamePool_Vehicle_GetAt(m_dwGTAId);
 		m_pEntity = (CPhysical*)m_pVehicle;
 
 		if (m_pVehicle)
@@ -459,14 +459,14 @@ bool CVehicle::IsDriverLocalPlayer()
 {
 	if (m_pVehicle)
 	{
-		if ((PED_TYPE*)m_pVehicle->pDriver == GamePool_FindPlayerPed())
+		if ((CPedGta*)m_pVehicle->pDriver == GamePool_FindPlayerPed())
 			return true;
 	}
 
 	return false;
 }
 
-bool IsValidGamePed(PED_TYPE* pPed);
+bool IsValidGamePed(CPedGta* pPed);
 
 void CVehicle::RemoveEveryoneFromVehicle()
 {
@@ -849,7 +849,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 
 	if (bNeedRecalculate)
 	{
-		((void (*)(VEHICLE_TYPE*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
+		((void (*)(CVehicleGta*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
 
 		CopyGlobalSuspensionLinesToPrivate();
 	}
@@ -862,7 +862,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 
 	if (bNeedRecalculate)
 	{
-		((void (*)(VEHICLE_TYPE*))(g_libGTASA + 0x004D6078 + 1))(m_pVehicle); // process suspension
+		((void (*)(CVehicleGta*))(g_libGTASA + 0x004D6078 + 1))(m_pVehicle); // process suspension
 	}
 }
 
@@ -901,7 +901,7 @@ void CVehicle::ResetVehicleHandling()
 
 	m_pVehicle->pHandling = m_pCustomHandling;
 
-	((void (*)(VEHICLE_TYPE*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
+	((void (*)(CVehicleGta*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
 	CopyGlobalSuspensionLinesToPrivate();
 
 	Log("Reseted to defaults");
@@ -1121,7 +1121,7 @@ void CVehicle::SetComponentAngle(bool bUnk, int iID, float angle)
 {
 	if (GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR)
 	{
-		((void(*)(VEHICLE_TYPE*, int a2, int a3, int a4, float a5, uint8_t a6))(g_libGTASA + 0x004DA0E4 + 1))(m_pVehicle, 0, iID, bUnk, angle, 1); // CAutomobile::OpenDoor
+		((void(*)(CVehicleGta*, int a2, int a3, int a4, float a5, uint8_t a6))(g_libGTASA + 0x004DA0E4 + 1))(m_pVehicle, 0, iID, bUnk, angle, 1); // CAutomobile::OpenDoor
 	}
 }
 

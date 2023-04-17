@@ -2,16 +2,16 @@
 #include "game/Enums/eWeaponType.h"
 #include <vector>
 
-bool CUtil::IsValidGameVehicle(VEHICLE_TYPE *pVehicle)
+bool CUtil::IsValidGameVehicle(CVehicleGta *pVehicle)
 {
 	// IsVehiclePointerValid
-	return (((bool (*)(VEHICLE_TYPE *))(g_libGTASA+0x5109E8+1))(pVehicle));
+	return (((bool (*)(CVehicleGta *))(g_libGTASA + 0x5109E8 + 1))(pVehicle));
 }
 
-bool CUtil::IsValidGamePed(PED_TYPE * pPed)
+bool CUtil::IsValidGamePed(CPedGta * pPed)
 {
 	// IsPedPointerValid(CPed *) — 0x00435614
-	return ((bool(*)(PED_TYPE *)) (g_libGTASA + 0x00435614 + 1)) (pPed);
+	return ((bool(*)(CPedGta *)) (g_libGTASA + 0x00435614 + 1)) (pPed);
 }
 
 bool CUtil::IsGameEntityArePlaceable(ENTITY_TYPE *pEntity)

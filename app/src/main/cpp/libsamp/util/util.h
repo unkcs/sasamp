@@ -5,8 +5,8 @@
 
 static class CUtil {
 public:
-    static bool IsValidGameVehicle(VEHICLE_TYPE *pVehicle);
-    static bool IsValidGamePed(PED_TYPE * pPed);
+    static bool IsValidGameVehicle(CVehicleGta *pVehicle);
+    static bool IsValidGamePed(CPedGta * pPed);
 
     static bool IsGameEntityArePlaceable(ENTITY_TYPE *pEntity);
 
@@ -14,7 +14,7 @@ public:
 
     static const char *GetWeaponName(int iWeaponID);
 
-    static int32_t FindPlayerSlotWithPedPointer(PED_TYPE *pPlayersPed);
+    static int32_t FindPlayerSlotWithPedPointer(CPedGta *pPlayersPed);
 
     static RwTexture* GetTexture(const char* name);
 

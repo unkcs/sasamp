@@ -422,7 +422,7 @@ void WorldVehicleAdd(RPCParameters *rpcParams)
 //		{
 //			{
 //				ScriptCommand(&change_car_skin, iVehicle, (NewVehicle.bytePaintjob - 1));
-//				VEHICLE_TYPE* pVeh = GamePool_Vehicle_GetAt(iVehicle);
+//				CVehicleGta* pVeh = GamePool_Vehicle_GetAt(iVehicle);
 //				if (pVeh)
 //				{
 //					uintptr_t this_vtable = pVeh->vtable;

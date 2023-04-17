@@ -9,7 +9,7 @@
 #include "Ped.h"
 
 #pragma pack(push, 1)
-struct VEHICLE_TYPE : CPhysical
+struct CVehicleGta : CPhysical
 {
     PADDING(_pad201, 588);		// 0184-900
     tHandlingData* pHandling;	// 900-904
@@ -137,8 +137,8 @@ struct VEHICLE_TYPE : CPhysical
     float m_wheelScale;
     unsigned short m_nAlarmState;
     short  m_nForcedRandomRouteSeed; // if this is non-zero the random wander gets deterministic
-    PED_TYPE* pDriver;			// 1120-1124	;driver
-    PED_TYPE* pPassengers[8];	// 1124-1152	;pPassengers
+    CPedGta* pDriver;			// 1120-1124	;driver
+    CPedGta* pPassengers[8];	// 1124-1152	;pPassengers
     unsigned char  m_nNumPassengers;
     unsigned char  m_nNumGettingIn;
     unsigned char  m_nGettingInFlags;

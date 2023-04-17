@@ -157,7 +157,7 @@ public:
 	CRGBA lightColor{255, 255, 255, 0};
 	RwTexture* pPlateTexture = nullptr;
 
-	VEHICLE_TYPE* 	m_pVehicle;
+	CVehicleGta* 	m_pVehicle;
 
 	// поворотники
 	CObject*		m_pLeftFrontTurnLighter = nullptr;

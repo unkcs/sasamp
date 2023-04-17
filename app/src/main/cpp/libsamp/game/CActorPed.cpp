@@ -66,11 +66,11 @@ CActorPed::~CActorPed()
 	Destroy();
 }
 
-bool IsValidGamePed(PED_TYPE* pPed) 
+bool IsValidGamePed(CPedGta* pPed)
 {
 	
 	//IsPedPointerValid(CPed *) � 0x00435614
-	if (((bool (*)(PED_TYPE*))(g_libGTASA + 0x00435614 + 1))(pPed)) {
+	if (((bool (*)(CPedGta*))(g_libGTASA + 0x00435614 + 1))(pPed)) {
 		return true;
 	}
 	return false;
@@ -85,7 +85,7 @@ void CActorPed::Destroy()
 	if (IsValidGamePed(m_pPed)) 
 	{
 		// CPed::vtable + 0x4 destructor
-		((void (*)(PED_TYPE*))(*(void**)(m_pPed->vtable + 0x4)))(m_pPed);
+		((void (*)(CPedGta*))(*(void**)(m_pPed->vtable + 0x4)))(m_pPed);
 	}
 
 	m_pPed = nullptr;
@@ -163,7 +163,7 @@ void CActorPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta,
 //	if (!GamePool_Vehicle_GetAt(iVehicleID)) return;
 //	if (!GamePool_Ped_GetAt(m_dwGTAId)) return;
 //
-//	VEHICLE_TYPE* pVehicle = GamePool_Vehicle_GetAt(iVehicleID);
+//	CVehicleGta* pVehicle = GamePool_Vehicle_GetAt(iVehicleID);
 //
 //	if (pVehicle->fHealth == 0.0f) return;
 //	if (pVehicle->vtable == g_libGTASA + 0x5C7358) return;

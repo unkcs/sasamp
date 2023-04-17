@@ -31,7 +31,7 @@ CVehicle* CVehiclePool::GetVehicleFromTrailer(CVehicle *pTrailer) {
 
 			if (m_bIsActive[x]) {
 				//Log("veh = %d, trailer = %d, needt = %d", pVehicle, pVehicle->m_pTrailer, pTrailer);
-				if(reinterpret_cast<VEHICLE_TYPE *>(pVehicle->m_pVehicle->dwTrailer) == pTrailer->m_pVehicle)
+				if(reinterpret_cast<CVehicleGta *>(pVehicle->m_pVehicle->dwTrailer) == pTrailer->m_pVehicle)
 				{
 					return pVehicle;
 				}
@@ -203,7 +203,7 @@ bool CVehiclePool::Delete(VEHICLEID VehicleID)
 	return true;
 }
 
-VEHICLEID CVehiclePool::FindIDFromGtaPtr(VEHICLE_TYPE *pGtaVehicle)
+VEHICLEID CVehiclePool::FindIDFromGtaPtr(CVehicleGta *pGtaVehicle)
 {
 	int x=1;
 
@@ -216,7 +216,7 @@ VEHICLEID CVehiclePool::FindIDFromGtaPtr(VEHICLE_TYPE *pGtaVehicle)
 	return INVALID_VEHICLE_ID;
 }
 
-CVehicle* CVehiclePool::FindVehicle(VEHICLE_TYPE *pGtaVehicle)
+CVehicle* CVehiclePool::FindVehicle(CVehicleGta *pGtaVehicle)
 {
 	for (size_t i = 0; i < MAX_VEHICLES; i++) {
 		if (GetSlotState(i)) {

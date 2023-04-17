@@ -503,8 +503,8 @@ __attribute__((naked)) void PickupPickUp_hook()
 }
 
 // fire weapon hooks
-uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, PED_TYPE * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
-uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, PED_TYPE * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
+uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
+uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -512,7 +512,7 @@ uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, PED_TYPE * pFiringEntity, 
 	dwRetAddr -= g_libGTASA;
 	if(dwRetAddr == 0x00569A84 + 1 || dwRetAddr == 0x00569616 + 1 || dwRetAddr == 0x0056978A + 1 || dwRetAddr == 0x00569C06 + 1)
 	{
-		PED_TYPE *pLocalPed = pGame->FindPlayerPed()->GetGtaActor();
+		CPedGta *pLocalPed = pGame->FindPlayerPed()->GetGtaActor();
 		if(pLocalPed)
 		{
 			if(pFiringEntity != pLocalPed)
@@ -1171,13 +1171,13 @@ struct stPedDamageResponse
 
 extern float m_fWeaponDamages[43 + 1];
 
-void onDamage(PED_TYPE* issuer, PED_TYPE* damaged)
+void onDamage(CPedGta* issuer, CPedGta* damaged)
 {
 	if (!pNetGame) return;
-	PED_TYPE* pPedPlayer = GamePool_FindPlayerPed();
+	CPedGta* pPedPlayer = GamePool_FindPlayerPed();
 	if (damaged && (pPedPlayer == issuer))
 	{
-		if (pNetGame->GetPlayerPool()->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)damaged) != INVALID_PLAYER_ID)
+		if (pNetGame->GetPlayerPool()->FindRemotePlayerIDFromGtaPtr((CPedGta*)damaged) != INVALID_PLAYER_ID)
 		{
 			CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 			CAMERA_AIM* caAim = pPlayerPool->GetLocalPlayer()->GetPlayerPed()->GetCurrentAim();
@@ -1187,7 +1187,7 @@ void onDamage(PED_TYPE* issuer, PED_TYPE* damaged)
 			aim.Y = caAim->f1y;
 			aim.Z = caAim->f1z;
 
-			pPlayerPool->GetLocalPlayer()->SendBulletSyncData(pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE*)damaged), BULLET_HIT_TYPE_PLAYER, aim);
+			pPlayerPool->GetLocalPlayer()->SendBulletSyncData(pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta*)damaged), BULLET_HIT_TYPE_PLAYER, aim);
 		}
 	}
 }
@@ -1195,7 +1195,7 @@ void onDamage(PED_TYPE* issuer, PED_TYPE* damaged)
 void (*CPedDamageResponseCalculator__ComputeDamageResponse)(stPedDamageResponse* thiz, ENTITY_TYPE* pEntity, uintptr_t pDamageResponse, bool bSpeak);
 void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageResponse* thiz, ENTITY_TYPE* pEntity, uintptr_t pDamageResponse, bool bSpeak)
 {
-	if (thiz && pEntity) onDamage((PED_TYPE*)*(uintptr_t*)thiz, (PED_TYPE*)pEntity);
+	if (thiz && pEntity) onDamage((CPedGta*)*(uintptr_t*)thiz, (CPedGta*)pEntity);
 
 	if( thiz->iWeaponType < 0 || thiz->iWeaponType > std::size(m_fWeaponDamages) )
 	{
@@ -1212,13 +1212,13 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
     if(pPlayerPool)
 	{
 
-        auto damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE *) thiz->pEntity); // отправитель урона
-		auto issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((PED_TYPE *) pEntity); // получатель
+        auto damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta *) thiz->pEntity); // отправитель урона
+		auto issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta *) pEntity); // получатель
 
         PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
 
-		auto pedGive = (PED_TYPE *)thiz->pEntity;
-		auto pedTake = (PED_TYPE *)pEntity;
+		auto pedGive = (CPedGta *)thiz->pEntity;
+		auto pedTake = (CPedGta *)pEntity;
 
 		auto pLocalPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed();
 
@@ -1577,8 +1577,8 @@ void CGame__Process_hook()
 
 uint16_t g_usLastProcessedModelIndexAutomobile = 0;
 int g_iLastProcessedModelIndexAutoEnt = 0;
-void (*CAutomobile__ProcessEntityCollision)(VEHICLE_TYPE* a1, ENTITY_TYPE* a2, int a3);
-void CAutomobile__ProcessEntityCollision_hook(VEHICLE_TYPE* a1, ENTITY_TYPE* a2, int a3)
+void (*CAutomobile__ProcessEntityCollision)(CVehicleGta* a1, ENTITY_TYPE* a2, int a3);
+void CAutomobile__ProcessEntityCollision_hook(CVehicleGta* a1, ENTITY_TYPE* a2, int a3)
 {
 	g_usLastProcessedModelIndexAutomobile = a1->nModelIndex;
 	g_iLastProcessedModelIndexAutoEnt = a2->nModelIndex;
@@ -1631,8 +1631,8 @@ void MainMenuScreen__OnExit_hook()
 }
 
 // TODO: VEHICLE RESET SUSPENSION
-void (*CShadows__StoreCarLightShadow)(VEHICLE_TYPE* vehicle, int id, RwTexture* texture, CVector* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle);
-void CShadows__StoreCarLightShadow_hook(VEHICLE_TYPE* vehicle, int id, RwTexture* texture, CVector* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle)
+void (*CShadows__StoreCarLightShadow)(CVehicleGta* vehicle, int id, RwTexture* texture, CVector* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle);
+void CShadows__StoreCarLightShadow_hook(CVehicleGta* vehicle, int id, RwTexture* texture, CVector* posn, float frontX, float frontY, float sideX, float sideY, unsigned char red, unsigned char green, unsigned char blue, float maxViewAngle)
 {
 	uint8_t r, g, b;
 	r = red;
@@ -1656,7 +1656,7 @@ void CShadows__StoreCarLightShadow_hook(VEHICLE_TYPE* vehicle, int id, RwTexture
 
 void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 {
-	VEHICLE_TYPE* v2; // r4
+	CVehicleGta* v2; // r4
 	int v3; // r2
 	RwMatrix* v4; // r5
 	float* v5; // r3
@@ -1719,8 +1719,8 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 			7.0f);
 }
 
-void (*CVehicle__DoHeadLightBeam)(VEHICLE_TYPE* vehicle, int arg0, RwMatrix& matrix, unsigned char arg2);
-void CVehicle__DoHeadLightBeam_hook(VEHICLE_TYPE* vehicle, int arg0, RwMatrix& matrix, unsigned char arg2)
+void (*CVehicle__DoHeadLightBeam)(CVehicleGta* vehicle, int arg0, RwMatrix& matrix, unsigned char arg2);
+void CVehicle__DoHeadLightBeam_hook(CVehicleGta* vehicle, int arg0, RwMatrix& matrix, unsigned char arg2)
 {
 	uint8_t r, g, b;
 	r = 0xFF;
@@ -1819,8 +1819,8 @@ void CMatrix__SetScale_hook(void* thiz, float x, float y, float z)
 	CMatrix__SetScale(thiz, x, y, z);
 }
 
-void (*CAutomobile__UpdateWheelMatrix)(VEHICLE_TYPE* thiz, int, int);
-void CAutomobile__UpdateWheelMatrix_hook(VEHICLE_TYPE* thiz, int nodeIndex, int flags)
+void (*CAutomobile__UpdateWheelMatrix)(CVehicleGta* thiz, int, int);
+void CAutomobile__UpdateWheelMatrix_hook(CVehicleGta* thiz, int nodeIndex, int flags)
 {
 	if (g_pLastProcessedVehicleMatrix)
 	{
@@ -1830,8 +1830,8 @@ void CAutomobile__UpdateWheelMatrix_hook(VEHICLE_TYPE* thiz, int nodeIndex, int 
 	CAutomobile__UpdateWheelMatrix(thiz, nodeIndex, flags);
 }
 
-void (*CAutomobile__PreRender)(VEHICLE_TYPE* thiz);
-void CAutomobile__PreRender_hook(VEHICLE_TYPE* thiz)
+void (*CAutomobile__PreRender)(CVehicleGta* thiz);
+void CAutomobile__PreRender_hook(CVehicleGta* thiz)
 {
 	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(thiz->nModelIndex);
 
@@ -1970,7 +1970,7 @@ int CPad__CycleCameraModeDownJustDown_hook(void* thiz)
 		return 0;
 	}
 
-	PED_TYPE* pPed = GamePool_FindPlayerPed();
+	CPedGta* pPed = GamePool_FindPlayerPed();
 	if (!pPed)
 	{
 		return 0;
@@ -2028,8 +2028,8 @@ void FxEmitterBP_c__Render_hook(uintptr_t* a1, int a2, int a3, float a4, char a5
 int g_iLastProcessedSkinCollision = 228;
 int g_iLastProcessedEntityCollision = 228;
 
-void (*CPed__ProcessEntityCollision)(PED_TYPE* thiz, ENTITY_TYPE* ent, void* colPoint);
-void CPed__ProcessEntityCollision_hook(PED_TYPE* thiz, ENTITY_TYPE* ent, void* colPoint)
+void (*CPed__ProcessEntityCollision)(CPedGta* thiz, ENTITY_TYPE* ent, void* colPoint);
+void CPed__ProcessEntityCollision_hook(CPedGta* thiz, ENTITY_TYPE* ent, void* colPoint)
 {
 	g_iLastProcessedSkinCollision = thiz->nModelIndex;
 	g_iLastProcessedEntityCollision = ent->nModelIndex;
@@ -2041,8 +2041,8 @@ void CPed__ProcessEntityCollision_hook(PED_TYPE* thiz, ENTITY_TYPE* ent, void* c
 	CPed__ProcessEntityCollision(thiz, ent, colPoint);
 }
 
-int (*CTaskSimpleGetUp__ProcessPed)(uintptr_t* thiz, PED_TYPE* ped);
-int CTaskSimpleGetUp__ProcessPed_hook(uintptr_t* thiz, PED_TYPE* ped)
+int (*CTaskSimpleGetUp__ProcessPed)(uintptr_t* thiz, CPedGta* ped);
+int CTaskSimpleGetUp__ProcessPed_hook(uintptr_t* thiz, CPedGta* ped)
 {
 	if(!ped)return 0;
 
@@ -2253,8 +2253,8 @@ int CCollision__ProcessVerticalLine_hook(float *a1, float *a2, int a3, int a4, i
 }
 
 
-int (*CWeapon__GenerateDamageEvent)(PED_TYPE *victim, ENTITY_TYPE *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction);
-int CWeapon__GenerateDamageEvent_hook(PED_TYPE *victim, ENTITY_TYPE *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction)
+int (*CWeapon__GenerateDamageEvent)(CPedGta *victim, ENTITY_TYPE *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction);
+int CWeapon__GenerateDamageEvent_hook(CPedGta *victim, ENTITY_TYPE *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction)
 {
 	if (pedPiece != PED_PIECE_HEAD)
 	{
@@ -2279,7 +2279,7 @@ int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
 	unsigned char v1 = *((unsigned char*)thiz + 13);
 	bool bChangeTheResult = false;
 
-	PED_TYPE* pPedPlayer = (PED_TYPE*)a2;
+	CPedGta* pPedPlayer = (CPedGta*)a2;
 	if(pPedPlayer && pNetGame)
 	{
 		if(v1 == 0)
@@ -2340,8 +2340,8 @@ int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
 	return CTaskSimpleUseGun__SetPedPosition(thiz, a2);
 }
 
-uint32_t (*CVehicle__GetVehicleLightsStatus)(VEHICLE_TYPE *_pVehicle);
-uint32_t CVehicle__GetVehicleLightsStatus_hook(VEHICLE_TYPE *_pVehicle)
+uint32_t (*CVehicle__GetVehicleLightsStatus)(CVehicleGta *_pVehicle);
+uint32_t CVehicle__GetVehicleLightsStatus_hook(CVehicleGta *_pVehicle)
 {
 //	*(bool*)(g_libGTASA + 0x97180D) = false;
 //	//unsigned int v6; // r2
@@ -2385,8 +2385,8 @@ void RenderEffects_hook()
 //	}
 }
 
-uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
-uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, PED_TYPE *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin)
+uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
+uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin)
 {
 	if(GamePool_FindPlayerPed() == pFiringEntity)
 	{
@@ -2451,8 +2451,8 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TY
 }
 
 bool g_bForceWorldProcessLineOfSight = false;
-uint32_t (*CWeapon__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, CWeapon *pWeaponSlot, PED_TYPE **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
-uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, CWeapon *pWeaponSlot, PED_TYPE **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
+uint32_t (*CWeapon__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, CWeapon *pWeaponSlot, CPedGta **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
+uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, CWeapon *pWeaponSlot, CPedGta **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -2464,8 +2464,8 @@ uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VEC
 	return CWeapon__ProcessLineOfSight(vecOrigin, vecEnd, vecPos, ppEntity, pWeaponSlot, ppEntity2, b1, b2, b3, b4, b5, b6, b7);
 }
 
-uint32_t (*CWorld__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8);
-uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, PED_TYPE **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8)
+uint32_t (*CWorld__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8);
+uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -2532,7 +2532,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 				{
 					if(!g_pCurrentBulletData->pEntity)
 					{
-						PED_TYPE *pLocalPed = pGame->FindPlayerPed()->GetGtaActor();
+						CPedGta *pLocalPed = pGame->FindPlayerPed()->GetGtaActor();
 						if(*ppEntity == pLocalPed || pLocalPed->bInVehicle && *(uintptr_t *)ppEntity == pLocalPed->pVehicle)
 						{
 							*ppEntity = nullptr;
@@ -2570,8 +2570,8 @@ signed int CBulletInfo_AddBullet_hook(ENTITY_TYPE* pEntity, CWeapon* pWeapon, VE
 	return 1;
 }
 
-bool (*CEventKnockOffBike__AffectsPed)(uintptr_t *thiz, PED_TYPE *a2);
-bool CEventKnockOffBike__AffectsPed_hook(uintptr_t *thiz, PED_TYPE *a2)
+bool (*CEventKnockOffBike__AffectsPed)(uintptr_t *thiz, CPedGta *a2);
+bool CEventKnockOffBike__AffectsPed_hook(uintptr_t *thiz, CPedGta *a2)
 {
 	return false;
 }

@@ -67,7 +67,7 @@ public:
 		return "None";
 	}
 
-	PLAYERID FindRemotePlayerIDFromGtaPtr(PED_TYPE * pActor);
+	PLAYERID FindRemotePlayerIDFromGtaPtr(CPedGta * pActor);
 
 	void ResetCollisionChecking();
 

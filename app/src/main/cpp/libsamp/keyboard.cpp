@@ -2344,7 +2344,7 @@ bool ProcessLocalCommands(const char str[])
 		if(pPlayer->IsInVehicle())
 		{
 			//incar savepos
-			VEHICLE_TYPE *pVehicle = pPlayer->GetGtaVehicle();
+			CVehicleGta *pVehicle = pPlayer->GetGtaVehicle();
 			VEHICLEID m_dwGTAId = GamePool_Vehicle_GetIndex(pVehicle);
 			ScriptCommand(&get_car_z_angle, m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
@@ -2359,7 +2359,7 @@ bool ProcessLocalCommands(const char str[])
 		else
 		{
 			//onfoot savepos
-			PED_TYPE *pActor = pPlayer->GetGtaActor();
+			CPedGta *pActor = pPlayer->GetGtaActor();
 			ScriptCommand(&get_actor_z_angle, pPlayer->m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),

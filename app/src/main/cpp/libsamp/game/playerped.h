@@ -40,7 +40,7 @@ public:
 	bool IsAPassenger();
 	// 0.3.7
 	void ApplyCommandTask(char* a2, int a4, int a5, int a6, VECTOR* a7, char a8, float a9, int a10, int a11, char a12);
-	VEHICLE_TYPE* GetGtaVehicle();
+	CVehicleGta* GetGtaVehicle();
 	// 0.3.7
 	void RemoveFromVehicleAndPutAt(float fX, float fY, float fZ);
 	// 0.3.7
@@ -111,7 +111,7 @@ public:
 	//BYTE FindDeathReasonAndResponsiblePlayer(PLAYERID *nPlayer);
 	PLAYERID FindDeathResponsiblePlayer();
 	void SetActionTrigger(ePedState action);
-	PED_TYPE * GetGtaActor() { return m_pPed; };
+	CPedGta * GetGtaActor() { return m_pPed; };
 
 	void AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot);
 	void SetAttachOffset(int iSlot, VECTOR pos, VECTOR rot);
@@ -129,7 +129,7 @@ public:
 	void SetMoveAnim(int iAnimGroup);
 
 public:
-	PED_TYPE*	m_pPed;
+	CPedGta*	m_pPed;
 	bool 		m_bIsSpawned{false};
 	bool 		m_bIsSpawnCd{false};
 	uint32_t 	m_iLastSpawnTime{};
@@ -174,7 +174,7 @@ public:
 
 	CVehicle *GetCurrentVehicle();
 
-	VEHICLE_TYPE *GetCurrentGtaVehicle();
+	CVehicleGta *GetCurrentGtaVehicle();
 
 	uint32_t GetCurrentGTAVehicleID();
 

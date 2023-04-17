@@ -50,7 +50,7 @@ public:
 		return m_bVehicleSlotState[VehicleID];
 	}
 
-	VEHICLEID FindIDFromGtaPtr(VEHICLE_TYPE * pGtaVehicle);
+	VEHICLEID FindIDFromGtaPtr(CVehicleGta * pGtaVehicle);
 	VEHICLEID FindIDFromRwObject(RwObject* pRWObject);
 	int FindGtaIDFromID(int ID);
 	
@@ -67,7 +67,7 @@ public:
 
 	CVehicle *GetVehicleFromTrailer(CVehicle *pTrailer);
 
-	CVehicle *FindVehicle(VEHICLE_TYPE *pGtaVehicle);
+	CVehicle *FindVehicle(CVehicleGta *pGtaVehicle);
 
 private:
 	bool			m_bVehicleSlotState[MAX_VEHICLES];

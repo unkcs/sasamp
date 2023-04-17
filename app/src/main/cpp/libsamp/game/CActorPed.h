@@ -15,5 +15,5 @@ public:
 	void RemoveFromVehicle();
 	void RemoveFromVehicleAndPutAt(float fX, float fY, float fZ);
 
-	PED_TYPE* m_pPed;
+	CPedGta* m_pPed;
 };

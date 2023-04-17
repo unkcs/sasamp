@@ -840,7 +840,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 
 	icSync.TrailerID = 0;
 
-	VEHICLE_TYPE* vehTrailer = (VEHICLE_TYPE*)pVehicle->m_pVehicle->dwTrailer;
+	CVehicleGta* vehTrailer = (CVehicleGta*)pVehicle->m_pVehicle->dwTrailer;
 	if (vehTrailer != nullptr)
 	{
 		uint16_t trailerId = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(vehTrailer);

@@ -17,7 +17,7 @@
 typedef struct _PED_TYPE
 {
     ENTITY_TYPE entity; 		// 0000-0184	;entity
-    uint8_t _pad106[174];
+    uint8_t _pad106[108];
     uint32_t _pad107;			// 0358-0362	;dwPedType
     uint8_t _pad101[722];
     CPedIntelligence* pPedIntelligence; // 1084-1088

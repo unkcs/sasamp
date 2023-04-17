@@ -52,7 +52,7 @@ void CVehiclePool::Process()
 		if(GetSlotState(x))
 		{
 			pVehicle = m_pVehicles[x];
-
+			Log("%f", pVehicle->m_pVehicle->entity.m_fMovingSpeed);
 			if(m_bIsActive[x])
 			{
 				if (pVehicle->GetHealth() < 300.0f)

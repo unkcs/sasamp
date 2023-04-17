@@ -13,7 +13,7 @@
 typedef struct _VEHICLE_TYPE
 {
     ENTITY_TYPE entity;			// 0000-0184	;entity
-    PADDING(_pad201, 716);		// 0184-900
+    PADDING(_pad201, 650);		// 0184-900
     tHandlingData* pHandling;	// 900-904
     uintptr_t* pFlyingHandling;
     union{

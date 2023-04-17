@@ -10,6 +10,7 @@
 #include "../Core/Link.h"
 #include "game/Enums/eEntityStatus.h"
 #include "game/Enums/eEntityType.h"
+#include "game/Enums/eSurfaceType.h"
 
 #pragma pack(push, 1)
 struct ENTITY_TYPE : CPlaceable
@@ -131,5 +132,17 @@ struct ENTITY_TYPE : CPlaceable
     uint8_t _pad3[4];
 
     uint32_t dwUnkModelRel;
+
+    uint8_t             m_nFakePhysics;
+    uint8_t             m_nNumEntitiesCollided;
+    eSurfaceType        m_nContactSurface;
+    uint8_t             _pad4;
+    ENTITY_TYPE*        m_apCollidedEntities[6];
+    float               m_fMovingSpeed; // m_fTrueDistanceTravelled
+    float               m_fDamageIntensity; // m_fDamageImpulseMagnitude
+    ENTITY_TYPE         *m_pDamageEntity;
+    CVector             m_vecDamageNormal;
+    CVector             m_vecDamagePos;
+    uint16_t            m_nDamagedPieceType;
 };
 #pragma pack(pop)

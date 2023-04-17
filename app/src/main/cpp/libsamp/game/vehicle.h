@@ -275,6 +275,8 @@ public:
 	void toggleReverseLight(bool toggle);
 
 	void setPlate(ePlateType type, char *szNumber, char *szRegion);
+
+	void test();
 };
 
 enum eVehicleOverrideLightsState {

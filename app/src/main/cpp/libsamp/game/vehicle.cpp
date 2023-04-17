@@ -355,8 +355,16 @@ VEHICLEID CVehicle::getSampId()
 	return pNetGame->GetVehiclePool()->FindIDFromGtaPtr(m_pVehicle);
 }
 
+void CVehicle::test()
+{
+	auto pEnt = m_pVehicle->entity;
+
+	Log("%d", pEnt.m_nDamagedPieceType);
+}
+
 void CVehicle::LinkToInterior(int iInterior)
 {
+    test();
 	if (GamePool_Vehicle_GetAt(m_dwGTAId))
 	{
 		ScriptCommand(&link_vehicle_to_interior, m_dwGTAId, iInterior);

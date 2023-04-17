@@ -96,7 +96,7 @@ CPlayerPed::~CPlayerPed()
 	if(!m_dwGTAId)return;
 	if(!GamePool_Ped_GetAt(m_dwGTAId))return;
 
-	if (m_pPed && IsValidGamePed(m_pPed) && m_pPed->entity.vtable != (g_libGTASA + 0x5C7358))
+	if (m_pPed && IsValidGamePed(m_pPed) && m_pPed->vtable != (g_libGTASA + 0x5C7358))
 	{
 		FlushAttach();
 		if (m_pPed->bInVehicle) {
@@ -108,7 +108,7 @@ CPlayerPed::~CPlayerPed()
 		*(uint32_t*)(*(uintptr_t*)(dwPedPtr + 1088) + 76) = 0;
 		// CPlayerPed::Destructor
 
-		//(( void (*)(PED_TYPE*))(*(void**)(m_pPed->entity.vtable+0x4)))(m_pPed);
+		//(( void (*)(PED_TYPE*))(*(void**)(m_pPed->vtable+0x4)))(m_pPed);
 		((void (*)(uintptr_t))(g_libGTASA+0x45D82C+1))((uintptr_t)m_pEntity);
 		//ScriptCommand(&DELETE_CHAR, m_dwGTAId);
 
@@ -526,8 +526,8 @@ bool CPlayerPed::IsAPassenger()
 		VEHICLE_TYPE *pVehicle = (VEHICLE_TYPE *)m_pPed->pVehicle;
 
 		if(	pVehicle->pDriver != m_pPed ||
-			pVehicle->entity.nModelIndex == TRAIN_PASSENGER ||
-			pVehicle->entity.nModelIndex == TRAIN_FREIGHT )
+			pVehicle->nModelIndex == TRAIN_PASSENGER ||
+			pVehicle->nModelIndex == TRAIN_FREIGHT )
 			return true;
 	}
 
@@ -549,10 +549,10 @@ void CPlayerPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
 		return;
 	}
 
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 	if(m_pPed && m_pPed->bInVehicle)
 		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, fX, fY, fZ);
 }
@@ -633,17 +633,17 @@ void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
 	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
 		return;
 	}
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 
     VEHICLE_TYPE *gtaVehicle = pVehicle->m_pVehicle;
     if(!gtaVehicle)return;
     if(gtaVehicle->fHealth == 0.0f) return;
     // check is cplaceable
-    if (gtaVehicle->entity.vtable == g_libGTASA+0x5C7358) return;
+    if (gtaVehicle->vtable == g_libGTASA+0x5C7358) return;
 
 	/*
 	if(GetCurrentWeapon() == WEAPON_PARACHUTE) {
@@ -658,9 +658,9 @@ void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
 //	pVehicle->GetMatrix(&mat);
 //
 ////	GetMatrix(&mat);
-////	mat.pos.X = pVehicle->entity.mat->pos.X;
-////	mat.pos.Y = pVehicle->entity.mat->pos.Y;
-////	mat.pos.Z = pVehicle->entity.mat->pos.Z;
+////	mat.pos.X = pVehicle->mat->pos.X;
+////	mat.pos.Y = pVehicle->mat->pos.Y;
+////	mat.pos.Z = pVehicle->mat->pos.Z;
 //	SetMatrix(mat);
 
 	if(iSeat == 0)
@@ -683,19 +683,19 @@ void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
 		return;
 	}
 
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 	VEHICLE_TYPE* ThisVehicleType;
 	if((ThisVehicleType = GamePool_Vehicle_GetAt(iVehicleID)) == 0) return;
 	if (ThisVehicleType->fHealth == 0.0f) return;
-	if (ThisVehicleType->entity.vtable == g_libGTASA + 0x5C7358) return;
+	if (ThisVehicleType->vtable == g_libGTASA + 0x5C7358) return;
 
 	if(bPassenger)
 	{
-		if(ThisVehicleType->entity.nModelIndex == TRAIN_PASSENGER &&
+		if(ThisVehicleType->nModelIndex == TRAIN_PASSENGER &&
 			(m_pPed == GamePool_FindPlayerPed()))
 		{
 			ScriptCommand(&put_actor_in_car2, m_dwGTAId, iVehicleID, -1);
@@ -721,10 +721,10 @@ void CPlayerPed::ExitCurrentVehicle()
 		return;
 	}
 
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 	//VEHICLE_TYPE* ThisVehicleType = 0;
 
@@ -806,10 +806,10 @@ void CPlayerPed::TogglePlayerControllable(bool bToggle, bool isTemp)
 		return;
 	}
 
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 	if(!bToggle)
 	{
@@ -920,7 +920,7 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 		return;
 	}
 
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
 
@@ -1138,10 +1138,10 @@ void CPlayerPed::ProcessAttach()
 		return;
 	}
 
-	if (CUtil::IsGameEntityArePlaceable(&m_pPed->entity)) {
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->entity.vtable == (g_libGTASA + 0x5C7358)) return;
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 	((int(*)(PED_TYPE*))(g_libGTASA + 0x00391968 + 1))(m_pPed); // UpdateRPHAnim
 
@@ -1155,7 +1155,7 @@ void CPlayerPed::ProcessAttach()
 		CObject* pObject = m_aAttachedObjects[i].pObject;
 		if (IsAdded())
 		{
-			RpHAnimHierarchy* hierarchy = ((RpHAnimHierarchy * (*)(uintptr_t*))(g_libGTASA + 0x00559338 + 1))((uintptr_t*)m_pPed->entity.m_pRwObject); // GetAnimHierarchyFromSkinClump
+			RpHAnimHierarchy* hierarchy = ((RpHAnimHierarchy * (*)(uintptr_t*))(g_libGTASA + 0x00559338 + 1))((uintptr_t*)m_pPed->m_pRwObject); // GetAnimHierarchyFromSkinClump
 			int iID;
 			uint32_t bone = m_aAttachedObjects[i].dwBone;
 			if (hierarchy)
@@ -1233,7 +1233,7 @@ void CPlayerPed::ProcessAttach()
 
 void CPlayerPed::ProcessHeadMatrix()
 {
-	RpHAnimHierarchy* hierarchy = ((RpHAnimHierarchy * (*)(uintptr_t*))(g_libGTASA + 0x00559338 + 1))((uintptr_t*)m_pPed->entity.m_pRwObject); // GetAnimHierarchyFromSkinClump
+	RpHAnimHierarchy* hierarchy = ((RpHAnimHierarchy * (*)(uintptr_t*))(g_libGTASA + 0x00559338 + 1))((uintptr_t*)m_pPed->m_pRwObject); // GetAnimHierarchyFromSkinClump
 	int iID;
 	uint32_t bone = 4;
 	if (hierarchy)
@@ -1281,7 +1281,7 @@ bool CPlayerPed::IsPlayingAnim(int idx)
 	{
 		return 0;
 	}
-	if (!m_pPed->entity.m_pRwObject)
+	if (!m_pPed->m_pRwObject)
 	{
 		return 0;
 	}
@@ -1294,7 +1294,7 @@ bool CPlayerPed::IsPlayingAnim(int idx)
 	const char* pNameAnim = strchr(pAnim, ':') + 1;
 
 	uintptr_t blendAssoc = ((uintptr_t(*)(uintptr_t clump, const char* szName))(g_libGTASA + 0x00340594 + 1))
-		(m_pPed->entity.m_pRwObject, pNameAnim);	// RpAnimBlendClumpGetAssociation
+		(m_pPed->m_pRwObject, pNameAnim);	// RpAnimBlendClumpGetAssociation
 
 	if (blendAssoc)
 	{
@@ -1321,7 +1321,7 @@ int CPlayerPed::GetCurrentAnimationIndex(float& blendData)
 		return 0;
 	}
 
-	if (!m_pPed->entity.m_pRwObject)
+	if (!m_pPed->m_pRwObject)
 	{
 		return 0;
 	}
@@ -1605,12 +1605,12 @@ ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
 	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
 		return 0;
 
-	vecStart.X = m_pPed->entity.mat->pos.x;
-	vecStart.Y = m_pPed->entity.mat->pos.y;
-	vecStart.Z = m_pPed->entity.mat->pos.z - 0.25f;
+	vecStart.X = m_pPed->mat->pos.x;
+	vecStart.Y = m_pPed->mat->pos.y;
+	vecStart.Z = m_pPed->mat->pos.z - 0.25f;
 
-	vecEnd.X = m_pPed->entity.mat->pos.x;
-	vecEnd.Y = m_pPed->entity.mat->pos.y;
+	vecEnd.X = m_pPed->mat->pos.x;
+	vecEnd.Y = m_pPed->mat->pos.y;
 	vecEnd.Z = vecStart.Z - 1.75f;
 
 	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,

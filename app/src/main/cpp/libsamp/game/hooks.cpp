@@ -1580,7 +1580,7 @@ int g_iLastProcessedModelIndexAutoEnt = 0;
 void (*CAutomobile__ProcessEntityCollision)(VEHICLE_TYPE* a1, ENTITY_TYPE* a2, int a3);
 void CAutomobile__ProcessEntityCollision_hook(VEHICLE_TYPE* a1, ENTITY_TYPE* a2, int a3)
 {
-	g_usLastProcessedModelIndexAutomobile = a1->entity.nModelIndex;
+	g_usLastProcessedModelIndexAutomobile = a1->nModelIndex;
 	g_iLastProcessedModelIndexAutoEnt = a2->nModelIndex;
 
 	bool bReplace = false;
@@ -1599,7 +1599,7 @@ void CAutomobile__ProcessEntityCollision_hook(VEHICLE_TYPE* a1, ENTITY_TYPE* a2,
 			{
 				if (pVeh->bHasSuspensionLines && pVeh->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR)
 				{
-					pColData = GetCollisionDataFromModel(a1->entity.nModelIndex);
+					pColData = GetCollisionDataFromModel(a1->nModelIndex);
 					if (pColData && pVeh->m_pSuspensionLines)
 					{
 						if (*(void**)(pColData + 16))
@@ -1680,7 +1680,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 	v2 = pVeh->m_pVehicle;
 	v3 = *((uintptr_t*)v2 + 5);
 	v4 = a2;
-	v5 = *(float**)(dwModelarray[v2->entity.nModelIndex] + 116);
+	v5 = *(float**)(dwModelarray[v2->nModelIndex] + 116);
 	v6 = *v5;
 	v7 = v5[1];
 	if (v3)
@@ -1703,7 +1703,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, RwMatrix* a2)
 	v19 = v15 * v18;
 
 	CVector pos;
-	memcpy(&pos, &(v2->entity.mat->pos), sizeof(VECTOR));
+	memcpy(&pos, &(v2->mat->pos), sizeof(VECTOR));
 	pos.z += 2.0f;
 
 	CShadows__StoreCarLightShadow(
@@ -1833,7 +1833,7 @@ void CAutomobile__UpdateWheelMatrix_hook(VEHICLE_TYPE* thiz, int nodeIndex, int 
 void (*CAutomobile__PreRender)(VEHICLE_TYPE* thiz);
 void CAutomobile__PreRender_hook(VEHICLE_TYPE* thiz)
 {
-	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(thiz->entity.nModelIndex);
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(thiz->nModelIndex);
 
 	float fOldFront = pModelInfoStart->m_fWheelSizeFront;
 	float fOldRear = pModelInfoStart->m_fWheelSizeRear;
@@ -1851,7 +1851,7 @@ void CAutomobile__PreRender_hook(VEHICLE_TYPE* thiz)
 				pModelInfoStart->m_fWheelSizeRear = pVeh->m_fWheelSize;
 			}
 			if (pVeh->m_bShadow && pVeh->m_Shadow.pTexture) {
-				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->entity.mat);
+				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->mat);
 			}
 		}
 	}
@@ -2031,7 +2031,7 @@ int g_iLastProcessedEntityCollision = 228;
 void (*CPed__ProcessEntityCollision)(PED_TYPE* thiz, ENTITY_TYPE* ent, void* colPoint);
 void CPed__ProcessEntityCollision_hook(PED_TYPE* thiz, ENTITY_TYPE* ent, void* colPoint)
 {
-	g_iLastProcessedSkinCollision = thiz->entity.nModelIndex;
+	g_iLastProcessedSkinCollision = thiz->nModelIndex;
 	g_iLastProcessedEntityCollision = ent->nModelIndex;
 
 //	if(ent->m_nType == ENTITY_TYPE_PED) { // проходить сквозь челов
@@ -2216,7 +2216,7 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 											return 0;
 										}
 										// Log("Processing remote attached object. Player: %d", i);
-										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->mat->pos.X, pObject->m_pEntity->mat->pos.Y, pObject->m_pEntity->mat->pos.Z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->dwUnkModelRel);
+										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->mat->pos.X, pObject->m_pEntity->mat->pos.Y, pObject->m_pEntity->mat->pos.Z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->m_pMovingList);
 										// result = CPhysical__Add(thiz);
 									}
 								}

@@ -105,10 +105,10 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 	m_bWasWheelOffsetProcessedY = true;
 	m_uiLastProcessedWheelOffset = 0;
 
-	RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
-	RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
-	RwFrame* pWheelRB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_rb_dummy"); // GetFrameFromname
-	RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_lb_dummy"); // GetFrameFromname
+	RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
+	RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
+	RwFrame* pWheelRB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rb_dummy"); // GetFrameFromname
+	RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lb_dummy"); // GetFrameFromname
 
 	if (pWheelLF && pWheelRF && pWheelRB && pWheelLB)
 	{
@@ -157,8 +157,8 @@ CVehicle::~CVehicle()
 		m_pTrailer = nullptr;
 	}
 
-	if (m_pVehicle->entity.nModelIndex == TRAIN_PASSENGER_LOCO ||
-		m_pVehicle->entity.nModelIndex == TRAIN_FREIGHT_LOCO) {
+	if (m_pVehicle->nModelIndex == TRAIN_PASSENGER_LOCO ||
+		m_pVehicle->nModelIndex == TRAIN_FREIGHT_LOCO) {
 		ScriptCommand(&destroy_train, m_dwGTAId);
 	}
 	else {
@@ -357,14 +357,14 @@ VEHICLEID CVehicle::getSampId()
 
 void CVehicle::test()
 {
-	auto pEnt = m_pVehicle->entity;
+	auto pEnt = m_pVehicle;
 
-	Log("%x", pEnt.m_pRealTimeShadow);
+	Log("%x", m_pVehicle->m_pRemapTexture);
 }
 
 void CVehicle::LinkToInterior(int iInterior)
 {
-    test();
+   // test();
 	if (GamePool_Vehicle_GetAt(m_dwGTAId))
 	{
 		ScriptCommand(&link_vehicle_to_interior, m_dwGTAId, iInterior);
@@ -438,7 +438,7 @@ void CVehicle::SetInvulnerable(bool bInv)
 {
 	if (!m_pVehicle) return;
 	if (!GamePool_Vehicle_GetAt(m_dwGTAId)) return;
-	if (m_pVehicle->entity.vtable == g_libGTASA + 0x5C7358) return;
+	if (m_pVehicle->vtable == g_libGTASA + 0x5C7358) return;
 
 	if (bInv)
 	{
@@ -475,9 +475,9 @@ void CVehicle::RemoveEveryoneFromVehicle()
 	if(!m_dwGTAId)return;
 	if (!GamePool_Vehicle_GetAt(m_dwGTAId)) return;
 
-	float fPosX = m_pVehicle->entity.mat->pos.x;
-	float fPosY = m_pVehicle->entity.mat->pos.y;
-	float fPosZ = m_pVehicle->entity.mat->pos.z;
+	float fPosX = m_pVehicle->mat->pos.x;
+	float fPosY = m_pVehicle->mat->pos.y;
+	float fPosZ = m_pVehicle->mat->pos.z;
 
 	int iPlayerID = 0;
 	if (m_pVehicle->pDriver)
@@ -739,7 +739,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		m_pCustomHandling = new tHandlingData;
 	}
 
-	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->entity.nModelIndex);
+	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->nModelIndex);
 
 	if (!pModel)
 	{
@@ -887,7 +887,7 @@ void CVehicle::ResetVehicleHandling()
 	{
 		m_pCustomHandling = new tHandlingData;
 	}
-	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->entity.nModelIndex);
+	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->nModelIndex);
 
 
 	if (!pModel)
@@ -1029,8 +1029,8 @@ void CVehicle::ProcessWheelsOffset()
 		if (m_bWheelOffsetX)
 		{
 			//CChatWindow::AddDebugMessage("setting wheel offset X");
-			RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
-			RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
+			RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
+			RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
 
 			/*if (m_fNewOffsetX)
 			{
@@ -1054,8 +1054,8 @@ void CVehicle::ProcessWheelsOffset()
 		if (m_bWheelOffsetY)
 		{
 			//CChatWindow::AddDebugMessage("setting wheel offset Y");
-			RwFrame* pWheelRB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_rb_dummy"); // GetFrameFromname
-			RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, "wheel_lb_dummy"); // GetFrameFromname
+			RwFrame* pWheelRB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rb_dummy"); // GetFrameFromname
+			RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lb_dummy"); // GetFrameFromname
 
 			/*if (m_fNewOffsetY)
 			{
@@ -1137,13 +1137,13 @@ void CVehicle::SetComponentVisibleInternal(const char* szComponent, bool bVisibl
 		return;
 	}
 
-	if (!m_pVehicle->entity.m_pRwObject)
+	if (!m_pVehicle->m_pRwObject)
 	{
 		return;
 	}
 
 
-	RwFrame* pFrame = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->entity.m_pRwObject, szComponent); // GetFrameFromname
+	RwFrame* pFrame = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, szComponent); // GetFrameFromname
 	if (pFrame != NULL)
 	{
 		// Get all atomics for this component - Usually one, or two if there is a damaged version
@@ -1280,7 +1280,7 @@ void CVehicle::CopyGlobalSuspensionLinesToPrivate()
 	if (!bHasSuspensionLines)
 	{
 		int numWheels;
-		void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->entity.nModelIndex, numWheels);
+		void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->nModelIndex, numWheels);
 
 		if (pOrigSuspension && numWheels)
 		{
@@ -1290,7 +1290,7 @@ void CVehicle::CopyGlobalSuspensionLinesToPrivate()
 	}
 
 	int numWheels;
-	void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->entity.nModelIndex, numWheels);
+	void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->nModelIndex, numWheels);
 
 	if (pOrigSuspension && numWheels)
 	{
@@ -1522,31 +1522,31 @@ unsigned int CVehicle::GetVehicleSubtype()
 {
 	if (m_pVehicle)
 	{
-		if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CC9F0) // 0x871120
+		if (m_pVehicle->vtable == g_libGTASA + 0x5CC9F0) // 0x871120
 		{
 			return VEHICLE_SUBTYPE_CAR;
 		}
-		else if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CCD48) // 0x8721A0
+		else if (m_pVehicle->vtable == g_libGTASA + 0x5CCD48) // 0x8721A0
 		{
 			return VEHICLE_SUBTYPE_BOAT;
 		}
-		else if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CCB18) // 0x871360
+		else if (m_pVehicle->vtable == g_libGTASA + 0x5CCB18) // 0x871360
 		{
 			return VEHICLE_SUBTYPE_BIKE;
 		}
-		else if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CD0B0) // 0x871948
+		else if (m_pVehicle->vtable == g_libGTASA + 0x5CD0B0) // 0x871948
 		{
 			return VEHICLE_SUBTYPE_PLANE;
 		}
-		else if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CCE60) // 0x871680
+		else if (m_pVehicle->vtable == g_libGTASA + 0x5CCE60) // 0x871680
 		{
 			return VEHICLE_SUBTYPE_HELI;
 		}
-		else if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CCC30) // 0x871528
+		else if (m_pVehicle->vtable == g_libGTASA + 0x5CCC30) // 0x871528
 		{
 			return VEHICLE_SUBTYPE_PUSHBIKE;
 		}
-		else if (m_pVehicle->entity.vtable == g_libGTASA + 0x5CD428) // 0x872370
+		else if (m_pVehicle->vtable == g_libGTASA + 0x5CD428) // 0x872370
 		{
 			return VEHICLE_SUBTYPE_TRAIN;
 		}
@@ -1558,9 +1558,9 @@ unsigned int CVehicle::GetVehicleSubtype()
 bool CVehicle::IsTrailer()
 {
 	if(!m_pVehicle)return false;
-	if(!m_pVehicle->entity.nModelIndex)return false;
+	if(!m_pVehicle->nModelIndex)return false;
 
-	return ((bool (*)(int)) (g_libGTASA + 0x00336940 + 1))(m_pVehicle->entity.nModelIndex);
+	return ((bool (*)(int)) (g_libGTASA + 0x00336940 + 1))(m_pVehicle->nModelIndex);
 }
 
 void CVehicle::GetDamageStatusEncoded(uint8_t* byteTyreFlags, uint8_t* byteLightFlags, uint32_t* dwDoorFlags, uint32_t* dwPanelFlags)

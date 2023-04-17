@@ -513,7 +513,7 @@ void CPed__ProcessControl_hook(uintptr_t thiz)
 void AllVehicles__ProcessControl_hook(uintptr_t thiz)
 {
 	VEHICLE_TYPE *pVehicle = (VEHICLE_TYPE*)thiz;
-	uintptr_t this_vtable = pVehicle->entity.vtable;
+	uintptr_t this_vtable = pVehicle->vtable;
 	this_vtable -= g_libGTASA;
 
 	uintptr_t call_addr = 0;

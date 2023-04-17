@@ -15,7 +15,7 @@ void CEntity::Add()
 		return;
 	}
 
-	if (!m_pEntity->dwUnkModelRel)
+	if (!m_pEntity->m_pMovingList)
 	{
 		CVector vec = { 0.0f,0.0f,0.0f };
 		SetMoveSpeedVector(vec);
@@ -116,7 +116,7 @@ void CEntity::Render()
 
 void CEntity::Remove()
 {
-    if(!m_pEntity || CUtil::IsGameEntityArePlaceable(m_pEntity) || !m_pEntity->dwUnkModelRel)
+    if(!m_pEntity || CUtil::IsGameEntityArePlaceable(m_pEntity) || !m_pEntity->m_pMovingList)
         return;
 
     CUtil::WorldRemoveEntity((uintptr_t)m_pEntity);
@@ -207,7 +207,7 @@ bool CEntity::IsAdded()
 		if(m_pEntity->vtable == g_libGTASA+0x5C7358) // CPlaceable
 			return false;
 
-		if(m_pEntity->dwUnkModelRel)
+		if(m_pEntity->m_pMovingList)
 			return true;
 	}
 

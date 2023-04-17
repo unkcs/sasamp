@@ -59,7 +59,7 @@ void CDebugInfo::Draw()
 
 		if (pGame->FindPlayerPed()->m_pPed)
 		{
-			snprintf(&szStrPos[0], 256, "POS: %.2f, %.2f, %.2f", pGame->FindPlayerPed()->m_pPed->entity.mat->pos.x, pGame->FindPlayerPed()->m_pPed->entity.mat->pos.y, pGame->FindPlayerPed()->m_pPed->entity.mat->pos.z);
+			snprintf(&szStrPos[0], 256, "POS: %.2f, %.2f, %.2f", pGame->FindPlayerPed()->m_pPed->mat->pos.x, pGame->FindPlayerPed()->m_pPed->mat->pos.y, pGame->FindPlayerPed()->m_pPed->mat->pos.z);
 			pos = ImVec2(pGUI->ScaleX(40.0f), pGUI->ScaleY(1080.0f - pGUI->GetFontSize() * 8));
 			pGUI->RenderText(pos, (ImU32)0xFFFFFFFF, true, &szStrPos[0]);
 		}

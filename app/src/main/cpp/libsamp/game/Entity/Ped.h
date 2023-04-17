@@ -13,9 +13,9 @@
 #include "Physical.h"
 
 #pragma pack(push, 1)
-typedef struct _PED_TYPE
+struct PED_TYPE : CPhysical
 {
-    CPhysical entity; 		// 0000-0184	;entity
+ //   CPhysical entity; 		// 0000-0184	;entity
     uint8_t _pad106[46];
     uint32_t _pad107;			// 0358-0362	;dwPedType
     uint8_t _pad101[722];
@@ -203,5 +203,5 @@ typedef struct _PED_TYPE
     uint8_t _pad281[44];
     uint32_t  dwWeaponUsed; // 1888-1892
     uintptr_t pdwDamageEntity; // 1892-1896
-} PED_TYPE;
+};
 #pragma pack(pop)

@@ -588,7 +588,7 @@ void CRemotePlayer::StoreBulletSyncData(BULLET_SYNC* pBulletSync)
 			{
 				if(pBulletSync->PlayerID == pPlayerPool->GetLocalPlayerID())
 				{
-					btData.pEntity = &pGame->FindPlayerPed()->m_pPed->entity;
+					btData.pEntity = pGame->FindPlayerPed()->m_pPed;
 				}
 				else if(pBulletSync->PlayerID == m_PlayerID)
 				{
@@ -601,7 +601,7 @@ void CRemotePlayer::StoreBulletSyncData(BULLET_SYNC* pBulletSync)
 					{
 						CPlayerPed *pPlayerPed = pRemotePlayer->GetPlayerPed();
 						if(pPlayerPed)
-							btData.pEntity = &pPlayerPed->m_pPed->entity;
+							btData.pEntity = pPlayerPed->m_pPed;
 					}
 				}
 			}
@@ -614,7 +614,7 @@ void CRemotePlayer::StoreBulletSyncData(BULLET_SYNC* pBulletSync)
 				CVehicle *pVehicle = pVehiclePool->GetAt(pBulletSync->PlayerID);
 				if(pVehicle)
 				{
-					btData.pEntity = &pVehicle->m_pVehicle->entity;
+					btData.pEntity = pVehicle->m_pVehicle;
 				}
 			}
 		}

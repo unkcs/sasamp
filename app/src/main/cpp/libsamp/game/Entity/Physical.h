@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "EntityGta.h"
 #include "game/Enums/eSurfaceType.h"
 
 #pragma pack(push, 1)
@@ -60,9 +59,9 @@ struct CPhysical : public ENTITY_TYPE {
     float m_fElasticity;
     float m_fBuoyancyConstant;
     CVector m_vecCOM;
-    uint8_t _pad3[4];
+    uint8_t m_pCollisionList[4];
 
-    uint32_t dwUnkModelRel;
+    uint32_t m_pMovingList;
 
     uint8_t             m_nFakePhysics;
     uint8_t             m_nNumEntitiesCollided;
@@ -86,4 +85,4 @@ struct CPhysical : public ENTITY_TYPE {
     uintptr_t           *m_pRealTimeShadow;
 };
 #pragma pack(pop)
-//static_assert(sizeof(CPhysical) == 0x13C, "Invalid size CPhysical");
+static_assert(sizeof(CPhysical) == 0x138, "Invalid size CPhysical");

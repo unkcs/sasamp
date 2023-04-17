@@ -9,9 +9,8 @@
 #include "Ped.h"
 
 #pragma pack(push, 1)
-typedef struct _VEHICLE_TYPE
+struct VEHICLE_TYPE : CPhysical
 {
-    CPhysical entity;			// 0000-0184	;entity
     PADDING(_pad201, 588);		// 0184-900
     tHandlingData* pHandling;	// 900-904
     uintptr_t* pFlyingHandling;
@@ -185,13 +184,13 @@ typedef struct _VEHICLE_TYPE
     uint32_t dwTrailer;			// 1232 - 1236 - trailer
     uint8_t padd_2[3];
     bool m_bFireAutoFlare;
-    CEntityGta *pBombOwner;
+    ENTITY_TYPE *pBombOwner;
     uint32_t DontUseSmallerRemovalRange;
     uint32_t TimeOfLastShotFired;
     uint32_t m_nTimeOfDeath;
     uint16_t GetOutOfCarTimer;
     uint16_t DelayedExplosion;
-    CEntityGta *pDelayedExplosionInflictor;
+    ENTITY_TYPE *pDelayedExplosionInflictor;
     float LastFrontHeight;
     float LastRearHeight;
     uint8_t NumOilSpillsToDo;
@@ -204,7 +203,7 @@ typedef struct _VEHICLE_TYPE
     uint32_t m_LastTimeGunFired;
     int8_t LastDamagedWeaponType;
     uint8_t skip15[3]; // wtf?
-    CEntityGta *pLastDamageEntity;
+    ENTITY_TYPE *pLastDamageEntity;
     uint8_t m_nRadioStation;
     uint8_t m_nRainHitCount;
     uint8_t m_nSoundIndex;
@@ -237,5 +236,5 @@ typedef struct _VEHICLE_TYPE
     const char* m_remapTxdName;
     const char* m_newRemapTxdName;
     RwTexture *m_pRemapTexture;
-} VEHICLE_TYPE;
+};
 #pragma pack(pop)

@@ -52,7 +52,7 @@ void CVehiclePool::Process()
 		if(GetSlotState(x))
 		{
 			pVehicle = m_pVehicles[x];
-			Log("%f", pVehicle->m_pVehicle->entity.m_fMovingSpeed);
+	
 			if(m_bIsActive[x])
 			{
 				if (pVehicle->GetHealth() < 300.0f)
@@ -239,7 +239,7 @@ VEHICLEID CVehiclePool::FindIDFromRwObject(RwObject* pRWObject)
 	{
 		if (m_pVehicles[x] && m_pVehicles[x]->m_pVehicle)
 		{
-			if (pRWObject == (RwObject*)(m_pVehicles[x]->m_pVehicle->entity.m_pRwObject)) return x;
+			if (pRWObject == (RwObject*)(m_pVehicles[x]->m_pVehicle->m_pRwObject)) return x;
 		}
 		x++;
 	}

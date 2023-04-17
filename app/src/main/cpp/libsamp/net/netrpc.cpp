@@ -425,7 +425,7 @@ void WorldVehicleAdd(RPCParameters *rpcParams)
 //				VEHICLE_TYPE* pVeh = GamePool_Vehicle_GetAt(iVehicle);
 //				if (pVeh)
 //				{
-//					uintptr_t this_vtable = pVeh->entity.vtable;
+//					uintptr_t this_vtable = pVeh->vtable;
 //					this_vtable -= g_libGTASA;
 //
 //					if (this_vtable == 0x5CC9F0)

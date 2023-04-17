@@ -810,93 +810,6 @@ uint8_t* RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, uint8_t const* pS
     return pDest;
 }
 
-void (*CPools_Initialise)(void);
-void CPools_Initialise_hook(void)
-{
-	struct PoolAllocator {
-
-		struct Pool {
-			void* objects;
-			uint8_t* flags;
-			uint32_t count;
-			uint32_t top;
-			uint32_t bInitialized;
-		};
-		static_assert(sizeof(Pool) == 0x14);
-
-		static Pool* Allocate(size_t count, size_t size) {
-
-			Pool* p = new Pool;
-
-			p->objects = new char[size * count];
-			p->flags = new uint8_t[count];
-			p->count = count;
-			p->top = 0xFFFFFFFF;
-			p->bInitialized = 1;
-
-			for (size_t i = 0; i < count; i++) {
-				p->flags[i] |= 0x80;
-				p->flags[i] &= 0x80;
-			}
-
-			return p;
-		}
-	};
-
-	// 600000 / 75000 = 8
-	static auto ms_pPtrNodeSingleLinkPool = PoolAllocator::Allocate(100000, 8);		// 75000
-	// 72000 / 6000 = 12
-	static auto ms_pPtrNodeDoubleLinkPool = PoolAllocator::Allocate(60000, 12);	// 6000
-	// 10000 / 500 = 20
-	static auto ms_pEntryInfoNodePool = PoolAllocator::Allocate(20000, 20);	// 500
-	// 279440 / 140 = 1996
-	static auto ms_pPedPool = PoolAllocator::Allocate(240, 1996);	// 140
-	// 286440 / 110 = 2604
-	static auto ms_pVehiclePool = PoolAllocator::Allocate(2000, 2604);	// 110
-	// 840000 / 14000 = 60
-	static auto ms_pBuildingPool = PoolAllocator::Allocate(20000, 60);	// 14000
-	// 147000 / 350 = 420
-	static auto ms_pObjectPool = PoolAllocator::Allocate(3000, 420);	// 350
-	// 210000 / 3500 = 60
-	static auto ms_pDummyPool = PoolAllocator::Allocate(40000, 60);	// 3500
-	// 487200 / 10150 = 48
-	static auto ms_pColModelPool = PoolAllocator::Allocate(50000, 48);	// 10150
-	// 64000 / 500 = 128
-	static auto ms_pTaskPool = PoolAllocator::Allocate(5000, 128);	// 500
-	// 13600 / 200 = 68
-	static auto ms_pEventPool = PoolAllocator::Allocate(1000, 68);	// 200
-	// 6400 / 64 = 100
-	static auto ms_pPointRoutePool = PoolAllocator::Allocate(200, 100);	// 64
-	// 13440 / 32 = 420
-	static auto ms_pPatrolRoutePool = PoolAllocator::Allocate(200, 420);	// 32
-	// 2304 / 64 = 36
-	static auto ms_pNodeRoutePool = PoolAllocator::Allocate(200, 36);	// 64
-	// 512 / 16 = 32
-	static auto ms_pTaskAllocatorPool = PoolAllocator::Allocate(3000, 32);	// 16
-	// 92960 / 140 = 664
-	static auto ms_pPedIntelligencePool = PoolAllocator::Allocate(240, 664);	// 140
-	// 15104 / 64 = 236
-	static auto ms_pPedAttractorPool = PoolAllocator::Allocate(200, 236);	// 64
-
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93E0) = ms_pPtrNodeSingleLinkPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93DC) = ms_pPtrNodeDoubleLinkPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D8) = ms_pEntryInfoNodePool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D4) = ms_pPedPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D0) = ms_pVehiclePool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93CC) = ms_pBuildingPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93C8) = ms_pObjectPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93C4) = ms_pDummyPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93C0) = ms_pColModelPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93BC) = ms_pTaskPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93B8) = ms_pEventPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93B4) = ms_pPointRoutePool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93B0) = ms_pPatrolRoutePool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93AC) = ms_pNodeRoutePool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93A8) = ms_pTaskAllocatorPool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93A4) = ms_pPedIntelligencePool;
-	*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93A0) = ms_pPedAttractorPool;
-}
-
 void (*CPlaceable_InitMatrixArray)();
 void CPlaceable_InitMatrixArray_hook()
 {
@@ -1024,6 +937,7 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 
 #include "game/Models/ModelInfo.h"
 #include "cHandlingDataMgr.h"
+#include "Pools.h"
 
 void InjectHooks()
 {
@@ -1032,6 +946,7 @@ void InjectHooks()
 	CTimer::InjectHooks();
 	cTransmission::InjectHooks();
 	cHandlingDataMgr::InjectHooks();
+	CPools::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -1130,7 +1045,6 @@ void InstallSpecialHooks()
 	CHook::InlineHook(g_libGTASA, 0x004FBCF4, cHandlingDataMgr__ConvertDataToGameUnits_hook, &cHandlingDataMgr__ConvertDataToGameUnits);
 	CHook::InlineHook(g_libGTASA, 0x0023ACC4, NVEventGetNextEvent_hook, &NVEventGetNextEvent_hooked);
 	CHook::InlineHook(g_libGTASA, 0x004042A8, CStreaming__Init2_hook, &CStreaming__Init2);	// increase stream memory value
-	CHook::InlineHook(g_libGTASA, 0x3AF1A0, &CPools_Initialise_hook, &CPools_Initialise);
 	CHook::InlineHook(g_libGTASA, 0x531118, &CCustomRoadsignMgr_RenderRoadsignAtomic_hook, &CCustomRoadsignMgr_RenderRoadsignAtomic);
 
 //	JMPCode(g_libGTASA + 0x1A1ED8, (uintptr_t)rqVertexBufferSelect_HOOK);

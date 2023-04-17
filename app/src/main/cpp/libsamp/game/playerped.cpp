@@ -20,7 +20,7 @@ CPlayerPed::CPlayerPed()
 	Log("CPlayerPed");
 	m_dwGTAId = 1;
 	m_pPed = (PED_TYPE*)GamePool_FindPlayerPed();
-	m_pEntity = (ENTITY_TYPE*)GamePool_FindPlayerPed();
+	m_pEntity = (CPhysical*)GamePool_FindPlayerPed();
 	m_bHaveBulletData = false;
 
 	m_bytePlayerNumber = 0;
@@ -53,7 +53,7 @@ CPlayerPed::CPlayerPed(uint8_t bytePlayerNumber, int iSkin, float fX, float fY, 
 
 	m_dwGTAId = dwPlayerActorID;
 	m_pPed = GamePool_Ped_GetAt(m_dwGTAId);
-	m_pEntity = (ENTITY_TYPE*)GamePool_Ped_GetAt(m_dwGTAId);
+	m_pEntity = (CPhysical*)GamePool_Ped_GetAt(m_dwGTAId);
 
 	m_bytePlayerNumber = bytePlayerNumber;
 

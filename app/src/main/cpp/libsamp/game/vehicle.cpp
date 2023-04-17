@@ -40,7 +40,7 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		ScriptCommand(&toggle_car_tires_vulnerable, m_dwGTAId, 1);
 		ScriptCommand(&set_car_immunities, m_dwGTAId, 0, 0, 0, 0, 0);
 		m_pVehicle = (VEHICLE_TYPE*)GamePool_Vehicle_GetAt(m_dwGTAId);
-		m_pEntity = (ENTITY_TYPE*)m_pVehicle;
+		m_pEntity = (CPhysical*)m_pVehicle;
 
 		if (m_pVehicle)
 		{
@@ -359,7 +359,7 @@ void CVehicle::test()
 {
 	auto pEnt = m_pVehicle->entity;
 
-	Log("%d", pEnt.m_qAttachedEntityRotation);
+	Log("%x", pEnt.m_pRealTimeShadow);
 }
 
 void CVehicle::LinkToInterior(int iInterior)

@@ -34,7 +34,7 @@ CActorPed::CActorPed(uint16_t usModel, VECTOR vecPosition, float fRotation, floa
 
 	m_dwGTAId = actorGTAId;
 	m_pPed = GamePool_Ped_GetAt(m_dwGTAId);
-	m_pEntity = (ENTITY_TYPE*)m_pPed;
+	m_pEntity = (CPhysical*)m_pPed;
 
 	ForceTargetRotation(fRotation);
 	TeleportTo(vecPosition.X, vecPosition.Y, vecPosition.Z);

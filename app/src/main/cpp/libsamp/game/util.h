@@ -9,7 +9,7 @@ int GamePool_Ped_GetIndex(PED_TYPE *pActor);
 VEHICLE_TYPE *GamePool_Vehicle_GetAt(int iID);
 int GamePool_Vehicle_GetIndex(VEHICLE_TYPE *pVehicle);
 
-ENTITY_TYPE *GamePool_Object_GetAt(int iID);
+CPhysical *GamePool_Object_GetAt(int iID);
 
 int LineOfSight(VECTOR* start, VECTOR* end, void* colpoint, uintptr_t ent,
 	char buildings, char vehicles, char peds, char objects, char dummies, bool seeThrough, bool camera, bool unk);

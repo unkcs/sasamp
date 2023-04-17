@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CVector.h"
-
+#include "Entity/Physical.h"
 class CEntity
 {
 public:
@@ -42,7 +42,7 @@ public:
 	float GetDistanceFromPoint(float x, float y, float z);
 
 public:
-	ENTITY_TYPE		*m_pEntity;
+	CPhysical		*m_pEntity;
 	uint32_t		m_dwGTAId;
 
     bool GetCollisionChecking();

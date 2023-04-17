@@ -2,88 +2,88 @@
 // Created by plaka on 09.04.2023.
 //
 
+#pragma once
+
 #include "EntityGta.h"
 #include "game/Enums/eSurfaceType.h"
 
 #pragma pack(push, 1)
-struct CPhysical : public CEntityGta {
-    float       m_fPrevDistFromCam;
-    uint32_t    m_nLastCollisionTime;
-    union {
-        struct {
-            uint32_t bMakeMassTwiceAsBig: 1;
-            uint32_t bApplyGravity: 1;
-            uint32_t bDisableCollisionForce: 1;
-            uint32_t bCollidable: 1;
-            uint32_t bDisableTurnForce: 1;
-            uint32_t bDisableMoveForce: 1;
-            uint32_t bInfiniteMass: 1;
-            uint32_t bDisableZ: 1;
-    
-            uint32_t bSubmergedInWater: 1;
-            uint32_t bOnSolidSurface: 1;
-            uint32_t bBroken: 1;
-            uint32_t bProcessCollisionEvenIfStationary: 1; // ref @ 0x6F5CF0
-            uint32_t bSkipLineCol: 1;                               // only used for peds
-            uint32_t bDontApplySpeed: 1;
-            uint32_t b15: 1;
-            uint32_t bProcessingShift: 1;
-    
-            uint32_t b17: 1;
-            uint32_t bDisableSimpleCollision: 1; // ref @ CPhysical::ProcessCollision
-            uint32_t bBulletProof: 1;
-            uint32_t bFireProof: 1;
-            uint32_t bCollisionProof: 1;
-            uint32_t bMeleeProof: 1;
-            uint32_t bInvulnerable: 1;
-            uint32_t bExplosionProof: 1;
-    
-            uint32_t bDontCollideWithFlyers: 1;
-            uint32_t bAttachedToEntity: 1;
-            uint32_t bAddMovingCollisionSpeed: 1;
-            uint32_t bTouchingWater: 1;
-            uint32_t bCanBeCollidedWith: 1;
-            uint32_t bDestroyed: 1;
-            uint32_t b31: 1;
-            uint32_t b32: 1;
-        } physicalFlags;
-        uint32_t m_nPhysicalFlags;
+struct CPhysical : public ENTITY_TYPE {
+    float m_fPrevDistFromCam;
+    uint32_t m_LastCollisionTime;
+    struct
+    {
+        uint32_t bExtraHeavy : 1;
+        uint32_t bDoGravity : 1;
+        uint32_t bInfiniteMass : 1;
+        uint32_t bInfiniteMassFixed : 1;
+        uint32_t bPedPhysics : 1;
+        uint32_t bDoorPhysics : 1;
+        uint32_t bHangingPhysics : 1;
+        uint32_t bPoolBallPhysics : 1;
+        uint32_t bIsInWater : 1;
+        uint32_t bCollidedThisFrame : 1;
+        uint32_t bUnFreezable : 1;
+        uint32_t bTrainForceCol : 1;
+        uint32_t bSkipLineCol : 1;
+        uint32_t bCoorsFrozenByScript : 1;
+        uint32_t bDontLoadCollision : 1;
+        uint32_t bHalfSpeedCollision : 1;
+        uint32_t bForceHitReturnFalse : 1;
+        uint32_t bDontProcessCollisionOurSelves : 1;
+        uint32_t bNotDamagedByBullets : 1;
+        uint32_t bNotDamagedByFlames : 1;
+        uint32_t bNotDamagedByCollisions : 1;
+        uint32_t bNotDamagedByMelee : 1;
+        uint32_t bOnlyDamagedByPlayer : 1;
+        uint32_t bIgnoresExplosions : 1;
+        uint32_t bFlyer : 1;
+        uint32_t bNeverGoStatic : 1;
+        uint32_t bUsingSpecialColModel : 1;
+        uint32_t bForceFullWaterCheck : 1;
+        uint32_t bUsesCollisionRecords : 1;
+        uint32_t bRenderScorched : 1;
+        uint32_t bDoorHitEndStop : 1;
+        uint32_t bCarriedByRope : 1;
     };
-    CVector m_vecMoveSpeed;
-    CVector m_vecTurnSpeed;
-    CVector m_vecFrictionMoveSpeed;
-    CVector m_vecFrictionTurnSpeed;
-    CVector m_vecForce;
-    CVector m_vecTorque;
+
+    CVector vecMoveSpeed;
+    CVector vecTurnSpeed;
+    CVector m_vecMoveFriction;
+    CVector m_vecTurnFriction;
+    CVector m_vecAverageMoveSpeed;
+    CVector m_vecAverageTurnSpeed;
     float m_fMass;
     float m_fTurnMass;
-    float m_fVelocityFrequency;
+    float m_fMassMultiplier;
     float m_fAirResistance;
     float m_fElasticity;
     float m_fBuoyancyConstant;
-    CVector m_vecCentreOfMass;
-    uintptr_t m_pCollisionList; // CEntryInfoList
-    uintptr_t *m_pMovingList; // CPtrNodeDoubleLink
-    uint8_t m_nFakePhysics;
-    uint8_t m_nNumEntitiesCollided;
-    eSurfaceType m_nContactSurface;
-    uint8_t pad_0;
-    CEntityGta *m_apCollidedEntities[6];
-    float m_fMovingSpeed; // ref @ CTheScripts::IsVehicleStopped
-    float m_fDamageIntensity;
-    CEntityGta *m_pDamageEntity;
-    CVector m_vecLastCollisionImpactVelocity;
-    CVector m_vecLastCollisionPosn;
-    uint16_t m_nPieceType;
-    uint16_t pad_1;
-    CEntityGta *m_pAttachedTo;
-    CVector m_vecAttachOffset;
-    CVector m_vecAttachedEntityRotation;
-    CQuaternion m_qAttachedEntityRotation;
-    CEntityGta *m_pEntityIgnoredCollision;
-    float m_fContactSurfaceBrightness;
-    float m_fDynamicLighting;
-    uintptr_t *m_pShadowData; // CRealTimeShadow
+    CVector m_vecCOM;
+    uint8_t _pad3[4];
+
+    uint32_t dwUnkModelRel;
+
+    uint8_t             m_nFakePhysics;
+    uint8_t             m_nNumEntitiesCollided;
+    eSurfaceType        m_nContactSurface;
+    uint8_t             _pad4;
+    ENTITY_TYPE*        m_apCollidedEntities[6];
+    float               m_fMovingSpeed; // m_fTrueDistanceTravelled
+    float               m_fDamageIntensity; // m_fDamageImpulseMagnitude
+    ENTITY_TYPE         *m_pDamageEntity;
+    CVector             m_vecDamageNormal;
+    CVector             m_vecDamagePos;
+    uint16_t            m_nDamagedPieceType;
+    uint8_t             _pad5[2];
+    ENTITY_TYPE         *m_pAttachToEntity;
+    CVector             m_vecAttachPosnOffset;
+    CVector             m_vecAttachTiltOffset;
+    CQuaternion         m_qAttachedEntityRotation;
+    ENTITY_TYPE         *m_pNOCollisionVehicle;
+    float               m_lightingFromCollision;
+    float               m_lightingFromPointLights;
+    uintptr_t           *m_pRealTimeShadow;
 };
 #pragma pack(pop)
-static_assert(sizeof(CPhysical) == 0x13C, "Invalid size CPhysical");
+//static_assert(sizeof(CPhysical) == 0x13C, "Invalid size CPhysical");

@@ -1893,9 +1893,9 @@ int GamePool_Vehicle_GetIndex(VEHICLE_TYPE *pVehicle)
     return (( int (*)(VEHICLE_TYPE*))(g_libGTASA+0x41DD28+1))(pVehicle);
 }
 
-ENTITY_TYPE *GamePool_Object_GetAt(int iID)
+CPhysical *GamePool_Object_GetAt(int iID)
 {
-	ENTITY_TYPE* (*GetPoolObj)(int iID);
+    CPhysical* (*GetPoolObj)(int iID);
 	*(void **) (&GetPoolObj) = (void*)(g_libGTASA+0x41DDB4+1);
 	return (GetPoolObj)(iID);
 } 

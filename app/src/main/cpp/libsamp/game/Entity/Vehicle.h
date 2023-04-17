@@ -4,16 +4,15 @@
 
 #pragma once
 
-
-#include "EntityGta.h"
 #include "../Enums/eVehicleType.h"
+#include "Physical.h"
 #include "Ped.h"
 
 #pragma pack(push, 1)
 typedef struct _VEHICLE_TYPE
 {
-    ENTITY_TYPE entity;			// 0000-0184	;entity
-    PADDING(_pad201, 604);		// 0184-900
+    CPhysical entity;			// 0000-0184	;entity
+    PADDING(_pad201, 588);		// 0184-900
     tHandlingData* pHandling;	// 900-904
     uintptr_t* pFlyingHandling;
     union{

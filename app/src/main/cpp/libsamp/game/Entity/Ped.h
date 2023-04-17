@@ -4,20 +4,19 @@
 
 #pragma once
 
-#include "Entity.h"
 #include "../PedIntelligence.h"
 #include "../Weapon.h"
 #include "../Enums/ePedState.h"
 #include "game/Enums/eMoveState.h"
-#include "game/common.h"
 #include "game/Enums/AnimationEnums.h"
 #include "game/Core/Vector2D.h"
+#include "Physical.h"
 
 #pragma pack(push, 1)
 typedef struct _PED_TYPE
 {
-    ENTITY_TYPE entity; 		// 0000-0184	;entity
-    uint8_t _pad106[62];
+    CPhysical entity; 		// 0000-0184	;entity
+    uint8_t _pad106[46];
     uint32_t _pad107;			// 0358-0362	;dwPedType
     uint8_t _pad101[722];
     CPedIntelligence* pPedIntelligence; // 1084-1088

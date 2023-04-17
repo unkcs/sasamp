@@ -4,6 +4,7 @@
 #include "vehicle.h"
 #include "Weapon.h"
 #include "entity.h"
+#include "game/Enums/ePedState.h"
 
 class CPlayerPed
 	: public CEntity

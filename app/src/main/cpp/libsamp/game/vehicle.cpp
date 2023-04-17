@@ -359,7 +359,7 @@ void CVehicle::test()
 {
 	auto pEnt = m_pVehicle->entity;
 
-	Log("%d", pEnt.m_nDamagedPieceType);
+	Log("%d", pEnt.m_qAttachedEntityRotation);
 }
 
 void CVehicle::LinkToInterior(int iInterior)

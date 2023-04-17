@@ -11,6 +11,7 @@
 #include "game/Enums/eEntityStatus.h"
 #include "game/Enums/eEntityType.h"
 #include "game/Enums/eSurfaceType.h"
+#include "game/quaternion.h"
 
 #pragma pack(push, 1)
 struct ENTITY_TYPE : CPlaceable
@@ -144,5 +145,10 @@ struct ENTITY_TYPE : CPlaceable
     CVector             m_vecDamageNormal;
     CVector             m_vecDamagePos;
     uint16_t            m_nDamagedPieceType;
+    uint8_t             _pad5[2];
+    ENTITY_TYPE         *m_pAttachToEntity;
+    CVector             m_vecAttachPosnOffset;
+    CVector             m_vecAttachTiltOffset;
+    CQuaternion         m_qAttachedEntityRotation;
 };
 #pragma pack(pop)

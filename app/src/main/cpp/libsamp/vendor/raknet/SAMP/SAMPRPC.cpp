@@ -67,7 +67,6 @@ int RPC_SetActorAnimation = 173;
 int RPC_ClearActorAnimations = 174;
 
 int RPC_ScrSetPlayerObjectMaterial = 0x54;
-int RPC_ScrSetSpawnInfo = 68;
 int RPC_ScrSetPlayerTeam = 69;
 int RPC_ScrSetPlayerSkin = 153;
 int RPC_ScrSetPlayerName = 11;

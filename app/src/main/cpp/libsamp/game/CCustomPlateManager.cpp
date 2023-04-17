@@ -26,79 +26,31 @@ uint8_t* CCustomPlateManager::m_pBitmap = nullptr;
 
 RwTexture* CCustomPlateManager::createTexture(ePlateType type, char* szNumber, char* szRegion)
 {
-	if(type == NUMBERPLATE_TYPE_NONE) {
-		return nullptr;
-	}
-	CFontInstance* font;
+//	type = NUMBERPLATE_TYPE_BY;
+//    szNumber = "8682 AX-3";
+//    szRegion = "01";
+
 	switch(type) {
 		case NUMBERPLATE_TYPE_UA: {
-			font = m_pUAFont;
-			break;
+			return createUaPlate(szNumber, szRegion);
 		}
 		case NUMBERPLATE_TYPE_KZ: {
-			font = m_pKZFont;
-			break;
-		}
-		default: {
-			font = m_pRUFont;
-			break;
-		}
-	}
-
-	CSprite2d* sprite;
-	switch (type) {
-		case NUMBERPLATE_TYPE_KZ: {
-			sprite = m_pKzSprite;
-			break;
+			return createKzPlate(szNumber, szRegion);
 		}
 		case NUMBERPLATE_TYPE_BY: {
-			sprite = m_pBuSprite;
-			break;
+			return createBuPlate(szNumber, szRegion);
 		}
-		case NUMBERPLATE_TYPE_UA: {
-			sprite = m_pUaSprite;
-			break;
+		case NUMBERPLATE_TYPE_RUS: {
+			return createRuPlate(szNumber, szRegion);
+		}
+		case NUMBERPLATE_TYPE_RU_POLICE: {
+			return createRuPolicePlate(szNumber, szRegion);
 		}
 		default: {
-			sprite = m_pRuSprite;
-			break;
+			return nullptr;
 		}
 	}
-	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
 
-	int x_max, y_max;
-	CFontRenderer::RenderText(szNumber, font, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
-
-	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
-	{
-		m_pBitmap[i] = 255 - m_pBitmap[i];
-	}
-
-	RwRaster* pTextRaster = GetRWRasterFromBitmap(m_pBitmap + (PLATE_BITMAP_WIDTH * 0), PLATE_BITMAP_WIDTH, 256, 64);
-
-	if (!pTextRaster)
-	{
-		return nullptr;
-	}
-
-	auto pText = new CSprite2d();
-
-	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
-
-	CRGBA white;
-	white.a = 255;
-	white.r = 255;
-	white.g = 255;
-	white.b = 255;
-
-	m_pRenderTarget->Begin();
-	sprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
-	pText->Draw(36.0f, 8.0f, 210.0f, 42.0f, white);
-	RwTexture* pTexture = m_pRenderTarget->End();
-
-	delete pText;
-
-	return pTexture;
 }
 
 void CCustomPlateManager::Initialise()
@@ -106,7 +58,8 @@ void CCustomPlateManager::Initialise()
 	char path[0xFF];
 	sprintf(path, "%sSAMP/plates/ru_font.ttf", g_pszStorage);
 
-	m_pRUFont = CFontRenderer::AddFont(path, 128);
+	m_pRUFont = CFontRenderer::AddFont(path, 132);
+
 	m_pKZFont = CFontRenderer::AddFont(path, 132);
 
 	sprintf(path, "%sSAMP/plates/ua_font.ttf", g_pszStorage);
@@ -178,4 +131,251 @@ void CCustomPlateManager::Shutdown()
 		m_pBitmap = nullptr;
 	}
 
+}
+
+RwTexture* CCustomPlateManager::createUaPlate(char* szNumber, char* szRegion)
+{
+	if (!m_pUaSprite)
+	{
+		return nullptr;
+	}
+	if (!m_pUaSprite->m_pRwTexture)
+	{
+		return nullptr;
+	}
+
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH); // what kind of u?
+
+	int x_max, y_max;
+	CFontRenderer::RenderText(szNumber, m_pUAFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+
+	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
+	{
+		m_pBitmap[i] = 255 - m_pBitmap[i];
+	}
+
+	RwRaster* pTextRaster = GetRWRasterFromBitmap(m_pBitmap + (PLATE_BITMAP_WIDTH * 0), PLATE_BITMAP_WIDTH, 256, 64);
+
+	if (!pTextRaster)
+	{
+		return nullptr;
+	}
+
+	CSprite2d* pText = new CSprite2d();
+
+	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+
+	CRGBA white {255, 255, 255, 255};
+
+	m_pRenderTarget->Begin();
+	m_pUaSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
+	pText->Draw(28.0f, 8.0f, 210.0f, 50.0f, white);
+	RwTexture* pTexture = m_pRenderTarget->End();
+
+	delete pText;
+
+	return pTexture;
+}
+
+RwTexture* CCustomPlateManager::createBuPlate(char* szNumber, char* szRegion)
+{
+
+	// process text
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+
+	int x_max, y_max;
+	CFontRenderer::RenderText(szNumber, m_pRUFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+
+	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
+	{
+		m_pBitmap[i] = 255 - m_pBitmap[i];
+	}
+	RwRaster* pTextRaster = GetRWRasterFromBitmap(m_pBitmap, PLATE_BITMAP_WIDTH, 256, 64);
+
+	if (!pTextRaster)
+	{
+		return nullptr;
+	}
+
+	auto pText = new CSprite2d();
+
+	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+
+	CRGBA white {255, 255, 255, 255};
+
+	m_pRenderTarget->Begin();
+	m_pBuSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
+	//pText->Draw(50.0f, 8.0f, 200.0f, 38.0f, white); // x y width height ÒÅÊÑÒ
+	pText->Draw(41.0f, 8.0f, 210.0f, 42.0f, white);
+	RwTexture* pTexture = m_pRenderTarget->End();
+
+	delete pText;
+
+	return pTexture;
+}
+
+RwTexture* CCustomPlateManager::createKzPlate(char* szNumber, char* szRegion)
+{
+	// process text
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+
+	int x_max, y_max;
+	CFontRenderer::RenderText(szNumber, m_pKZFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+
+	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
+	{
+		m_pBitmap[i] = 255 - m_pBitmap[i];
+	}
+
+	RwRaster* pTextRaster = GetRWRasterFromBitmap(m_pBitmap + (PLATE_BITMAP_WIDTH * 30), PLATE_BITMAP_WIDTH, 256, 64);
+
+	// process region code
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+	CFontRenderer::RenderText(szRegion, m_pRUFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
+	{
+		m_pBitmap[i] = 255 - m_pBitmap[i];
+	}
+
+	RwRaster* pRegionRaster = GetRWRasterFromBitmap(m_pBitmap + (PLATE_BITMAP_WIDTH * 30), PLATE_BITMAP_WIDTH, 128, 64);
+
+	if (!pRegionRaster || !pTextRaster)
+	{
+		if (pRegionRaster)
+		{
+			RwRasterDestroy(pRegionRaster);
+		}
+		if (pTextRaster)
+		{
+			RwRasterDestroy(pTextRaster);
+		}
+		return nullptr;
+	}
+
+	CSprite2d* pText = new CSprite2d();
+	CSprite2d* pRegion = new CSprite2d();
+
+	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
+
+	CRGBA white {255, 255, 255, 255};
+
+	m_pRenderTarget->Begin();
+	m_pKzSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
+	pText->Draw(48.0f, 0, 154.0f, 48.0f, white);
+	pRegion->Draw(214.0f, 10.0f, 40.0f, 44.0f, white);
+	RwTexture* pTexture = m_pRenderTarget->End();
+
+	delete pText;
+	delete pRegion;
+
+	return pTexture;
+}
+
+RwTexture* CCustomPlateManager::createRuPolicePlate(char* szNumber, char* szRegion)
+{
+	// process text
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+
+	int x_max, y_max;
+	CFontRenderer::RenderText(szNumber, m_pRUFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+
+	RwRaster* pTextRaster = GetRWRasterFromBitmapPalette(m_pBitmap + (PLATE_BITMAP_WIDTH * 30), PLATE_BITMAP_WIDTH, 256, 64, 0, 85, 185, 0);
+
+	// process region code
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+	CFontRenderer::RenderText(szRegion, m_pRUFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+
+	RwRaster* pRegionRaster = GetRWRasterFromBitmapPalette(m_pBitmap + (PLATE_BITMAP_WIDTH * 30), PLATE_BITMAP_WIDTH, 128, 64, 0, 85, 185, 0);
+
+	if (!pRegionRaster || !pTextRaster)
+	{
+		if (pRegionRaster)
+		{
+			RwRasterDestroy(pRegionRaster);
+		}
+		if (pTextRaster)
+		{
+			RwRasterDestroy(pTextRaster);
+		}
+		return nullptr;
+	}
+
+	auto pText = new CSprite2d();
+	auto pRegion = new CSprite2d();
+
+
+	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
+
+	CRGBA white {255, 255, 255, 255};
+
+	m_pRenderTarget->Begin();
+	m_pRuPoliceSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
+	pText->Draw(22.0f, 12.0f, 160.0f, 44.0f, white);
+	pRegion->Draw(206.0f, 14.0f, 38.0f, 24.0f, white);
+	RwTexture* pTexture = m_pRenderTarget->End();
+
+	delete pText;
+	delete pRegion;
+
+	return pTexture;
+}
+
+RwTexture* CCustomPlateManager::createRuPlate(char* szNumber, char* szRegion)
+{
+	// process text
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+
+	int x_max, y_max;
+	CFontRenderer::RenderText(szNumber, m_pRUFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+
+	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
+	{
+		m_pBitmap[i] = 255 - m_pBitmap[i];
+	}
+
+	RwRaster* pTextRaster = GetRWRasterFromBitmap(m_pBitmap + (PLATE_BITMAP_WIDTH * 30), PLATE_BITMAP_WIDTH, 256, 64);
+
+	// process region code
+	memset(m_pBitmap, 0, PLATE_BITMAP_HEIGHT * PLATE_BITMAP_WIDTH);
+	CFontRenderer::RenderText(szRegion, m_pRUFont, m_pBitmap, PLATE_BITMAP_WIDTH, x_max, y_max);
+	for (int i = 0; i < PLATE_BITMAP_WIDTH * PLATE_BITMAP_HEIGHT; i++)
+	{
+		m_pBitmap[i] = 255 - m_pBitmap[i];
+	}
+
+	RwRaster* pRegionRaster = GetRWRasterFromBitmap(m_pBitmap + (PLATE_BITMAP_WIDTH * 30), PLATE_BITMAP_WIDTH, 128, 64);
+
+	if (!pRegionRaster || !pTextRaster)
+	{
+		if (pRegionRaster)
+		{
+			RwRasterDestroy(pRegionRaster);
+		}
+		if (pTextRaster)
+		{
+			RwRasterDestroy(pTextRaster);
+		}
+		return nullptr;
+	}
+
+	CSprite2d* pText = new CSprite2d();
+	CSprite2d* pRegion = new CSprite2d();
+
+	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
+
+	CRGBA white {255, 255, 255, 255};
+
+	m_pRenderTarget->Begin();
+	m_pRuSprite->Draw(0.0f, 0.0f, 256.0f, 64.0f, white);
+	pText->Draw(22.0f, 8.0f, 160.0f, 38.0f, white); // x y width height ÒÅÊÑÒ
+	pRegion->Draw(212.0f, 11.0f, 33.0f, 20.0f, white); // x y width height ÐÅÃÈÎÍ
+	RwTexture* pTexture = m_pRenderTarget->End();
+
+	delete pText;
+	delete pRegion;
+
+	return pTexture;
 }

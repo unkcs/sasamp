@@ -2388,74 +2388,6 @@ bool ProcessLocalCommands(const char str[])
 		CHUD::toggleAll( CHUD::bIsCamEditGui );
 		return true;
 	}
-	if (strcmp(str, "/load") == 0)
-	{
-		//char VehicleNames[210][14] = *(char(*)[][])(g_libGTASA + 0x006B06AC);
-		Log("%s", *(char*)(g_libGTASA + 0x0060EF78));
-		cHandlingDataMgr::LoadHandlingData();
-		return true;
-	}
-
-	if (strstr(str, "/testveh "))
-	{
-		int size = 0;
-		if (sscanf(str, "%*s%d", &size) == -1)
-		{
-			CChatWindow::AddDebugMessage("Используйте: /fontsize [scale]");
-			return true;
-		}
-
-		CPlayerPed *pPlayer = pGame->FindPlayerPed();
-		CVehicle* pVehicle = pPlayer->GetCurrentVehicle();
-
-		auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
-		uint8_t* pModelInfoStart = (uint8_t*)dwModelarray[pVehicle->m_pVehicle->entity.nModelIndex];
-
-		if (!pModelInfoStart)
-		{
-			return true;
-		}
-
-		uintptr_t* m_pVehicleStruct = (uintptr_t*)(pModelInfoStart + 0x74);
-
-		auto m_avDummyPos = (CVector*)(*m_pVehicleStruct + 0x0);
-
-		CVector vec;
-		// 0 - front light
-		vec.x = m_avDummyPos[size].x;
-		vec.y = m_avDummyPos[size].y;
-		vec.z = m_avDummyPos[size].z;
-		//float x;
-
-
-//		RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(pVehicle->m_pVehicle->entity.m_pRwObject, "taillights"); // GetFrameFromname
-//
-//		RwMatrix mat;
-//		memcpy(&mat, (const void*)&(pWheelLB->modelling), sizeof(RwMatrix));
-//
-//		//CHook::CallFunction<int>(g_libGTASA + 0x338698 + 1, pModelInfoStart, &vec, 1);
-//	//	(( int (*)(uint8_t*, CVector*, int32_t))(g_libGTASA + 0x338698 + 1))(pModelInfoStart, &vec, size);
-
-//		CText3DLabelsPool *pLabelsPool = pNetGame->GetLabelPool();
-//
-//		if(pLabelsPool)
-//		{
-//			pLabelsPool->CreateTextLabel((int)555, "x", 0xFFFFFFFF,
-//										 x, y, z, 30.0f, 0, INVALID_PLAYER_ID, pPlayer->GetCurrentSampVehicleID());
-//		}
-		CObjectPool* pObjectPool = pNetGame->GetObjectPool();
-		CVector vec11;
-		vec11.x = vec11.y = vec11.z = 0.0;
-		pObjectPool->New(555, 19294, vec11, vec11, 300.0f);
-
-		CObject* pObject = pObjectPool->GetAt(555);
-		if (!pObject) return true;
-		pObject->AttachToVehicle(pPlayer->GetCurrentSampVehicleID(), &vec, &vec11);
-
-
-		CChatWindow::AddInfoMessage("%.3f, %.3f, %.3f", vec.x, vec.y, vec.z);
-		return true;
-	}
 
 	if (strcmp(str, "/tab") == 0)
 	{
@@ -2499,6 +2431,12 @@ bool ProcessLocalCommands(const char str[])
 	if (strcmp(str, "/style") == 0)
 	{
 		CStyling::show(0, 0, 0, 0, 0, 0);
+		return true;
+	}
+	if (strcmp(str, "/coll") == 0)
+	{
+		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
+		pPed->m_pEntity->nEntityFlags.m_bUsesCollision = false;
 		return true;
 	}
 

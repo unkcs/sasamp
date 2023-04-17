@@ -64,7 +64,6 @@ extern int RPC_SetActorAnimation;
 extern int RPC_ClearActorAnimations;
 
 extern int RPC_ScrSetPlayerObjectMaterial;
-extern int RPC_ScrSetSpawnInfo;
 extern int RPC_ScrSetPlayerTeam;
 extern int RPC_ScrSetPlayerSkin;
 extern int RPC_ScrSetPlayerName;

@@ -1219,25 +1219,30 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
 
 		auto pedGive = (PED_TYPE *)thiz->pEntity;
 		auto pedTake = (PED_TYPE *)pEntity;
+
+		auto pLocalPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed();
+
+		if(!pLocalPed->m_bIsSpawned)
+			return;
+
 		pedTake->pdwDamageEntity = reinterpret_cast<uintptr_t>(pedTake);
 
         // player give damage
-        if (pedGive == pGame->FindPlayerPed()->m_pPed)
+        if (pedGive == pLocalPed->m_pPed)
 		{
             CHUD::addGiveDamageNotify(issuerid, thiz->iWeaponType, fDamage);
 			CNetGame::sendGiveDamage(issuerid, thiz->iWeaponType, fDamage, bodypart);
         }
 
         // player take damage
-        else if (pedTake == pGame->FindPlayerPed()->m_pPed)
+        else if (pedTake == pLocalPed->m_pPed)
 		{
 			CNetGame::sendTakeDamage(damagedid, thiz->iWeaponType, fDamage, bodypart);
 
             char nick[MAX_PLAYER_NAME];
             strcpy(nick, pPlayerPool->GetPlayerName(damagedid));
 
-            CHUD::addTakeDamageNotify(pPlayerPool->GetPlayerName(damagedid), thiz->iWeaponType,
-                                      fDamage);
+            CHUD::addTakeDamageNotify(pPlayerPool->GetPlayerName(damagedid), thiz->iWeaponType,fDamage);
         }
     }
 
@@ -1899,6 +1904,8 @@ void CCam__Process_hook(uintptr_t thiz)
 				pVeh = pNetGame->GetVehiclePool()->GetAt(pNetGame->GetPlayerPool()->GetLocalPlayer()->m_CurrentVehicle);
 				if (pVeh)
 				{
+					vecSpeed = pVeh->m_pEntity->vecMoveSpeed;
+
 					pVeh->m_pEntity->vecMoveSpeed *= 6.0f;
 
 					*(float*)(g_libGTASA + 0x00608558) = 200.0f;
@@ -1910,7 +1917,7 @@ void CCam__Process_hook(uintptr_t thiz)
 	CCam__Process(thiz);
 	if (pVeh)
 	{
-		pVeh->SetMoveSpeedVector(vecSpeed);
+		pVeh->m_pEntity->vecMoveSpeed = vecSpeed;
 		*(float*)(g_libGTASA + 0x00608558) = pOld;
 	}
 	if (*(uint16_t*)(thiz + 14) == 4 || *(uint16_t*)(thiz + 14) == 53) // 53 is weapon
@@ -2026,6 +2033,10 @@ void CPed__ProcessEntityCollision_hook(PED_TYPE* thiz, ENTITY_TYPE* ent, void* c
 {
 	g_iLastProcessedSkinCollision = thiz->entity.nModelIndex;
 	g_iLastProcessedEntityCollision = ent->nModelIndex;
+
+//	if(ent->m_nType == ENTITY_TYPE_PED) { // проходить сквозь челов
+//		return;
+//	}
 
 	CPed__ProcessEntityCollision(thiz, ent, colPoint);
 }

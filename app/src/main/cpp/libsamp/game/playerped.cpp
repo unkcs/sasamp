@@ -17,6 +17,7 @@ BULLET_DATA* g_pCurrentBulletData;
 
 CPlayerPed::CPlayerPed()
 {
+	Log("CPlayerPed");
 	m_dwGTAId = 1;
 	m_pPed = (PED_TYPE*)GamePool_FindPlayerPed();
 	m_pEntity = (ENTITY_TYPE*)GamePool_FindPlayerPed();
@@ -1414,8 +1415,6 @@ void CPlayerPed::PlayAnimByIdx(int idx, float BlendData, bool loop, bool freeze,
 
 bool IsBlendAssocGroupLoaded(int iGroup)
 {
-	
-
 	uintptr_t* pBlendAssocGroup = *(uintptr_t * *)(g_libGTASA + 0x00890350); // CAnimManager::ms_aAnimAssocGroups
 	uintptr_t blendAssoc = (uintptr_t)pBlendAssocGroup;
 	blendAssoc += (iGroup * 20);

@@ -6,6 +6,7 @@
 
 class CFontInstance
 {
+public:
 	unsigned char* m_pFontBuffer;
 	stbtt_fontinfo m_sFontInfo;
 

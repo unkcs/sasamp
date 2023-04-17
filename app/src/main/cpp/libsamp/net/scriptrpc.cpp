@@ -44,12 +44,6 @@ void ScrSetGravity(RPCParameters *rpcParams)
 	pGame->SetGravity(fGravity);
 }
 
-void ScrForceSpawnSelection(RPCParameters *rpcParams)
-{
-	Log("RPC: ScrForceSpawnSelection");
-	pNetGame->GetPlayerPool()->GetLocalPlayer()->ReturnToClassSelection();
-}
-
 void ScrSetPlayerPos(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrSetPlayerPos");
@@ -274,24 +268,6 @@ void ScrSetPlayerSpecialAction(RPCParameters *rpcParams)
 		pPed->ProcessSpecialAction(byteSpecialAction);
 	}
 
-}
-
-void ScrSetSpawnInfo(RPCParameters *rpcParams)
-{
-	Log("RPC: ScrSetSpawnInfo");
-
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-
-	PLAYER_SPAWN_INFO SpawnInfo;
-
-	RakNet::BitStream bsData(Data, (iBitLength/8)+1, false);
-
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-
-	bsData.Read((char*)&SpawnInfo, sizeof(PLAYER_SPAWN_INFO));
-
-	pPlayerPool->GetLocalPlayer()->SetSpawnInfo(&SpawnInfo);
 }
 
 void ScrCreateExplosion(RPCParameters *rpcParams)
@@ -1675,7 +1651,6 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerTeam, ScrSetPlayerTeam);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrDisplayGameText, ScrDisplayGameText);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetGravity, ScrSetGravity);
-	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrForceSpawnSelection,ScrForceSpawnSelection);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerPos, ScrSetPlayerPos);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetCameraPos, ScrSetCameraPos);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetCameraLookAt, ScrSetCameraLookAt);
@@ -1684,7 +1659,6 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerSkin, ScrSetPlayerSkin);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrApplyPlayerAnimation, ScrApplyPlayerAnimation);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrClearPlayerAnimations, ScrClearPlayerAnimations);
-	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetSpawnInfo, ScrSetSpawnInfo);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrCreateExplosion, ScrCreateExplosion);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerHealth, ScrSetPlayerHealth);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ScrSetPlayerArmour, ScrSetPlayerArmour);
@@ -1777,7 +1751,6 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrSetPlayerSkin);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrApplyPlayerAnimation);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrClearPlayerAnimations);
-	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrSetSpawnInfo);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrCreateExplosion);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrSetPlayerHealth);
 	pRakClient->UnregisterAsRemoteProcedureCall(&RPC_ScrSetPlayerArmour);

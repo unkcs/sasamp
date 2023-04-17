@@ -43,19 +43,6 @@
 #define BULLET_HIT_TYPE_OBJECT          3
 #define BULLET_HIT_TYPE_PLAYER_OBJECT   4
 
-typedef unsigned short RW_OBJECTID;
-
-typedef struct _PLAYER_SPAWN_INFO
-{
-	uint8_t byteTeam;
-	int iSkin;
-	uint8_t unk;
-	VECTOR vecPos;
-	float fRotation;
-	int iSpawnWeapons[3];
-	int iSpawnWeaponsAmmo[3];
-} PLAYER_SPAWN_INFO;
-
 #pragma pack(push, 1)
 typedef struct _ONFOOT_SYNC_DATA
 {
@@ -189,12 +176,10 @@ public:
 	void SendEnterVehicleNotification(VEHICLEID VehicleID, bool bPassenger);
 	void SendExitVehicleNotification(VEHICLEID VehicleID);
 	void UpdateRemoteInterior(uint8_t byteInterior);
-	void SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn);
 	bool Spawn(const CVector pos, float rot);
 	int GetOptimumOnFootSendRate();
 	uint8_t DetermineNumberOfPlayersInLocalRange();
 	int GetOptimumInCarSendRate();
-	void ReturnToClassSelection() { m_bWantsAnotherClass = true; }
 	void ProcessSpectating();
 	void ToggleSpectating(bool bToggle);
 	void SpectatePlayer(PLAYERID playerId);
@@ -239,15 +224,9 @@ private:
 
 	uint32_t			m_dwPassengerEnterExit;
 
-	PLAYER_SPAWN_INFO 	m_SpawnInfo;
 	ONFOOT_SYNC_DATA 	m_OnFootData;
 	INCAR_SYNC_DATA 	m_InCarData;
 	PASSENGER_SYNC_DATA m_PassengerData;
-
-	int					m_iSelectedClass;
-	bool				m_bHasSpawnInfo;
-	bool				m_bWantsAnotherClass;
-	bool				m_bClearedToSpawn;
 
 	uint32_t 			m_dwLastSendTick;
 	uint32_t			m_dwLastSendSpecTick;

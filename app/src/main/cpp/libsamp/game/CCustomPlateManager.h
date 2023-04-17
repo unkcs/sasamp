@@ -3,6 +3,7 @@
 #include "CRenderTarget.h"
 #include "..//gui/CFontInstance.h"
 #include "..//gui/CFontRenderer.h"
+#include "game/RW/rwcore.h"
 #include <list>
 
 
@@ -43,4 +44,14 @@ public:
 	static void Shutdown();
 
 	static RwTexture *createTexture(ePlateType type, char *szNumber, char *szRegion);
+
+    static RwTexture *createRuPlate(char *szNumber, char *szRegion);
+
+    static RwTexture *createRuPolicePlate(char *szNumber, char *szRegion);
+
+	static RwTexture *createKzPlate(char *szNumber, char *szRegion);
+
+	static RwTexture *createUaPlate(char *szNumber, char *szRegion);
+
+	static RwTexture *createBuPlate(char* szNumber, char* szRegion);
 };

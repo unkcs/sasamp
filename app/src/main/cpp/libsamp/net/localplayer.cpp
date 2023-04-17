@@ -44,9 +44,6 @@ CLocalPlayer::CLocalPlayer()
 	m_bIsActive = false;
 	m_bIsWasted = false;
 
-	m_iSelectedClass = 0;
-	m_bHasSpawnInfo = false;
-	m_bWantsAnotherClass = false;
 	m_bInRCMode = false;
 
 	memset(&m_OnFootData, 0, sizeof(ONFOOT_SYNC_DATA));
@@ -187,7 +184,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/casino/Dice.h"
 
 CAMERA_AIM* caAim = new CAMERA_AIM();
-extern bool bFirstSpawn;
+
 bool CLocalPlayer::Process()
 {
 	m_pPlayerPed->SetCurrentAim(caAim);
@@ -198,6 +195,10 @@ bool CLocalPlayer::Process()
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 	uint32_t dwThisTick = GetTickCount();
 
+	if(m_pPlayerPed->m_bIsSpawnCd) {
+		if(dwThisTick > (m_pPlayerPed->m_iLastSpawnTime + 5000) )
+			m_pPlayerPed->m_bIsSpawnCd = false;
+	}
 	if(m_bIsActive && m_pPlayerPed) {
 		if (m_pPlayerPed->drunk_level) {
 			m_pPlayerPed->drunk_level--;
@@ -470,7 +471,7 @@ bool CLocalPlayer::Process()
 
 	if(CDialog::bIsShow || CDice::bIsShow || CTab::bIsShow || pGame->isAutoShopActive
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
-	   CMedic::bIsShow || CInventory::bIsToggle || bFirstSpawn || CEditobject::bIsToggle || CChip::bIsShow
+	   CMedic::bIsShow || CInventory::bIsToggle || !m_pPlayerPed->m_bIsSpawned || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
 	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow)
 	{
@@ -574,14 +575,9 @@ void CLocalPlayer::UpdateRemoteInterior(uint8_t byteInterior)
 	pNetGame->GetRakClient()->RPC(&RPC_SetInteriorId, &bsUpdateInterior, HIGH_PRIORITY, RELIABLE, 0, false, UNASSIGNED_NETWORK_ID, NULL);
 }
 
-void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
-{
-	memcpy(&m_SpawnInfo, pSpawn, sizeof(PLAYER_SPAWN_INFO));
-	m_bHasSpawnInfo = true;
-}
-bool bFirstSpawn = true;
 bool CLocalPlayer::Spawn(const CVector pos, float rot)
 {
+	Log("CLocalPlayer::Spawn");
 	//if(!m_bHasSpawnInfo) return false;
 	//m_pPlayerPed->SetInterior(interior);
 
@@ -597,12 +593,9 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 	//pGame->DisplayHUD(true);
 	m_pPlayerPed->TogglePlayerControllable(true);
 	
-	//if(!bFirstSpawn)
-		m_pPlayerPed->SetInitialState();
-	//else
-	bFirstSpawn = false;
+	m_pPlayerPed->SetInitialState();
 
-//	bFirstSpawn = false;
+	m_pPlayerPed->m_bIsSpawned = true;
 
 	pGame->RefreshStreamingAt(pos.x,pos.y);
 
@@ -616,13 +609,14 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 	// CCamera::Fade
 	CHook::WriteMemory(g_libGTASA + 0x36EA2C, "\x70\x47", 2); // bx lr
 
-	m_pPlayerPed->TeleportTo(pos.x,pos.y, (pos.z + 0.5f));
+	m_pPlayerPed->TeleportTo(pos.x,pos.y, pos.z);
 
 	m_pPlayerPed->ForceTargetRotation(rot);
 
 	m_bIsWasted = false;
 	m_bIsActive = true;
-
+	m_pPlayerPed->m_bIsSpawnCd = true;
+	m_pPlayerPed->m_iLastSpawnTime = GetTickCount();
 //	RakNet::BitStream bsSendSpawn;
 //	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
 //		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);

@@ -947,6 +947,7 @@ void InjectHooks()
 	cTransmission::InjectHooks();
 	cHandlingDataMgr::InjectHooks();
 	CPools::InjectHooks();
+	CVehicleGta::InjectHooks();
 }
 
 void InstallSpecialHooks()

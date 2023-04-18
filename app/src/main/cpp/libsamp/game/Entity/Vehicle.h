@@ -239,6 +239,8 @@ struct CVehicleGta : CPhysical
     RwTexture *m_pRemapTexture;
 
 public:
+    static void InjectHooks();
+
     static void SetDriver(CVehicleGta *thiz, CPedGta *pPed);
 };
 #pragma pack(pop)

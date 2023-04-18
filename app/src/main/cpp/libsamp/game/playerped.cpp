@@ -945,8 +945,8 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 	}
 }
 
-extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, CPedGta* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, ENTITY_TYPE* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
-extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
+extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, CPedGta* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, CEntityGta* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
+extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, VECTOR *vecOrigin);
 
 void CPlayerPed::FireInstant() {
 	if(!m_pPed || !GamePool_Ped_GetAt(m_dwGTAId)) {
@@ -1170,7 +1170,7 @@ void CPlayerPed::ProcessAttach()
 			{
 				continue;
 			}
-			((void (*)(ENTITY_TYPE*))(*(void**)(pObject->m_pEntity->vtable + 16)))(pObject->m_pEntity); // CPhysical::Remove
+			((void (*)(CEntityGta*))(*(void**)(pObject->m_pEntity->vtable + 16)))(pObject->m_pEntity); // CPhysical::Remove
 
 			RwMatrix outMat;
 			memcpy(&outMat, &hierarchy->pMatrixArray[iID], sizeof(RwMatrix));
@@ -1221,8 +1221,8 @@ void CPlayerPed::ProcessAttach()
 				}
 			}
 			//Log("pos %f %f %f", outMat.pos.X, outMat.pos.Y, outMat.pos.Z);
-			((int(*)(ENTITY_TYPE*))(g_libGTASA + 0x0039194C + 1))(pObject->m_pEntity); // CEntity::UpdateRwFrame
-			((void (*)(ENTITY_TYPE*))(*(void**)(pObject->m_pEntity->vtable + 8)))(pObject->m_pEntity); // CPhysical::Add
+			((int(*)(CEntityGta*))(g_libGTASA + 0x0039194C + 1))(pObject->m_pEntity); // CEntity::UpdateRwFrame
+			((void (*)(CEntityGta*))(*(void**)(pObject->m_pEntity->vtable + 8)))(pObject->m_pEntity); // CPhysical::Add
 		}
 		else
 		{
@@ -1594,7 +1594,7 @@ void CPlayerPed::GetBonePosition(int iBoneID, VECTOR* vecOut)
 	(( void (*)(CPedGta*, VECTOR*, int, int))(g_libGTASA + 0x436590 + 1))(m_pPed, vecOut, iBoneID, 0);
 }
 
-ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
+CEntityGta* CPlayerPed::GetEntityUnderPlayer()
 {
 	uintptr_t entity;
 	VECTOR vecStart;
@@ -1616,7 +1616,7 @@ ENTITY_TYPE* CPlayerPed::GetEntityUnderPlayer()
 	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
 		0, 1, 0, 1, 0, 0, 0, 0);
 
-	return (ENTITY_TYPE*)entity;
+	return (CEntityGta*)entity;
 }
 void CPlayerPed::ClumpUpdateAnimations(float step, int flag)
 {

@@ -503,8 +503,8 @@ __attribute__((naked)) void PickupPickUp_hook()
 }
 
 // fire weapon hooks
-uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
-uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, ENTITY_TYPE * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
+uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, CEntityGta * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
+uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, CEntityGta * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -1066,7 +1066,7 @@ enum ePedPieceTypes
 
 struct CPedDamageResponseCalculatorInterface
 {
-	ENTITY_TYPE *pEntity;
+	CEntityGta *pEntity;
 	float fDamage;
 	ePedPieceTypes bodyPart;
 	unsigned int weaponType;
@@ -1076,7 +1076,7 @@ struct CPedDamageResponseCalculatorInterface
 // thanks Codeesar
 struct stPedDamageResponse
 {
-	ENTITY_TYPE* pEntity;
+	CEntityGta* pEntity;
 	float fDamage;
 	int iBodyPart;
 	eWeaponType iWeaponType;
@@ -1106,8 +1106,8 @@ void onDamage(CPedGta* issuer, CPedGta* damaged)
 	}
 }
 
-void (*CPedDamageResponseCalculator__ComputeDamageResponse)(stPedDamageResponse* thiz, ENTITY_TYPE* pEntity, uintptr_t pDamageResponse, bool bSpeak);
-void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageResponse* thiz, ENTITY_TYPE* pEntity, uintptr_t pDamageResponse, bool bSpeak)
+void (*CPedDamageResponseCalculator__ComputeDamageResponse)(stPedDamageResponse* thiz, CEntityGta* pEntity, uintptr_t pDamageResponse, bool bSpeak);
+void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageResponse* thiz, CEntityGta* pEntity, uintptr_t pDamageResponse, bool bSpeak)
 {
 	if (thiz && pEntity) onDamage((CPedGta*)*(uintptr_t*)thiz, (CPedGta*)pEntity);
 
@@ -1491,8 +1491,8 @@ void CGame__Process_hook()
 
 uint16_t g_usLastProcessedModelIndexAutomobile = 0;
 int g_iLastProcessedModelIndexAutoEnt = 0;
-void (*CAutomobile__ProcessEntityCollision)(CVehicleGta* a1, ENTITY_TYPE* a2, int a3);
-void CAutomobile__ProcessEntityCollision_hook(CVehicleGta* a1, ENTITY_TYPE* a2, int a3)
+void (*CAutomobile__ProcessEntityCollision)(CVehicleGta* a1, CEntityGta* a2, int a3);
+void CAutomobile__ProcessEntityCollision_hook(CVehicleGta* a1, CEntityGta* a2, int a3)
 {
 	g_usLastProcessedModelIndexAutomobile = a1->nModelIndex;
 	g_iLastProcessedModelIndexAutoEnt = a2->nModelIndex;
@@ -1942,8 +1942,8 @@ void FxEmitterBP_c__Render_hook(uintptr_t* a1, int a2, int a3, float a4, char a5
 int g_iLastProcessedSkinCollision = 228;
 int g_iLastProcessedEntityCollision = 228;
 
-void (*CPed__ProcessEntityCollision)(CPedGta* thiz, ENTITY_TYPE* ent, void* colPoint);
-void CPed__ProcessEntityCollision_hook(CPedGta* thiz, ENTITY_TYPE* ent, void* colPoint)
+void (*CPed__ProcessEntityCollision)(CPedGta* thiz, CEntityGta* ent, void* colPoint);
+void CPed__ProcessEntityCollision_hook(CPedGta* thiz, CEntityGta* ent, void* colPoint)
 {
 	g_iLastProcessedSkinCollision = thiz->nModelIndex;
 	g_iLastProcessedEntityCollision = ent->nModelIndex;
@@ -2081,7 +2081,7 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 					CVehicle *pVehicle = pVehiclePool->GetAt(i);
 					if (pVehicle && pVehicle->IsAdded())
 					{
-						/*CObject* pObject = pVehicle->Att((ENTITY_TYPE*)thiz);
+						/*CObject* pObject = pVehicle->Att((CEntityGta*)thiz);
 						if (pObject != nullptr)
 						{
 							if (pObject->m_pEntity->mat->pos.X > 20000.0f || pObject->m_pEntity->mat->pos.Y > 20000.0f || pObject->m_pEntity->mat->pos.Z > 20000.0f ||
@@ -2167,8 +2167,8 @@ int CCollision__ProcessVerticalLine_hook(float *a1, float *a2, int a3, int a4, i
 }
 
 
-int (*CWeapon__GenerateDamageEvent)(CPedGta *victim, ENTITY_TYPE *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction);
-int CWeapon__GenerateDamageEvent_hook(CPedGta *victim, ENTITY_TYPE *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction)
+int (*CWeapon__GenerateDamageEvent)(CPedGta *victim, CEntityGta *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction);
+int CWeapon__GenerateDamageEvent_hook(CPedGta *victim, CEntityGta *creator, unsigned int weaponType, int damageFactor, ePedPieceTypes pedPiece, int direction)
 {
 	if (pedPiece != PED_PIECE_HEAD)
 	{
@@ -2299,8 +2299,8 @@ void RenderEffects_hook()
 //	}
 }
 
-uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin);
-uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, ENTITY_TYPE *a3, VECTOR *vecOrigin)
+uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, VECTOR *vecOrigin);
+uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, VECTOR *vecOrigin)
 {
 	if(GamePool_FindPlayerPed() == pFiringEntity)
 	{
@@ -2315,7 +2315,7 @@ uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, 
 	return 1;
 }
 
-void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TYPE **ppEntity)
+void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGta **ppEntity)
 {
 	BULLET_DATA bulletData;
 	memset(&bulletData, 0, sizeof(BULLET_DATA));
@@ -2330,7 +2330,7 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, ENTITY_TY
 
 	if(ppEntity)
 	{
-		static ENTITY_TYPE *pEntity;
+		static CEntityGta *pEntity;
 		pEntity = *ppEntity;
 		if(pEntity)
 		{
@@ -2389,7 +2389,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 	{
 		g_bForceWorldProcessLineOfSight = false;
 
-		ENTITY_TYPE *pEntity = nullptr;
+		CEntityGta *pEntity = nullptr;
 		RwMatrix *pMatrix = nullptr;
 		VECTOR vecPosPlusOffset;
 
@@ -2432,7 +2432,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 			if(g_pCurrentFiredPed)
 			{
 				if(g_pCurrentFiredPed == pGame->FindPlayerPed())
-					SendBulletSync(vecOrigin, vecEnd, vecPos, (ENTITY_TYPE**)ppEntity);
+					SendBulletSync(vecOrigin, vecEnd, vecPos, (CEntityGta**)ppEntity);
 			}
 
 			return result;
@@ -2463,7 +2463,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 		if(g_pCurrentFiredPed)
 		{
 			if(g_pCurrentFiredPed == pGame->FindPlayerPed())
-				SendBulletSync(vecOrigin, vecEnd, vecPos, (ENTITY_TYPE **)ppEntity);
+				SendBulletSync(vecOrigin, vecEnd, vecPos, (CEntityGta **)ppEntity);
 		}
 
 		return result;
@@ -2472,8 +2472,8 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 	return CWorld__ProcessLineOfSight(vecOrigin, vecEnd, vecPos, ppEntity, b1, b2, b3, b4, b5, b6, b7, b8);
 }
 
-signed int (*CBulletInfo_AddBullet)(ENTITY_TYPE* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2);
-signed int CBulletInfo_AddBullet_hook(ENTITY_TYPE* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2)
+signed int (*CBulletInfo_AddBullet)(CEntityGta* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2);
+signed int CBulletInfo_AddBullet_hook(CEntityGta* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2)
 {
 	vec2.X *= 50.0f;
 	vec2.Y *= 50.0f;

@@ -6,7 +6,7 @@
 */
 #pragma once
 
-//struct ENTITY_TYPE;
+//struct CEntityGta;
 
 class CReference {
 public:

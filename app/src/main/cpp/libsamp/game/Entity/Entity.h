@@ -14,7 +14,7 @@
 #include "game/quaternion.h"
 
 #pragma pack(push, 1)
-struct ENTITY_TYPE : CPlaceable
+struct CEntityGta : CPlaceable
 {
     union {
         uintptr_t m_pRwObject;
@@ -68,11 +68,11 @@ struct ENTITY_TYPE : CPlaceable
 
     uint16_t nModelIndex;
     CReference *pReferences;
-    CLink<ENTITY_TYPE*> *m_pLastRenderedLink;
+    CLink<CEntityGta*> *m_pLastRenderedLink;
     uint16_t m_nScanCode;
     uint8_t m_iplIndex;
     uint8_t m_areaCode;
-    ENTITY_TYPE *m_pLod;
+    CEntityGta *m_pLod;
     uint8_t numLodChildren;
     int8_t numLodChildrenRendered;
     eEntityType   m_nType : 3;          // Mask: & 0x7  = 7

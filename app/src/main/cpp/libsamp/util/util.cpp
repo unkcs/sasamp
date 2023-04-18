@@ -14,7 +14,7 @@ bool CUtil::IsValidGamePed(CPedGta * pPed)
 	return ((bool(*)(CPedGta *)) (g_libGTASA + 0x00435614 + 1)) (pPed);
 }
 
-bool CUtil::IsGameEntityArePlaceable(ENTITY_TYPE *pEntity)
+bool CUtil::IsGameEntityArePlaceable(CEntityGta *pEntity)
 {
 	if(pEntity)
 	{

@@ -22,6 +22,6 @@ public:
 	void InterpolateCameraLookAt(VECTOR *posFrom, VECTOR *posTo, int time, uint8_t mode);
 
 private:
-	ENTITY_TYPE* m_pEntity;
+	CEntityGta* m_pEntity;
 	RwMatrix *m_matPos;
 };

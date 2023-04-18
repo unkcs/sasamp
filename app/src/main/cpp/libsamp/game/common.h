@@ -282,7 +282,7 @@ typedef struct _BULLET_DATA {
 	VECTOR vecOrigin;
 	VECTOR vecPos;
 	VECTOR vecOffset;
-	ENTITY_TYPE* pEntity;
+	CEntityGta* pEntity;
 } BULLET_DATA;
 
 #pragma pack(pop)

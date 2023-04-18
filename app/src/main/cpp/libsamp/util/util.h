@@ -8,7 +8,7 @@ public:
     static bool IsValidGameVehicle(CVehicleGta *pVehicle);
     static bool IsValidGamePed(CPedGta * pPed);
 
-    static bool IsGameEntityArePlaceable(ENTITY_TYPE *pEntity);
+    static bool IsGameEntityArePlaceable(CEntityGta *pEntity);
 
     static void WorldRemoveEntity(uintptr_t pEnt);
 

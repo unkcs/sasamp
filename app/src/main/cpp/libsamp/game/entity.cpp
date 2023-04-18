@@ -46,7 +46,7 @@ void CEntity::UpdateRwMatrixAndFrame()
 				((void (*) (RwMatrix*, uintptr_t))(g_libGTASA + 0x3E862C + 1))(m_pEntity->mat, pRwMatrix);
 
 				// CEntity::UpdateRwFrame
-				((void (*) (ENTITY_TYPE*))(g_libGTASA + 0x39194C + 1))(m_pEntity);
+				((void (*) (CEntityGta*))(g_libGTASA + 0x39194C + 1))(m_pEntity);
 			}
 		}
 	}
@@ -54,12 +54,12 @@ void CEntity::UpdateRwMatrixAndFrame()
 
 void CEntity::RemovePhysical()
 {
-	((void (*)(ENTITY_TYPE*))(*(void**)(m_pEntity->vtable + 16)))(m_pEntity); // CPhysical::Remove
+	((void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 16)))(m_pEntity); // CPhysical::Remove
 }
 
 void CEntity::AddPhysical()
 {
-	((void (*)(ENTITY_TYPE*))(*(void**)(m_pEntity->vtable + 8)))(m_pEntity); // CPhysical::Add
+	((void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 8)))(m_pEntity); // CPhysical::Add
 }
 
 void CEntity::UpdateMatrix(RwMatrix mat)
@@ -69,13 +69,13 @@ void CEntity::UpdateMatrix(RwMatrix mat)
 		if (m_pEntity->mat)
 		{
 			// CPhysical::Remove
-			((void (*)(ENTITY_TYPE*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
+			((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
 
 			SetMatrix(mat);
 			UpdateRwMatrixAndFrame();
 
 			// CPhysical::Add
-			((void (*)(ENTITY_TYPE*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
+			((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
 		}
 	}
 }
@@ -108,10 +108,10 @@ void CEntity::Render()
 	}
 
 	// CEntity::PreRender
-	(( void (*)(ENTITY_TYPE*))(*(void**)(m_pEntity->vtable+0x48)))(m_pEntity);
+	(( void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 0x48)))(m_pEntity);
 
 	// CRenderer::RenderOneNonRoad
-	(( void (*)(ENTITY_TYPE*))(g_libGTASA+0x3B1690+1))(m_pEntity);
+	(( void (*)(CEntityGta*))(g_libGTASA + 0x3B1690 + 1))(m_pEntity);
 }
 
 void CEntity::Remove()
@@ -238,10 +238,10 @@ bool CEntity::SetModelIndex(unsigned int uiModel)
 	}
 
 	// CEntity::DeleteRWObject()
-	(( void (*)(ENTITY_TYPE*))(*(void**)(m_pEntity->vtable+0x24)))(m_pEntity);
+	(( void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 0x24)))(m_pEntity);
 	m_pEntity->nModelIndex = uiModel;
 	// CEntity::SetModelIndex()
-	(( void (*)(ENTITY_TYPE*, unsigned int))(*(void**)(m_pEntity->vtable+0x18)))(m_pEntity, uiModel);
+	(( void (*)(CEntityGta*, unsigned int))(*(void**)(m_pEntity->vtable + 0x18)))(m_pEntity, uiModel);
 
 	return true;
 }
@@ -255,7 +255,7 @@ void CEntity::TeleportTo(float fX, float fY, float fZ)
 		if(	modelIndex != TRAIN_PASSENGER_LOCO &&
 			modelIndex != TRAIN_FREIGHT_LOCO &&
 			modelIndex != TRAIN_TRAM)
-			(( void (*)(ENTITY_TYPE*, float, float, float, bool))(*(void**)(m_pEntity->vtable+0x3C)))(m_pEntity, fX, fY, fZ, 0);
+			(( void (*)(CEntityGta*, float, float, float, bool))(*(void**)(m_pEntity->vtable + 0x3C)))(m_pEntity, fX, fY, fZ, 0);
 		else
 			ScriptCommand(&put_train_at, m_dwGTAId, fX, fY, fZ);
 	}

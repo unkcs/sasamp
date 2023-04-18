@@ -68,7 +68,7 @@ public:
 	// 0.3.7
 	int GetVehicleSeatID();
 
-	ENTITY_TYPE* GetEntityUnderPlayer();
+	CEntityGta* GetEntityUnderPlayer();
 
 	void GiveWeapon(int iWeaponID, int iAmmo);
 	uint8_t GetCurrentWeapon();

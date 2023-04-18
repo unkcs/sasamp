@@ -32,9 +32,9 @@ public:
 		return m_pObjects[ObjectID];
 	};
 
-	uint16_t FindIDFromGtaPtr(ENTITY_TYPE *pGtaObject);
+	uint16_t FindIDFromGtaPtr(CEntityGta *pGtaObject);
 
-	CObject *GetObjectFromGtaPtr(ENTITY_TYPE *pGtaObject);
+	CObject *GetObjectFromGtaPtr(CEntityGta *pGtaObject);
 
 	void Process();
 };

@@ -44,16 +44,6 @@ jobject CHUD::thiz = nullptr;
 
 jmethodID jUpdateHudInfo;
 
-void CHUD::ChangeChatHeight(int height) {
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-    if(!env)return;
-
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID method = env->GetMethodID(clazz, "ChangeChatHeight", "(I)V");
-
-    env->CallVoidMethod(thiz, method, height);
-}
-
 void CHUD::ChangeChatTextSize(int size) {
     JNIEnv* env = g_pJavaWrapper->GetEnv();
     if(!env)return;
@@ -72,7 +62,6 @@ Java_com_liverussia_cr_gui_hud_HudManager_HudInit(JNIEnv *env, jobject thiz) {
     jUpdateHudInfo = env->GetMethodID(env->GetObjectClass(thiz), "UpdateHudInfo", "(IIIIII)V");
 
     CHUD::ToggleHpText(CSettings::m_Settings.iHPArmourText);
-    CHUD::ChangeChatHeight(CSettings::m_Settings.iChatMaxMessages);
     CHUD::ChangeChatTextSize(CSettings::m_Settings.iChatFontSize);
 
 }

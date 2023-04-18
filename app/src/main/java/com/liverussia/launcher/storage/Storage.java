@@ -17,11 +17,23 @@ public class Storage {
         return sharedPreferences.getBoolean(value, false);
     }
 
+    public static int getInt(String value) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(value, 0);
+    }
+
     public static void setBoolean(String element, boolean value) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putBoolean(element, value);
+        editor.apply();
+    }
+    public static void setInt(String element, int value) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(element, value);
         editor.apply();
     }
 

@@ -18,6 +18,7 @@
             android:id="@+id/chat_fade_box"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_73sdp"
+            android:minHeight="@dimen/_73sdp"
             app:fel_edge="top"
             app:fel_size_top="40dp"
             app:layout_constraintStart_toStartOf="parent"

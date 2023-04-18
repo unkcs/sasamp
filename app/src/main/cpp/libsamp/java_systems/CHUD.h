@@ -56,8 +56,6 @@ public:
 
     static void ToggleHpText(bool toggle);
 
-    static void ChangeChatHeight(int height);
-
     void ToggleChat(bool toggle);
 
     static void ChangeChatTextSize(int size);

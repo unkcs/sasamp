@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.liverussia.cr.gui.util.FadingEdgeLayout;
+import com.liverussia.launcher.storage.Storage;
 import com.nvidia.devtech.NvEventQueueActivity;
 import com.liverussia.cr.R;
 
@@ -57,6 +60,12 @@ public class DialogClientSettings extends DialogFragment {
         ((AppCompatButton)rootview.findViewById(R.id.dialog_settings_button_reset)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int defaultheight = Storage.getInt("defaultChatHeight");
+                FadingEdgeLayout chat = mContext.findViewById(R.id.chat_fade_box);
+                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) chat.getLayoutParams();
+                layoutParams.height = defaultheight;
+                chat.setLayoutParams(layoutParams);
+
                 onSettingsWindowDefaults(tabLayout.getSelectedTabPosition() + 1);
 
                 ISaveableFragment fragment = (ISaveableFragment)adapter.getItem(tabLayout.getSelectedTabPosition());

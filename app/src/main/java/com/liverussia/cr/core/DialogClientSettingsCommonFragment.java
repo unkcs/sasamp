@@ -65,7 +65,6 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
     private HashMap<ViewGroup, Drawable> mOldDrawables;
 
     private ViewGroup mParentView = null;
-   // public native void ChatLineChanged(int newcount);
 
     public static DialogClientSettingsCommonFragment createInstance(String txt)
     {
@@ -146,8 +145,10 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         switch_3dtext_show = mRootView.findViewById(R.id.switch_3dtext_show);
         switch_androidkeyboard = mRootView.findViewById(R.id.switch_androidkeyboard);
         mSwitchOutfit = mRootView.findViewById(R.id.switch_outfit_weapons);
+
         chat_line_count = mRootView.findViewById(R.id.chat_line_count);
         chat_line_count.setProgress(mContext.findViewById(R.id.chat).getLayoutParams().height);
+
         chat_font_size = mRootView.findViewById(R.id.chat_font_size);
         TextView chatlinelayout = mContext.findViewById(R.id.chat_line_text);
         chat_font_size.setProgress((int) chatlinelayout.getTextSize());
@@ -173,11 +174,11 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         chat_line_count.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-               // ChatLineChanged(progress);
-//                FadingEdgeLayout chat = mContext.findViewById(R.id.chat_fade_box);
-//                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) chat.getLayoutParams();
-//                layoutParams.height = progress;
-//                chat.setLayoutParams(layoutParams);
+                FadingEdgeLayout chat = mContext.findViewById(R.id.chat_fade_box);
+                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) chat.getLayoutParams();
+                layoutParams.height = progress;
+                chat.setLayoutParams(layoutParams);
+                Storage.setInt("chatHeight", progress);
 
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {

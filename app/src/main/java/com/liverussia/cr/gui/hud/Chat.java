@@ -1,11 +1,13 @@
 package com.liverussia.cr.gui.hud;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.liverussia.cr.core.Samp.activity;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.liverussia.cr.R;
+import com.liverussia.cr.gui.util.FadingEdgeLayout;
 import com.liverussia.cr.gui.util.Utils;
 import com.liverussia.launcher.storage.Storage;
 
@@ -53,8 +57,9 @@ public class Chat {
 
     private int chatFontSize;
 
+    FadingEdgeLayout chatBox;
     private RecyclerView chat;
-    //int defaultChatHeight;
+    int defaultChatHeight;
     int defaultChatFontSize;
 
     HudManager.ChatAdapter adapter;
@@ -138,9 +143,19 @@ public class Chat {
         });
 
         defaultChatFontSize = 27;
-
         chat = activity.findViewById(R.id.chat);
-        //defaultChatHeight = chat.getLayoutParams().height;
+
+        FadingEdgeLayout chatBox = activity.findViewById(R.id.chat_fade_box);
+        
+        Storage.setInt("defaultChatHeight", chatBox.getMinimumHeight());
+
+        int height = Storage.getInt("chatHeight");
+        if(height > 100) {
+
+            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) chatBox.getLayoutParams();
+            layoutParams.height = height;
+            chatBox.setLayoutParams(layoutParams);
+        }
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
 
@@ -202,31 +217,13 @@ public class Chat {
         adapter.addItem(msg);
     }
 
-    public void ChangeChatHeight(int height)
-    {
-        activity.runOnUiThread(() -> {
-//            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) chat.getLayoutParams();
-//            if(height == -1){
-//                layoutParams.height = defaultChatHeight;
-//            }else{
-//                layoutParams.height = height;
-//            }
-//            chat.setLayoutParams(layoutParams);
-        });
-    }
     public void ChangeChatFontSize(int size)
     {
         activity.runOnUiThread(() -> {
-            // TextView chat_line = activity.findViewById(R.id.chat_line_text);
-            // TextView chat_line_shadow = activity.findViewById(R.id.chat_line_shadow);
             if(size == -1){
                 chatFontSize = defaultChatFontSize;
-                //   chat_line.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultChatFontSize);
-                // chat_line_shadow.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultChatFontSize);
             }else{
                 chatFontSize = size;
-//                chat_line.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
-//                chat_line_shadow.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
             }
             adapter = new ChatAdapter(activity, adapter.getItems());
             // устанавливаем для списка адаптер

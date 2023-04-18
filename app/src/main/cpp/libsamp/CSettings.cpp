@@ -32,7 +32,6 @@ void CSettings::toDefaults(int iCategory)
 	save(iCategory);
 	LoadSettings(m_Settings.szNickName);
 
-	CHUD::ChangeChatHeight(m_Settings.iChatMaxMessages);
 	CHUD::ChangeChatTextSize(m_Settings.iChatFontSize);
 
 }
@@ -190,14 +189,6 @@ JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_AuthorizationManager_ToggleAutoLogin(JNIEnv *env, jobject thiz,
 																jboolean toggle) {
 	CSettings::m_Settings.szAutoLogin = toggle;
-	CSettings::save();
-}
-
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_core_DialogClientSettingsCommonFragment_ChatLineChanged(JNIEnv *env,
-																			   jobject thiz,
-																			   jint newcount) {
-	CSettings::m_Settings.iChatMaxMessages = newcount;
 	CSettings::save();
 }
 

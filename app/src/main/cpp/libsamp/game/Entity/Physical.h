@@ -5,6 +5,7 @@
 #pragma once
 
 #include "game/Enums/eSurfaceType.h"
+#include "Entity.h"
 
 #pragma pack(push, 1)
 struct CPhysical : public CEntityGta {

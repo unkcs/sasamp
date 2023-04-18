@@ -2,8 +2,9 @@
 // Created by plaka on 28.03.2023.
 //
 
-#ifndef LIVERUSSIA_VEHICLETYPE_H
-#define LIVERUSSIA_VEHICLETYPE_H
+#pragma once
+
+#include <stdint.h>
 
 enum eVehicleType : uint32_t
 {
@@ -21,5 +22,3 @@ enum eVehicleType : uint32_t
     VEHICLE_TYPE_BMX = 0xA,
     VEHICLE_TYPE_TRAILER = 0xB,
 };
-
-#endif //LIVERUSSIA_VEHICLETYPE_H

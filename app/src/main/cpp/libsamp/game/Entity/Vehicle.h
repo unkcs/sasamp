@@ -7,12 +7,13 @@
 #include "../Enums/eVehicleType.h"
 #include "Physical.h"
 #include "Ped.h"
+#include "game/tHandlingData.h"
 
 #pragma pack(push, 1)
 struct CVehicleGta : CPhysical
 {
-    PADDING(_pad201, 588);		// 0184-900
-    tHandlingData* pHandling;	// 900-904
+    uint8_t m_VehicleAudioEntity[588];
+    tHandlingData* pHandling;
     uintptr_t* pFlyingHandling;
     union{
         eVehicleHandlingFlags  m_nHandlingFlagsIntValue;
@@ -236,5 +237,8 @@ struct CVehicleGta : CPhysical
     const char* m_remapTxdName;
     const char* m_newRemapTxdName;
     RwTexture *m_pRemapTexture;
+
+public:
+    static void SetDriver(CVehicleGta *thiz, CPedGta *pPed);
 };
 #pragma pack(pop)

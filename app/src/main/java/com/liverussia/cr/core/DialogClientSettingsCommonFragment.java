@@ -147,7 +147,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         mSwitchOutfit = mRootView.findViewById(R.id.switch_outfit_weapons);
 
         chat_line_count = mRootView.findViewById(R.id.chat_line_count);
-        chat_line_count.setProgress(mContext.findViewById(R.id.chat).getLayoutParams().height);
+        chat_line_count.setProgress(mContext.findViewById(R.id.chat_fade_box).getLayoutParams().height);
 
         chat_font_size = mRootView.findViewById(R.id.chat_font_size);
         TextView chatlinelayout = mContext.findViewById(R.id.chat_line_text);
@@ -174,6 +174,11 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         chat_line_count.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress < 100)
+                {
+                    seekBar.setProgress(100);
+                    return;
+                }
                 FadingEdgeLayout chat = mContext.findViewById(R.id.chat_fade_box);
                 ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) chat.getLayoutParams();
                 layoutParams.height = progress;

@@ -89,6 +89,8 @@ public:
     static int iSatiety;
 
     static void updateFamilyWarLayout(int seconds, int topScore, int currScore, bool show);
+
+    static float radarSize;
 };
 
 

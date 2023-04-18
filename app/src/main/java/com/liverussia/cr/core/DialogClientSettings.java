@@ -65,6 +65,7 @@ public class DialogClientSettings extends DialogFragment {
                 ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) chat.getLayoutParams();
                 layoutParams.height = defaultheight;
                 chat.setLayoutParams(layoutParams);
+                Storage.setInt("chatHeight", defaultheight);
 
                 onSettingsWindowDefaults(tabLayout.getSelectedTabPosition() + 1);
 

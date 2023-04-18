@@ -1,5 +1,6 @@
 package com.liverussia.cr.gui.hud;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static java.lang.Thread.sleep;
 
 import android.annotation.SuppressLint;
@@ -7,6 +8,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -113,7 +115,7 @@ public class HudManager extends Chat {
     native void PressedHorn(boolean pressed);
     native void clickSiren();
     native void SetRadarBgPos(float x1, float y1, float x2, float y2);
-    native void SetRadarPos(float x1, float y1);
+    native void SetRadarPos(float x1, float y1, float size);
 
     native void clickCameraMode();
     native void clickMultText();
@@ -291,14 +293,19 @@ public class HudManager extends Chat {
             int screenwidth = hud_main.getWidth();
             int screenheight = hud_main.getHeight();
 
-
             float real_prcX= ( ( hud_bg.getX() + (hud_bg.getWidth()/2)) /screenwidth)*100;
             float real_prcY = ( ( hud_bg.getY() + (hud_bg.getHeight()/2.2f) ) /screenheight)*100;
 
             float gtaX =  (640*(real_prcX/100f));
             float gtaY =  (480*(real_prcY/100f));
 
-            SetRadarPos(gtaX, gtaY);
+            float real_prcSize = ( ((float)hud_bg.getWidth() / 2) / screenwidth) * 100;
+          //  real_prcSize /= 2;
+            float gtaSize = (640 * (real_prcSize/100f) );
+
+            gtaSize *= 0.94;
+
+            SetRadarPos(gtaX, gtaY, gtaSize);
 
             activity.runOnUiThread(() -> {
                 hud_main.setVisibility(View.GONE);

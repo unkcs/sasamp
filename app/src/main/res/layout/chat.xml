@@ -17,7 +17,7 @@
         <com.liverussia.cr.gui.util.FadingEdgeLayout
             android:id="@+id/chat_fade_box"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_73sdp"
+            android:layout_height="@dimen/_80sdp"
             android:minHeight="@dimen/_73sdp"
             app:fel_edge="top"
             app:fel_size_top="40dp"
@@ -171,7 +171,7 @@
         android:layout_height="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_125sdp"
-        android:background="@drawable/chat_hide"
+        android:src="@drawable/chat_hide"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"

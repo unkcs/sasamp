@@ -39,6 +39,7 @@ PLAYERID    CHUD::lastGiveDamagePlayerId = INVALID_PLAYER_ID;
 CVector2DFloat CHUD::radarBgPos1;
 CVector2DFloat CHUD::radarBgPos2;
 CVector2DFloat CHUD::radarPos;
+float          CHUD::radarSize;
 
 jobject CHUD::thiz = nullptr;
 
@@ -613,10 +614,11 @@ Java_com_liverussia_cr_gui_hud_HudManager_SetRadarBgPos(JNIEnv *env, jobject thi
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_hud_HudManager_SetRadarPos(JNIEnv *env, jobject thiz, jfloat x1, jfloat y1) {
+Java_com_liverussia_cr_gui_hud_HudManager_SetRadarPos(JNIEnv *env, jobject thiz, jfloat x1, jfloat y1, jfloat size) {
 
     CHUD::radarPos.X = x1;
     CHUD::radarPos.Y = y1;
+    CHUD::radarSize = size;
 
 }
 

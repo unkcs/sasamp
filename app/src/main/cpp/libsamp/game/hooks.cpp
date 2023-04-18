@@ -212,8 +212,8 @@ void Render2dStuff()
 			thiz[3] = CHUD::radarPos.X;
 			thiz[4] = CHUD::radarPos.Y;
 
-			thiz[5] = 38.0f;
-			thiz[6] = 38.0f;
+			thiz[5] = CHUD::radarSize;
+			thiz[6] = CHUD::radarSize;
 		}
 
 		((void (*)()) (g_libGTASA + 0x003D4ED8 + 1))(); // радар

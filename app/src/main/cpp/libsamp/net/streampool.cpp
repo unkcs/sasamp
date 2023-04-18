@@ -26,6 +26,13 @@ CStreamPool::CStreamPool() // ready
 			}
 		}
 	);
+
+	addStaticStream(2702.97, - 1755.96, 23.17, -1, 55.0f, "http://files.liverussia.online/sounds/lesopilka_winter.mp3");
+	addStaticStream(-766.1666,-2751.3713,-21.8225, 0, 200.0f, "http://files.liverussia.online/sounds/zavod.mp3");
+	addStaticStream(1803.4633,1748.1989,15.5142, 0, 75.0f, "http://files.liverussia.online/sounds/army.mp3");
+	addStaticStream(-2730.0898,-1761.5973,2.3055, -1, 35.0f, "http://files.liverussia.online/sounds/hotel_sound.mp3");
+	addStaticStream(-903.3563,-2041.9608,25.7742, -1, 55.0f, "http://files.liverussia.online/sounds/univermag.mp3");
+	addStaticStream(-784.0, 698.0, 13.10, 0, 200.0f, "http://files.liverussia.online/sounds/oil_zavod.mp3");
 }
 
 CStreamPool::~CStreamPool() // ready
@@ -77,11 +84,16 @@ CStream* CStreamPool::GetStream(int iID)
 	return nullptr;
 }
 
+void CStreamPool::addStaticStream(float x, float y, float z, int interior, float dist, const char* url) {
+	CVector vec{x, y, z};
+	m_pStaticStream.push_back( new CStream(&vec, interior, dist, url) );
+}
+
 CStream* CStreamPool::AddStream(int iID, CVector* pPos, int iVirtualWorld, int iInterior, float fDistance, const char* szUrl) // ready
 {
 	if (iID < 0 || iID >= MAX_STREAMS) return nullptr;
 	
-	CStream* pStream = new CStream(pPos, iVirtualWorld, iInterior, fDistance, szUrl);
+	CStream* pStream = new CStream(pPos, iInterior, fDistance, szUrl);
 
 	if (m_bIsDeactivated)
 	{
@@ -171,6 +183,9 @@ void CStreamPool::Process() // ready
 {
 	if (CTimer::m_UserPause)// pause
 	{
+		for(auto pStream : m_pStaticStream) {
+			pStream->SetIsDeactivated(true);
+		}
 		for (int i = 0; i < MAX_STREAMS; i++)
 		{
 			if (m_pStreams[i] && m_bSlotState[i])
@@ -199,6 +214,9 @@ void CStreamPool::Process() // ready
 	{
 		if (m_bWasPaused)
 		{
+			for(auto pStream : m_pStaticStream) {
+				pStream->SetIsDeactivated(false);
+			}
 			for (int i = 0; i < MAX_STREAMS; i++)
 			{
 				if (m_pStreams[i] && m_bSlotState[i])
@@ -279,22 +297,31 @@ void CStreamPool::Process() // ready
 		}
 	}
 
-	RwMatrix matLocal;
-	pGame->FindPlayerPed()->GetMatrix(&matLocal);
+	auto pLocalPed = pGame->FindPlayerPed();
+//	RwMatrix matLocal;
+//	pGame->FindPlayerPed()->GetMatrix(&matLocal);
 
 	for (int i = 0; i < MAX_STREAMS; i++)
 	{
 		if (m_bSlotState[i] && m_pStreams[i])
 		{
-			m_pStreams[i]->Process(&matLocal);
+			m_pStreams[i]->Process(pLocalPed->m_pPed->mat);
 		}
+	}
+	for(auto pStream : m_pStaticStream) {
+		pStream->Process(pLocalPed->m_pPed->mat);
 	}
 
 	BASS_3DVECTOR pos;
 
-	pos.x = matLocal.pos.x;
-	pos.y = matLocal.pos.y;
-	pos.z = matLocal.pos.z;
+	pos.x = pLocalPed->m_pPed->mat->pos.x;
+	pos.y = pLocalPed->m_pPed->mat->pos.y;
+	pos.z = pLocalPed->m_pPed->mat->pos.z;
+
+//	BASS_3DVECTOR vel;
+//	vel.x = pLocalPed->m_pPed->vecMoveSpeed.x;
+//	vel.y = pLocalPed->m_pPed->vecMoveSpeed.y;
+//	vel.z = pLocalPed->m_pPed->vecMoveSpeed.z;
 
 	BASS_Set3DPosition(&pos, nullptr, nullptr, nullptr);
 

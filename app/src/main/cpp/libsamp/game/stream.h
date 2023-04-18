@@ -3,7 +3,6 @@ class CStream
 {
 	HSTREAM m_hStream;
 	CVector m_vPos;
-	int m_iVirtualWorld;
 	int m_iInterior;
 	float m_fDistance;
 	char m_szUrl[255];
@@ -20,7 +19,7 @@ class CStream
 
 	//friend void CALLBACK MyDownloadProc(const void* buffer, DWORD length, void* user);
 public:
-	CStream(CVector* pPos, int iVirtualWorld, int iInterior, float fDistance, const char* szUrl);
+	CStream(CVector* pPos, int iInterior, float fDistance, const char* szUrl);
 	~CStream();
 
 	void AttachToVehicle(int iVehicleID);

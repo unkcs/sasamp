@@ -20,7 +20,7 @@ void CLoader::loadBassLib()
 {
     InitBASSFuncs();
     BASS_Init(-1, 44100, BASS_DEVICE_3D, nullptr, nullptr);
-    BASS_Set3DFactors(1, 0.10, 1);
+    BASS_Set3DFactors(0.9144f, 0.1, 1);
     BASS_Apply3D();
 }
 

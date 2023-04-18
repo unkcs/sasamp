@@ -13,6 +13,7 @@ struct BUFFERED_COMMAND_STREAMPOOL
 
 class CStreamPool
 {
+	std::vector<CStream*> m_pStaticStream;
 	CStream* m_pStreams[MAX_STREAMS];
 	bool	m_bSlotState[MAX_STREAMS];
 	HSTREAM m_hIndividualStream;
@@ -45,4 +46,6 @@ public:
 	void SetStreamVolume(int iID, float fVolume);
 
 	void Process();
+
+	void addStaticStream(float x, float y, float z, int interior, float dist, const char *url);
 };

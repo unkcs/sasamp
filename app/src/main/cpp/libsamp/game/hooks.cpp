@@ -1415,15 +1415,12 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 		}
         if ( mat->color.red == 125 && mat->color.green == 100 && mat->color.blue == 0 )
         { // wheel
-            if(pVeh->wheelColor.a == 0)
-                return mat;
+//            if(pVeh->wheelColor.a == 0)
+//                return mat;
 
             resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
-            mat->color.alpha = 255;
-            mat->color.red = pVeh->wheelColor.r;
-            mat->color.green = pVeh->mainColor.g;
-            mat->color.blue = pVeh->mainColor.b;
 
+          	mat->color = pVeh->wheelColor;
             return mat;
         }
 	}

@@ -919,7 +919,8 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->wheelColor.r);
             bs.Read(pVeh->wheelColor.g);
             bs.Read(pVeh->wheelColor.b);
-            //bs.Read(pVeh->wheelColor.a);
+           // Log("Serv send ==== %d, %d, %d", pVeh->wheelColor.r, pVeh->wheelColor.g, pVeh->wheelColor.b);
+          //  bs.Read(pVeh->wheelColor.a);
 
             //
             bs.Read(pVeh->tonerColor.r);

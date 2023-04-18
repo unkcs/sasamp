@@ -152,7 +152,7 @@ private:
 public:
 	CRGBA tonerColor{255, 255, 255, 110};
 	CRGBA mainColor{0, 0, 0, 255};
-    CRGBA wheelColor{0, 0, 0, 0};
+    CRGBA wheelColor{0, 0, 0, 255};
 	CRGBA secondColor{0, 0, 0, 255};
 	CRGBA lightColor{255, 255, 255, 0};
 	RwTexture* pPlateTexture = nullptr;

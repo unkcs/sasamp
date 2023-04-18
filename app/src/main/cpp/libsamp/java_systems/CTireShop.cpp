@@ -48,6 +48,8 @@ void CTireShop::show(bool toggle, uint32_t price) {
         CTireShop::bIsShow = true;
     } else {
         CTireShop::bIsShow = false;
+        env->DeleteGlobalRef(CTireShop::thiz);
+        CTireShop::thiz = nullptr;
     }
 }
 

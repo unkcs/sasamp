@@ -31,11 +31,12 @@ class CVehicleModelInfo;
 class CWeaponModelInfo;
 struct RwObject;
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CBaseModelInfo {
     uintptr_t 	vtable;
     uint32_t    m_nKey;
     char        m_modelName[21];
+    uint8_t     pad_0;
     int16_t     m_nRefCount;
     int16_t     m_nTxdIndex;
     uint8_t     m_nAlpha;
@@ -82,6 +83,7 @@ struct CBaseModelInfo {
             };
         };
     };
+    uint8_t     pad_1[2];
     uintptr_t   *m_pColModel;     // CColModel
     float       m_fDrawDistance;  // m_lodDistance
     union {

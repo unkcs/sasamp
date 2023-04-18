@@ -7,7 +7,7 @@
 
 #include "BaseModelInfo.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CAtomicModelInfo : public CBaseModelInfo {
 
 };

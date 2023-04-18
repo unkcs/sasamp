@@ -18,7 +18,9 @@ public:
 
     static void injectHooks();
 
-    static CStore<CPedModelInfo, 350> ms_pedModelInfoStore;
+    static constexpr int32_t NUM_PED_MODEL_INFOS = 350;
+    static CStore<CPedModelInfo, NUM_PED_MODEL_INFOS> ms_pedModelInfoStore;
+
     static CStore<CAtomicModelInfo, 20000> ms_atomicModelInfoStore;
     static CStore<CVehicleModelInfo, 300> ms_vehicleModelInfoStore;
 
@@ -32,6 +34,8 @@ public:
     static auto GetPedModelInfo(int32_t index) { return GetModelInfo(index)->AsPedModelInfoPtr(); }
     static auto GetVehicleModelInfo(int32_t index) { return GetModelInfo(index)->AsVehicleModelInfoPtr(); }
     static void SetModelInfo(int index, CBaseModelInfo* pInfo) { ms_modelInfoPtrs[index] = pInfo; }
+
+    static void Initialise();
 };
 
 

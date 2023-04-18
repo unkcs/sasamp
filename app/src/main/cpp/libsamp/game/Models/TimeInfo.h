@@ -5,7 +5,7 @@
 #ifndef LIVERUSSIA_TIMEINFO_H
 #define LIVERUSSIA_TIMEINFO_H
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CTimeInfo {
     uint8_t m_nTimeOn;
     uint8_t m_nTimeOff;

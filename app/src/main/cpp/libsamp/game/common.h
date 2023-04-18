@@ -169,6 +169,7 @@ typedef struct _ATTACHED_OBJECT_INFO
 	VECTOR vecScale;
 	uint32_t dwColor[2];
 } ATTACHED_OBJECT_INFO;
+#pragma pack(pop)
 
 struct RpHAnimHierarchy
 {

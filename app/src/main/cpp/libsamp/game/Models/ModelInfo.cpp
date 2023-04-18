@@ -5,23 +5,11 @@
 #include "ModelInfo.h"
 #include "util/patch.h"
 
-CBaseModelInfo *CModelInfo::ms_modelInfoPtrs[30000];
+CBaseModelInfo *CModelInfo::ms_modelInfoPtrs[30000] {};
 
 CStore<CPedModelInfo, 350> CModelInfo::ms_pedModelInfoStore;
 CStore<CAtomicModelInfo, 20000> CModelInfo::ms_atomicModelInfoStore;
 CStore<CVehicleModelInfo, 300> CModelInfo::ms_vehicleModelInfoStore;
-
-void CModelInfo::injectHooks()
-{
-    CHook::Write(g_libGTASA + 0x005CFAEC, &CModelInfo::ms_atomicModelInfoStore);
-    CHook::Write(g_libGTASA + 0x005CFF30, &CModelInfo::ms_pedModelInfoStore);
-    CHook::Write(g_libGTASA + 0x005D0918, &CModelInfo::ms_vehicleModelInfoStore);
-    CHook::Write(g_libGTASA + 0x005D1634, &CModelInfo::ms_modelInfoPtrs);
-
-    CHook::Redirect(g_libGTASA + 0x00336690, &CModelInfo::AddPedModel);
-    CHook::Redirect(g_libGTASA + 0x00336618, &CModelInfo::AddVehicleModel);
-    CHook::Redirect(g_libGTASA + 0x00336268, &CModelInfo::AddAtomicModel);
-}
 
 CVehicleModelInfo* CModelInfo::AddVehicleModel(int index)
 {
@@ -69,3 +57,20 @@ CAtomicModelInfo* CModelInfo::AddAtomicModel(int index)
     return &pInfo;
 }
 
+void CModelInfo::Initialise() {
+    memset(ms_modelInfoPtrs, 0, sizeof(ms_modelInfoPtrs));
+
+    //CHook::NOP(g_libGTASA + 0x)
+}
+
+void CModelInfo::injectHooks()
+{
+    CHook::Write(g_libGTASA + 0x005CFAEC, &CModelInfo::ms_atomicModelInfoStore);
+    CHook::Write(g_libGTASA + 0x005CFF30, &CModelInfo::ms_pedModelInfoStore);
+    CHook::Write(g_libGTASA + 0x005D0918, &CModelInfo::ms_vehicleModelInfoStore);
+    CHook::Write(g_libGTASA + 0x005D1634, &CModelInfo::ms_modelInfoPtrs);
+
+    CHook::Redirect(g_libGTASA + 0x00336690, &CModelInfo::AddPedModel);
+    CHook::Redirect(g_libGTASA + 0x00336618, &CModelInfo::AddVehicleModel);
+    CHook::Redirect(g_libGTASA + 0x00336268, &CModelInfo::AddAtomicModel);
+}

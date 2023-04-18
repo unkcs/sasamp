@@ -425,6 +425,7 @@ struct RwTexture
     RwInt32             refCount; /* Reference count, surprisingly enough */              //+84
 };
 typedef struct RwTexture RwTexture;
+static_assert(sizeof(RwTexture) == 0x58);
 
 /*--- Automatically derived from: C:/daily/rwsdk/src/batypehf.h ---*/
 

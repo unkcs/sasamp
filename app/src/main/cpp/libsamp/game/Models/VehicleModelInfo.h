@@ -67,12 +67,13 @@ struct UpgradePosnDesc {
 };
 static_assert(sizeof(UpgradePosnDesc) == 0x20, "Invalid size UpgradePosnDesc");
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CVehicleModelInfo : public CClumpModelInfo {
     RpMaterial*         m_pPlateMaterial; // 3C
     char                m_szPlateText[9]; // 40
     unsigned char       m_nPlateType;    //  49
     char                m_szGameName[8]; //  4a
+    char               _pad3A[2];
     eVehicleType        m_nVehicleType;  //  54
     float               m_fWheelSizeFront;// 58
     float               m_fWheelSizeRear;    //5C
@@ -83,6 +84,7 @@ struct CVehicleModelInfo : public CClumpModelInfo {
     int8_t              m_nFlags;    //66
     int8_t              m_nWheelUpgradeClass;//67
     int8_t              m_nTimesUsed;    //68
+    uint8_t             pad_0;
     int16_t             m_freq;
     tVehicleCompsUnion  m_extraComps;    //6c
     float               m_fBikeSteerAngle; // 70
@@ -106,6 +108,7 @@ struct CVehicleModelInfo : public CClumpModelInfo {
     uint8_t     m_lastColUsed;
     uint8_t     m_lastCol[4];
     int16_t     m_anUpgrades[18];
+    uint8_t     pad_1[2];
     const char* m_remaps[4];
 
     union {

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "rwlpcore.h"
+#include "rwplcore.h"
 #include "rwcore.h"
 #include <stdint.h>
 extern uintptr_t g_libGTASA;

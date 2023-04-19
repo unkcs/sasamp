@@ -43,7 +43,7 @@ void CEntity::UpdateRwMatrixAndFrame()
 			{
 				uintptr_t pRwMatrix = *(uintptr_t*)(m_pEntity->m_pRwObject + 4) + 0x10;
 				// CMatrix::UpdateRwMatrix
-				((void (*) (RwMatrix*, uintptr_t))(g_libGTASA + 0x3E862C + 1))(m_pEntity->mat, pRwMatrix);
+				m_pEntity->mat->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(pRwMatrix));
 
 				// CEntity::UpdateRwFrame
 				((void (*) (CEntityGta*))(g_libGTASA + 0x39194C + 1))(m_pEntity);
@@ -127,40 +127,22 @@ void CEntity::GetMatrix(RwMatrix* Matrix)
 {
 	if (!m_pEntity || !m_pEntity->mat) return;
 
-	Matrix->right.x = m_pEntity->mat->right.x;
-	Matrix->right.y = m_pEntity->mat->right.y;
-	Matrix->right.z = m_pEntity->mat->right.z;
-
-	Matrix->up.x = m_pEntity->mat->up.x;
-	Matrix->up.y = m_pEntity->mat->up.y;
-	Matrix->up.z = m_pEntity->mat->up.z;
-
-	Matrix->at.x = m_pEntity->mat->at.x;
-	Matrix->at.y = m_pEntity->mat->at.y;
-	Matrix->at.z = m_pEntity->mat->at.z;
-
-	Matrix->pos = m_pEntity->mat->pos;
+	*Matrix = m_pEntity->mat->ToRwMatrix();
 }
 
 // 0.3.7
-void CEntity::SetMatrix(RwMatrix Matrix)
+void CEntity::SetMatrix(RwMatrix mat)
 {
 	if (!m_pEntity) return;
 	if (!m_pEntity->mat) return;
 
-	m_pEntity->mat->right.x = Matrix.right.x;
-	m_pEntity->mat->right.y = Matrix.right.y;
-	m_pEntity->mat->right.z = Matrix.right.z;
+	m_pEntity->mat->m_right = mat.right;
 
-	m_pEntity->mat->up.x = Matrix.up.x;
-	m_pEntity->mat->up.y = Matrix.up.y;
-	m_pEntity->mat->up.z = Matrix.up.z;
+	m_pEntity->mat->m_forward = mat.up;
 
-	m_pEntity->mat->at.x = Matrix.at.x;
-	m_pEntity->mat->at.y = Matrix.at.y;
-	m_pEntity->mat->at.z = Matrix.at.z;
+	m_pEntity->mat->m_up = mat.at;
 
-	m_pEntity->mat->pos = Matrix.pos;
+	m_pEntity->mat->m_pos = mat.pos;
 }
 
 // 0.3.7

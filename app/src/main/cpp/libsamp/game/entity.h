@@ -19,7 +19,7 @@ public:
 	// 0.3.7
 	void GetMatrix(RwMatrix* Matrix);
 	// 0.3.7
-	void SetMatrix(RwMatrix Matrix);
+	void SetMatrix(RwMatrix mat);
 	// 0.3.7
 	void GetMoveSpeedVector(CVector *vec);
 	// 0.3.7

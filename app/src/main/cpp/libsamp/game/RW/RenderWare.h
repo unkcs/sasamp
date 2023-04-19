@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rwlpcore.h"
+#include "rwplcore.h"
 #include "rwcore.h"
 
 /* skeleton.h */

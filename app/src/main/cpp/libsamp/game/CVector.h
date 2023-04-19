@@ -8,7 +8,7 @@
 
 #include <numeric>
 #include <span>
-#include "game/RW/rwlpcore.h"
+#include "game/RW/rwplcore.h"
 #include "game/Core/Vector2D.h"
 
 class CMatrix;

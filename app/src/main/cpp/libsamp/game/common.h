@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "game/Core/Vector.h"
-#include "game/RW/rwlpcore.h"
+#include "game/RW/rwplcore.h"
 
 #include "tHandlingData.h"
 #include "game/Entity/Entity.h"

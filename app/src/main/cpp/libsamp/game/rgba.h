@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "game/RW/rwlpcore.h"
+#include "game/RW/rwplcore.h"
 
 class CRGBA
 {

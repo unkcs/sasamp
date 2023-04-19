@@ -6,13 +6,14 @@
 #define LIVERUSSIA_PLACEABLE_H
 
 #include "game/SimpleTransform.h"
+#include "game/Core/MatrixLink.h"
 
 #pragma pack(push, 1)
 struct CPlaceable
 {
     uint32_t            vtable;
     CSimpleTransform    m_transform;
-    RwMatrix            *mat;
+    CMatrixLink         *mat;
 };
 static_assert(sizeof(CPlaceable) == 0x18, "Invalid size CPlaceable");
 #pragma pack(pop)

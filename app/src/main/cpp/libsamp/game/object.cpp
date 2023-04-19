@@ -308,7 +308,7 @@ void CObject::GetRotation(float* pfX,float* pfY,float* pfZ)
 {
 	if (!m_pEntity) return;
 
-	RwMatrix* mat = m_pEntity->mat;
+	CMatrix* mat = m_pEntity->mat;
 
 	if(mat) CHook::CallFunction<void>(g_libGTASA + 0x3E8098 + 1, mat, pfX, pfY, pfZ, 21);
 

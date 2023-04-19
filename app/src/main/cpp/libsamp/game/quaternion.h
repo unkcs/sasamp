@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RW/rwlpcore.h"
+#include "RW/rwplcore.h"
 
 class CQuaternion
 {

@@ -2147,11 +2147,11 @@ void RwMatrixInvert(RwMatrix *matOut, RwMatrix *matIn)
     ((void (*)(RwMatrix*, RwMatrix*))(g_libGTASA+0x1B91CC+1))(matOut, matIn);
 }
 
-void ProjectMatrix(VECTOR* vecOut, RwMatrix* mat, VECTOR* vecPos)
+void ProjectMatrix(VECTOR* vecOut, CMatrix* mat, VECTOR* vecPos)
 {
-	vecOut->x = mat->at.x * vecPos->z + mat->up.x * vecPos->y + mat->right.x * vecPos->x + mat->pos.x;
-	vecOut->y = mat->at.y * vecPos->z + mat->up.y * vecPos->y + mat->right.y * vecPos->x + mat->pos.y;
-	vecOut->z = mat->at.z * vecPos->z + mat->up.z * vecPos->y + mat->right.z * vecPos->x + mat->pos.z;
+	vecOut->x = mat->m_up.x * vecPos->z + mat->m_forward.x * vecPos->y + mat->m_right.x * vecPos->x + mat->m_pos.x;
+	vecOut->y = mat->m_up.y * vecPos->z + mat->m_forward.y * vecPos->y + mat->m_right.y * vecPos->x + mat->m_pos.y;
+	vecOut->z = mat->m_up.z * vecPos->z + mat->m_forward.z * vecPos->y + mat->m_right.z * vecPos->x + mat->m_pos.z;
 }
 
 void RwMatrixRotate(RwMatrix* mat, int axis, float angle)

@@ -1216,7 +1216,8 @@ void CPlayerPed::ProcessAttach()
 					uintptr_t v8 = *(uintptr_t*)(pObject->m_pEntity->m_pRwObject + 4) + 16;
 					if (v8)
 					{
-						((int(*)(RwMatrix*, uintptr_t))(g_libGTASA + 0x003E862C + 1))(pObject->m_pEntity->mat, v8); // CEntity::UpdateRwFrame
+						pObject->m_pEntity->mat->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(v8));
+					//	((int(*)(RwMatrix*, uintptr_t))(g_libGTASA + 0x003E862C + 1))(pObject->m_pEntity->mat, v8); // CEntity::UpdateRwFrame
 					}
 				}
 			}
@@ -1605,12 +1606,12 @@ CEntityGta* CPlayerPed::GetEntityUnderPlayer()
 	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
 		return 0;
 
-	vecStart.x = m_pPed->mat->pos.x;
-	vecStart.y = m_pPed->mat->pos.y;
-	vecStart.z = m_pPed->mat->pos.z - 0.25f;
+	vecStart.x = m_pPed->mat->m_pos.x;
+	vecStart.y = m_pPed->mat->m_pos.y;
+	vecStart.z = m_pPed->mat->m_pos.z - 0.25f;
 
-	vecEnd.x = m_pPed->mat->pos.x;
-	vecEnd.y = m_pPed->mat->pos.y;
+	vecEnd.x = m_pPed->mat->m_pos.x;
+	vecEnd.y = m_pPed->mat->m_pos.y;
 	vecEnd.z = vecStart.z - 1.75f;
 
 	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
@@ -1918,9 +1919,9 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 												}
 												else
 												{
-													btData->vecOffset.x = btData->pEntity->mat->pos.x + btData->vecOffset.x;
-													btData->vecOffset.y = btData->pEntity->mat->pos.y + btData->vecOffset.y;
-													btData->vecOffset.z = btData->pEntity->mat->pos.z + btData->vecOffset.z;
+													btData->vecOffset.x = btData->pEntity->mat->m_pos.x + btData->vecOffset.x;
+													btData->vecOffset.y = btData->pEntity->mat->m_pos.y + btData->vecOffset.y;
+													btData->vecOffset.z = btData->pEntity->mat->m_pos.z + btData->vecOffset.z;
 												}
 											}
 											else

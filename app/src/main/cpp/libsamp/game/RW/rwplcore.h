@@ -28,6 +28,12 @@
  *
  ************************************************************************/
 
+/* Get components */
+#define RwMatrixGetRight(m)    (&(m)->right)
+#define RwMatrixGetUp(m)       (&(m)->up)
+#define RwMatrixGetAt(m)       (&(m)->at)
+#define RwMatrixGetPos(m)      (&(m)->pos)
+
 #define RWFORCEENUMSIZEINT ((RwInt32)((~((RwUInt32)0))>>1))
 
 typedef long RwFixed;
@@ -784,3 +790,8 @@ struct RwMatrixTag
 };
 
 typedef RwMatrixTag RwMatrix;
+
+
+
+RwMatrix* RwMatrixUpdate(RwMatrix* matrix);
+RwBool RwMatrixDestroy(RwMatrix* mpMat);

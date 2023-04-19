@@ -209,8 +209,8 @@ void Render2dStuff()
 		if (thiz)
 		{
 
-			thiz[3] = CHUD::radarPos.X;
-			thiz[4] = CHUD::radarPos.Y;
+			thiz[3] = CHUD::radarPos.x;
+			thiz[4] = CHUD::radarPos.y;
 
 			thiz[5] = CHUD::radarSize;
 			thiz[6] = CHUD::radarSize;
@@ -1098,9 +1098,9 @@ void onDamage(CPedGta* issuer, CPedGta* damaged)
 			CAMERA_AIM* caAim = pPlayerPool->GetLocalPlayer()->GetPlayerPed()->GetCurrentAim();
 
 			VECTOR aim;
-			aim.X = caAim->f1x;
-			aim.Y = caAim->f1y;
-			aim.Z = caAim->f1z;
+			aim.x = caAim->f1x;
+			aim.y = caAim->f1y;
+			aim.z = caAim->f1z;
 
 			pPlayerPool->GetLocalPlayer()->SendBulletSyncData(pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta*)damaged), BULLET_HIT_TYPE_PLAYER, aim);
 		}
@@ -2093,8 +2093,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 						/*CObject* pObject = pVehicle->Att((CEntityGta*)thiz);
 						if (pObject != nullptr)
 						{
-							if (pObject->m_pEntity->mat->pos.X > 20000.0f || pObject->m_pEntity->mat->pos.Y > 20000.0f || pObject->m_pEntity->mat->pos.Z > 20000.0f ||
-								pObject->m_pEntity->mat->pos.X < -20000.0f || pObject->m_pEntity->mat->pos.Y < -20000.0f || pObject->m_pEntity->mat->pos.Z < -20000.0f)
+							if (pObject->m_pEntity->mat->pos.x > 20000.0f || pObject->m_pEntity->mat->pos.y > 20000.0f || pObject->m_pEntity->mat->pos.z > 20000.0f ||
+								pObject->m_pEntity->mat->pos.x < -20000.0f || pObject->m_pEntity->mat->pos.y < -20000.0f || pObject->m_pEntity->mat->pos.z < -20000.0f)
 							{
 								/*if(pChatWindow)
 								{
@@ -2139,7 +2139,7 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 											return 0;
 										}
 										// Log("Processing remote attached object. Player: %d", i);
-										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->mat->pos.X, pObject->m_pEntity->mat->pos.Y, pObject->m_pEntity->mat->pos.Z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->m_pMovingList);
+										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->mat->pos.x, pObject->m_pEntity->mat->pos.y, pObject->m_pEntity->mat->pos.z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->m_pMovingList);
 										// result = CPhysical__Add(thiz);
 									}
 								}
@@ -2329,13 +2329,13 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGt
 	BULLET_DATA bulletData;
 	memset(&bulletData, 0, sizeof(BULLET_DATA));
 
-	bulletData.vecOrigin.X = vecOrigin->X;
-	bulletData.vecOrigin.Y = vecOrigin->Y;
-	bulletData.vecOrigin.Z = vecOrigin->Z;
+	bulletData.vecOrigin.x = vecOrigin->x;
+	bulletData.vecOrigin.y = vecOrigin->y;
+	bulletData.vecOrigin.z = vecOrigin->z;
 
-	bulletData.vecPos.X = vecPos->X;
-	bulletData.vecPos.Y = vecPos->Y;
-	bulletData.vecPos.Z = vecPos->Z;
+	bulletData.vecPos.x = vecPos->x;
+	bulletData.vecPos.y = vecPos->y;
+	bulletData.vecPos.z = vecPos->z;
 
 	if(ppEntity)
 	{
@@ -2347,9 +2347,9 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGt
 			{
 				if(pNetGame->m_iLagCompensation)
 				{
-					bulletData.vecOffset.X = vecPos->X - pEntity->mat->pos.x;
-					bulletData.vecOffset.Y = vecPos->Y - pEntity->mat->pos.y;
-					bulletData.vecOffset.Z = vecPos->Z - pEntity->mat->pos.z;
+					bulletData.vecOffset.x = vecPos->x - pEntity->mat->pos.x;
+					bulletData.vecOffset.y = vecPos->y - pEntity->mat->pos.y;
+					bulletData.vecOffset.z = vecPos->z - pEntity->mat->pos.z;
 				}
 				else
 				{
@@ -2417,15 +2417,15 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 							{
 								if(pNetGame->m_iLagCompensation)
 								{
-									vecPosPlusOffset.X = pMatrix->pos.x + g_pCurrentBulletData->vecOffset.X;
-									vecPosPlusOffset.Y = pMatrix->pos.y + g_pCurrentBulletData->vecOffset.Y;
-									vecPosPlusOffset.Z = pMatrix->pos.z + g_pCurrentBulletData->vecOffset.Z;
+									vecPosPlusOffset.x = pMatrix->pos.x + g_pCurrentBulletData->vecOffset.x;
+									vecPosPlusOffset.y = pMatrix->pos.y + g_pCurrentBulletData->vecOffset.y;
+									vecPosPlusOffset.z = pMatrix->pos.z + g_pCurrentBulletData->vecOffset.z;
 								}
 								else ProjectMatrix(&vecPosPlusOffset, pMatrix, &g_pCurrentBulletData->vecOffset);
 
-								vecEnd->X = vecPosPlusOffset.X - vecOrigin->X + vecPosPlusOffset.X;
-								vecEnd->Y = vecPosPlusOffset.Y - vecOrigin->Y + vecPosPlusOffset.Y;
-								vecEnd->Z = vecPosPlusOffset.Z - vecOrigin->Z + vecPosPlusOffset.Z;
+								vecEnd->x = vecPosPlusOffset.x - vecOrigin->x + vecPosPlusOffset.x;
+								vecEnd->y = vecPosPlusOffset.y - vecOrigin->y + vecPosPlusOffset.y;
+								vecEnd->z = vecPosPlusOffset.z - vecOrigin->z + vecPosPlusOffset.z;
 							}
 						}
 					}
@@ -2459,9 +2459,9 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 						if(*ppEntity == pLocalPed || pLocalPed->bInVehicle && *(uintptr_t *)ppEntity == pLocalPed->pVehicle)
 						{
 							*ppEntity = nullptr;
-							vecPos->X = 0.0f;
-							vecPos->Y = 0.0f;
-							vecPos->Z = 0.0f;
+							vecPos->x = 0.0f;
+							vecPos->y = 0.0f;
+							vecPos->z = 0.0f;
 							return 0;
 						}
 					}
@@ -2484,9 +2484,9 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 signed int (*CBulletInfo_AddBullet)(CEntityGta* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2);
 signed int CBulletInfo_AddBullet_hook(CEntityGta* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2)
 {
-	vec2.X *= 50.0f;
-	vec2.Y *= 50.0f;
-	vec2.Z *= 50.0f;
+	vec2.x *= 50.0f;
+	vec2.y *= 50.0f;
+	vec2.z *= 50.0f;
 	CBulletInfo_AddBullet(pEntity, pWeapon, vec1, vec2);
 	// CBulletInfo::Update
 	(( void (*)())(g_libGTASA+0x55E170+1))();

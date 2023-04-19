@@ -2149,9 +2149,9 @@ void RwMatrixInvert(RwMatrix *matOut, RwMatrix *matIn)
 
 void ProjectMatrix(VECTOR* vecOut, RwMatrix* mat, VECTOR* vecPos)
 {
-	vecOut->X = mat->at.X * vecPos->Z + mat->up.X * vecPos->Y + mat->right.X * vecPos->X + mat->pos.x;
-	vecOut->Y = mat->at.Y * vecPos->Z + mat->up.Y * vecPos->Y + mat->right.Y * vecPos->X + mat->pos.y;
-	vecOut->Z = mat->at.Z * vecPos->Z + mat->up.Z * vecPos->Y + mat->right.Z * vecPos->X + mat->pos.z;
+	vecOut->x = mat->at.x * vecPos->z + mat->up.x * vecPos->y + mat->right.x * vecPos->x + mat->pos.x;
+	vecOut->y = mat->at.y * vecPos->z + mat->up.y * vecPos->y + mat->right.y * vecPos->x + mat->pos.y;
+	vecOut->z = mat->at.z * vecPos->z + mat->up.z * vecPos->y + mat->right.z * vecPos->x + mat->pos.z;
 }
 
 void RwMatrixRotate(RwMatrix* mat, int axis, float angle)
@@ -2168,17 +2168,17 @@ void RwMatrixRotate(RwMatrix* mat, int axis, float angle)
 
 void RwMatrixScale(RwMatrix* matrix, VECTOR* vecScale)
 {
-	matrix->right.X *= vecScale->X;
-	matrix->right.Y *= vecScale->X;
-	matrix->right.Z *= vecScale->X;
+	matrix->right.x *= vecScale->x;
+	matrix->right.y *= vecScale->x;
+	matrix->right.z *= vecScale->x;
 
-	matrix->up.X *= vecScale->Y;
-	matrix->up.Y *= vecScale->Y;
-	matrix->up.Z *= vecScale->Y;
+	matrix->up.x *= vecScale->y;
+	matrix->up.y *= vecScale->y;
+	matrix->up.z *= vecScale->y;
 
-	matrix->at.X *= vecScale->Z;
-	matrix->at.Y *= vecScale->Z;
-	matrix->at.Z *= vecScale->Z;
+	matrix->at.x *= vecScale->z;
+	matrix->at.y *= vecScale->z;
+	matrix->at.z *= vecScale->z;
 
 	matrix->flags &= 0xFFFDFFFC;
 }

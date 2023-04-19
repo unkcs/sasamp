@@ -133,7 +133,7 @@ void CObject::Process(float fElapsedTime)
 		{
 			float fx, fy, fz;
 			GetRotation(&fx, &fy, &fz);
-			distance = m_vecRotationTarget.Z - distance * m_vecSubRotationTarget.Z;
+			distance = m_vecRotationTarget.z - distance * m_vecSubRotationTarget.z;
 			vecSpeed.x = 0.0f;
 			vecSpeed.y = 0.0f;
 			vecSpeed.z = subAngle(remaining, distance) * 0.01f;
@@ -213,14 +213,14 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 
 		VECTOR vecRot;
 		RwMatrix matrix;
-		this->GetRotation(&vecRot.X, &vecRot.Y, &vecRot.Z);
-		m_vecRotationTarget.X = fixAngle(fRotX);
-		m_vecRotationTarget.Y = fixAngle(fRotY);
-		m_vecRotationTarget.Z = fixAngle(fRotZ);
+		this->GetRotation(&vecRot.x, &vecRot.y, &vecRot.z);
+		m_vecRotationTarget.x = fixAngle(fRotX);
+		m_vecRotationTarget.y = fixAngle(fRotY);
+		m_vecRotationTarget.z = fixAngle(fRotZ);
 
-		m_vecSubRotationTarget.X = subAngle(vecRot.X, fRotX);
-		m_vecSubRotationTarget.Y = subAngle(vecRot.Y, fRotY);
-		m_vecSubRotationTarget.Z = subAngle(vecRot.Z, fRotZ);
+		m_vecSubRotationTarget.x = subAngle(vecRot.x, fRotX);
+		m_vecSubRotationTarget.y = subAngle(vecRot.y, fRotY);
+		m_vecSubRotationTarget.z = subAngle(vecRot.z, fRotZ);
 
 		this->InstantRotate(fRotX, fRotY, fRotZ);
 		this->GetMatrix(&matrix);
@@ -229,7 +229,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 		m_matTarget.at = matrix.at;
 		m_matTarget.up = matrix.up;
 
-		this->InstantRotate(vecRot.X, vecRot.Y, vecRot.Z);
+		this->InstantRotate(vecRot.x, vecRot.y, vecRot.z);
 		this->GetMatrix(&matrix);
 
 		m_quatStart.SetFromMatrix(matrix);
@@ -252,13 +252,13 @@ void CObject::AttachToVehicle(uint16_t usVehID, CVector* pVecOffset, CVector* pV
 {
 	m_bAttachedType = 1;
 	m_usAttachedVehicle = usVehID;
-	m_vecAttachedOffset.X = pVecOffset->x;
-	m_vecAttachedOffset.Y = pVecOffset->y;
-	m_vecAttachedOffset.Z = pVecOffset->z;
+	m_vecAttachedOffset.x = pVecOffset->x;
+	m_vecAttachedOffset.y = pVecOffset->y;
+	m_vecAttachedOffset.z = pVecOffset->z;
 
-	m_vecAttachedRotation.X = pVecRot->x;
-	m_vecAttachedRotation.Y = pVecRot->y;
-	m_vecAttachedRotation.Z = pVecRot->z;
+	m_vecAttachedRotation.x = pVecRot->x;
+	m_vecAttachedRotation.y = pVecRot->y;
+	m_vecAttachedRotation.z = pVecRot->z;
 }
 
 void CObject::ProcessAttachToVehicle(CVehicle* pVehicle)
@@ -267,8 +267,8 @@ void CObject::ProcessAttachToVehicle(CVehicle* pVehicle)
 	{
 		if (!ScriptCommand(&is_object_attached, m_dwGTAId))
 		{
-			ScriptCommand(&attach_object_to_car, m_dwGTAId, pVehicle->m_dwGTAId, m_vecAttachedOffset.X,
-				m_vecAttachedOffset.Y, m_vecAttachedOffset.Z, m_vecAttachedRotation.X, m_vecAttachedRotation.Y, m_vecAttachedRotation.Z);
+			ScriptCommand(&attach_object_to_car, m_dwGTAId, pVehicle->m_dwGTAId, m_vecAttachedOffset.x,
+				m_vecAttachedOffset.y, m_vecAttachedOffset.z, m_vecAttachedRotation.x, m_vecAttachedRotation.y, m_vecAttachedRotation.z);
 		}
 	}
 }

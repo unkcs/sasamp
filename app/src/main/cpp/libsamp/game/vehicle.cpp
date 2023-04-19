@@ -1103,20 +1103,20 @@ void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, fl
 void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID)
 {
 	VECTOR vecOffset;
-	vecOffset.X = 0.0f - fValue;
-	vecOffset.Y = 0.0f;
-	vecOffset.Z = 0.0f;
+	vecOffset.x = 0.0f - fValue;
+	vecOffset.y = 0.0f;
+	vecOffset.z = 0.0f;
 	if (bLeft)
 	{
-		vecOffset.X *= -1.0f;
+		vecOffset.x *= -1.0f;
 	}
 
 	VECTOR vecOut;
 	RwMatrixMultiplyByVector(&vecOut, &(m_vInitialWheelMatrix[iID]), &vecOffset);
 
-	pFrame->modelling.pos.x = vecOut.X;
-	pFrame->modelling.pos.y = vecOut.Y;
-	pFrame->modelling.pos.z = vecOut.Z;
+	pFrame->modelling.pos.x = vecOut.x;
+	pFrame->modelling.pos.y = vecOut.y;
+	pFrame->modelling.pos.z = vecOut.z;
 }
 
 void CVehicle::SetComponentAngle(bool bUnk, int iID, float angle)

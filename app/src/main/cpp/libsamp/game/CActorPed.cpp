@@ -30,14 +30,14 @@ CActorPed::CActorPed(uint16_t usModel, VECTOR vecPosition, float fRotation, floa
 	}
 
 	uint32_t actorGTAId = 0;
-	ScriptCommand(&create_actor, 22, usModel, vecPosition.X, vecPosition.Y, vecPosition.Z, &actorGTAId);
+	ScriptCommand(&create_actor, 22, usModel, vecPosition.x, vecPosition.y, vecPosition.z, &actorGTAId);
 
 	m_dwGTAId = actorGTAId;
 	m_pPed = GamePool_Ped_GetAt(m_dwGTAId);
 	m_pEntity = (CPhysical*)m_pPed;
 
 	ForceTargetRotation(fRotation);
-	TeleportTo(vecPosition.X, vecPosition.Y, vecPosition.Z);
+	TeleportTo(vecPosition.x, vecPosition.y, vecPosition.z);
 
 	if (fHealth < 1.0f) 
 	{

@@ -55,11 +55,11 @@ void ScrSetPlayerPos(RPCParameters *rpcParams)
 	CLocalPlayer *pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
 
 	VECTOR vecPos;
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
 
-	if(pLocalPlayer) pLocalPlayer->GetPlayerPed()->TeleportTo(vecPos.X,vecPos.Y,vecPos.Z);
+	if(pLocalPlayer) pLocalPlayer->GetPlayerPed()->TeleportTo(vecPos.x,vecPos.y,vecPos.z);
 }
 
 void ScrSetCameraPos(RPCParameters *rpcParams)
@@ -70,10 +70,10 @@ void ScrSetCameraPos(RPCParameters *rpcParams)
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
 	VECTOR vecPos;
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
-	pGame->GetCamera()->SetPosition(vecPos.X, vecPos.Y, vecPos.Z, 0.0f, 0.0f, 0.0f);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
+	pGame->GetCamera()->SetPosition(vecPos.x, vecPos.y, vecPos.z, 0.0f, 0.0f, 0.0f);
 }
 
 void ScrSetCameraLookAt(RPCParameters *rpcParams)
@@ -84,10 +84,10 @@ void ScrSetCameraLookAt(RPCParameters *rpcParams)
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
 	VECTOR vecPos;
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
-	pGame->GetCamera()->LookAtPoint(vecPos.X,vecPos.Y,vecPos.Z,2);	
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
+	pGame->GetCamera()->LookAtPoint(vecPos.x,vecPos.y,vecPos.z,2);
 }
 
 void ScrSetPlayerFacingAngle(RPCParameters *rpcParams)
@@ -232,7 +232,7 @@ void ScrClearPlayerAnimations(RPCParameters *rpcParams)
 		{
 			pPlayerPed->ClearAnimations();
 			//pPlayerPed->GetMatrix(&mat);
-			//pPlayerPed->TeleportTo(mat.pos.X, mat.pos.Y, mat.pos.Z);
+			//pPlayerPed->TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 		}
 	}
 }
@@ -392,14 +392,14 @@ void ScrSetPlayerPosFindZ(RPCParameters *rpcParams)
 
 	VECTOR vecPos;
 
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
 
-	vecPos.Z = pGame->FindGroundZForCoord(vecPos.X, vecPos.Y, vecPos.Z);
-	vecPos.Z += 1.5f;
+	vecPos.z = pGame->FindGroundZForCoord(vecPos.x, vecPos.y, vecPos.z);
+	vecPos.z += 1.5f;
 
-	pLocalPlayer->GetPlayerPed()->TeleportTo(vecPos.X, vecPos.Y, vecPos.Z);
+	pLocalPlayer->GetPlayerPed()->TeleportTo(vecPos.x, vecPos.y, vecPos.z);
 }
 
 void ScrSetPlayerInterior(RPCParameters *rpcParams)
@@ -807,12 +807,12 @@ void ScrInterpolateCamera(RPCParameters *rpcParams)
 	uint8_t mode;
 
 	bsData.Read(bSetPos);
-	bsData.Read(vecFrom.X);
-	bsData.Read(vecFrom.Y);
-	bsData.Read(vecFrom.Z);
-	bsData.Read(vecDest.X);
-	bsData.Read(vecDest.Y);
-	bsData.Read(vecDest.Z);
+	bsData.Read(vecFrom.x);
+	bsData.Read(vecFrom.y);
+	bsData.Read(vecFrom.z);
+	bsData.Read(vecDest.x);
+	bsData.Read(vecDest.y);
+	bsData.Read(vecDest.z);
 	bsData.Read(time);
 	bsData.Read(mode);
 
@@ -1055,19 +1055,19 @@ void ScrSetObjectPos(RPCParameters *rpcParams)
 	VECTOR vecPos, vecRot;
 	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
 	bsData.Read(wObjectID);
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
 	bsData.Read(fRotation);
 
-	//LOGI("id: %d x: %.2f y: %.2f z: %.2f", wObjectID, vecPos.X, vecPos.Y, vecPos.Z);
-	//LOGI("VecRot x: %.2f y: %.2f z: %.2f", vecRot.X, vecRot.Y, vecRot.Z);
+	//LOGI("id: %d x: %.2f y: %.2f z: %.2f", wObjectID, vecPos.x, vecPos.y, vecPos.z);
+	//LOGI("VecRot x: %.2f y: %.2f z: %.2f", vecRot.x, vecRot.y, vecRot.z);
 
 	CObjectPool*	pObjectPool =	pNetGame->GetObjectPool();
 	CObject*		pObject		=	pObjectPool->GetAt(wObjectID);
 	if(pObject)
 	{
-		pObject->SetPos(vecPos.X, vecPos.Y, vecPos.Z);
+		pObject->SetPos(vecPos.x, vecPos.y, vecPos.z);
 	}
 }
 
@@ -1613,7 +1613,7 @@ void ScrSetObjectRotation(RPCParameters* rpcParams)
 
 	if (pNetGame->GetObjectPool()->GetAt(objectId))
 	{
-		pNetGame->GetObjectPool()->GetAt(objectId)->InstantRotate(vecRot.X, vecRot.Y, vecRot.Z);
+		pNetGame->GetObjectPool()->GetAt(objectId)->InstantRotate(vecRot.x, vecRot.y, vecRot.z);
 	}
 }
 

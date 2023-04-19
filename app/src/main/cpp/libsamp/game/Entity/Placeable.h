@@ -5,7 +5,6 @@
 #ifndef LIVERUSSIA_PLACEABLE_H
 #define LIVERUSSIA_PLACEABLE_H
 
-#include "../RwMatrix.h"
 #include "game/SimpleTransform.h"
 
 #pragma pack(push, 1)

@@ -20,26 +20,26 @@ void CFirstPersonCamera::ProcessCameraOnFoot(uintptr_t pCam, CPlayerPed* pPed)
 	VECTOR* pVec = (VECTOR*)(pCam + 372);
 
 	VECTOR vecOffset;
-	vecOffset.X = 0.35f;
-	vecOffset.Y = 0.1f;
-	vecOffset.Z = 0.1f;
+	vecOffset.x = 0.35f;
+	vecOffset.y = 0.1f;
+	vecOffset.z = 0.1f;
 
 
 	VECTOR vecOut;
 	RwMatrixMultiplyByVector(&vecOut, &(pPed->m_HeadBoneMatrix), &vecOffset);
 
-	if (vecOut.X != vecOut.X || vecOut.Y != vecOut.Y || vecOut.Z != vecOut.Z)
+	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
 		pPed->GetBonePosition(4, &vecOut);
 	}
-	if (vecOut.X != vecOut.X || vecOut.Y != vecOut.Y || vecOut.Z != vecOut.Z)
+	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
 		return;
 	}
 
-	pVec->X = vecOut.X;
-	pVec->Y = vecOut.Y;
-	pVec->Z = vecOut.Z;
+	pVec->x = vecOut.x;
+	pVec->y = vecOut.y;
+	pVec->z = vecOut.z;
 
 	((RwCamera*(*)(RwCamera*, float))(g_libGTASA + 0x001AD6F4 + 1))(*(RwCamera**)(g_libGTASA + 0x95B064), 0.2f);
 }
@@ -58,18 +58,18 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 	VECTOR* pVec = (VECTOR*)(pCam + 372);
 
 	VECTOR vecOffset;
-	vecOffset.X = 0.0f;
-	vecOffset.Y = 0.0f;
-	vecOffset.Z = 0.6f;
+	vecOffset.x = 0.0f;
+	vecOffset.y = 0.0f;
+	vecOffset.z = 0.6f;
 
 	uint16_t modelIndex = pPed->GetGtaVehicle()->nModelIndex;
 
 	if (modelIndex == 581 || modelIndex == 509 || modelIndex == 481 || modelIndex == 462 || modelIndex == 521 || modelIndex == 463 || modelIndex == 510 ||
 		modelIndex == 522 || modelIndex == 461 || modelIndex == 468 || modelIndex == 448 || modelIndex == 586)
 	{
-		vecOffset.X = 0.05f;
-		vecOffset.Y = 0.3f;
-		vecOffset.Z = 0.45f;
+		vecOffset.x = 0.05f;
+		vecOffset.y = 0.3f;
+		vecOffset.z = 0.45f;
 		((RwCamera * (*)(RwCamera*, float))(g_libGTASA + 0x001AD6F4 + 1))(*(RwCamera * *)(g_libGTASA + 0x95B064), 0.3f);
 	}
 	else
@@ -84,18 +84,18 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 
 	RwMatrixMultiplyByVector(&vecOut, &mat, &vecOffset);
 
-	if (vecOut.X != vecOut.X || vecOut.Y != vecOut.Y || vecOut.Z != vecOut.Z)
+	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
 		pPed->GetBonePosition(4, &vecOut);
 	}
-	if (vecOut.X != vecOut.X || vecOut.Y != vecOut.Y || vecOut.Z != vecOut.Z)
+	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
 		return;
 	}
 
-	pVec->X = vecOut.X;
-	pVec->Y = vecOut.Y;
-	pVec->Z = vecOut.Z;
+	pVec->x = vecOut.x;
+	pVec->y = vecOut.y;
+	pVec->z = vecOut.z;
 
 	//pPed->SetArmedWeapon(0);
 

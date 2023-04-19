@@ -167,12 +167,12 @@ void CNetGame::Process() {
         CPlayerPed *pPlayerDed = m_pPlayerPool->GetLocalPlayer()->GetPlayerPed();
         if (pPlayerDed) {
             ScriptCommand(&is_actor_near_point_3d, pPlayerDed->m_dwGTAId,
-                          pGame->m_vecCheckpointPos.X,
-                          pGame->m_vecCheckpointPos.Y,
-                          pGame->m_vecCheckpointPos.Z,
-                          pGame->m_vecCheckpointExtent.X,
-                          pGame->m_vecCheckpointExtent.Y,
-                          pGame->m_vecCheckpointExtent.Z,
+                          pGame->m_vecCheckpointPos.x,
+                          pGame->m_vecCheckpointPos.y,
+                          pGame->m_vecCheckpointPos.z,
+                          pGame->m_vecCheckpointExtent.x,
+                          pGame->m_vecCheckpointExtent.y,
+                          pGame->m_vecCheckpointExtent.z,
                           1);
         }
     }
@@ -1028,7 +1028,7 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(len);
             bs.Read(&str[0], len);
             str[len] = '\0';
-            //CChatWindow::AddDebugMessage("%d %f %f %f %f %d %d %d %s", id, pos.X, pos.Y, pos.Z, fDistance, vw, interior, len, str);
+            //CChatWindow::AddDebugMessage("%d %f %f %f %f %d %d %d %s", id, pos.x, pos.y, pos.z, fDistance, vw, interior, len, str);
             GetStreamPool()->AddStream(id, &pos, vw, interior, fDistance, (const char *) &str[0]);
             break;
         }

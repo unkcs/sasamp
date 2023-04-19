@@ -21,21 +21,21 @@ class CWeaponsOutFit
 			iBone = -1;
 			iBoneSecondary = -1;
 
-			vOffset.X = 0.0f;
-			vOffset.Y = 0.0f;
-			vOffset.Z = 0.0f;
+			vOffset.x = 0.0f;
+			vOffset.y = 0.0f;
+			vOffset.z = 0.0f;
 
-			vRotation.X = 0.0f;
-			vRotation.Y = 0.0f;
-			vRotation.Z = 0.0f;
+			vRotation.x = 0.0f;
+			vRotation.y = 0.0f;
+			vRotation.z = 0.0f;
 
-			vOffsetSecondary.X = 0.0f;
-			vOffsetSecondary.Y = 0.0f;
-			vOffsetSecondary.Z = 0.0f;
+			vOffsetSecondary.x = 0.0f;
+			vOffsetSecondary.y = 0.0f;
+			vOffsetSecondary.z = 0.0f;
 
-			vRotationSecondary.X = 0.0f;
-			vRotationSecondary.Y = 0.0f;
-			vRotationSecondary.Z = 0.0f;
+			vRotationSecondary.x = 0.0f;
+			vRotationSecondary.y = 0.0f;
+			vRotationSecondary.z = 0.0f;
 		}
 	};
 

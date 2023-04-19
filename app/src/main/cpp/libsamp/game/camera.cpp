@@ -37,17 +37,17 @@ void CCamera::LookAtPoint(float fX, float fY, float fZ, int iType)
 
 void CCamera::GetMatrix(RwMatrix* Matrix)
 {
-	Matrix->right.X = m_matPos->right.X;
-	Matrix->right.Y = m_matPos->right.Y;
-	Matrix->right.Z = m_matPos->right.Z;
+	Matrix->right.x = m_matPos->right.x;
+	Matrix->right.y = m_matPos->right.y;
+	Matrix->right.z = m_matPos->right.z;
 
-	Matrix->up.X = m_matPos->up.X;
-	Matrix->up.Y = m_matPos->up.Y;
-	Matrix->up.Z = m_matPos->up.Z;
+	Matrix->up.x = m_matPos->up.x;
+	Matrix->up.y = m_matPos->up.y;
+	Matrix->up.z = m_matPos->up.z;
 
-	Matrix->at.X = m_matPos->at.X;
-	Matrix->at.Y = m_matPos->at.Y;
-	Matrix->at.Z = m_matPos->at.Z;
+	Matrix->at.x = m_matPos->at.x;
+	Matrix->at.y = m_matPos->at.y;
+	Matrix->at.z = m_matPos->at.z;
 
 	Matrix->pos = m_matPos->pos;
 }
@@ -57,12 +57,12 @@ void CCamera::InterpolateCameraPos(VECTOR *posFrom, VECTOR *posTo, int time, uin
 {
 	ScriptCommand(&restore_camera_to_user);
 	ScriptCommand(&lock_camera_position1, 1);
-	ScriptCommand(&set_camera_pos_time_smooth, posFrom->X, posFrom->Y, posFrom->Z, posTo->X, posTo->Y, posTo->Z, time, mode);
+	ScriptCommand(&set_camera_pos_time_smooth, posFrom->x, posFrom->y, posFrom->z, posTo->x, posTo->y, posTo->z, time, mode);
 }
 
 // 0.3.7
 void CCamera::InterpolateCameraLookAt(VECTOR *posFrom, VECTOR *posTo, int time, uint8_t mode)
 {
 	ScriptCommand(&lock_camera_position, 1);
-	ScriptCommand(&point_camera_transverse, posFrom->X, posFrom->Y, posFrom->Z, posTo->X, posTo->Y, posTo->Z, time, mode);
+	ScriptCommand(&point_camera_transverse, posFrom->x, posFrom->y, posFrom->z, posTo->x, posTo->y, posTo->z, time, mode);
 }

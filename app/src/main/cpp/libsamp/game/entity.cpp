@@ -127,17 +127,17 @@ void CEntity::GetMatrix(RwMatrix* Matrix)
 {
 	if (!m_pEntity || !m_pEntity->mat) return;
 
-	Matrix->right.X = m_pEntity->mat->right.X;
-	Matrix->right.Y = m_pEntity->mat->right.Y;
-	Matrix->right.Z = m_pEntity->mat->right.Z;
+	Matrix->right.x = m_pEntity->mat->right.x;
+	Matrix->right.y = m_pEntity->mat->right.y;
+	Matrix->right.z = m_pEntity->mat->right.z;
 
-	Matrix->up.X = m_pEntity->mat->up.X;
-	Matrix->up.Y = m_pEntity->mat->up.Y;
-	Matrix->up.Z = m_pEntity->mat->up.Z;
+	Matrix->up.x = m_pEntity->mat->up.x;
+	Matrix->up.y = m_pEntity->mat->up.y;
+	Matrix->up.z = m_pEntity->mat->up.z;
 
-	Matrix->at.X = m_pEntity->mat->at.X;
-	Matrix->at.Y = m_pEntity->mat->at.Y;
-	Matrix->at.Z = m_pEntity->mat->at.Z;
+	Matrix->at.x = m_pEntity->mat->at.x;
+	Matrix->at.y = m_pEntity->mat->at.y;
+	Matrix->at.z = m_pEntity->mat->at.z;
 
 	Matrix->pos = m_pEntity->mat->pos;
 }
@@ -148,17 +148,17 @@ void CEntity::SetMatrix(RwMatrix Matrix)
 	if (!m_pEntity) return;
 	if (!m_pEntity->mat) return;
 
-	m_pEntity->mat->right.X = Matrix.right.X;
-	m_pEntity->mat->right.Y = Matrix.right.Y;
-	m_pEntity->mat->right.Z = Matrix.right.Z;
+	m_pEntity->mat->right.x = Matrix.right.x;
+	m_pEntity->mat->right.y = Matrix.right.y;
+	m_pEntity->mat->right.z = Matrix.right.z;
 
-	m_pEntity->mat->up.X = Matrix.up.X;
-	m_pEntity->mat->up.Y = Matrix.up.Y;
-	m_pEntity->mat->up.Z = Matrix.up.Z;
+	m_pEntity->mat->up.x = Matrix.up.x;
+	m_pEntity->mat->up.y = Matrix.up.y;
+	m_pEntity->mat->up.z = Matrix.up.z;
 
-	m_pEntity->mat->at.X = Matrix.at.X;
-	m_pEntity->mat->at.Y = Matrix.at.Y;
-	m_pEntity->mat->at.Z = Matrix.at.Z;
+	m_pEntity->mat->at.x = Matrix.at.x;
+	m_pEntity->mat->at.y = Matrix.at.y;
+	m_pEntity->mat->at.z = Matrix.at.z;
 
 	m_pEntity->mat->pos = Matrix.pos;
 }

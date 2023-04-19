@@ -62,10 +62,10 @@ void CRemotePlayer::ProcessSpecialActions(BYTE byteSpecialAction)
 		{
 			VECTOR LookAt;
 			CAMERA_AIM* Aim = GameGetRemotePlayerAim(m_pPlayerPed->m_bytePlayerNumber);
-			LookAt.X = Aim->pos1x + (Aim->f1x * 20.0f);
-			LookAt.Y = Aim->pos1y + (Aim->f1y * 20.0f);
-			LookAt.Z = Aim->pos1z + (Aim->f1z * 20.0f);
-			ScriptCommand(&TASK_LOOK_AT_COORD, m_pPlayerPed->m_dwGTAId, LookAt.X, LookAt.Y, LookAt.Z, 3000);
+			LookAt.x = Aim->pos1x + (Aim->f1x * 20.0f);
+			LookAt.y = Aim->pos1y + (Aim->f1y * 20.0f);
+			LookAt.z = Aim->pos1z + (Aim->f1z * 20.0f);
+			ScriptCommand(&TASK_LOOK_AT_COORD, m_pPlayerPed->m_dwGTAId, LookAt.x, LookAt.y, LookAt.z, 3000);
 			m_dwLastHeadUpdate = GetTickCount();
 		}
 	}
@@ -122,9 +122,9 @@ void CRemotePlayer::Process()
 			{
 				VECTOR LookAt;
 				CAMERA_AIM* Aim = GameGetRemotePlayerAim(m_pPlayerPed->m_bytePlayerNumber);
-				LookAt.X = Aim->pos1x + (Aim->f1x * 20.0f);
-				LookAt.Y = Aim->pos1y + (Aim->f1y * 20.0f);
-				LookAt.Z = Aim->pos1z + (Aim->f1z * 20.0f);
+				LookAt.x = Aim->pos1x + (Aim->f1x * 20.0f);
+				LookAt.y = Aim->pos1y + (Aim->f1y * 20.0f);
+				LookAt.z = Aim->pos1z + (Aim->f1z * 20.0f);
 				m_pPlayerPed->ApplyCommandTask("FollowPedSA", 0, 2000, -1, &LookAt, 0, 0.1f, 500, 3, 0);
 				m_dwLastHeadUpdate = GetTickCount();
 			}
@@ -140,7 +140,7 @@ void CRemotePlayer::Process()
 
 				m_ofSync.byteCurrentWeapon = m_byteWeaponShotID;
 				m_pPlayerPed->SetArmedWeapon((int)m_byteWeaponShotID);
-				//ScriptCommand(&task_shoot_at_coord, m_pPlayerPed->m_dwGTAId, localMat.pos.X, localMat.pos.Y, localMat.pos.Z, 10);
+				//ScriptCommand(&task_shoot_at_coord, m_pPlayerPed->m_dwGTAId, localMat.pos.x, localMat.pos.y, localMat.pos.z, 10);
 				m_pPlayerPed->SetCurrentAim(pPool->GetLocalPlayer()->GetPlayerPed()->GetCurrentAim());
 				m_pPlayerPed->SetKeys((uint16_t)4, m_ofSync.lrAnalog, m_ofSync.udAnalog);
 
@@ -239,7 +239,7 @@ void CRemotePlayer::SlerpRotation()
 		quatResult.GetMatrix(&mat);
 		m_pPlayerPed->SetMatrix(mat);
 
-		double fZ = atan2(-mat.up.X, mat.up.Y) * 57.295776; /* rad to deg */
+		double fZ = atan2(-mat.up.x, mat.up.y) * 57.295776; /* rad to deg */
 		if(fZ > 360.0f) fZ -= 360.0f;
 		if(fZ < 0.0f) fZ += 360.0f;
 		m_pPlayerPed->SetRotation((float)fZ);
@@ -291,11 +291,11 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 
 	if(m_pCurrentVehicle->IsAdded())
 	{
-		m_vecPosOffset.X = FloatOffset(m_vecInCarTargetPos.x, matEnt.pos.x);
-		m_vecPosOffset.Y = FloatOffset(m_vecInCarTargetPos.y, matEnt.pos.y);
-		m_vecPosOffset.Z = FloatOffset(m_vecInCarTargetPos.z, matEnt.pos.z);
+		m_vecPosOffset.x = FloatOffset(m_vecInCarTargetPos.x, matEnt.pos.x);
+		m_vecPosOffset.y = FloatOffset(m_vecInCarTargetPos.y, matEnt.pos.y);
+		m_vecPosOffset.z = FloatOffset(m_vecInCarTargetPos.z, matEnt.pos.z);
 
-		if(m_vecPosOffset.X > 0.05f || m_vecPosOffset.Y > 0.05f || m_vecPosOffset.Z > 0.05f)
+		if(m_vecPosOffset.x > 0.05f || m_vecPosOffset.y > 0.05f || m_vecPosOffset.z > 0.05f)
 		{
 			delta = 0.5f;
 			if( m_pCurrentVehicle->GetVehicleSubtype() == VEHICLE_SUBTYPE_BOAT ||
@@ -305,7 +305,7 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 				delta = 2.0f;
 			}
 
-			if(m_vecPosOffset.X > 8.0f || m_vecPosOffset.Y > 8.0f || m_vecPosOffset.Z > delta)
+			if(m_vecPosOffset.x > 8.0f || m_vecPosOffset.y > 8.0f || m_vecPosOffset.z > delta)
 			{
 				matEnt.pos = m_vecInCarTargetPos;
 
@@ -315,11 +315,11 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 			else
 			{
 				m_pCurrentVehicle->GetMoveSpeedVector(&vec);
-				if(m_vecPosOffset.X > 0.05f)
+				if(m_vecPosOffset.x > 0.05f)
 					vec.x += (m_vecInCarTargetPos.x - matEnt.pos.x) * 0.06f;
-				if(m_vecPosOffset.Y > 0.05f)
+				if(m_vecPosOffset.y > 0.05f)
 					vec.y += (m_vecInCarTargetPos.y - matEnt.pos.y) * 0.06f;
-				if(m_vecPosOffset.Z > 0.05f)
+				if(m_vecPosOffset.z > 0.05f)
 					vec.z += (m_vecInCarTargetPos.z - matEnt.pos.z) * 0.06f;
 
 				if( FloatOffset(vec.x, 0.0f) > 0.01f ||
@@ -386,7 +386,7 @@ bool CRemotePlayer::Spawn(uint8_t byteTeam, unsigned int iSkin, VECTOR *vecPos, 
 		m_pPlayerPed = nullptr;
 	}
 
-	CPlayerPed *pPlayer = pGame->NewPlayer(iSkin, vecPos->X, vecPos->Y, vecPos->Z, fRotation);
+	CPlayerPed *pPlayer = pGame->NewPlayer(iSkin, vecPos->x, vecPos->y, vecPos->z, fRotation);
 
 	if(pPlayer)
 	{
@@ -488,13 +488,13 @@ void CRemotePlayer::UpdateOnFootTargetPosition()
 		return;
 	}
 
-	m_vecPosOffset.X = FloatOffset(m_vecOnFootTargetPos.x, mat.pos.x);
-	m_vecPosOffset.Y = FloatOffset(m_vecOnFootTargetPos.y, mat.pos.y);
-	m_vecPosOffset.Z = FloatOffset(m_vecOnFootTargetPos.z, mat.pos.z);
+	m_vecPosOffset.x = FloatOffset(m_vecOnFootTargetPos.x, mat.pos.x);
+	m_vecPosOffset.y = FloatOffset(m_vecOnFootTargetPos.y, mat.pos.y);
+	m_vecPosOffset.z = FloatOffset(m_vecOnFootTargetPos.z, mat.pos.z);
 
-	if(m_vecPosOffset.X > 0.00001f || m_vecPosOffset.Y > 0.00001f || m_vecPosOffset.Z > 0.00001f)
+	if(m_vecPosOffset.x > 0.00001f || m_vecPosOffset.y > 0.00001f || m_vecPosOffset.z > 0.00001f)
 	{
-		if(m_vecPosOffset.X > 2.0f || m_vecPosOffset.Y > 2.0f || m_vecPosOffset.Z > 1.0f)
+		if(m_vecPosOffset.x > 2.0f || m_vecPosOffset.y > 2.0f || m_vecPosOffset.z > 1.0f)
 		{
 			mat.pos = m_vecOnFootTargetPos;
 			m_pPlayerPed->SetMatrix(mat);
@@ -502,11 +502,11 @@ void CRemotePlayer::UpdateOnFootTargetPosition()
 		}
 
 		m_pPlayerPed->GetMoveSpeedVector(&vec);
-		if(m_vecPosOffset.X > 0.00001f)
+		if(m_vecPosOffset.x > 0.00001f)
 			vec.x += (m_vecOnFootTargetPos.x - mat.pos.x) * 0.1f;
-		if(m_vecPosOffset.Y > 0.00001f)
+		if(m_vecPosOffset.y > 0.00001f)
 			vec.y += (m_vecOnFootTargetPos.y - mat.pos.y) * 0.1f;
-		if(m_vecPosOffset.Z > 0.00001f)
+		if(m_vecPosOffset.z > 0.00001f)
 			vec.z += (m_vecOnFootTargetPos.z - mat.pos.z) * 0.1f;
 
 		m_pPlayerPed->SetMoveSpeedVector(vec);
@@ -566,17 +566,17 @@ void CRemotePlayer::StoreBulletSyncData(BULLET_SYNC* pBulletSync)
 	BULLET_DATA btData;
 	memset(&btData, 0, sizeof(BULLET_DATA));
 
-	btData.vecOrigin.X = pBulletSync->vecOrigin.X;
-	btData.vecOrigin.Y = pBulletSync->vecOrigin.Y;
-	btData.vecOrigin.Z = pBulletSync->vecOrigin.Z;
+	btData.vecOrigin.x = pBulletSync->vecOrigin.x;
+	btData.vecOrigin.y = pBulletSync->vecOrigin.y;
+	btData.vecOrigin.z = pBulletSync->vecOrigin.z;
 
-	btData.vecPos.X = pBulletSync->vecPos.X;
-	btData.vecPos.Y = pBulletSync->vecPos.Y;
-	btData.vecPos.Z = pBulletSync->vecPos.Z;
+	btData.vecPos.x = pBulletSync->vecPos.x;
+	btData.vecPos.y = pBulletSync->vecPos.y;
+	btData.vecPos.z = pBulletSync->vecPos.z;
 
-	btData.vecOffset.X = pBulletSync->vecOffset.X;
-	btData.vecOffset.Y = pBulletSync->vecOffset.Y;
-	btData.vecOffset.Z = pBulletSync->vecOffset.Z;
+	btData.vecOffset.x = pBulletSync->vecOffset.x;
+	btData.vecOffset.y = pBulletSync->vecOffset.y;
+	btData.vecOffset.z = pBulletSync->vecOffset.z;
 
 	if(pBulletSync->byteHitType != 0)
 	{
@@ -662,12 +662,12 @@ void calculateAimVector(VECTOR* vec1, VECTOR* vec2)
 	float f2;
 	float f3;
 
-	f1 = atan2(vec1->X, vec1->Y) - 1.570796370506287;
+	f1 = atan2(vec1->x, vec1->y) - 1.570796370506287;
 	f2 = sin(f1);
 	f3 = cos(f1);
-	vec2->X = vec1->Y * 0.0 - f3 * vec1->Z;
-	vec2->Y = f2 * vec1->Z - vec1->X * 0.0;
-	vec2->Z = f3 * vec1->X - f2 * vec1->Y;
+	vec2->x = vec1->y * 0.0 - f3 * vec1->z;
+	vec2->y = f2 * vec1->z - vec1->x * 0.0;
+	vec2->z = f3 * vec1->x - f2 * vec1->y;
 }
 
 void CRemotePlayer::UpdateAimFromSyncData(AIM_SYNC_DATA * pAimSync)
@@ -677,31 +677,31 @@ void CRemotePlayer::UpdateAimFromSyncData(AIM_SYNC_DATA * pAimSync)
 
 	CAMERA_AIM Aim;
 
-	Aim.f1x = pAimSync->vecAimf.X;
-	Aim.f1y = pAimSync->vecAimf.Y;
-	Aim.f1z = pAimSync->vecAimf.Z;
-	Aim.pos1x = pAimSync->vecAimPos.X;
-	Aim.pos1y = pAimSync->vecAimPos.Y;
-	Aim.pos1z = pAimSync->vecAimPos.Z;
-	Aim.pos2x = pAimSync->vecAimPos.X;
-	Aim.pos2y = pAimSync->vecAimPos.Y;
-	Aim.pos2z = pAimSync->vecAimPos.Z;
+	Aim.f1x = pAimSync->vecAimf.x;
+	Aim.f1y = pAimSync->vecAimf.y;
+	Aim.f1z = pAimSync->vecAimf.z;
+	Aim.pos1x = pAimSync->vecAimPos.x;
+	Aim.pos1y = pAimSync->vecAimPos.y;
+	Aim.pos1z = pAimSync->vecAimPos.z;
+	Aim.pos2x = pAimSync->vecAimPos.x;
+	Aim.pos2y = pAimSync->vecAimPos.y;
+	Aim.pos2z = pAimSync->vecAimPos.z;
 
 	VECTOR vec1;
-	vec1.X = Aim.f1x;
-	vec1.Y = Aim.f1y;
-	vec1.Z = Aim.f1z;
+	vec1.x = Aim.f1x;
+	vec1.y = Aim.f1y;
+	vec1.z = Aim.f1z;
 
 	VECTOR vec2;
-	vec2.X = 0.0f;
-	vec2.Y = 0.0f;
-	vec2.Z = 0.0f;
+	vec2.x = 0.0f;
+	vec2.y = 0.0f;
+	vec2.z = 0.0f;
 
 	calculateAimVector(&vec1, &vec2);
 
-	Aim.f2x = vec2.X;
-	Aim.f2y = vec2.Y;
-	Aim.f2z = vec2.Z;
+	Aim.f2x = vec2.x;
+	Aim.f2y = vec2.y;
+	Aim.f2z = vec2.z;
 
 	m_pPlayerPed->SetCurrentAim(&Aim);
 	m_pPlayerPed->SetAimZ(pAimSync->fAimZ);

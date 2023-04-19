@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "game/Core/Vector.h"
-#include "RwMatrix.h"
 #include "game/RW/rwlpcore.h"
 
 #include "tHandlingData.h"

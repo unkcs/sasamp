@@ -7,7 +7,7 @@
 #pragma pack(push, 1)
 typedef struct _VECTOR
 {
-    float X,Y,Z;
+    float x, y, z;
 } VECTOR, *PVECTOR;
 #pragma pack(pop)
 

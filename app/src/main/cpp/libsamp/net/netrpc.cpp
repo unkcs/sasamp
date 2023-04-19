@@ -271,9 +271,9 @@ void WorldPlayerAdd(RPCParameters *rpcParams)
 	bsData.Read(playerId);
 	bsData.Read(byteTeam);
 	bsData.Read(iSkin);
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
 	bsData.Read(fRotation);
 	bsData.Read(dwColor);
 	bsData.Read(byteFightingStyle);
@@ -321,12 +321,12 @@ void SetCheckpoint(RPCParameters *rpcParams)
 
 	VECTOR pos, Extent;
 
-	pos.X = fX;
-	pos.Y = fY;
-	pos.Z = fZ;
-	Extent.X = fSize;
-	Extent.Y = fSize;
-	Extent.Z = fSize;
+	pos.x = fX;
+	pos.y = fY;
+	pos.z = fZ;
+	Extent.x = fSize;
+	Extent.y = fSize;
+	Extent.z = fSize;
 
 	pGame->SetCheckpointInformation(&pos, &Extent);
 	pGame->CreateCheckPoint();
@@ -351,16 +351,16 @@ void SetRaceCheckpoint(RPCParameters *rpcParams)
 	bsData.Read(fX);
 	bsData.Read(fY);
 	bsData.Read(fZ);
-	pos.X = fX;
-	pos.Y = fY;
-	pos.Z = fZ;
+	pos.x = fX;
+	pos.y = fY;
+	pos.z = fZ;
 
 	bsData.Read(fX);
 	bsData.Read(fY);
 	bsData.Read(fZ);
-	next.X = fX;
-	next.Y = fY;
-	next.Z = fZ;
+	next.x = fX;
+	next.y = fY;
+	next.z = fZ;
 
 	bsData.Read(fX);
 
@@ -602,9 +602,9 @@ void Create3DTextLabel(RPCParameters *rpcParams)
 
 	bsData.Read(LabelID);
 	bsData.Read(color);
-	bsData.Read(pos.X);
-	bsData.Read(pos.Y);
-	bsData.Read(pos.Z);
+	bsData.Read(pos.x);
+	bsData.Read(pos.y);
+	bsData.Read(pos.z);
 	bsData.Read(dist);
 	bsData.Read(testLOS);
 	bsData.Read(PlayerID);
@@ -617,7 +617,7 @@ void Create3DTextLabel(RPCParameters *rpcParams)
 	if(pLabelsPool)
 	{
 		pLabelsPool->CreateTextLabel((int)LabelID, szBuff, color, 
-			pos.X, pos.Y, pos.Z, dist, testLOS, PlayerID, VehicleID);
+			pos.x, pos.y, pos.z, dist, testLOS, PlayerID, VehicleID);
 	}
 }
 
@@ -743,34 +743,6 @@ void ScmEvent(RPCParameters* rpcParams)
 	ProcessIncommingEvent(bytePlayerID, iEvent, dwParam1, dwParam2, dwParam3);
 }
 
-void RemoveBuildingByPtr(uintptr_t pBuild)
-{
-	VECTOR* vecObjectPos = (VECTOR*)(pBuild + 4);
-	vecObjectPos->Z -= 2000.0f;
-	*(uint8_t*)(pBuild + 47) = 1;
-	if (*(uintptr_t*)(pBuild + 20))
-	{
-		RwMatrix* matt = (RwMatrix*) * (uintptr_t*)(pBuild + 20);
-		matt->pos.z -= 2000.0f;
-		//*(uint32_t*)((uintptr_t)matt + 12) &= 0xFFFDFFFC;
-	}
-}
-
-void* GetObjectPool()
-{
-	return (void*) * (uintptr_t*)(g_libGTASA + 0x008B93C8);
-}
-
-void* GetBuildingPool()
-{
-	return (void*) * (uintptr_t*)(g_libGTASA + 0x008B93CC);
-}
-
-void* GetDummyPool()
-{
-	return (void*) * (uintptr_t*)(g_libGTASA + 0x008B93C4);
-}
-
 void RemoveBuilding(RPCParameters* rpcParams)
 {
 	//
@@ -869,9 +841,9 @@ void WorldActorAdd(RPCParameters* rpcParams)
 
 	bsData.Read(actorId);
 	bsData.Read(iSkinId);
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
+	bsData.Read(vecPos.x);
+	bsData.Read(vecPos.y);
+	bsData.Read(vecPos.z);
 	bsData.Read(fRotation);
 	bsData.Read(fHealth);
 	bsData.Read(bInvulnerable);
@@ -941,13 +913,13 @@ void SetActorPos(RPCParameters* rpcParams)
 	bsData.Read((char*)& pos, sizeof(VECTOR));
 	CActorPool* pActorPool = pNetGame->GetActorPool();
 #ifdef _CDEBUG
-	CChatWindow::AddDebugMessage("Set actor pos %d %f %f %f", actorId, pos.X, pos.Y, pos.Z);
+	CChatWindow::AddDebugMessage("Set actor pos %d %f %f %f", actorId, pos.x, pos.y, pos.z);
 #endif
 	if (pActorPool)
 	{
 		if (pActorPool->GetAt(actorId))
 		{
-			pActorPool->GetAt(actorId)->TeleportTo(pos.X, pos.Y, pos.Z);
+			pActorPool->GetAt(actorId)->TeleportTo(pos.x, pos.y, pos.z);
 		}
 	}
 }

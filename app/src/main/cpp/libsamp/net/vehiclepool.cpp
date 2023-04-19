@@ -146,9 +146,9 @@ bool CVehiclePool::New(NEW_VEHICLE *pNewVehicle)
 	}
 
 	m_pVehicles[pNewVehicle->VehicleID] = new	CVehicle(pNewVehicle->iVehicleType,
-														  pNewVehicle->vecPos.X,
-														  pNewVehicle->vecPos.Y,
-														  pNewVehicle->vecPos.Z,
+														  pNewVehicle->vecPos.x,
+														  pNewVehicle->vecPos.y,
+														  pNewVehicle->vecPos.z,
 														  pNewVehicle->fRotation,
 														  pNewVehicle->byteAddSiren);
 

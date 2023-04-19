@@ -7,7 +7,6 @@
 
 
 #include "CVector.h"
-#include "RwMatrix.h"
 
 class CSimpleTransform {
 public:

@@ -234,12 +234,12 @@ void CGame::MakeRaceCheckpoint()
 	}
 
 	ScriptCommand(&create_racing_checkpoint, (int)m_byteRaceType,
-				m_vecRaceCheckpointPos.X, m_vecRaceCheckpointPos.Y, m_vecRaceCheckpointPos.Z,
-				m_vecRaceCheckpointNext.X, m_vecRaceCheckpointNext.Y, m_vecRaceCheckpointNext.Z,
+				m_vecRaceCheckpointPos.x, m_vecRaceCheckpointPos.y, m_vecRaceCheckpointPos.z,
+				m_vecRaceCheckpointNext.x, m_vecRaceCheckpointNext.y, m_vecRaceCheckpointNext.z,
 				m_fRaceCheckpointSize, &m_dwRaceCheckpointHandle);
 
-	m_dwRaceCheckpointMarker = CreateRadarMarkerIcon(0, m_vecRaceCheckpointPos.X,
-													 m_vecRaceCheckpointPos.Y, m_vecRaceCheckpointPos.Z, 1005, 0);
+	m_dwRaceCheckpointMarker = CreateRadarMarkerIcon(0, m_vecRaceCheckpointPos.x,
+													 m_vecRaceCheckpointPos.y, m_vecRaceCheckpointPos.z, 1005, 0);
 
 	m_bRaceCheckpointsEnabled = true;
 }
@@ -277,9 +277,9 @@ void CGame::CreateCheckPoint()
 
 	m_dwCheckpointMarker =
 			CreateRadarMarkerIcon(0,
-								  m_vecCheckpointPos.X,
-								  m_vecCheckpointPos.Y,
-								  m_vecCheckpointPos.Z, 1005, 0);
+								  m_vecCheckpointPos.x,
+								  m_vecCheckpointPos.y,
+								  m_vecCheckpointPos.z, 1005, 0);
 
 	m_bCheckpointsEnabled = true;
 }

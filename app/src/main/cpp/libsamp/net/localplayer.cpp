@@ -277,11 +277,11 @@ bool CLocalPlayer::Process()
 			if ((dwThisTick - m_dwLastHeadUpdate) > 1000 && g_uiHeadMoveEnabled) {
 				VECTOR LookAt;
 				CAMERA_AIM *Aim = GameGetInternalAim();
-				LookAt.X = Aim->pos1x + (Aim->f1x * 20.0f);
-				LookAt.Y = Aim->pos1y + (Aim->f1y * 20.0f);
-				LookAt.Z = Aim->pos1z + (Aim->f1z * 20.0f);
+				LookAt.x = Aim->pos1x + (Aim->f1x * 20.0f);
+				LookAt.y = Aim->pos1y + (Aim->f1y * 20.0f);
+				LookAt.z = Aim->pos1z + (Aim->f1z * 20.0f);
 
-				//	ScriptCommand(&TASK_LOOK_AT_COORD, m_pPlayerPed->m_dwGTAId, LookAt.X, LookAt.Y, LookAt.Z, 3000);
+				//	ScriptCommand(&TASK_LOOK_AT_COORD, m_pPlayerPed->m_dwGTAId, LookAt.x, LookAt.y, LookAt.z, 3000);
 				pGame->FindPlayerPed()->ApplyCommandTask("FollowPedSA", 0, 2000, -1, &LookAt, 0,
 														 0.1f, 500, 3, 0);
 				m_dwLastHeadUpdate = dwThisTick;
@@ -770,11 +770,11 @@ void CLocalPlayer::SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, V
 	}
 	blSync.byteWeaponID = byteShotWeapon;
 
-	blSync.vecOrigin.X = vecHitPos.X;
-	blSync.vecOrigin.Y = vecHitPos.Y;
-	blSync.vecOrigin.Z = vecHitPos.Z;
+	blSync.vecOrigin.x = vecHitPos.x;
+	blSync.vecOrigin.y = vecHitPos.y;
+	blSync.vecOrigin.z = vecHitPos.z;
 
-	blSync.vecOffset.X = blSync.vecOffset.Y = blSync.vecOffset.Z = 0.0f;
+	blSync.vecOffset.x = blSync.vecOffset.y = blSync.vecOffset.z = 0.0f;
 
 	RakNet::BitStream bsBulletSync;
 	bsBulletSync.Write((uint8_t)ID_BULLET_SYNC);
@@ -934,12 +934,12 @@ void CLocalPlayer::SendAimSyncData()
     CAMERA_AIM* caAim = m_pPlayerPed->GetCurrentAim();
 
     aimSync.byteCamMode = m_pPlayerPed->GetCameraMode();
-    aimSync.vecAimf.X = caAim->f1x;
-    aimSync.vecAimf.Y = caAim->f1y;
-    aimSync.vecAimf.Z = caAim->f1z;
-    aimSync.vecAimPos.X = caAim->pos1x;
-    aimSync.vecAimPos.Y = caAim->pos1y;
-    aimSync.vecAimPos.Z = caAim->pos1z;
+    aimSync.vecAimf.x = caAim->f1x;
+    aimSync.vecAimf.y = caAim->f1y;
+    aimSync.vecAimf.z = caAim->f1z;
+    aimSync.vecAimPos.x = caAim->pos1x;
+    aimSync.vecAimPos.y = caAim->pos1y;
+    aimSync.vecAimPos.z = caAim->pos1z;
     aimSync.fAimZ = m_pPlayerPed->GetAimZ();
     aimSync.aspect_ratio = /*GameGetAspectRatio() * */ 255.0f;
     aimSync.byteCamExtZoom = (uint8_t)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);

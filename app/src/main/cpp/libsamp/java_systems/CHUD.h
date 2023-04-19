@@ -44,9 +44,9 @@ public:
 
     static bool bIsShowMafiaWar;
 
-    static CVector2DFloat radarBgPos1;
-    static CVector2DFloat radarBgPos2;
-    static CVector2DFloat radarPos;
+    static CVector2D radarBgPos1;
+    static CVector2D radarBgPos2;
+    static CVector2D radarPos;
 
     static void AddChatMessage(const char msg[]);
 

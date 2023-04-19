@@ -79,4 +79,5 @@ struct CEntityGta : CPlaceable
     eEntityStatus m_nStatus : 5;        // Mask: & 0xF8 = 248 (Remember: In the original code unless this was left shifted the value it's compared to has to be left shifted by 3!)
     uint8_t pad_0;
 };
+static_assert(sizeof(CEntityGta) == 0x38);
 #pragma pack(pop)

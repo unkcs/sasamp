@@ -1407,13 +1407,13 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 
 		if ( color == 0xff00ff3c )
 		{ // first color
+			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
             if(pVeh->m_iVinylId != -1) {
                 resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->texture)), *reinterpret_cast<unsigned int*>(&(mat->texture)));
                 mat->texture = CVehicle::m_pVinyls[ pVeh->m_iVinylId ];
                 mat->color = {255, 255, 255, 255};
                 return mat;
             }
-			resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
 			mat->color = pVeh->mainColor;
 			return mat;
 		}

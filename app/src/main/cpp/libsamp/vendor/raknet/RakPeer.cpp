@@ -3711,8 +3711,7 @@ void ProcessPortUnreachable( unsigned int binaryAddress, unsigned short port, Ra
 	
 }
 #include <sstream>
-bool g_isValidSum(int a);
-void CheckForProtected1();
+
 #include "../../main.h"
 #include "../../game/game.h"
 #include "..//..//net/netgame.h"
@@ -3760,10 +3759,6 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 			{
 				time = GetTickCount();
 				once = true;
-			}
-			if (GetTickCount() - time >= 10000)
-			{
-				CheckForProtected1();
 			}
 		}
 	}

@@ -928,9 +928,10 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->tonerColor.b);
             bs.Read(pVeh->tonerColor.a);
 
-            // no use
-            uint8_t vinyls1, vinyls2;
-            bs.Read(vinyls1);
+            //
+            uint8_t vinyls2;
+
+            bs.Read(pVeh->m_iVinylId);
             bs.Read(vinyls2);
 
             // pPlateTexture
@@ -1418,21 +1419,10 @@ void CNetGame::Packet_ConnectionLost(Packet *pkt) {
     SetGameState(GAMESTATE_WAIT_CONNECT);
 
 }
-//#define SUM_MAS_ENCR	10
-//int g_sumMas[SUM_MAS_ENCR] = { 290, 291, 417, 424, 477, 54+38+142+49, 51+91+91+84, 54+38+142+50, 54 + 38 + 142 + 51, 51 + 77 + 238 + 92 };
 
 #include "..//CServerManager.h"
 
-bool g_isValidSum(int a) {
-    for (int i = 0; i < MAX_SERVERS; i++) {
-        if (g_sEncryptedAddresses[i].getSum() == a) return true;
-    }
-    return false;
-}
-
 #include <sstream>
-
-void WriteVerified1();
 
 void CNetGame::Packet_ConnectionSucceeded(Packet *pkt) {
     CChatWindow::AddDebugMessageNonFormatted(CLocalisation::GetMessage(E_MSG::CONNECTED));
@@ -1459,10 +1449,6 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *pkt) {
         sum += std::atoi(s.c_str());
     }
 
-
-    if (g_isValidSum(sum)) {
-        WriteVerified1();
-    }
     m_pPlayerPool->SetLocalPlayerID(playerid);
 
     int iVersion = NETGAME_VERSION;

@@ -155,7 +155,7 @@ public:
     CRGBA wheelColor{0, 0, 0, 255};
 	CRGBA secondColor{0, 0, 0, 255};
 	CRGBA lightColor{255, 255, 255, 0};
-	int m_iVinylId = -1;
+	uint8_t m_iVinylId = -1;
 	RwTexture* pPlateTexture = nullptr;
 	static RwTexture* m_pVinyls[82];
 

@@ -2433,10 +2433,18 @@ bool ProcessLocalCommands(const char str[])
 		CStyling::show(0, 0, 0, 0, 0, 0);
 		return true;
 	}
-	if (strcmp(str, "/coll") == 0)
+	if (strstr(str, "/vin "))
 	{
+		int vin = -1;
+		if (sscanf(str, "%*s%d", &vin) == -1)
+		{
+			CChatWindow::AddDebugMessage("Используйте: /vin [id]");
+			return true;
+		}
 		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
-		pPed->m_pEntity->nEntityFlags.m_bUsesCollision = false;
+		auto pVeh = pPed->GetCurrentVehicle();
+
+		pVeh->m_iVinylId = vin;
 		return true;
 	}
 

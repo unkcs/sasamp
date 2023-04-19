@@ -10,6 +10,8 @@ extern CGame* pGame;
 
 extern CNetGame* pNetGame;
 
+RwTexture* CVehicle::m_pVinyls[82]{};
+
 CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRotation, bool bSiren)
 {
 	Log("CVehicle(%d, %4.f, %4.f, %4.f, %4.f)", iType, fPosX, fPosY, fPosZ, fRotation);

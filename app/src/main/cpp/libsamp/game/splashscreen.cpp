@@ -14,6 +14,12 @@ void LoadSplashTexture()
 {
 	Log("Loading hud bg texture..");
 	splashTexture = CUtil::LoadTextureFromDB("txd", "hud_bg");
+
+	for(int i = 0; i < std::size(CVehicle::m_pVinyls); i++) {
+		char name[55];
+		sprintf(name, "remapbody%d", i + 1);
+		CVehicle::m_pVinyls[i] = CUtil::LoadTextureFromDB("gta3", name);
+	}
 }
 
 void ImGui_ImplRenderWare_RenderDrawData(ImDrawData* draw_data);

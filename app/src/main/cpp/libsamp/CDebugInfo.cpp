@@ -46,11 +46,11 @@ void CDebugInfo::Draw()
 		pGUI->RenderText(pos, (ImU32)0xFFFFFFFF, true, &szStr[0]);
 
 		uint32_t msUsed = *(uint32_t*)(g_libGTASA + 0x0067067C);
-		uint32_t msAvailable = *(uint32_t*)(g_libGTASA + 0x005DE734);
+		uint32_t msAvailable = CStreaming::ms_memoryAvailable;
 		float percentUsed = ((float)msUsed/(float)msAvailable)*100;
-		snprintf(&szStrMem[0], 256, "MEM: %.1f/%.1f (%.1f %%)",
+		snprintf(&szStrMem[0], 256, "MEM: %.1f/%.d (%.1f %%)",
 				 (float)msUsed/1048576,
-				 (float)msAvailable/1048576,
+				 msAvailable/1048576,
 				 percentUsed
 				 );
 		pos = ImVec2(pGUI->ScaleX(40.0f), pGUI->ScaleY(1080.0f - pGUI->GetFontSize() * 9));

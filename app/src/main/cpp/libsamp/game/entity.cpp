@@ -29,9 +29,6 @@ void CEntity::Add()
 	}
 }
 
-void CEntity::SetGravityProcessing(bool bProcess)
-{
-}
 
 void CEntity::UpdateRwMatrixAndFrame()
 {
@@ -50,16 +47,6 @@ void CEntity::UpdateRwMatrixAndFrame()
 			}
 		}
 	}
-}
-
-void CEntity::RemovePhysical()
-{
-	((void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 16)))(m_pEntity); // CPhysical::Remove
-}
-
-void CEntity::AddPhysical()
-{
-	((void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 8)))(m_pEntity); // CPhysical::Add
 }
 
 void CEntity::UpdateMatrix(RwMatrix mat)

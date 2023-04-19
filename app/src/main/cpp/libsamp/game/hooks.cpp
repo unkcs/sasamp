@@ -343,35 +343,6 @@ void TouchEvent_hook(int type, int num, int posX, int posY)
 		return TouchEvent(type, num, posX, posY);
 }
 
-
-void (*CStreaming_InitImageList)();
-void CStreaming_InitImageList_hook()
-{
-	char* ms_files = (char*)(g_libGTASA+0x6702FC);
-	ms_files[0] = 0;
-	*(uint32_t*)&ms_files[44] = 0;
-	ms_files[48] = 0;
-	*(uint32_t*)&ms_files[92] = 0;
-	ms_files[96] = 0;
-	*(uint32_t*)&ms_files[140] = 0;
-	ms_files[144] = 0;
-	*(uint32_t*)&ms_files[188] = 0;
-	ms_files[192] = 0;
-	*(uint32_t*)&ms_files[236] = 0;
-	ms_files[240] = 0;
-	*(uint32_t*)&ms_files[284] = 0;
-	ms_files[288] = 0;
-	*(uint32_t*)&ms_files[332] = 0;
-	ms_files[336] = 0;
-	*(uint32_t*)&ms_files[380] = 0;
-
-	CStreaming::AddImageToList("TEXDB\\GTA3.IMG", true);
-	CStreaming::AddImageToList("TEXDB\\SKINS.IMG", true);
-    CStreaming::AddImageToList("TEXDB\\CARS.IMG", true);
-	CStreaming::AddImageToList("TEXDB\\SAMP.IMG", true);
-	CStreaming::AddImageToList("TEXDB\\SAMPCOL.IMG", true);
-}
-
 uint32_t (*CRadar__GetRadarTraceColor)(uint32_t color, uint8_t bright, uint8_t friendly);
 uint32_t CRadar__GetRadarTraceColor_hook(uint32_t color, uint8_t bright, uint8_t friendly)
 {
@@ -883,6 +854,7 @@ void InjectHooks()
 	CPools::InjectHooks();
 	CVehicleGta::InjectHooks();
 	CMatrixLink::InjectHooks();
+	CStreaming::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -903,8 +875,6 @@ void InstallSpecialHooks()
 	CHook::InlineHook(g_libGTASA, 0x1bdc3c, &CTextureDatabaseRuntime__GetEntry_hook, &CTextureDatabaseRuntime__GetEntry);
 
 	//CHook::InlineHook(g_libGTASA, 0x0055B968, &TextureDatabaseRuntime__Load_hook, (uintptr_t*)&TextureDatabaseRuntime__Load);
-	//IMG
-	CHook::InlineHook(g_libGTASA, 0x28E83C, &CStreaming_InitImageList_hook, (uintptr_t*)&CStreaming_InitImageList);
 
 	CHook::InlineHook(g_libGTASA, 0x001E4AE4, &GetMeshPriority_hook, &GetMeshPriority);
 	//new fix

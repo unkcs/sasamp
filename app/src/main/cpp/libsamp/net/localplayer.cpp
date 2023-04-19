@@ -597,7 +597,7 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 
 	m_pPlayerPed->m_bIsSpawned = true;
 
-	pGame->RefreshStreamingAt(pos.x,pos.y);
+	CGame::RefreshStreamingAt(pos.x,pos.y);
 
 	m_pPlayerPed->RestartIfWastedAt(pos, rot);
 	//m_pPlayerPed->SetModelIndex(skin);

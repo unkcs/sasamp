@@ -110,7 +110,7 @@ enum eLights :	uint8_t
 	MAX_LIGHTS            // MUST BE 16 OR LESS
 };
 
-#pragma pack(1)
+#pragma pack(push, 1)
 struct VehicleAudioPropertiesStruct
 {
 	int16_t VehicleType;		//	1: +  0
@@ -180,7 +180,7 @@ struct CVector2DFloat
 };
 
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct _ATTACHED_OBJECT_INFO_INTERNAL
 {
 	uint32_t dwModelId;
@@ -194,8 +194,9 @@ typedef struct _ATTACHED_OBJECT_INFO_INTERNAL
 	class CObject* pObject;
 	uint32_t dwSampBone;
 } ATTACHED_OBJECT_INFO_INTERNAL;
+#pragma pack(pop)
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct _ATTACHED_OBJECT_INFO
 {
 	uint32_t dwModelId;
@@ -246,6 +247,7 @@ typedef struct _RES_ENTRY_OBJ
 } RES_ENTRY_OBJ;
 static_assert(sizeof(_RES_ENTRY_OBJ) == 56);
 #pragma pack(pop)
+
 enum eWheelPosition
 {
 	FRONT_LEFT_WHEEL = 0,
@@ -399,3 +401,5 @@ typedef struct _BULLET_DATA {
 #define WEAPON_MODEL_JETPACK			370	// newly added
 #define WEAPON_MODEL_PARACHUTE			371
 #define WEAPON_MODEL_PARACHUTE			371
+
+#pragma pack(pop)

@@ -339,35 +339,11 @@ void TouchEvent_hook(int type, int num, int posX, int posY)
 		}
 	}
 
-	/*
-	if (g_pWidgetManager)
-	{
-		g_pWidgetManager->OnTouchEvent(type, num, posX, posY);
-		if (g_pWidgetManager->GetWidget(WIDGET_MICROPHONE))
-		{
-			if (g_pWidgetManager->GetWidget(WIDGET_MICROPHONE)->GetState() == 1)
-			{
-				bBlockCWidgetRegionLookUpdate = 1;
-			}
-			if (g_pWidgetManager->GetWidget(WIDGET_MICROPHONE)->GetState() == 2)
-			{
-				bBlockCWidgetRegionLookUpdate = 0;
-			}
-		}
-	}
-	*/
 	if(bRet) 
 		return TouchEvent(type, num, posX, posY);
 }
 
-/* ====================================================== */
 
-unsigned int (*TextureDatabaseRuntime__Load)(uintptr_t *thiz, const char *a2, const char *a3, bool a4);
-unsigned int TextureDatabaseRuntime__Load_hook(uintptr_t *thiz, const char *a2, const char *a3, bool a4)
-{
-	Log("TextureDatabaseRuntime__Load = %s, %s, %s, %d", (char*)thiz, a2, a3, a4);
-	return TextureDatabaseRuntime__Load(thiz, a2, a3, a4);
-}
 void (*CStreaming_InitImageList)();
 void CStreaming_InitImageList_hook()
 {
@@ -395,35 +371,6 @@ void CStreaming_InitImageList_hook()
 	CStreaming::AddImageToList("TEXDB\\SAMP.IMG", true);
 	CStreaming::AddImageToList("TEXDB\\SAMPCOL.IMG", true);
 }
-
-/* ====================================================== */
-//typedef struct _PED_MODEL
-//{
-//	uintptr_t 	vtable;
-//	uint8_t		data[88];
-//} PED_MODEL; // SIZE = 92
-//
-//PED_MODEL PedsModels[370];
-//int PedsModelsCount = 0;
-
-//PED_MODEL* (*CModelInfo_AddPedModel)(int id);
-//PED_MODEL* CModelInfo_AddPedModel_hook(int id)
-//{
-//	PED_MODEL* model = &PedsModels[PedsModelsCount];
-//	memset(model, 0, sizeof(PED_MODEL));								// initialize by zero
-//
-//	((void(*)(void* thiz))(g_libGTASA + 0x0033559C + 1))((void*)model); // CBaseModelInfo::CBaseModelInfo();
-//
-//    model->vtable = (uintptr_t)(g_libGTASA+0x5C6E90);					// assign CPedModelInfo vmt
-//
-//    (( uintptr_t (*)(PED_MODEL*))(*(void**)(model->vtable+0x1C)))(model);  // CClumpModelInfo::Init()
-//
-//    *(PED_MODEL**)(g_libGTASA+0x87BF48+(id*4)) = model; // CModelInfo::ms_modelInfoPtrs
-//
-//	PedsModelsCount++;
-//	return model;
-//}
-/* ====================================================== */
 
 uint32_t (*CRadar__GetRadarTraceColor)(uint32_t color, uint8_t bright, uint8_t friendly);
 uint32_t CRadar__GetRadarTraceColor_hook(uint32_t color, uint8_t bright, uint8_t friendly)
@@ -733,13 +680,7 @@ int *(*LoadFullTexture)(uintptr_t *thiz, unsigned int a2);
 int *LoadFullTexture_hook(uintptr_t *thiz, unsigned int a2)
 {
 	strcpy(g_iLastBlock, *(const char **)(*((DWORD *)thiz + 7) + 0x17 * a2));
-    //*((DWORD *)thiz + 0x1A) = 0;
-    //Log("LoadFullTexture_hook %s", *(const char **)(*((DWORD *)thiz + 7) + 0x17 * a2));
-//	Log("%d", *((DWORD *)thiz + 0x1A));
-//	Log("%d", *((DWORD *)thiz + 0x1B));
-//    if(strcmp(*(const char **)(*((DWORD *)thiz + 7) + 0x17 * a2), "hud_bg") == 0){
-//
-//    }
+
     return LoadFullTexture(thiz, a2);
 }
 //
@@ -815,7 +756,6 @@ void CPlaceable_InitMatrixArray_hook()
 {
 	CHook::CallFunction<void>(g_libGTASA + 0x3AB2D8 + 1, g_libGTASA + 0x8B90A8, 10000);
 }
-
 
 int (*CustomPipeRenderCB)(uintptr_t resEntry, uintptr_t object, uint8_t type, uint32_t flags);
 int CustomPipeRenderCB_hook(uintptr_t resEntry, uintptr_t object, uint8_t type, uint32_t flags)
@@ -921,12 +861,6 @@ int CTextureDatabaseRuntime__GetEntry_hook(unsigned int a1, const char *a2, bool
 	else
 		result = -1;
 	return result;
-}
-
-int (*CGame__Init2)(uintptr_t *thiz, const char *a2);
-int CGame__Init2_hook(uintptr_t *thiz, const char *a2)
-{
-
 }
 
 uintptr_t* (*CCustomRoadsignMgr_RenderRoadsignAtomic)(uintptr_t*, VECTOR const&);
@@ -1242,29 +1176,6 @@ uint64_t CWorld_ProcessPedsAfterPreRender_hook()
 #include "util.h"
 
 #include <list>
-
-std::list<std::pair<unsigned int*, unsigned int>> resetEntries;
-
-static uint32_t Color32Reverse(uint32_t x)
-{
-	return
-		((x & 0xFF000000) >> 24) |
-		((x & 0x00FF0000) >> 8) |
-		((x & 0x0000FF00) << 8) |
-		((x & 0x000000FF) << 24);
-}
-
-static RwRGBA DWORD2RGBAinternal(uint32_t dwColor)
-{
-	RwRGBA tmp;
-
-	tmp.blue = dwColor & 0xFF; dwColor >>= 8;
-	tmp.green = dwColor & 0xFF; dwColor >>= 8;
-	tmp.red = dwColor & 0xFF; dwColor >>= 8;
-	tmp.alpha = dwColor & 0xFF; /* dwColor >>= 8; */
-
-	return tmp;
-}
 
 int g_iLastRenderedObject;
 

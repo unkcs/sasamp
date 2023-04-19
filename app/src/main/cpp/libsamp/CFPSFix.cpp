@@ -7,7 +7,7 @@ static void setThreadAffinityMask(pid_t tid, uint32_t mask)
 	syscall(__NR_sched_setaffinity, tid, sizeof(mask), &mask);
 }
 
-void CFPSFix::Routine()
+[[noreturn]] void CFPSFix::Routine()
 {
 	while (true)
 	{
@@ -27,10 +27,6 @@ void CFPSFix::Routine()
 CFPSFix::CFPSFix()
 {
 	std::thread(&CFPSFix::Routine, this).detach();
-}
-
-CFPSFix::~CFPSFix()
-{
 }
 
 void CFPSFix::PushThread(pid_t tid)

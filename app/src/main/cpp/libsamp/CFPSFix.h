@@ -7,13 +7,13 @@
 class CFPSFix
 {
 private:
-	void Routine();
+	[[noreturn]] void Routine();
 
 	std::mutex m_Mutex;
 	std::vector<pid_t> m_Threads;
 public:
 	CFPSFix();
-	~CFPSFix();
+	~CFPSFix()= default;;
 
 	void PushThread(pid_t tid);
 };

@@ -267,7 +267,7 @@ typedef struct _AIM_SYNC_DATA
 #pragma pack(pop)
 //-----------------------------------------------------------
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct _BULLET_SYNC
 {
 	uint8_t byteHitType;			// +0

@@ -58,6 +58,9 @@ public:
     static bool GetIsCodePaused() { return m_CodePause; }
     static void SetCodePause(bool pause) { m_CodePause = pause; }
 
+    static uint32_t GetTimeInMS() { return m_snTimeInMilliseconds; }
+    static void   SetTimeInMS(uint32_t t) { m_snTimeInMilliseconds = t; }
+
     static float  GetTimeStep() { return ms_fTimeStep; }
 
 };

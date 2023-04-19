@@ -19,6 +19,18 @@ public:
     static RwTexture* GetTexture(const char* name);
 
     static RwTexture *LoadTextureFromDB(const char *dbname, const char *texture);
+
+    // Converts degrees to radians
+    // keywords: 0.017453292 flt_8595EC
+    constexpr static float DegreesToRadians(float angleInDegrees) {
+        return angleInDegrees * PI / 180.0F;
+    }
+
+    // Converts radians to degrees
+    // 57.295826
+    constexpr static float RadiansToDegrees(float angleInRadians) {
+        return angleInRadians * 180.0F / PI;
+    }
 };
 
 uintptr_t FindLibrary(const char* library);

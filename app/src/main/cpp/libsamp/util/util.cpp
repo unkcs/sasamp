@@ -1,5 +1,7 @@
 #include "../main.h"
 #include "game/Enums/eWeaponType.h"
+#include "util.h"
+
 #include <vector>
 
 bool CUtil::IsValidGameVehicle(CVehicleGta *pVehicle)

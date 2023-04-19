@@ -640,28 +640,10 @@ void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
 
 
     CVehicleGta *gtaVehicle = pVehicle->m_pVehicle;
-    if(!gtaVehicle)return;
+
     if(gtaVehicle->fHealth == 0.0f) return;
-    // check is cplaceable
-    if (gtaVehicle->vtable == g_libGTASA+0x5C7358) return;
-
-	/*
-	if(GetCurrentWeapon() == WEAPON_PARACHUTE) {
-		SetArmedWeapon(0);
-	}*/
-
-	// check seatid
 
 	Log("PutDirectlyInVehicle");
-
-//	RwMatrix mat;
-//	pVehicle->GetMatrix(&mat);
-//
-////	GetMatrix(&mat);
-////	mat.pos.x = pVehicle->mat->pos.x;
-////	mat.pos.y = pVehicle->mat->pos.y;
-////	mat.pos.z = pVehicle->mat->pos.z;
-//	SetMatrix(mat);
 
 	if(iSeat == 0)
 	{

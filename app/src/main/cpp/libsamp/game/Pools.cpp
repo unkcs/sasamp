@@ -4,6 +4,7 @@
 
 #include "Pools.h"
 #include "../util/patch.h"
+#include "IplDef.h"
 
 PoolAllocator::Pool*      CPools::ms_pPtrNodeSingleLinkPool = nullptr;
 PoolAllocator::Pool*      CPools::ms_pPtrNodeDoubleLinkPool;

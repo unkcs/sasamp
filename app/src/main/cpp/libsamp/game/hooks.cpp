@@ -722,12 +722,6 @@ uint8_t* RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, uint8_t const* pS
     return pDest;
 }
 
-void (*CPlaceable_InitMatrixArray)();
-void CPlaceable_InitMatrixArray_hook()
-{
-	CHook::CallFunction<void>(g_libGTASA + 0x3AB2D8 + 1, g_libGTASA + 0x8B90A8, 10000);
-}
-
 int (*CustomPipeRenderCB)(uintptr_t resEntry, uintptr_t object, uint8_t type, uint32_t flags);
 int CustomPipeRenderCB_hook(uintptr_t resEntry, uintptr_t object, uint8_t type, uint32_t flags)
 {
@@ -843,6 +837,7 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTO
 #include "game/Models/ModelInfo.h"
 #include "cHandlingDataMgr.h"
 #include "Pools.h"
+#include "game/Core/MatrixLinkList.h"
 
 void InjectHooks()
 {
@@ -854,7 +849,9 @@ void InjectHooks()
 	CPools::InjectHooks();
 	CVehicleGta::InjectHooks();
 	CMatrixLink::InjectHooks();
+	CMatrixLinkList::InjectHooks();
 	CStreaming::InjectHooks();
+	CPlaceable::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -880,11 +877,6 @@ void InstallSpecialHooks()
 	//new fix
 	CHook::InlineHook(g_libGTASA, 0x1EEC90, &rxOpenGLDefaultAllInOneRenderCB_hook, &rxOpenGLDefaultAllInOneRenderCB);
 	CHook::InlineHook(g_libGTASA, 0x28AAAC, &CustomPipeRenderCB_hook, &CustomPipeRenderCB);
-
-	//
-	// CPlaceable::InitMatrixArray
-	CHook::WriteMemory(g_libGTASA + 0x3ABB0A, "\x4F\xF4\x7A\x61", 4); // MOV.W R1, #4000
-	CHook::InlineHook(g_libGTASA, 0x3ABB08, &CPlaceable_InitMatrixArray_hook, &CPlaceable_InitMatrixArray);
 
 	// RLEDecompress fix
 	CHook::InlineHook(g_libGTASA, 0x001BC314, &RLEDecompress_hook, &RLEDecompress);

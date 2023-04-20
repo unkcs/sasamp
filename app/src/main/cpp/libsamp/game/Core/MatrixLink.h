@@ -24,8 +24,8 @@ public:
 public:
     static void InjectHooks();
 
-    inline void Insert(CMatrixLink* pWhere);
-    inline void Remove();
+    void Insert(CMatrixLink* pWhere);
+    void Remove();
 };
 #pragma pack(pop)
 static_assert(sizeof(CMatrixLink) == 0x54);

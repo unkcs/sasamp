@@ -4,7 +4,7 @@
 #include "game/RW/rwplcore.h"
 
 #include "tHandlingData.h"
-#include "game/Entity/Entity.h"
+
 
 constexpr float E              = 2.71828f;          // e
 constexpr float E_CONST        = 0.577f;            // Euler-Mascheroni constant
@@ -315,6 +315,8 @@ typedef struct _BULLET_SYNC
 	VECTOR vecOffset;				// +20
 	uint8_t byteWeaponID;			// +28
 } BULLET_SYNC;					// size = 29
+
+class CEntityGta;
 
 typedef struct _BULLET_DATA {
 	uint32_t unk;

@@ -21,16 +21,16 @@ public:
     static void InjectHooks();
 
 public:
-    void         Init(int32 count);
-    void         Shutdown();
-    CMatrixLink* AddToList1();
-    CMatrixLink* AddToList2();
-    inline void  MoveToList1(CMatrixLink* mat);
-    inline void  MoveToList2(CMatrixLink* mat);
-    inline void  MoveToFreeList(CMatrixLink* mat);
-    int32        GetNumFree();
-    int32        GetNumUsed1();
-    int32        GetNumUsed2();
+    void            Init(int32 count);
+    void            Shutdown();
+    CMatrixLink*    AddToList1();
+    CMatrixLink*    AddToList2();
+    void            MoveToList1(CMatrixLink* mat);
+    void            MoveToList2(CMatrixLink* mat);
+    void            MoveToFreeList(CMatrixLink* mat);
+    int32           GetNumFree();
+    int32           GetNumUsed1();
+    int32           GetNumUsed2();
 
 public:
     inline bool IsFull() { return m_freeListHead.m_pNext == &m_freeListTail; }

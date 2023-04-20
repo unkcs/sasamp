@@ -54,12 +54,13 @@ void ScrSetPlayerPos(RPCParameters *rpcParams)
 
 	CLocalPlayer *pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
 
-	VECTOR vecPos;
+	CVector vecPos;
 	bsData.Read(vecPos.x);
 	bsData.Read(vecPos.y);
 	bsData.Read(vecPos.z);
 
-	if(pLocalPlayer) pLocalPlayer->GetPlayerPed()->TeleportTo(vecPos.x,vecPos.y,vecPos.z);
+	if(pLocalPlayer)
+		pLocalPlayer->GetPlayerPed()->m_pPed->SetPosn(vecPos);
 }
 
 void ScrSetCameraPos(RPCParameters *rpcParams)
@@ -231,8 +232,6 @@ void ScrClearPlayerAnimations(RPCParameters *rpcParams)
 		if(pPlayerPed) 
 		{
 			pPlayerPed->ClearAnimations();
-			//pPlayerPed->GetMatrix(&mat);
-			//pPlayerPed->TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
 		}
 	}
 }
@@ -242,7 +241,7 @@ void ScrSetPlayerSpecialAction(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrSetPlayerSpecialAction");
 
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
@@ -390,7 +389,7 @@ void ScrSetPlayerPosFindZ(RPCParameters *rpcParams)
 
 	CLocalPlayer *pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
 
-	VECTOR vecPos;
+	CVector vecPos;
 
 	bsData.Read(vecPos.x);
 	bsData.Read(vecPos.y);
@@ -399,7 +398,7 @@ void ScrSetPlayerPosFindZ(RPCParameters *rpcParams)
 	vecPos.z = pGame->FindGroundZForCoord(vecPos.x, vecPos.y, vecPos.z);
 	vecPos.z += 1.5f;
 
-	pLocalPlayer->GetPlayerPed()->TeleportTo(vecPos.x, vecPos.y, vecPos.z);
+	pLocalPlayer->GetPlayerPed()->m_pPed->SetPosn(vecPos);
 }
 
 void ScrSetPlayerInterior(RPCParameters *rpcParams)
@@ -733,16 +732,17 @@ void ScrSetVehiclePos(RPCParameters *rpcParams)
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
 	VEHICLEID VehicleId;
-	float fX, fY, fZ;
+
+	CVector pos;
 	bsData.Read(VehicleId);
-	bsData.Read(fX);
-	bsData.Read(fY);
-	bsData.Read(fZ);
+	bsData.Read(pos.x);
+	bsData.Read(pos.y);
+	bsData.Read(pos.z);
 
 	if(pNetGame && pNetGame->GetVehiclePool())
 	{
 		if(pNetGame->GetVehiclePool()->GetSlotState(VehicleId))
-			pNetGame->GetVehiclePool()->GetAt(VehicleId)->TeleportTo(fX, fY, fZ);
+			pNetGame->GetVehiclePool()->GetAt(VehicleId)->m_pVehicle->SetPosn(pos);
 	}
 }
 

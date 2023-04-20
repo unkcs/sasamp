@@ -80,7 +80,7 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 	VECTOR vecOut;
 	RwMatrix mat;
 
-	memcpy(&mat, pPed->m_pPed->mat, sizeof(RwMatrix));
+	memcpy(&mat, pPed->m_pPed->m_matrix, sizeof(RwMatrix));
 
 	RwMatrixMultiplyByVector(&vecOut, &mat, &vecOffset);
 

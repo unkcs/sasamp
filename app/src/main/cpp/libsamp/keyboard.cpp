@@ -2349,9 +2349,9 @@ bool ProcessLocalCommands(const char str[])
 			ScriptCommand(&get_car_z_angle, m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),
-					pVehicle->mat->m_pos.x,
-					pVehicle->mat->m_pos.y,
-					pVehicle->mat->m_pos.z,
+					pVehicle->m_matrix->m_pos.x,
+					pVehicle->m_matrix->m_pos.y,
+					pVehicle->m_matrix->m_pos.z,
 					fZAngle
 			);
 			CChatWindow::AddInfoMessage("-> InCar position saved.");
@@ -2363,9 +2363,9 @@ bool ProcessLocalCommands(const char str[])
 			ScriptCommand(&get_actor_z_angle, pPlayer->m_dwGTAId, &fZAngle);
 			fprintf(fileOut, "%s = %.3f, %.3f, %.3f, %.3f\n",
 					msg.c_str(),
-					pActor->mat->m_pos.x,
-					pActor->mat->m_pos.y,
-					pActor->mat->m_pos.z,
+					pActor->m_matrix->m_pos.x,
+					pActor->m_matrix->m_pos.y,
+					pActor->m_matrix->m_pos.z,
 					fZAngle
 			);
 			CChatWindow::AddInfoMessage("-> OnFoot position saved.");

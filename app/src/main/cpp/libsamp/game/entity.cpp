@@ -25,7 +25,7 @@ void CEntity::Add()
 
 		RwMatrix mat;
 		GetMatrix(&mat);
-		TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
+		m_pEntity->SetPosn(mat.pos.x, mat.pos.y, mat.pos.z);
 	}
 }
 
@@ -36,11 +36,11 @@ void CEntity::UpdateRwMatrixAndFrame()
 	{
 		if (m_pEntity->m_pRwObject)
 		{
-			if (m_pEntity->mat)
+			if (m_pEntity->m_matrix)
 			{
 				uintptr_t pRwMatrix = *(uintptr_t*)(m_pEntity->m_pRwObject + 4) + 0x10;
 				// CMatrix::UpdateRwMatrix
-				m_pEntity->mat->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(pRwMatrix));
+				m_pEntity->m_matrix->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(pRwMatrix));
 
 				// CEntity::UpdateRwFrame
 				((void (*) (CEntityGta*))(g_libGTASA + 0x39194C + 1))(m_pEntity);
@@ -53,7 +53,7 @@ void CEntity::UpdateMatrix(RwMatrix mat)
 {
 	if (m_pEntity)
 	{
-		if (m_pEntity->mat)
+		if (m_pEntity->m_matrix)
 		{
 			// CPhysical::Remove
 			((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
@@ -112,24 +112,24 @@ void CEntity::Remove()
 // 0.3.7
 void CEntity::GetMatrix(RwMatrix* Matrix)
 {
-	if (!m_pEntity || !m_pEntity->mat) return;
+	if (!m_pEntity || !m_pEntity->m_matrix) return;
 
-	*Matrix = m_pEntity->mat->ToRwMatrix();
+	*Matrix = m_pEntity->m_matrix->ToRwMatrix();
 }
 
 // 0.3.7
 void CEntity::SetMatrix(RwMatrix mat)
 {
 	if (!m_pEntity) return;
-	if (!m_pEntity->mat) return;
+	if (!m_pEntity->m_matrix) return;
 
-	m_pEntity->mat->m_right = mat.right;
+	m_pEntity->m_matrix->m_right = mat.right;
 
-	m_pEntity->mat->m_forward = mat.up;
+	m_pEntity->m_matrix->m_forward = mat.up;
 
-	m_pEntity->mat->m_up = mat.at;
+	m_pEntity->m_matrix->m_up = mat.at;
 
-	m_pEntity->mat->m_pos = mat.pos;
+	m_pEntity->m_matrix->m_pos = mat.pos;
 }
 
 // 0.3.7
@@ -213,21 +213,6 @@ bool CEntity::SetModelIndex(unsigned int uiModel)
 	(( void (*)(CEntityGta*, unsigned int))(*(void**)(m_pEntity->vtable + 0x18)))(m_pEntity, uiModel);
 
 	return true;
-}
-
-// 0.3.7
-void CEntity::TeleportTo(float fX, float fY, float fZ)
-{
-	if(m_pEntity && m_pEntity->vtable != (g_libGTASA+0x5C7358)) /* CPlaceable */
-	{
-		uint16_t modelIndex = m_pEntity->nModelIndex;
-		if(	modelIndex != TRAIN_PASSENGER_LOCO &&
-			modelIndex != TRAIN_FREIGHT_LOCO &&
-			modelIndex != TRAIN_TRAM)
-			(( void (*)(CEntityGta*, float, float, float, bool))(*(void**)(m_pEntity->vtable + 0x3C)))(m_pEntity, fX, fY, fZ, 0);
-		else
-			ScriptCommand(&put_train_at, m_dwGTAId, fX, fY, fZ);
-	}
 }
 
 float CEntity::GetDistanceFromCamera()

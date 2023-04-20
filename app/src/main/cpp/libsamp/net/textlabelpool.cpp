@@ -177,7 +177,7 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 
 				memcpy((void*)& pos, (const void*)& mat.pos, sizeof(VECTOR));
 
-				//memcpy((void*)& pos, (const void*)& mat.pos, sizeof(VECTOR));
+				//memcpy((void*)& pos, (const void*)& m_matrix.pos, sizeof(VECTOR));
 
 				VECTOR Out;
 				memset((void*)&Out, 0, sizeof(VECTOR));

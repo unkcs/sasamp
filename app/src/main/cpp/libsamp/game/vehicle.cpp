@@ -477,9 +477,9 @@ void CVehicle::RemoveEveryoneFromVehicle()
 	if(!m_dwGTAId)return;
 	if (!GamePool_Vehicle_GetAt(m_dwGTAId)) return;
 
-	float fPosX = m_pVehicle->mat->m_pos.x;
-	float fPosY = m_pVehicle->mat->m_pos.y;
-	float fPosZ = m_pVehicle->mat->m_pos.z;
+	float fPosX = m_pVehicle->m_matrix->m_pos.x;
+	float fPosY = m_pVehicle->m_matrix->m_pos.y;
+	float fPosZ = m_pVehicle->m_matrix->m_pos.z;
 
 	int iPlayerID = 0;
 	if (m_pVehicle->pDriver)

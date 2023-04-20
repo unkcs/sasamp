@@ -834,7 +834,7 @@ void WorldActorAdd(RPCParameters* rpcParams)
 
 	uint16_t actorId;
 	uint32_t iSkinId;
-	VECTOR vecPos;
+	CVector vecPos;
 	float fRotation;
 	float fHealth;
 	bool bInvulnerable;
@@ -903,23 +903,19 @@ void SetActorHealth(RPCParameters* rpcParams)
 
 void SetActorPos(RPCParameters* rpcParams)
 {
-	
-
 	RakNet::BitStream bsData(rpcParams->input, (rpcParams->numberOfBitsOfData / 8) + 1, false);
 
 	uint16_t actorId;
-	VECTOR pos;
+	CVector pos;
 	bsData.Read(actorId);
 	bsData.Read((char*)& pos, sizeof(VECTOR));
 	CActorPool* pActorPool = pNetGame->GetActorPool();
-#ifdef _CDEBUG
-	CChatWindow::AddDebugMessage("Set actor pos %d %f %f %f", actorId, pos.x, pos.y, pos.z);
-#endif
+
 	if (pActorPool)
 	{
 		if (pActorPool->GetAt(actorId))
 		{
-			pActorPool->GetAt(actorId)->TeleportTo(pos.x, pos.y, pos.z);
+			pActorPool->GetAt(actorId)->m_pEntity->SetPosn(pos);
 		}
 	}
 }
@@ -994,8 +990,6 @@ void SetActorAnimation(RPCParameters* rpcParams)
 
 void ClearActorAnimations(RPCParameters* rpcParams)
 {
-	
-	
 	RakNet::BitStream bsData(rpcParams->input, (rpcParams->numberOfBitsOfData / 8) + 1, false);
 
 	uint16_t actorId;
@@ -1011,7 +1005,8 @@ void ClearActorAnimations(RPCParameters* rpcParams)
 		{
 			RwMatrix mat;
 			pActorPool->GetAt(actorId)->GetMatrix(&mat);
-			pActorPool->GetAt(actorId)->TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
+
+			pActorPool->GetAt(actorId)->m_pPed->SetPosn(mat.pos.x, mat.pos.y, mat.pos.z);
 		}
 	}
 }

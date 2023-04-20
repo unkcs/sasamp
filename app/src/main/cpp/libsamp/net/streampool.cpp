@@ -305,18 +305,18 @@ void CStreamPool::Process() // ready
 	{
 		if (m_bSlotState[i] && m_pStreams[i])
 		{
-			m_pStreams[i]->Process(reinterpret_cast<RwMatrix *>(pLocalPed->m_pPed->mat));
+			m_pStreams[i]->Process(reinterpret_cast<RwMatrix *>(pLocalPed->m_pPed->m_matrix));
 		}
 	}
 	for(auto pStream : m_pStaticStream) {
-		pStream->Process(reinterpret_cast<RwMatrix *>(pLocalPed->m_pPed->mat));
+		pStream->Process(reinterpret_cast<RwMatrix *>(pLocalPed->m_pPed->m_matrix));
 	}
 
 	BASS_3DVECTOR pos;
 
-	pos.x = pLocalPed->m_pPed->mat->m_pos.x;
-	pos.y = pLocalPed->m_pPed->mat->m_pos.y;
-	pos.z = pLocalPed->m_pPed->mat->m_pos.z;
+	pos.x = pLocalPed->m_pPed->m_matrix->m_pos.x;
+	pos.y = pLocalPed->m_pPed->m_matrix->m_pos.y;
+	pos.z = pLocalPed->m_pPed->m_matrix->m_pos.z;
 
 //	BASS_3DVECTOR vel;
 //	vel.x = pLocalPed->m_pPed->vecMoveSpeed.x;

@@ -30,8 +30,6 @@ public:
 	
 	// 0.3.7
 	uint16_t GetModelIndex();
-	// 0.3.7
-	void TeleportTo(float fX, float fY, float fZ);
 
 	bool SetModelIndex(unsigned int uiModel);
 	// 0.3.7

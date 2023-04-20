@@ -64,7 +64,7 @@ void CObject::Process(float fElapsedTime)
 	}
 	m_pEntity = GamePool_Object_GetAt(m_dwGTAId);
 	if (!m_pEntity) return;
-	if (!(m_pEntity->mat)) return;
+	if (!(m_pEntity->m_matrix)) return;
 	if (m_byteMoving & 1)
 	{
 		CVector vecSpeed = { 0.0f, 0.0f, 0.0f };
@@ -308,7 +308,7 @@ void CObject::GetRotation(float* pfX,float* pfY,float* pfZ)
 {
 	if (!m_pEntity) return;
 
-	CMatrix* mat = m_pEntity->mat;
+	CMatrix* mat = m_pEntity->m_matrix;
 
 	if(mat) CHook::CallFunction<void>(g_libGTASA + 0x3E8098 + 1, mat, pfX, pfY, pfZ, 21);
 

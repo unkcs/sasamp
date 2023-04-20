@@ -232,7 +232,7 @@ void CPlayerPed::SetDead()
 	RwMatrix mat;
 	GetMatrix(&mat);
 	// will reset the tasks
-	TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
+	m_pPed->SetPosn(mat.pos.x, mat.pos.y, mat.pos.z);
 	m_pPed->fHealth = 0.0f;
 
 	uint8_t old = CWorld::PlayerInFocus;
@@ -849,12 +849,7 @@ void CPlayerPed::ClearAllTasks()
 
 void CPlayerPed::ClearAnimations()
 {
-	ApplyAnimation("crry_prtial", "CARRY", 4.0, 0, 0, 0, 0, 1);
-	//ClearAllTasks();
-	RwMatrix mat;
-	GetMatrix(&mat);
-	TeleportTo(mat.pos.x,mat.pos.y,mat.pos.z);
-
+	m_pPed->m_matrix->UpdateRW();
 	Log("ClearAnimations");
 }
 
@@ -1193,13 +1188,13 @@ void CPlayerPed::ProcessAttach()
 			pObject->SetMatrix(outMat); // copy to CMatrix
 			if (pObject->m_pEntity->m_pRwObject)
 			{
-				if (pObject->m_pEntity->mat)
+				if (pObject->m_pEntity->m_matrix)
 				{
 					uintptr_t v8 = *(uintptr_t*)(pObject->m_pEntity->m_pRwObject + 4) + 16;
 					if (v8)
 					{
-						pObject->m_pEntity->mat->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(v8));
-					//	((int(*)(RwMatrix*, uintptr_t))(g_libGTASA + 0x003E862C + 1))(pObject->m_pEntity->mat, v8); // CEntity::UpdateRwFrame
+						pObject->m_pEntity->m_matrix->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(v8));
+					//	((int(*)(RwMatrix*, uintptr_t))(g_libGTASA + 0x003E862C + 1))(pObject->m_pEntity->m_matrix, v8); // CEntity::UpdateRwFrame
 					}
 				}
 			}
@@ -1209,7 +1204,7 @@ void CPlayerPed::ProcessAttach()
 		}
 		else
 		{
-			pObject->TeleportTo(0.0f, 0.0f, 0.0f);
+			pObject->m_pEntity->SetPosn(0.0f, 0.0f, 0.0f);
 		}
 	}
 }
@@ -1354,7 +1349,7 @@ void CPlayerPed::PlayAnimByIdx(int idx, float BlendData, bool loop, bool freeze,
 	{
 		RwMatrix mat;
 		GetMatrix(&mat);
-		TeleportTo(mat.pos.x, mat.pos.y, mat.pos.z);
+		m_pPed->SetPosn(mat.pos.x, mat.pos.y, mat.pos.z);
 		return;
 	}
 	std::string szAnim;
@@ -1588,12 +1583,12 @@ CEntityGta* CPlayerPed::GetEntityUnderPlayer()
 	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
 		return 0;
 
-	vecStart.x = m_pPed->mat->m_pos.x;
-	vecStart.y = m_pPed->mat->m_pos.y;
-	vecStart.z = m_pPed->mat->m_pos.z - 0.25f;
+	vecStart.x = m_pPed->m_matrix->m_pos.x;
+	vecStart.y = m_pPed->m_matrix->m_pos.y;
+	vecStart.z = m_pPed->m_matrix->m_pos.z - 0.25f;
 
-	vecEnd.x = m_pPed->mat->m_pos.x;
-	vecEnd.y = m_pPed->mat->m_pos.y;
+	vecEnd.x = m_pPed->m_matrix->m_pos.x;
+	vecEnd.y = m_pPed->m_matrix->m_pos.y;
 	vecEnd.z = vecStart.z - 1.75f;
 
 	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
@@ -1807,14 +1802,12 @@ void CPlayerPed::ProcessSpecialAction(BYTE byteSpecialAction) {
     if(!m_iPissingState && byteSpecialAction == SPECIAL_ACTION_PISSING) {
         ApplyAnimation("PISS_LOOP", "PAULNMAC", 4.0f, 1, true, true, true, -1);
 
-        //opcode_066a('PETROLCAN', lhActor0, 0.0, 0.58, -0.08, 0.0, 0.01, 0.0, 1, l000f);
-
         ScriptCommand(&attach_particle_to_actor2,"PETROLCAN",m_dwGTAId,
                       0.0f, 0.58f, -0.08f, 0.0f, 0.01f, 0.0f, 1, &m_dwPissParticlesHandle);
 
         ScriptCommand(&make_particle_visible,m_dwPissParticlesHandle);
 
-        m_iPissingState = 1;
+        m_iPissingState = true;
     }
 
     // pissing:stop
@@ -1824,7 +1817,7 @@ void CPlayerPed::ProcessSpecialAction(BYTE byteSpecialAction) {
             m_dwPissParticlesHandle = 0;
         }
         ClearAnimations();
-        m_iPissingState = 0;
+        m_iPissingState = false;
     }
 }
 
@@ -1892,18 +1885,18 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 												vecOut.y = 0.0f;
 												vecOut.z = 0.0f;
 
-												if (btData->pEntity->mat)
+												if (btData->pEntity->m_matrix)
 												{
-													ProjectMatrix(&vecOut, btData->pEntity->mat, &btData->vecOffset);
+													ProjectMatrix(&vecOut, btData->pEntity->m_matrix, &btData->vecOffset);
 													btData->vecOffset.x = vecOut.x;
 													btData->vecOffset.y = vecOut.y;
 													btData->vecOffset.z = vecOut.z;
 												}
 												else
 												{
-													btData->vecOffset.x = btData->pEntity->mat->m_pos.x + btData->vecOffset.x;
-													btData->vecOffset.y = btData->pEntity->mat->m_pos.y + btData->vecOffset.y;
-													btData->vecOffset.z = btData->pEntity->mat->m_pos.z + btData->vecOffset.z;
+													btData->vecOffset.x = btData->pEntity->m_matrix->m_pos.x + btData->vecOffset.x;
+													btData->vecOffset.y = btData->pEntity->m_matrix->m_pos.y + btData->vecOffset.y;
+													btData->vecOffset.z = btData->pEntity->m_matrix->m_pos.z + btData->vecOffset.z;
 												}
 											}
 											else

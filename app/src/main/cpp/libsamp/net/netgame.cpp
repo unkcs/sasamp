@@ -197,7 +197,7 @@ void CNetGame::Process() {
             if (pPlayer->IsInVehicle())
                 pPlayer->RemoveFromVehicleAndPutAt(314.0f, 160.0f, 39.0f);
             else
-                pPlayer->TeleportTo(314.0f, 160.0f, 39.0f);
+                pPlayer->m_pPed->SetPosn(314.0f, 160.0f, 39.0f);
 
             pCamera->SetPosition(-314.0f, 160.0f, 39.0f, 0.0f, 0.0f, 0.0f);
             pCamera->LookAtPoint(-310.0f, 157.0f, 39.0f, 2);

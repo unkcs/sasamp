@@ -205,7 +205,7 @@ Java_com_nvidia_devtech_NvEventQueueActivity_onRegisterChooseSkinClick(JNIEnv *p
     if (pPlayer->IsInVehicle())
         pPlayer->RemoveFromVehicleAndPutAt(-82.9753, 966.7605, 1597.9788);
     else
-        pPlayer->TeleportTo(-82.9753, 966.7605, 1597.9788);
+        pPlayer->m_pPed->SetPosn(-82.9753, 966.7605, 1597.9788);
 
     pPlayer->ForceTargetRotation(90.0f);
 

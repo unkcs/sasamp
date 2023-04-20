@@ -1271,11 +1271,11 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 
 				return mat;
 			}
-//			if (!strcmp(mat->texture->name, "remap_cbody_0"))
+//			if (!strcmp(m_matrix->texture->name, "remap_cbody_0"))
 //			{
 //
 //
-//				return mat;
+//				return m_matrix;
 //			}
 		}
 
@@ -1301,7 +1301,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
         if ( mat->color.red == 125 && mat->color.green == 100 && mat->color.blue == 0 )
         { // wheel
 //            if(pVeh->wheelColor.a == 0)
-//                return mat;
+//                return m_matrix;
 
             resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->color)), *reinterpret_cast<unsigned int*>(&(mat->color)));
 
@@ -1500,7 +1500,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* a2)
 	v19 = v15 * v18;
 
 	CVector pos;
-	memcpy(&pos, &(v2->mat->m_pos), sizeof(VECTOR));
+	memcpy(&pos, &(v2->m_matrix->m_pos), sizeof(VECTOR));
 	pos.z += 2.0f;
 
 	CShadows__StoreCarLightShadow(
@@ -1648,7 +1648,7 @@ void CAutomobile__PreRender_hook(CVehicleGta* thiz)
 				pModelInfoStart->m_fWheelSizeRear = pVeh->m_fWheelSize;
 			}
 			if (pVeh->m_bShadow && pVeh->m_Shadow.pTexture) {
-				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->mat);
+				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->m_matrix);
 			}
 		}
 	}
@@ -1937,8 +1937,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 						if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
 						{
 							CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-							if (pObject->m_pEntity->mat->m_pos.x > 20000.0f || pObject->m_pEntity->mat->m_pos.y > 20000.0f || pObject->m_pEntity->mat->m_pos.z > 20000.0f ||
-								pObject->m_pEntity->mat->m_pos.x < -20000.0f || pObject->m_pEntity->mat->m_pos.y < -20000.0f || pObject->m_pEntity->mat->m_pos.z < -20000.0f)
+							if (pObject->m_pEntity->m_matrix->m_pos.x > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.y > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.z > 20000.0f ||
+                                pObject->m_pEntity->m_matrix->m_pos.x < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.y < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.z < -20000.0f)
 							{
 								/*if(pChatWindow)
 								{
@@ -1967,8 +1967,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 						/*CObject* pObject = pVehicle->Att((CEntityGta*)thiz);
 						if (pObject != nullptr)
 						{
-							if (pObject->m_pEntity->mat->pos.x > 20000.0f || pObject->m_pEntity->mat->pos.y > 20000.0f || pObject->m_pEntity->mat->pos.z > 20000.0f ||
-								pObject->m_pEntity->mat->pos.x < -20000.0f || pObject->m_pEntity->mat->pos.y < -20000.0f || pObject->m_pEntity->mat->pos.z < -20000.0f)
+							if (pObject->m_pEntity->m_matrix->pos.x > 20000.0f || pObject->m_pEntity->m_matrix->pos.y > 20000.0f || pObject->m_pEntity->m_matrix->pos.z > 20000.0f ||
+								pObject->m_pEntity->m_matrix->pos.x < -20000.0f || pObject->m_pEntity->m_matrix->pos.y < -20000.0f || pObject->m_pEntity->m_matrix->pos.z < -20000.0f)
 							{
 								/*if(pChatWindow)
 								{
@@ -2003,8 +2003,8 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 									if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
 									{
 										CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-										if (pObject->m_pEntity->mat->m_pos.x > 20000.0f || pObject->m_pEntity->mat->m_pos.y > 20000.0f || pObject->m_pEntity->mat->m_pos.z > 20000.0f ||
-											pObject->m_pEntity->mat->m_pos.x < -20000.0f || pObject->m_pEntity->mat->m_pos.y < -20000.0f || pObject->m_pEntity->mat->m_pos.z < -20000.0f)
+										if (pObject->m_pEntity->m_matrix->m_pos.x > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.y > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.z > 20000.0f ||
+                                            pObject->m_pEntity->m_matrix->m_pos.x < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.y < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.z < -20000.0f)
 										{
 											/*if(pChatWindow)
 											{
@@ -2013,7 +2013,7 @@ char **CPhysical__Add_hook(uintptr_t thiz)
 											return 0;
 										}
 										// Log("Processing remote attached object. Player: %d", i);
-										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->mat->pos.x, pObject->m_pEntity->mat->pos.y, pObject->m_pEntity->mat->pos.z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->m_pMovingList);
+										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->m_matrix->pos.x, pObject->m_pEntity->m_matrix->pos.y, pObject->m_pEntity->m_matrix->pos.z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->m_pMovingList);
 										// result = CPhysical__Add(thiz);
 									}
 								}
@@ -2217,13 +2217,13 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGt
 		pEntity = *ppEntity;
 		if(pEntity)
 		{
-			if(pEntity->mat)
+			if(pEntity->m_matrix)
 			{
 				if(pNetGame->m_iLagCompensation)
 				{
-					bulletData.vecOffset.x = vecPos->x - pEntity->mat->m_pos.x;
-					bulletData.vecOffset.y = vecPos->y - pEntity->mat->m_pos.y;
-					bulletData.vecOffset.z = vecPos->z - pEntity->mat->m_pos.z;
+					bulletData.vecOffset.x = vecPos->x - pEntity->m_matrix->m_pos.x;
+					bulletData.vecOffset.y = vecPos->y - pEntity->m_matrix->m_pos.y;
+					bulletData.vecOffset.z = vecPos->z - pEntity->m_matrix->m_pos.z;
 				}
 				else
 				{
@@ -2233,7 +2233,7 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGt
 					static RwMatrix mat2;
 					memset(&mat2, 0, sizeof(mat2));
 
-					RwMatrixOrthoNormalize(&mat2, reinterpret_cast<RwMatrix *>(pEntity->mat));
+					RwMatrixOrthoNormalize(&mat2, reinterpret_cast<RwMatrix *>(pEntity->m_matrix));
 					RwMatrixInvert(&mat1, &mat2);
 					ProjectMatrix(&bulletData.vecOffset, reinterpret_cast<CMatrix *>(&mat1), vecPos);
 				}
@@ -2286,7 +2286,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 					{
 						if(!CUtil::IsGameEntityArePlaceable(g_pCurrentBulletData->pEntity))
 						{
-							pMatrix = g_pCurrentBulletData->pEntity->mat;
+							pMatrix = g_pCurrentBulletData->pEntity->m_matrix;
 							if(pMatrix)
 							{
 								if(pNetGame->m_iLagCompensation)

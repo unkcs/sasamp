@@ -10,7 +10,7 @@
 #include "Entity/Physical.h"
 extern CGame* pGame;
 
-CActorPed::CActorPed(uint16_t usModel, VECTOR vecPosition, float fRotation, float fHealth, bool bInvulnerable)
+CActorPed::CActorPed(uint16_t usModel, CVector vecPosition, float fRotation, float fHealth, bool bInvulnerable)
 {
 	
 
@@ -37,7 +37,7 @@ CActorPed::CActorPed(uint16_t usModel, VECTOR vecPosition, float fRotation, floa
 	m_pEntity = (CPhysical*)m_pPed;
 
 	ForceTargetRotation(fRotation);
-	TeleportTo(vecPosition.x, vecPosition.y, vecPosition.z);
+	m_pEntity->SetPosn(vecPosition);
 
 	if (fHealth < 1.0f) 
 	{
@@ -120,7 +120,7 @@ void CActorPed::SetDead()
 
 	RwMatrix matEntity;
 	GetMatrix(&matEntity);
-	TeleportTo(matEntity.pos.x, matEntity.pos.y, matEntity.pos.z);
+	m_pEntity->SetPosn(matEntity.pos.x, matEntity.pos.y, matEntity.pos.z);
 
 	SetHealth(0.0f);
 	ScriptCommand(&kill_actor, m_dwGTAId);

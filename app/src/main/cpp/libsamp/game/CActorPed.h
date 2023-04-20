@@ -3,7 +3,7 @@
 class CActorPed : public CEntity
 {
 public:
-	CActorPed(uint16_t usModel, VECTOR vecPosition, float fRotation, float fHealth, bool bInvulnerable);
+	CActorPed(uint16_t usModel, CVector vecPosition, float fRotation, float fHealth, bool bInvulnerable);
 	~CActorPed();
 
 	void Destroy();

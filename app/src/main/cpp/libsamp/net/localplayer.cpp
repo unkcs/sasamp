@@ -609,7 +609,7 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 	// CCamera::Fade
 	CHook::WriteMemory(g_libGTASA + 0x36EA2C, "\x70\x47", 2); // bx lr
 
-	m_pPlayerPed->TeleportTo(pos.x,pos.y, pos.z);
+	m_pPlayerPed->m_pPed->SetPosn(pos);
 
 	m_pPlayerPed->ForceTargetRotation(rot);
 
@@ -994,7 +994,7 @@ void CLocalPlayer::ProcessSpectating()
 	}
 
 	m_pPlayerPed->SetHealth(100.0f);
-	GetPlayerPed()->TeleportTo(spSync.vecPos.x, spSync.vecPos.y, spSync.vecPos.z + 20.0f);
+	m_pPlayerPed->m_pPed->SetPosn(spSync.vecPos.x, spSync.vecPos.y, spSync.vecPos.z + 20.0f);
 
 	// handle spectate player left the server
 	if(m_byteSpectateType == SPECTATE_TYPE_PLAYER &&

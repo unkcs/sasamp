@@ -766,7 +766,7 @@ void ScrSetVehicleVelocity(RPCParameters *rpcParams)
 	{
 		CVehicle *pVehicle = pVehiclePool->GetAt( pVehiclePool->FindIDFromGtaPtr(pPlayerPed->GetGtaVehicle()));
 		if(pVehicle)
-			pVehicle->SetMoveSpeedVector(vecMoveSpeed);
+			pVehicle->m_pVehicle->SetVelocity(vecMoveSpeed);
 	}
 }
 

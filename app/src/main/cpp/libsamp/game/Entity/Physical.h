@@ -109,7 +109,7 @@ public:
     void     ResetMoveSpeed()               { SetVelocity(CVector{}); }
 
     CVector& GetTurnSpeed() { return m_vecTurnSpeed; }
-    void ResetTurnSpeed() { m_vecTurnSpeed = CVector(); }
+    void ResetTurnSpeed()   { m_vecTurnSpeed = CVector(); }
 };
 #pragma pack(pop)
 

@@ -17,9 +17,7 @@ void CEntity::Add()
 
 	if (!m_pEntity->m_pMovingList)
 	{
-		CVector vec = { 0.0f,0.0f,0.0f };
-		SetMoveSpeedVector(vec);
-		SetTurnSpeedVector(vec);
+		m_pEntity->ResetMoveSpeed();
 
 		WorldAddEntity((uintptr_t)m_pEntity);
 
@@ -137,13 +135,6 @@ void CEntity::GetMoveSpeedVector(CVector *vec)
 {
 	if (!m_pEntity) return;
 	*vec = m_pEntity->m_vecMoveSpeed;
-}
-
-// 0.3.7
-void CEntity::SetMoveSpeedVector(CVector Vector)
-{
-	if (!m_pEntity) return;
-	m_pEntity->m_vecMoveSpeed = Vector;
 }
 
 void CEntity::GetTurnSpeedVector(CVector* vec)

@@ -22,8 +22,6 @@ public:
 	void SetMatrix(RwMatrix mat);
 	// 0.3.7
 	void GetMoveSpeedVector(CVector *vec);
-	// 0.3.7
-	void SetMoveSpeedVector(CVector Vector);
 
 	void GetTurnSpeedVector(CVector* Vector);
 	void SetTurnSpeedVector(const CVector Vector);

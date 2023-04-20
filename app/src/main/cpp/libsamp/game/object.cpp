@@ -83,7 +83,8 @@ void CObject::Process(float fElapsedTime)
 
 		if (distance >= remaining)
 		{
-			SetMoveSpeedVector(vecSpeed);
+			m_pEntity->SetVelocity(vecSpeed);
+
 			SetTurnSpeedVector(vecSpeed);
 			matEnt.pos = m_matTarget.pos;
 
@@ -126,7 +127,7 @@ void CObject::Process(float fElapsedTime)
 			}
 		}
 
-		SetMoveSpeedVector(vecSpeed);
+		m_pEntity->SetVelocity(vecSpeed);
 		ApplyMoveSpeed();
 
 		if (m_bNeedRotate)
@@ -284,7 +285,7 @@ void CObject::InstantRotate(float x, float y, float z)
 void CObject::StopMoving()
 {
 	CVector vec = { 0.0f, 0.0f, 0.0f };
-	this->SetMoveSpeedVector(vec);
+	this->m_pEntity->ResetMoveSpeed();
 	this->SetTurnSpeedVector(vec);
 	m_byteMoving &= ~1;
 }

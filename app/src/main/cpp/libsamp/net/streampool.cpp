@@ -319,9 +319,9 @@ void CStreamPool::Process() // ready
 	pos.z = pLocalPed->m_pPed->m_matrix->m_pos.z;
 
 //	BASS_3DVECTOR vel;
-//	vel.x = pLocalPed->m_pPed->vecMoveSpeed.x;
-//	vel.y = pLocalPed->m_pPed->vecMoveSpeed.y;
-//	vel.z = pLocalPed->m_pPed->vecMoveSpeed.z;
+//	vel.x = pLocalPed->m_pPed->m_vecMoveSpeed.x;
+//	vel.y = pLocalPed->m_pPed->m_vecMoveSpeed.y;
+//	vel.z = pLocalPed->m_pPed->m_vecMoveSpeed.z;
 
 	BASS_Set3DPosition(&pos, nullptr, nullptr, nullptr);
 

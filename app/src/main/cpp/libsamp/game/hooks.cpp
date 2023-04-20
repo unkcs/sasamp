@@ -1702,9 +1702,9 @@ void CCam__Process_hook(uintptr_t thiz)
 				pVeh = pNetGame->GetVehiclePool()->GetAt(pNetGame->GetPlayerPool()->GetLocalPlayer()->m_CurrentVehicle);
 				if (pVeh)
 				{
-					vecSpeed = pVeh->m_pEntity->vecMoveSpeed;
+					vecSpeed = pVeh->m_pEntity->m_vecMoveSpeed;
 
-					pVeh->m_pEntity->vecMoveSpeed *= 6.0f;
+					pVeh->m_pEntity->m_vecMoveSpeed *= 6.0f;
 
 					*(float*)(g_libGTASA + 0x00608558) = 200.0f;
 				}
@@ -1715,7 +1715,7 @@ void CCam__Process_hook(uintptr_t thiz)
 	CCam__Process(thiz);
 	if (pVeh)
 	{
-		pVeh->m_pEntity->vecMoveSpeed = vecSpeed;
+		pVeh->m_pEntity->m_vecMoveSpeed = vecSpeed;
 		*(float*)(g_libGTASA + 0x00608558) = pOld;
 	}
 	if (*(uint16_t*)(thiz + 14) == 4 || *(uint16_t*)(thiz + 14) == 53) // 53 is weapon

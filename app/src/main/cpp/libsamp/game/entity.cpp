@@ -136,26 +136,26 @@ void CEntity::SetMatrix(RwMatrix mat)
 void CEntity::GetMoveSpeedVector(CVector *vec)
 {
 	if (!m_pEntity) return;
-	*vec = m_pEntity->vecMoveSpeed;
+	*vec = m_pEntity->m_vecMoveSpeed;
 }
 
 // 0.3.7
 void CEntity::SetMoveSpeedVector(CVector Vector)
 {
 	if (!m_pEntity) return;
-	m_pEntity->vecMoveSpeed = Vector;
+	m_pEntity->m_vecMoveSpeed = Vector;
 }
 
 void CEntity::GetTurnSpeedVector(CVector* vec)
 {
 	if (!m_pEntity) return;
-	*vec = m_pEntity->vecTurnSpeed;
+	*vec = m_pEntity->m_vecTurnSpeed;
 }
 
 void CEntity::SetTurnSpeedVector(const CVector vec)
 {
 	if (!m_pEntity) return;
-	m_pEntity->vecTurnSpeed = vec;
+	m_pEntity->m_vecTurnSpeed = vec;
 }
 
 // 0.3.7

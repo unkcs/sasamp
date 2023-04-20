@@ -297,9 +297,9 @@ void CObject::ApplyMoveSpeed()
 
 		RwMatrix mat;
 		GetMatrix(&mat);
-		mat.pos.x += fTimeStep * m_pEntity->vecMoveSpeed.x;
-		mat.pos.y += fTimeStep * m_pEntity->vecMoveSpeed.y;
-		mat.pos.z += fTimeStep * m_pEntity->vecMoveSpeed.z;
+		mat.pos.x += fTimeStep * m_pEntity->m_vecMoveSpeed.x;
+		mat.pos.y += fTimeStep * m_pEntity->m_vecMoveSpeed.y;
+		mat.pos.z += fTimeStep * m_pEntity->m_vecMoveSpeed.z;
 		UpdateMatrix(mat);
 	}
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "game/Core/Vector.h"
 #include "game/RW/rwplcore.h"
 
 #include "tHandlingData.h"
@@ -183,28 +182,28 @@ struct CVector2DFloat
 #pragma pack(push, 1)
 typedef struct _ATTACHED_OBJECT_INFO_INTERNAL
 {
-	uint32_t dwModelId;
-	uint32_t dwBone;
-	VECTOR vecOffset;
-	VECTOR vecRotation;
-	VECTOR vecScale;
-	uint32_t dwColor[2];
+	uint32_t 	dwModelId;
+	uint32_t 	dwBone;
+	CVector 	vecOffset;
+	CVector 	vecRotation;
+	CVector 	vecScale;
+	uint32_t 	dwColor[2];
 
-	bool bState;
+	bool 		bState;
 	class CObject* pObject;
-	uint32_t dwSampBone;
+	uint32_t 	dwSampBone;
 } ATTACHED_OBJECT_INFO_INTERNAL;
 #pragma pack(pop)
 
 #pragma pack(push, 1)
 typedef struct _ATTACHED_OBJECT_INFO
 {
-	uint32_t dwModelId;
-	uint32_t dwBone;
-	VECTOR vecOffset;
-	VECTOR vecRotation;
-	VECTOR vecScale;
-	uint32_t dwColor[2];
+	uint32_t 	dwModelId;
+	uint32_t 	dwBone;
+	CVector 	vecOffset;
+	CVector 	vecRotation;
+	CVector 	vecScale;
+	uint32_t 	dwColor[2];
 } ATTACHED_OBJECT_INFO;
 #pragma pack(pop)
 
@@ -294,13 +293,13 @@ enum eComponentStatus
 #pragma pack(push, 1)
 typedef struct _AIM_SYNC_DATA
 {
-	uint8_t	byteCamMode;
-	VECTOR vecAimf;
-	VECTOR vecAimPos;
-	float fAimZ;
-	uint8_t byteCamExtZoom : 6;
-	uint8_t byteWeaponState : 2;
-	uint8_t aspect_ratio;
+	uint8_t		byteCamMode;
+	CVector 	vecAimf;
+	CVector 	vecAimPos;
+	float 		fAimZ;
+	uint8_t 	byteCamExtZoom : 6;
+	uint8_t 	byteWeaponState : 2;
+	uint8_t 	aspect_ratio;
 } AIM_SYNC_DATA;
 #pragma pack(pop)
 //-----------------------------------------------------------
@@ -308,21 +307,21 @@ typedef struct _AIM_SYNC_DATA
 #pragma pack(push, 1)
 typedef struct _BULLET_SYNC
 {
-	uint8_t byteHitType;			// +0
-	uint16_t PlayerID;				// +1
-	VECTOR vecOrigin;				// +3
-	VECTOR vecPos;					// +12
-	VECTOR vecOffset;				// +20
-	uint8_t byteWeaponID;			// +28
+	uint8_t 	byteHitType;			// +0
+	uint16_t 	PlayerID;				// +1
+	CVector 	vecOrigin;				// +3
+	CVector 	vecPos;					// +12
+	CVector 	vecOffset;				// +20
+	uint8_t 	byteWeaponID;			// +28
 } BULLET_SYNC;					// size = 29
 
 class CEntityGta;
 
 typedef struct _BULLET_DATA {
-	uint32_t unk;
-	VECTOR vecOrigin;
-	VECTOR vecPos;
-	VECTOR vecOffset;
+	uint32_t 	unk;
+	CVector 	vecOrigin;
+	CVector 	vecPos;
+	CVector 	vecOffset;
 	CEntityGta* pEntity;
 } BULLET_DATA;
 

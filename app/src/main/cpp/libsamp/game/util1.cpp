@@ -1900,10 +1900,10 @@ CPhysical *GamePool_Object_GetAt(int iID)
 	return (GetPoolObj)(iID);
 } 
 
-int LineOfSight(VECTOR* start, VECTOR* end, void* colpoint, uintptr_t ent,
+int LineOfSight(CVector* start, CVector* end, void* colpoint, uintptr_t ent,
 	char buildings, char vehicles, char peds, char objects, char dummies, bool seeThrough, bool camera, bool unk)
 {
-	return (( int (*)(VECTOR*, VECTOR*, void*, uintptr_t,
+	return (( int (*)(CVector*, CVector*, void*, uintptr_t,
 		char, char, char, char, char, char, char, char))(g_libGTASA+0x3C70C0+1))(start, end, colpoint, ent,
 		buildings, vehicles, peds, objects, dummies, seeThrough, camera, unk);
 }
@@ -2147,7 +2147,7 @@ void RwMatrixInvert(RwMatrix *matOut, RwMatrix *matIn)
     ((void (*)(RwMatrix*, RwMatrix*))(g_libGTASA+0x1B91CC+1))(matOut, matIn);
 }
 
-void ProjectMatrix(VECTOR* vecOut, CMatrix* mat, VECTOR* vecPos)
+void ProjectMatrix(CVector* vecOut, CMatrix* mat, CVector* vecPos)
 {
 	vecOut->x = mat->m_up.x * vecPos->z + mat->m_forward.x * vecPos->y + mat->m_right.x * vecPos->x + mat->m_pos.x;
 	vecOut->y = mat->m_up.y * vecPos->z + mat->m_forward.y * vecPos->y + mat->m_right.y * vecPos->x + mat->m_pos.y;
@@ -2166,7 +2166,7 @@ void RwMatrixRotate(RwMatrix* mat, int axis, float angle)
 	((void (*)(RwMatrix*, float*, float, int))(g_libGTASA + 0x1B9118 + 1))(mat, matt[axis], angle, 1);
 }
 
-void RwMatrixScale(RwMatrix* matrix, VECTOR* vecScale)
+void RwMatrixScale(RwMatrix* matrix, CVector* vecScale)
 {
 	matrix->right.x *= vecScale->x;
 	matrix->right.y *= vecScale->x;

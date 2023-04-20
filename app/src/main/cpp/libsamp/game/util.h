@@ -11,7 +11,7 @@ int GamePool_Vehicle_GetIndex(CVehicleGta *pVehicle);
 
 CPhysical *GamePool_Object_GetAt(int iID);
 
-int LineOfSight(VECTOR* start, VECTOR* end, void* colpoint, uintptr_t ent,
+int LineOfSight(CVector* start, CVector* end, void* colpoint, uintptr_t ent,
 	char buildings, char vehicles, char peds, char objects, char dummies, bool seeThrough, bool camera, bool unk);
 
 bool IsPedModel(unsigned int uiModel);
@@ -34,11 +34,11 @@ int GetAnimIdxByName(const char* szName);
 struct RwRaster* GetRWRasterFromBitmap(uint8_t* pBitmap, size_t dwStride, size_t dwX, size_t dwY);
 struct RwRaster* GetRWRasterFromBitmapPalette(uint8_t* pBitmap, size_t dwStride, size_t dwX, size_t dwY, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
-void ProjectMatrix(VECTOR* vecOut, CMatrix* mat, VECTOR* vecPos);
+void ProjectMatrix(CVector* vecOut, CMatrix* mat, CVector* vecPos);
 void RwMatrixOrthoNormalize(RwMatrix *matIn, RwMatrix *matOut);
 void RwMatrixInvert(RwMatrix *matOut, RwMatrix *matIn);
 void RwMatrixRotate(RwMatrix* mat, int axis, float angle);
-void RwMatrixScale(RwMatrix* mat, VECTOR* vecScale);
+void RwMatrixScale(RwMatrix* mat, CVector* vecScale);
 
 int GetFreeTextDrawTextureSlot();
 void DestroyTextDrawTexture(int index);
@@ -49,7 +49,7 @@ void WorldAddEntity(uintptr_t pEnt);
 uintptr_t GetModelInfoByID(int iModelID);
 
 void DestroyAtomicOrClump(uintptr_t rwObject);
-void GetModelColSphereVecCenter(int iModel, VECTOR* vec);
+void GetModelColSphereVecCenter(int iModel, CVector* vec);
 float GetModelColSphereRadius(int iModel);
 void RenderClumpOrAtomic(uintptr_t rwObject);
 uintptr_t ModelInfoCreateInstance(int iModel);

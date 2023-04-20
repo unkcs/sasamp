@@ -211,7 +211,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 	{
 		m_bNeedRotate = true;
 
-		VECTOR vecRot;
+		CVector vecRot;
 		RwMatrix matrix;
 		this->GetRotation(&vecRot.x, &vecRot.y, &vecRot.z);
 		m_vecRotationTarget.x = fixAngle(fRotX);

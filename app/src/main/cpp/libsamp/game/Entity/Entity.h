@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Placeable.h"
-#include "game/CVector.h"
+#include "game/Core/Vector.h"
 #include "game/Reference.h"
 #include "../Core/Link.h"
 #include "game/Enums/eEntityStatus.h"

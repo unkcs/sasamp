@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CVector.h"
+#include "game/Core/Vector.h"
 #include "Entity/Physical.h"
 class CEntity
 {

@@ -330,7 +330,7 @@ void CKeyBoard::Close()
 #include "java_systems/CTab.h"
 #include "java_systems/CDuelsGui.h"
 #include "util/patch.h"
-#include "game/CVector.h"
+#include "game/Core/Vector.h"
 #include "java_systems/CStyling.h"
 #include "game/Models/ModelInfo.h"
 #include "game/cHandlingDataMgr.h"

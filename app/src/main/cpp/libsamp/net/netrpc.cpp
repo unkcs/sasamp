@@ -263,7 +263,7 @@ void WorldPlayerAdd(RPCParameters *rpcParams)
 	uint8_t byteFightingStyle=4;
 	uint8_t byteTeam=0;
 	unsigned int iSkin=0;
-	VECTOR vecPos;
+	CVector vecPos;
 	float fRotation=0;
 	uint32_t dwColor=0;
 	bool bVisible;
@@ -319,7 +319,7 @@ void SetCheckpoint(RPCParameters *rpcParams)
 	bsData.Read(fZ);
 	bsData.Read(fSize);
 
-	VECTOR pos, Extent;
+	CVector pos, Extent;
 
 	pos.x = fX;
 	pos.y = fY;
@@ -345,7 +345,7 @@ void SetRaceCheckpoint(RPCParameters *rpcParams)
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
 	float fX, fY, fZ;
 	uint8_t byteType;
-	VECTOR pos, next;
+	CVector pos, next;
 
 	bsData.Read(byteType);
 	bsData.Read(fX);
@@ -591,7 +591,7 @@ void Create3DTextLabel(RPCParameters *rpcParams)
 
 	uint16_t LabelID;
 	uint32_t color;
-	VECTOR pos;
+	CVector pos;
 	float dist;
 	uint8_t testLOS;
 	PLAYERID PlayerID;
@@ -908,7 +908,7 @@ void SetActorPos(RPCParameters* rpcParams)
 	uint16_t actorId;
 	CVector pos;
 	bsData.Read(actorId);
-	bsData.Read((char*)& pos, sizeof(VECTOR));
+	bsData.Read((char*)& pos, sizeof(CVector));
 	CActorPool* pActorPool = pNetGame->GetActorPool();
 
 	if (pActorPool)

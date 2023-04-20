@@ -60,7 +60,7 @@ void CStream::ProcessAttached() // todo
 		}
 		RwMatrix mat;
 		pVeh->GetMatrix(&mat);
-		memcpy(&m_vPos, &mat.pos, sizeof(VECTOR));
+		memcpy(&m_vPos, &mat.pos, sizeof(CVector));
 		//CChatWindow::AddDebugMessage("processed for vehicle %d", m_iAttachedTo);
 	}
 	if (m_iAttachType == 2) // player
@@ -76,7 +76,7 @@ void CStream::ProcessAttached() // todo
 		}
 		RwMatrix mat;
 		pPed->GetMatrix(&mat);
-		memcpy(&m_vPos, &mat.pos, sizeof(VECTOR));
+		memcpy(&m_vPos, &mat.pos, sizeof(CVector));
 		//CChatWindow::AddDebugMessage("processed for player %d", m_iAttachedTo);
 	}
 
@@ -97,7 +97,7 @@ CStream::CStream(CVector* pPos, int iInterior, float fDistance, const char* szUr
 	m_hStream = NULL;
 
 	strcpy(&m_szUrl[0], szUrl);
-	memcpy(&m_vPos, pPos, sizeof(VECTOR));
+	memcpy(&m_vPos, pPos, sizeof(CVector));
 
 	m_iInterior = iInterior;
 	m_fDistance = fDistance;

@@ -76,9 +76,9 @@ public:
 	// 0.3.7
 	void ToggleRaceCheckpoints(bool bEnabled) { m_bRaceCheckpointsEnabled = bEnabled; }
 	// 0.3.7
-	void SetCheckpointInformation(VECTOR *pos, VECTOR *extent);
+	void SetCheckpointInformation(CVector *pos, CVector *extent);
 	// 0.3.7
-	void SetRaceCheckpointInformation(uint8_t byteType, VECTOR *pos, VECTOR *next, float fSize);
+	void SetRaceCheckpointInformation(uint8_t byteType, CVector *pos, CVector *next, float fSize);
 	// 0.3.7
 	void UpdateCheckpoints();
 	// 0.3.7
@@ -134,8 +134,8 @@ public:
 	void CreateCheckPoint();
 
 	uint32_t		m_dwCheckpointMarker;
-	VECTOR			m_vecCheckpointPos;
-	VECTOR			m_vecCheckpointExtent;
+	CVector			m_vecCheckpointPos;
+	CVector			m_vecCheckpointExtent;
 	bool isAutoShopActive = false;
 	bool isCasinoWheelActive = false;
 	bool isShowMedicGame = false;
@@ -158,8 +158,8 @@ private:
 	uint32_t		m_dwRaceCheckpointMarker;
 	float			m_fRaceCheckpointSize;
 	uint8_t			m_byteRaceType;
-	VECTOR 			m_vecRaceCheckpointPos;
-	VECTOR			m_vecRaceCheckpointNext;
+	CVector 			m_vecRaceCheckpointPos;
+	CVector			m_vecRaceCheckpointNext;
 
 	bool 			m_bClockEnabled;
 

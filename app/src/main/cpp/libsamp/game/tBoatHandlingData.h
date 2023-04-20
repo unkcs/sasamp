@@ -6,7 +6,7 @@
 */
 #pragma once
 
-#include "CVector.h"
+#include "game/Core/Vector.h"
 
 struct tBoatHandlingData {
     int32_t     m_nVehicleId;

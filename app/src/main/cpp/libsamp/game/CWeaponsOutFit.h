@@ -7,13 +7,13 @@ class CWeaponsOutFit
 	public:
 		int iSlot;
 		int iBone;
-		VECTOR vOffset;
-		VECTOR vRotation;
+		CVector vOffset;
+		CVector vRotation;
 
 		bool bUseSecondary;
 		int iBoneSecondary;
-		VECTOR vOffsetSecondary;
-		VECTOR vRotationSecondary;
+		CVector vOffsetSecondary;
+		CVector vRotationSecondary;
 
 		SWeaponOutFitSettings()
 		{

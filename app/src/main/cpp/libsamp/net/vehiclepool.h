@@ -8,7 +8,7 @@ typedef struct _NEW_VEHICLE
 {
 	VEHICLEID 	VehicleID;
 	int 		iVehicleType;
-	VECTOR		vecPos;
+	CVector		vecPos;
 	float 		fRotation;
 	uint8_t		aColor1;
 	uint8_t		aColor2;

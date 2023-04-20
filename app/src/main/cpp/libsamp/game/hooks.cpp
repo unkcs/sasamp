@@ -421,8 +421,8 @@ __attribute__((naked)) void PickupPickUp_hook()
 }
 
 // fire weapon hooks
-uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, CEntityGta * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle);
-uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, CPedGta * pFiringEntity, VECTOR * vecOrigin, VECTOR * muzzlePosn, CEntityGta * targetEntity, VECTOR * target, VECTOR * originForDriveBy, int arg6, int muzzle)
+uint32_t (*CWeapon__FireInstantHit)(CWeapon * thiz, CPedGta * pFiringEntity, CVector * vecOrigin, CVector * muzzlePosn, CEntityGta * targetEntity, CVector * target, CVector * originForDriveBy, int arg6, int muzzle);
+uint32_t CWeapon__FireInstantHit_hook(CWeapon * thiz, CPedGta * pFiringEntity, CVector * vecOrigin, CVector * muzzlePosn, CEntityGta * targetEntity, CVector * target, CVector * originForDriveBy, int arg6, int muzzle)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -828,8 +828,8 @@ int CTextureDatabaseRuntime__GetEntry_hook(unsigned int a1, const char *a2, bool
 	return result;
 }
 
-uintptr_t* (*CCustomRoadsignMgr_RenderRoadsignAtomic)(uintptr_t*, VECTOR const&);
-uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, VECTOR const& a2)
+uintptr_t* (*CCustomRoadsignMgr_RenderRoadsignAtomic)(uintptr_t*, CVector const&);
+uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVector const& a2)
 {
 	return atomic;
 }
@@ -995,7 +995,7 @@ void onDamage(CPedGta* issuer, CPedGta* damaged)
 			CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 			CAMERA_AIM* caAim = pPlayerPool->GetLocalPlayer()->GetPlayerPed()->GetCurrentAim();
 
-			VECTOR aim;
+			CVector aim;
 			aim.x = caAim->f1x;
 			aim.y = caAim->f1y;
 			aim.z = caAim->f1z;
@@ -1501,7 +1501,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* a2)
 	v19 = v15 * v18;
 
 	CVector pos;
-	memcpy(&pos, &(v2->m_matrix->m_pos), sizeof(VECTOR));
+	memcpy(&pos, &(v2->m_matrix->m_pos), sizeof(CVector));
 	pos.z += 2.0f;
 
 	CShadows__StoreCarLightShadow(
@@ -2183,8 +2183,8 @@ void RenderEffects_hook()
 //	}
 }
 
-uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, VECTOR *vecOrigin);
-uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, VECTOR *vecOrigin)
+uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, CVector *vecOrigin);
+uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, CVector *vecOrigin)
 {
 	if(GamePool_FindPlayerPed() == pFiringEntity)
 	{
@@ -2199,7 +2199,7 @@ uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, 
 	return 1;
 }
 
-void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGta **ppEntity)
+void SendBulletSync(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CEntityGta **ppEntity)
 {
 	BULLET_DATA bulletData;
 	memset(&bulletData, 0, sizeof(BULLET_DATA));
@@ -2249,8 +2249,8 @@ void SendBulletSync(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CEntityGt
 }
 
 bool g_bForceWorldProcessLineOfSight = false;
-uint32_t (*CWeapon__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, CWeapon *pWeaponSlot, CPedGta **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
-uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, CWeapon *pWeaponSlot, CPedGta **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
+uint32_t (*CWeapon__ProcessLineOfSight)(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CPedGta **ppEntity, CWeapon *pWeaponSlot, CPedGta **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
+uint32_t CWeapon__ProcessLineOfSight_hook(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CPedGta **ppEntity, CWeapon *pWeaponSlot, CPedGta **ppEntity2, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -2262,8 +2262,8 @@ uint32_t CWeapon__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VEC
 	return CWeapon__ProcessLineOfSight(vecOrigin, vecEnd, vecPos, ppEntity, pWeaponSlot, ppEntity2, b1, b2, b3, b4, b5, b6, b7);
 }
 
-uint32_t (*CWorld__ProcessLineOfSight)(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8);
-uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECTOR *vecPos, CPedGta **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8)
+uint32_t (*CWorld__ProcessLineOfSight)(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CPedGta **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8);
+uint32_t CWorld__ProcessLineOfSight_hook(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CPedGta **ppEntity, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7, bool b8)
 {
 	uintptr_t dwRetAddr = 0;
 	__asm__ volatile ("mov %0, lr":"=r" (dwRetAddr));
@@ -2275,7 +2275,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 
 		CEntityGta *pEntity = nullptr;
 		CMatrix *pMatrix = nullptr;
-		VECTOR vecPosPlusOffset;
+		CVector vecPosPlusOffset;
 
 		if(pNetGame->m_iLagCompensation != 2)
 		{
@@ -2356,8 +2356,8 @@ uint32_t CWorld__ProcessLineOfSight_hook(VECTOR *vecOrigin, VECTOR *vecEnd, VECT
 	return CWorld__ProcessLineOfSight(vecOrigin, vecEnd, vecPos, ppEntity, b1, b2, b3, b4, b5, b6, b7, b8);
 }
 
-signed int (*CBulletInfo_AddBullet)(CEntityGta* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2);
-signed int CBulletInfo_AddBullet_hook(CEntityGta* pEntity, CWeapon* pWeapon, VECTOR vec1, VECTOR vec2)
+signed int (*CBulletInfo_AddBullet)(CEntityGta* pEntity, CWeapon* pWeapon, CVector vec1, CVector vec2);
+signed int CBulletInfo_AddBullet_hook(CEntityGta* pEntity, CWeapon* pWeapon, CVector vec1, CVector vec2)
 {
 	vec2.x *= 50.0f;
 	vec2.y *= 50.0f;

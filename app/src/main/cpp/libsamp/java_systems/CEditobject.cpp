@@ -64,7 +64,7 @@ Java_com_liverussia_cr_gui_AttachEdit_Exit(JNIEnv *env, jobject thiz) {
     CEditobject::thiz = nullptr;
 }
 
-void CEditobject::SendOnEditAttach(int response, int index, int modelid, int bone, VECTOR offset, VECTOR rot, VECTOR scale){
+void CEditobject::SendOnEditAttach(int response, int index, int modelid, int bone, CVector offset, CVector rot, CVector scale){
 
     RakNet::BitStream bsSend;
 

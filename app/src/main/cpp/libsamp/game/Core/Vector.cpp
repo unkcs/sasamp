@@ -5,9 +5,9 @@
     Do not delete this comment block. Respect others' work!
 */
 
-#include "CVector.h"
-#include "Core/Vector2D.h"
-#include "General.h"
+#include "Vector.h"
+#include "Vector2D.h"
+#include "game/General.h"
 
 void CVector::InjectHooks()
 {

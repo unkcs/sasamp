@@ -60,7 +60,7 @@ void CRemotePlayer::ProcessSpecialActions(BYTE byteSpecialAction)
 		//headmove?
 		if ((GetTickCount() - m_dwLastHeadUpdate) > 500 && g_uiHeadMoveEnabled)
 		{
-			VECTOR LookAt;
+			CVector LookAt;
 			CAMERA_AIM* Aim = GameGetRemotePlayerAim(m_pPlayerPed->m_bytePlayerNumber);
 			LookAt.x = Aim->pos1x + (Aim->f1x * 20.0f);
 			LookAt.y = Aim->pos1y + (Aim->f1y * 20.0f);
@@ -120,7 +120,7 @@ void CRemotePlayer::Process()
 		{
 			if ((GetTickCount() - m_dwLastHeadUpdate) > 500 /*&& pSettings->GetReadOnly().szHeadMove*/)
 			{
-				VECTOR LookAt;
+				CVector LookAt;
 				CAMERA_AIM* Aim = GameGetRemotePlayerAim(m_pPlayerPed->m_bytePlayerNumber);
 				LookAt.x = Aim->pos1x + (Aim->f1x * 20.0f);
 				LookAt.y = Aim->pos1y + (Aim->f1y * 20.0f);
@@ -377,7 +377,7 @@ void CRemotePlayer::UpdateVehicleRotation()
 	m_pCurrentVehicle->SetMatrix(matEnt);
 }
 
-bool CRemotePlayer::Spawn(uint8_t byteTeam, unsigned int iSkin, VECTOR *vecPos, float fRotation, 
+bool CRemotePlayer::Spawn(uint8_t byteTeam, unsigned int iSkin, CVector *vecPos, float fRotation,
 	uint32_t dwColor, uint8_t byteFightingStyle, bool bVisible)
 {
 	if(m_pPlayerPed)
@@ -656,7 +656,7 @@ void CRemotePlayer::Say(unsigned char* szText)
 	}
 }
 
-void calculateAimVector(VECTOR* vec1, VECTOR* vec2)
+void calculateAimVector(CVector* vec1, CVector* vec2)
 {
 	float f1;
 	float f2;
@@ -687,12 +687,12 @@ void CRemotePlayer::UpdateAimFromSyncData(AIM_SYNC_DATA * pAimSync)
 	Aim.pos2y = pAimSync->vecAimPos.y;
 	Aim.pos2z = pAimSync->vecAimPos.z;
 
-	VECTOR vec1;
+	CVector vec1;
 	vec1.x = Aim.f1x;
 	vec1.y = Aim.f1y;
 	vec1.z = Aim.f1z;
 
-	VECTOR vec2;
+	CVector vec2;
 	vec2.x = 0.0f;
 	vec2.y = 0.0f;
 	vec2.z = 0.0f;

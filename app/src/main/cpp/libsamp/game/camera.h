@@ -17,9 +17,9 @@ public:
 
 	void GetMatrix(RwMatrix* mat);
 	// 0.3.7
-	void InterpolateCameraPos(VECTOR *posFrom, VECTOR *posTo, int time, uint8_t mode);
+	void InterpolateCameraPos(CVector *posFrom, CVector *posTo, int time, uint8_t mode);
 	// 0.3.7
-	void InterpolateCameraLookAt(VECTOR *posFrom, VECTOR *posTo, int time, uint8_t mode);
+	void InterpolateCameraLookAt(CVector *posFrom, CVector *posTo, int time, uint8_t mode);
 
 private:
 	CEntityGta* m_pEntity;

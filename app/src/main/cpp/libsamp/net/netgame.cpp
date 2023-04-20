@@ -1503,8 +1503,8 @@ void CNetGame::Packet_PlayerSync(Packet *pkt) {
     // GENERAL KEYS
     bsPlayerSync.Read(ofSync.wKeys);
 
-    // VECTOR POS
-    bsPlayerSync.Read((char *) &ofSync.vecPos, sizeof(VECTOR));
+    // CVector POS
+    bsPlayerSync.Read((char *) &ofSync.vecPos, sizeof(CVector));
 
     // QUATERNION
     float tw, tx, ty, tz;
@@ -1588,7 +1588,7 @@ void CNetGame::Packet_VehicleSync(Packet *pkt) {
             icSync.quat.z);
 
     // position
-    bsSync.Read((char *) &icSync.vecPos, sizeof(VECTOR));
+    bsSync.Read((char *) &icSync.vecPos, sizeof(CVector));
 
     // speed
     bsSync.ReadVector(

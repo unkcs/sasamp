@@ -53,7 +53,7 @@ void CCamera::GetMatrix(RwMatrix* Matrix)
 }
 
 // 0.3.7
-void CCamera::InterpolateCameraPos(VECTOR *posFrom, VECTOR *posTo, int time, uint8_t mode)
+void CCamera::InterpolateCameraPos(CVector *posFrom, CVector *posTo, int time, uint8_t mode)
 {
 	ScriptCommand(&restore_camera_to_user);
 	ScriptCommand(&lock_camera_position1, 1);
@@ -61,7 +61,7 @@ void CCamera::InterpolateCameraPos(VECTOR *posFrom, VECTOR *posTo, int time, uin
 }
 
 // 0.3.7
-void CCamera::InterpolateCameraLookAt(VECTOR *posFrom, VECTOR *posTo, int time, uint8_t mode)
+void CCamera::InterpolateCameraLookAt(CVector *posFrom, CVector *posTo, int time, uint8_t mode)
 {
 	ScriptCommand(&lock_camera_position, 1);
 	ScriptCommand(&point_camera_transverse, posFrom->x, posFrom->y, posFrom->z, posTo->x, posTo->y, posTo->z, time, mode);

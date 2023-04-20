@@ -473,13 +473,13 @@ void CPlayerPed::SetPlayerAimState()
 	CWorld::PlayerInFocus = old;
 }
 
-void CPlayerPed::ApplyCommandTask(char* a2, int a4, int a5, int a6, VECTOR* a7, char a8, float a9, int a10, int a11, char a12)
+void CPlayerPed::ApplyCommandTask(char* a2, int a4, int a5, int a6, CVector* a7, char a8, float a9, int a10, int a11, char a12)
 {
 	uint32_t dwPed = (uint32_t)m_pPed;
 	if (!dwPed) return;
 	// 00958484 - g_ikChainManager
 	// 00463188 addr
-	((int(*)(uintptr_t a1, char* a2, uint32_t a3, int a4, int a5, int a6, VECTOR* a7, char a8, float a9, int a10, int a11, char a12))(g_libGTASA + 0x00463188 + 1))
+	((int(*)(uintptr_t a1, char* a2, uint32_t a3, int a4, int a5, int a6, CVector* a7, char a8, float a9, int a10, int a11, char a12))(g_libGTASA + 0x00463188 + 1))
 		(g_libGTASA + 0x00958484, a2, dwPed, a4, a5, a6, a7, a8, a9, a10, a11, a12);
 
 }
@@ -880,19 +880,19 @@ uintptr_t GetWeaponInfo(int iWeapon, int iSkill)
 	return ((uintptr_t(*)(int, int))(g_libGTASA + 0x0056BD60 + 1))(iWeapon, iSkill);
 }
 
-VECTOR* CPlayerPed::GetCurrentWeaponFireOffset() {
+CVector* CPlayerPed::GetCurrentWeaponFireOffset() {
 	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
 		return nullptr;
 	}
 
 	CWeapon* pSlot = GetCurrentWeaponSlot();
 	if (pSlot) {
-		return (VECTOR*)(GetWeaponInfo(pSlot->dwType, 1) + 0x24);
+		return (CVector*)(GetWeaponInfo(pSlot->dwType, 1) + 0x24);
 	}
 	return nullptr;
 }
 
-void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut) {
+void CPlayerPed::GetWeaponInfoForFire(int bLeft, CVector* vecBone, CVector* vecOut) {
 	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
 		return;
 	}
@@ -901,7 +901,7 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 		return;
 	}
 
-	VECTOR* pFireOffset = GetCurrentWeaponFireOffset();
+	CVector* pFireOffset = GetCurrentWeaponFireOffset();
 	if (pFireOffset && vecBone && vecOut) {
 		vecOut->x = pFireOffset->x;
 		vecOut->y = pFireOffset->y;
@@ -913,17 +913,17 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, VECTOR* vecBone, VECTOR* vecOut
 		}
 
 		// CPed::GetBonePosition
-		((void (*)(CPedGta*, VECTOR*, int, bool))(g_libGTASA + 0x00436590 + 1))(m_pPed, vecBone, bone_id, false);
+		((void (*)(CPedGta*, CVector*, int, bool))(g_libGTASA + 0x00436590 + 1))(m_pPed, vecBone, bone_id, false);
 
 		vecBone->z += pFireOffset->z + 0.15f;
 
 		// CPed::GetTransformedBonePosition
-		((void (*)(CPedGta*, VECTOR*, int, bool))(g_libGTASA + 0x004383C0 + 1))(m_pPed, vecOut, bone_id, false);
+		((void (*)(CPedGta*, CVector*, int, bool))(g_libGTASA + 0x004383C0 + 1))(m_pPed, vecOut, bone_id, false);
 	}
 }
 
-extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, CPedGta* pFiringEntity, VECTOR* vecOrigin, VECTOR* muzzlePosn, CEntityGta* targetEntity, VECTOR *target, VECTOR* originForDriveBy, int arg6, int muzzle);
-extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, VECTOR *vecOrigin);
+extern uint32_t (*CWeapon__FireInstantHit)(CWeapon* thiz, CPedGta* pFiringEntity, CVector* vecOrigin, CVector* muzzlePosn, CEntityGta* targetEntity, CVector *target, CVector* originForDriveBy, int arg6, int muzzle);
+extern uint32_t (*CWeapon__FireSniper)(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, CEntityGta *a3, CVector *vecOrigin);
 
 void CPlayerPed::FireInstant() {
 	if(!m_pPed || !GamePool_Ped_GetAt(m_dwGTAId)) {
@@ -962,8 +962,8 @@ void CPlayerPed::FireInstant() {
 		}
 		else
 		{
-			VECTOR vecBonePos;
-			VECTOR vecOut;
+			CVector vecBonePos;
+			CVector vecOut;
 
 			GetWeaponInfoForFire(true, &vecBonePos, &vecOut);
 
@@ -1048,7 +1048,7 @@ void CPlayerPed::AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot)
 
 }
 
-void CPlayerPed::SetAttachOffset(int iSlot, VECTOR pos, VECTOR rot)
+void CPlayerPed::SetAttachOffset(int iSlot, CVector pos, CVector rot)
 {
 	if (iSlot < 0 || iSlot >= MAX_ATTACHED_OBJECTS)
 	{
@@ -1089,10 +1089,10 @@ void CPlayerPed::FlushAttach()
 	}
 }
 
-RwMatrix* RwMatrixMultiplyByVector(VECTOR* out, RwMatrix* a2, VECTOR* in)
+RwMatrix* RwMatrixMultiplyByVector(CVector* out, RwMatrix* a2, CVector* in)
 {
 	RwMatrix* result;
-	VECTOR* v4;
+	CVector* v4;
 
 	result = a2;
 	v4 = in;
@@ -1102,9 +1102,9 @@ RwMatrix* RwMatrixMultiplyByVector(VECTOR* out, RwMatrix* a2, VECTOR* in)
 	return result;
 }
 
-void RwMatrixRotate(RwMatrix* pMat, VECTOR* axis, float angle)
+void RwMatrixRotate(RwMatrix* pMat, CVector* axis, float angle)
 {
-	((int(*)(RwMatrix*, VECTOR*, float, int))(g_libGTASA + 0x001B9118 + 1))(pMat, axis, angle, 1);
+	((int(*)(RwMatrix*, CVector*, float, int))(g_libGTASA + 0x001B9118 + 1))(pMat, axis, angle, 1);
 }
 
 void CPlayerPed::ProcessAttach()
@@ -1152,24 +1152,24 @@ void CPlayerPed::ProcessAttach()
 			RwMatrix outMat;
 			memcpy(&outMat, &hierarchy->pMatrixArray[iID], sizeof(RwMatrix));
 
-			VECTOR vecOut;
+			CVector vecOut;
 			RwMatrixMultiplyByVector(&vecOut, &outMat, &m_aAttachedObjects[i].vecOffset);
 
 			outMat.pos.x = vecOut.x;
 			outMat.pos.y = vecOut.y;
 			outMat.pos.z = vecOut.z;
 
-			VECTOR axis = { 1.0f, 0.0f, 0.0f };
+			CVector axis { 1.0f, 0.0f, 0.0f };
 			if (m_aAttachedObjects[i].vecRotation.x != 0.0f)
 			{
 				RwMatrixRotate(&outMat, &axis, m_aAttachedObjects[i].vecRotation.x);
 			}
-			axis = { 0.0f, 1.0f, 0.0f };
+			axis.Set( 0.0f, 1.0f, 0.0f );
 			if (m_aAttachedObjects[i].vecRotation.y != 0.0f)
 			{
 				RwMatrixRotate(&outMat, &axis, m_aAttachedObjects[i].vecRotation.y);
 			}
-			axis = { 0.0f, 0.0f, 1.0f };
+			axis.Set( 0.0f, 0.0f, 1.0f );
 			if (m_aAttachedObjects[i].vecRotation.z != 0.0f)
 			{
 				RwMatrixRotate(&outMat, &axis, m_aAttachedObjects[i].vecRotation.z);
@@ -1564,19 +1564,19 @@ void CPlayerPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta
 }
 
 // 0.3.7
-void CPlayerPed::GetBonePosition(int iBoneID, VECTOR* vecOut)
+void CPlayerPed::GetBonePosition(int iBoneID, CVector* vecOut)
 {
 	if(!m_pPed) return;
 	if(m_pEntity->vtable == g_libGTASA+0x5C7358) return;
 
-	(( void (*)(CPedGta*, VECTOR*, int, int))(g_libGTASA + 0x436590 + 1))(m_pPed, vecOut, iBoneID, 0);
+	(( void (*)(CPedGta*, CVector*, int, int))(g_libGTASA + 0x436590 + 1))(m_pPed, vecOut, iBoneID, 0);
 }
 
 CEntityGta* CPlayerPed::GetEntityUnderPlayer()
 {
 	uintptr_t entity;
-	VECTOR vecStart;
-	VECTOR vecEnd;
+	CVector vecStart;
+	CVector vecEnd;
 	char buf[100];
 
 	if(!m_pPed) return nullptr;
@@ -1880,7 +1880,7 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 											ObjectID = pObjectPool->FindIDFromGtaPtr(btData->pEntity);
 											if (ObjectID == INVALID_OBJECT_ID)
 											{
-												VECTOR vecOut;
+												CVector vecOut;
 												vecOut.x = 0.0f;
 												vecOut.y = 0.0f;
 												vecOut.z = 0.0f;

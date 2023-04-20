@@ -39,7 +39,7 @@ public:
 	// 0.3.7
 	bool IsAPassenger();
 	// 0.3.7
-	void ApplyCommandTask(char* a2, int a4, int a5, int a6, VECTOR* a7, char a8, float a9, int a10, int a11, char a12);
+	void ApplyCommandTask(char* a2, int a4, int a5, int a6, CVector* a7, char a8, float a9, int a10, int a11, char a12);
 	CVehicleGta* GetGtaVehicle();
 	// 0.3.7
 	void RemoveFromVehicleAndPutAt(float fX, float fY, float fZ);
@@ -106,7 +106,7 @@ public:
 	// 0.3.7
 	void ApplyAnimation( char *szAnimName, char *szAnimFile, float fT, bool opt1, bool opt2, bool opt3, bool opt4, int iUnk );
 	// 0.3.7
-	void GetBonePosition(int iBoneID, VECTOR* vecOut);
+	void GetBonePosition(int iBoneID, CVector* vecOut);
 	// roflan
 	//BYTE FindDeathReasonAndResponsiblePlayer(PLAYERID *nPlayer);
 	PLAYERID FindDeathResponsiblePlayer();
@@ -114,7 +114,7 @@ public:
 	CPedGta * GetGtaActor() { return m_pPed; };
 
 	void AttachObject(ATTACHED_OBJECT_INFO* pInfo, int iSlot);
-	void SetAttachOffset(int iSlot, VECTOR pos, VECTOR rot);
+	void SetAttachOffset(int iSlot, CVector pos, CVector rot);
 	void DeattachObject(int iSlot);
 	bool IsHasAttach();
 	void FlushAttach();
@@ -168,9 +168,9 @@ public:
     bool m_bHaveBulletData;
 	BULLET_DATA 		m_bulletData;
 
-	void GetWeaponInfoForFire(int bLeft, VECTOR *vecBone, VECTOR *vecOut);
+	void GetWeaponInfoForFire(int bLeft, CVector *vecBone, CVector *vecOut);
 
-	VECTOR *GetCurrentWeaponFireOffset();
+	CVector *GetCurrentWeaponFireOffset();
 
 	CVehicle *GetCurrentVehicle();
 

@@ -200,7 +200,7 @@ public:
 
 	CPlayerPed			*m_pPlayerPed;
 
-	void SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, VECTOR vecHitPos);
+	void SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, CVector vecHitPos);
 
 public:
 	bool				m_bIsSpectating;

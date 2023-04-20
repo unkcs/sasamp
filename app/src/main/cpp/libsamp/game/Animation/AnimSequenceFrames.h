@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../quaternion.h"
-#include "../CVector.h"
+#include "../Core/Vector.h"
 #include <cstdint>
 
 union Quat16 { // 4096

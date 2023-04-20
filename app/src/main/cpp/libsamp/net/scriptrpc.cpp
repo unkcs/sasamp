@@ -70,7 +70,7 @@ void ScrSetCameraPos(RPCParameters *rpcParams)
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-	VECTOR vecPos;
+	CVector vecPos;
 	bsData.Read(vecPos.x);
 	bsData.Read(vecPos.y);
 	bsData.Read(vecPos.z);
@@ -84,7 +84,7 @@ void ScrSetCameraLookAt(RPCParameters *rpcParams)
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
-	VECTOR vecPos;
+	CVector vecPos;
 	bsData.Read(vecPos.x);
 	bsData.Read(vecPos.y);
 	bsData.Read(vecPos.z);
@@ -798,7 +798,7 @@ void ScrInterpolateCamera(RPCParameters *rpcParams)
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
 	bool bSetPos = true;
-	VECTOR vecFrom, vecDest;
+	CVector vecFrom, vecDest;
 	int time;
 	uint8_t mode;
 
@@ -1048,7 +1048,7 @@ void ScrSetObjectPos(RPCParameters *rpcParams)
 
 	uint16_t wObjectID;
 	float fRotation;
-	VECTOR vecPos, vecRot;
+	CVector vecPos, vecRot;
 	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
 	bsData.Read(wObjectID);
 	bsData.Read(vecPos.x);
@@ -1602,10 +1602,10 @@ void ScrSetObjectRotation(RPCParameters* rpcParams)
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
 
 	uint16_t objectId;
-	VECTOR vecRot;
+	CVector vecRot;
 	
 	bsData.Read(objectId);
-	bsData.Read((char*)&vecRot, sizeof(VECTOR));
+	bsData.Read((char*)&vecRot, sizeof(CVector));
 
 	if (pNetGame->GetObjectPool()->GetAt(objectId))
 	{

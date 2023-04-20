@@ -208,17 +208,17 @@ float CGame::FindGroundZForCoord(float x, float y, float z)
 }
 
 // 0.3.7
-void CGame::SetCheckpointInformation(VECTOR *pos, VECTOR *extent)
+void CGame::SetCheckpointInformation(CVector *pos, CVector *extent)
 {
-	memcpy(&m_vecCheckpointPos,pos,sizeof(VECTOR));
-	memcpy(&m_vecCheckpointExtent,extent,sizeof(VECTOR));
+	memcpy(&m_vecCheckpointPos,pos,sizeof(CVector));
+	memcpy(&m_vecCheckpointExtent,extent,sizeof(CVector));
 }
 
 // 0.3.7
-void CGame::SetRaceCheckpointInformation(uint8_t byteType, VECTOR *pos, VECTOR *next, float fSize)
+void CGame::SetRaceCheckpointInformation(uint8_t byteType, CVector *pos, CVector *next, float fSize)
 {
-	memcpy(&m_vecRaceCheckpointPos,pos,sizeof(VECTOR));
-	memcpy(&m_vecRaceCheckpointNext,next,sizeof(VECTOR));
+	memcpy(&m_vecRaceCheckpointPos,pos,sizeof(CVector));
+	memcpy(&m_vecRaceCheckpointNext,next,sizeof(CVector));
 	m_fRaceCheckpointSize = fSize;
 	m_byteRaceType = byteType;
 

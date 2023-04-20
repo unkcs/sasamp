@@ -6,7 +6,7 @@
 #define LIVERUSSIA_SIMPLETRANSFORM_H
 
 
-#include "CVector.h"
+#include "game/Core/Vector.h"
 
 class CSimpleTransform {
 public:

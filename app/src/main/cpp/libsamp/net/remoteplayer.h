@@ -30,7 +30,7 @@ public:
 
 	void Process();
 	uint32_t GetPlayerColorAsARGB();
-	bool Spawn(uint8_t byteTeam, unsigned int iSkin, VECTOR *vecPos, float fRotation, uint32_t dwColor, uint8_t byteFightingStyle, bool bVisible);
+	bool Spawn(uint8_t byteTeam, unsigned int iSkin, CVector *vecPos, float fRotation, uint32_t dwColor, uint8_t byteFightingStyle, bool bVisible);
 	void Remove();
 
 	CPlayerPed* GetPlayerPed() { return m_pPlayerPed; }
@@ -124,7 +124,7 @@ private:
 
 	uint8_t m_byteWeaponShotID;
 
-	VECTOR 				m_vecPosOffset;
+	CVector 				m_vecPosOffset;
 
 	CVector				m_vecOnFootTargetPos;
 	CVector 				m_vecOnFootTargetSpeed;

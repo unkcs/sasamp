@@ -31,7 +31,7 @@ CPlayerTags::~CPlayerTags() {}
 #include <algorithm>
 void CPlayerTags::Render()
 {
-	VECTOR VecPos;
+	CVector VecPos;
 	RwMatrix matLocal, matPlayer;
 	int dwHitEntity;
 	char szNickBuf[50];
@@ -169,9 +169,9 @@ void CPlayerTags::ResetChatBubble(PLAYERID playerId)
 	m_bChatBubbleStatus[playerId] = 0;
 }
 
-void CPlayerTags::DrawChatBubble(PLAYERID playerId, VECTOR* vec, float fDistance)
+void CPlayerTags::DrawChatBubble(PLAYERID playerId, CVector* vec, float fDistance)
 {
-	VECTOR TagPos;
+	CVector TagPos;
 
 	TagPos.x = vec->x;
 	TagPos.y = vec->y;
@@ -179,9 +179,9 @@ void CPlayerTags::DrawChatBubble(PLAYERID playerId, VECTOR* vec, float fDistance
 	//TagPos.z = vec->Z;
 	TagPos.z += 0.45f + (fDistance * 0.0675f) + ((float)m_iOffset[playerId] * pGUI->ScaleY(0.35f));
 
-	VECTOR Out;
+	CVector Out;
 	// CSprite::CalcScreenCoors
-	((void (*)(VECTOR*, VECTOR*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&TagPos, &Out, 0, 0, 0, 0);
+	((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&TagPos, &Out, 0, 0, 0, 0);
 
 	if (Out.z < 1.0f)
 		return;
@@ -221,20 +221,20 @@ void CPlayerTags::DrawChatBubble(PLAYERID playerId, VECTOR* vec, float fDistance
 	TextWithColors(pos, __builtin_bswap32(m_dwColors[playerId]), m_pSzText[playerId]);
 }
 
-void CPlayerTags::Draw(VECTOR* vec, char* szName, uint32_t dwColor,
+void CPlayerTags::Draw(CVector* vec, char* szName, uint32_t dwColor,
 	float fDist, float fHealth, float fArmour, bool bAfk, bool bVoice, bool bKeyboard)
 {
 	if (!pGame->IsToggledHUDElement(HUD_ELEMENT_TAGS)) return;
-	VECTOR TagPos;
+	CVector TagPos;
 
 	TagPos.x = vec->x;
 	TagPos.y = vec->y;
 	TagPos.z = vec->z;
 	TagPos.z += 0.25f + (fDist * 0.0475f);
 
-	VECTOR Out;
+	CVector Out;
 	// CSprite::CalcScreenCoors
-	(( void (*)(VECTOR*, VECTOR*, float*, float*, bool, bool))(g_libGTASA+0x54EEC0+1))(&TagPos, &Out, 0, 0, 0, 0);
+	(( void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA+0x54EEC0+1))(&TagPos, &Out, 0, 0, 0, 0);
 
 	if(Out.z < 1.0f)
 		return;
@@ -336,16 +336,16 @@ void CPlayerTags::Draw(VECTOR* vec, char* szName, uint32_t dwColor,
 		ImGui::GetOverlayDrawList()->AddImage((ImTextureID)m_pAfk_icon->raster, a, b);
 	}
 
-	VECTOR TagPos_voice;
+	CVector TagPos_voice;
 
 	TagPos_voice.x = vec->x;
 	TagPos_voice.y = vec->y;
 	TagPos_voice.z = vec->z;
 	TagPos_voice.z += 0.65f + (fDist * 0.0475f);
 
-	VECTOR Out_voice;
+	CVector Out_voice;
 	// CSprite::CalcScreenCoors
-	((void (*)(VECTOR*, VECTOR*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&TagPos_voice, &Out_voice, 0, 0, 0, 0);
+	((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&TagPos_voice, &Out_voice, 0, 0, 0, 0);
 
 	if (Out_voice.z < 1.0f)
 		return;

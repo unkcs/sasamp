@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Vector2D.h"
-#include "game/CVector.h"
+#include "Vector.h"
 #include <array>
 #include <cassert>
 

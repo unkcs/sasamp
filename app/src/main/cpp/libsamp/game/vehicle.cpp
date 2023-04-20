@@ -4,7 +4,7 @@
 extern CGame* pGame;
 #include "..//CDebugInfo.h"
 #include "..//net/netgame.h"
-#include "CVector.h"
+#include "game/Core/Vector.h"
 #include "game/Models/VehicleModelInfo.h"
 #include "game/Models/ModelInfo.h"
 
@@ -1017,7 +1017,7 @@ void CVehicle::SetWheelWidth(float fValue)
 	m_fWheelWidth = fValue;
 }
 
-RwMatrix* RwMatrixMultiplyByVector(VECTOR* out, RwMatrix* a2, VECTOR* in);
+RwMatrix* RwMatrixMultiplyByVector(CVector* out, RwMatrix* a2, CVector* in);
 
 void CVehicle::ProcessWheelsOffset()
 {
@@ -1102,7 +1102,7 @@ void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, fl
 
 void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID)
 {
-	VECTOR vecOffset;
+	CVector vecOffset;
 	vecOffset.x = 0.0f - fValue;
 	vecOffset.y = 0.0f;
 	vecOffset.z = 0.0f;
@@ -1111,7 +1111,7 @@ void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int
 		vecOffset.x *= -1.0f;
 	}
 
-	VECTOR vecOut;
+	CVector vecOut;
 	RwMatrixMultiplyByVector(&vecOut, &(m_vInitialWheelMatrix[iID]), &vecOffset);
 
 	pFrame->modelling.pos.x = vecOut.x;

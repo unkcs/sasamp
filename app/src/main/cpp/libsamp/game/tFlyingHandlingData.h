@@ -7,7 +7,7 @@
 #pragma once
 
 
-#include "CVector.h"
+#include "game/Core/Vector.h"
 
 struct tFlyingHandlingData {
     int32_t m_nVehicleId;

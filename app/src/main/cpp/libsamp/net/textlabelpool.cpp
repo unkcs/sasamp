@@ -23,8 +23,8 @@ void CText3DLabelsPool::DrawNonAttached(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	VECTOR pos;
-	memcpy((void*)&pos, (const void*)&(pLabel->pos), sizeof(VECTOR));
+	CVector pos;
+	memcpy((void*)&pos, (const void*)&(pLabel->pos), sizeof(CVector));
 	DrawTextLabel(pLabel, &pos);
 }
 
@@ -48,8 +48,8 @@ void CText3DLabelsPool::DrawAttachedToPlayer(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	VECTOR pos;
-	memset((void*)&pos, 0, sizeof(VECTOR));
+	CVector pos;
+	memset((void*)&pos, 0, sizeof(CVector));
 
 	PLAYERID playerId = pLabel->attachedToPlayerID;
 
@@ -82,10 +82,10 @@ void CText3DLabelsPool::DrawAttachedToPlayer(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	VECTOR boneOut;
+	CVector boneOut;
 	pPlayerPed->GetBonePosition(5, &boneOut);
 
-	memcpy((void*)&pos, (const void*)&boneOut, sizeof(VECTOR));
+	memcpy((void*)&pos, (const void*)&boneOut, sizeof(CVector));
 
 	pos.x += pLabel->offsetCoords.x;
 	pos.y += pLabel->offsetCoords.y;
@@ -104,8 +104,8 @@ void CText3DLabelsPool::DrawAttachedToVehicle(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	VECTOR pos;
-	memset((void*)&pos, 0, sizeof(VECTOR));
+	CVector pos;
+	memset((void*)&pos, 0, sizeof(CVector));
 
 	VEHICLEID vehId = pLabel->attachedToVehicleID;
 
@@ -138,7 +138,7 @@ void CText3DLabelsPool::DrawAttachedToVehicle(TEXT_LABELS* pLabel)
 
 	pVehicle->GetMatrix(&mat);
 
-	memcpy((void*)& pos, (const void*)& mat.pos, sizeof(VECTOR));
+	memcpy((void*)& pos, (const void*)& mat.pos, sizeof(CVector));
 
 	pos.x += pLabel->offsetCoords.x;
 	pos.y += pLabel->offsetCoords.y;
@@ -167,22 +167,22 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 			if(distance < 20){
 				CVehicle* pVehicle = pVehiclePool->GetAt(i);
 
-				VECTOR pos;
-				memset((void*)&pos, 0, sizeof(VECTOR));
+				CVector pos;
+				memset((void*)&pos, 0, sizeof(CVector));
 
 				RwMatrix mat;
 				memset((void*)& mat, 0, sizeof(RwMatrix));
 
 				pVehicle->GetMatrix(&mat);
 
-				memcpy((void*)& pos, (const void*)& mat.pos, sizeof(VECTOR));
+				memcpy((void*)& pos, (const void*)& mat.pos, sizeof(CVector));
 
-				//memcpy((void*)& pos, (const void*)& m_matrix.pos, sizeof(VECTOR));
+				//memcpy((void*)& pos, (const void*)& m_matrix.pos, sizeof(CVector));
 
-				VECTOR Out;
-				memset((void*)&Out, 0, sizeof(VECTOR));
+				CVector Out;
+				memset((void*)&Out, 0, sizeof(CVector));
 				// CSprite::CalcScreenCoors
-				((void (*)(VECTOR*, VECTOR*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&pos, &Out, 0, 0, 0, 0);
+				((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&pos, &Out, 0, 0, 0, 0);
 				if (Out.z < 1.0f)
 				{
 					return;
@@ -206,7 +206,7 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 	}
 }
 
-void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, VECTOR* pPos)
+void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, CVector* pPos)
 {
 	int hitEntity = 0;
 	if (!pNetGame->GetPlayerPool()->GetLocalPlayer())
@@ -241,10 +241,10 @@ void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, VECTOR* pPos)
 	{
 		if (pPed->GetDistanceFromPoint(pPos->x, pPos->y, pPos->z) <= pLabel->drawDistance)
 		{
-			VECTOR Out;
-			memset((void*)&Out, 0, sizeof(VECTOR));
+			CVector Out;
+			memset((void*)&Out, 0, sizeof(CVector));
 			// CSprite::CalcScreenCoors
-			((void (*)(VECTOR*, VECTOR*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(pPos, &Out, 0, 0, 0, 0);
+			((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(pPos, &Out, 0, 0, 0, 0);
 			if (Out.z < 1.0f)
 			{
 				return;
@@ -397,7 +397,7 @@ void CText3DLabelsPool::Delete(int labelID)
 	}
 }
 
-void CText3DLabelsPool::AttachToPlayer(int labelID, PLAYERID playerID, VECTOR pos)
+void CText3DLabelsPool::AttachToPlayer(int labelID, PLAYERID playerID, CVector pos)
 {
 	if (labelID < 0 || labelID >= TEXT_LABEL_POOL_SIZE)
 	{
@@ -412,7 +412,7 @@ void CText3DLabelsPool::AttachToPlayer(int labelID, PLAYERID playerID, VECTOR po
 	}
 }
 
-void CText3DLabelsPool::AttachToVehicle(int labelID, VEHICLEID vehicleID, VECTOR pos)
+void CText3DLabelsPool::AttachToVehicle(int labelID, VEHICLEID vehicleID, CVector pos)
 {
 	if (labelID < 0 || labelID >= TEXT_LABEL_POOL_SIZE)
 	{

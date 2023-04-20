@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "CVector.h"
+#include "game/Core/Vector.h"
 #include "cTransmission.h"
 #include "Enums/eVehicleHandlingModelFlags.h"
 #include "Enums/eVehicleHandlingFlags.h"

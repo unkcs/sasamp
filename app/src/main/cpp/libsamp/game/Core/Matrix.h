@@ -7,7 +7,7 @@
 #pragma once
 
 #include "../RW/rwplcore.h"
-#include "../CVector.h"
+#include "Vector.h"
 #include "../quaternion.h"
 
 enum eMatrixEulerFlags : uint32_t {

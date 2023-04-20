@@ -9,7 +9,7 @@ extern CNetGame* pNetGame;
 
 bool CFirstPersonCamera::m_bEnabled = false;
 
-RwMatrix* RwMatrixMultiplyByVector(VECTOR* out, RwMatrix* a2, VECTOR* in);
+RwMatrix* RwMatrixMultiplyByVector(CVector* out, RwMatrix* a2, CVector* in);
 void CFirstPersonCamera::ProcessCameraOnFoot(uintptr_t pCam, CPlayerPed* pPed)
 {
 	if (!m_bEnabled || *(uint8_t*)(g_libGTASA + 0x8B147E) || *(uint8_t*)(g_libGTASA + 0x8B147F))
@@ -17,15 +17,15 @@ void CFirstPersonCamera::ProcessCameraOnFoot(uintptr_t pCam, CPlayerPed* pPed)
 		return;
 	}
 
-	VECTOR* pVec = (VECTOR*)(pCam + 372);
+	CVector* pVec = (CVector*)(pCam + 372);
 
-	VECTOR vecOffset;
+	CVector vecOffset;
 	vecOffset.x = 0.35f;
 	vecOffset.y = 0.1f;
 	vecOffset.z = 0.1f;
 
 
-	VECTOR vecOut;
+	CVector vecOut;
 	RwMatrixMultiplyByVector(&vecOut, &(pPed->m_HeadBoneMatrix), &vecOffset);
 
 	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
@@ -44,8 +44,8 @@ void CFirstPersonCamera::ProcessCameraOnFoot(uintptr_t pCam, CPlayerPed* pPed)
 	((RwCamera*(*)(RwCamera*, float))(g_libGTASA + 0x001AD6F4 + 1))(*(RwCamera**)(g_libGTASA + 0x95B064), 0.2f);
 }
 
-VECTOR vecAtSaved;
-VECTOR vecUpSaved;
+CVector vecAtSaved;
+CVector vecUpSaved;
 bool bsaved = false;
 
 void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CVehicle* pVeh)
@@ -55,9 +55,9 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 		return;
 	}
 
-	VECTOR* pVec = (VECTOR*)(pCam + 372);
+	CVector* pVec = (CVector*)(pCam + 372);
 
-	VECTOR vecOffset;
+	CVector vecOffset;
 	vecOffset.x = 0.0f;
 	vecOffset.y = 0.0f;
 	vecOffset.z = 0.6f;
@@ -77,7 +77,7 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 		((RwCamera * (*)(RwCamera*, float))(g_libGTASA + 0x001AD6F4 + 1))(*(RwCamera * *)(g_libGTASA + 0x95B064), 0.01f);
 	}
 
-	VECTOR vecOut;
+	CVector vecOut;
 	RwMatrix mat;
 
 	memcpy(&mat, pPed->m_pPed->m_matrix, sizeof(RwMatrix));

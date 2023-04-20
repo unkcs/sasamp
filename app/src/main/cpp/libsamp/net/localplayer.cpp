@@ -275,7 +275,7 @@ bool CLocalPlayer::Process()
 			UpdateSurfing();
 
 			if ((dwThisTick - m_dwLastHeadUpdate) > 1000 && g_uiHeadMoveEnabled) {
-				VECTOR LookAt;
+				CVector LookAt;
 				CAMERA_AIM *Aim = GameGetInternalAim();
 				LookAt.x = Aim->pos1x + (Aim->f1x * 20.0f);
 				LookAt.y = Aim->pos1y + (Aim->f1y * 20.0f);
@@ -734,7 +734,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 	}
 }
 
-void CLocalPlayer::SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, VECTOR vecHitPos)
+void CLocalPlayer::SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, CVector vecHitPos)
 {
 	if (!m_pPlayerPed) return;
 	switch (byteHitType)

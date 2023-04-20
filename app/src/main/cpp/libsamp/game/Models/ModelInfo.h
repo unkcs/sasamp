@@ -9,7 +9,7 @@
 #include "PedModelInfo.h"
 #include "AtomicModelInfo.h"
 #include "VehicleModelInfo.h"
-#include "game/Core/CStore.h"
+#include "game/Core/Store.h"
 
 class CModelInfo {
 public:

@@ -201,7 +201,7 @@ void CWeaponsOutFit::ProcessLocalPlayer(CPlayerPed* pPed)
 		for (int i = 0; i < 10; i++)
 		{
 			int iWeaponID = GetWeaponModelIDFromSlot(i);
-			VECTOR vecPos, vecRot;
+			CVector vecPos, vecRot;
 			if (i >= MAX_ATTACHED_OBJECTS || iWeaponID == 0)
 			{
 				continue;

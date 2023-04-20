@@ -110,7 +110,8 @@ public class DonateFragment extends Fragment implements View.OnClickListener, Ac
         switch (v.getId()) {
             case R.id.rechargeButton:
                 v.startAnimation(animation);
-                performRechargeButtonAction();
+                performRechargeQiwiButtonAction();
+//                performRechargeButtonAction();
                 break;
             case R.id.rechargeQiwiButton:
                 v.startAnimation(animation);

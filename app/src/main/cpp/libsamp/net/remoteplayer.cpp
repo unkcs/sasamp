@@ -314,7 +314,8 @@ void CRemotePlayer::UpdateInCarTargetPosition()
 			}
 			else
 			{
-				m_pCurrentVehicle->GetMoveSpeedVector(&vec);
+				vec = m_pCurrentVehicle->m_pVehicle->GetMoveSpeed();
+
 				if(m_vecPosOffset.x > 0.05f)
 					vec.x += (m_vecInCarTargetPos.x - matEnt.pos.x) * 0.06f;
 				if(m_vecPosOffset.y > 0.05f)
@@ -500,8 +501,8 @@ void CRemotePlayer::UpdateOnFootTargetPosition()
 			m_pPlayerPed->SetMatrix(mat);
 			return;
 		}
+		vec = m_pPlayerPed->m_pPed->GetMoveSpeed();
 
-		m_pPlayerPed->GetMoveSpeedVector(&vec);
 		if(m_vecPosOffset.x > 0.00001f)
 			vec.x += (m_vecOnFootTargetPos.x - mat.pos.x) * 0.1f;
 		if(m_vecPosOffset.y > 0.00001f)

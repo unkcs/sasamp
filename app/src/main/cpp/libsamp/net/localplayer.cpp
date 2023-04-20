@@ -672,14 +672,13 @@ void CLocalPlayer::SendOnFootFullSyncData()
 {
 	RakNet::BitStream bsPlayerSync;
 	RwMatrix matPlayer;
-	CVector vecMoveSpeed;
+	CVector vecMoveSpeed = m_pPlayerPed->m_pPed->GetMoveSpeed();
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
 
 	ONFOOT_SYNC_DATA ofSync;
 
 	m_pPlayerPed->GetMatrix(&matPlayer);
-	m_pPlayerPed->GetMoveSpeedVector(&vecMoveSpeed);
 
 	ofSync.lrAnalog = lrAnalog;
 	ofSync.udAnalog = udAnalog;
@@ -811,7 +810,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 	icSync.wKeys = wKeys;
 
 	pVehicle->GetMatrix(&matPlayer);
-	pVehicle->GetMoveSpeedVector(&vecMoveSpeed);
+	vecMoveSpeed = pVehicle->m_pVehicle->GetMoveSpeed();
 
 	icSync.quat.SetFromMatrix(matPlayer);
 	icSync.quat.Normalize();
@@ -866,7 +865,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 			syncQuat.SetFromMatrix(matTrailer);
 			trSync.quat = syncQuat;
 
-			pTrailer->GetMoveSpeedVector(&trSync.vecMoveSpeed);
+			trSync.vecMoveSpeed = pTrailer->m_pVehicle->GetMoveSpeed();
 			pTrailer->GetTurnSpeedVector(&trSync.vecTurnSpeed);
 
 			RakNet::BitStream bsTrailerSync;

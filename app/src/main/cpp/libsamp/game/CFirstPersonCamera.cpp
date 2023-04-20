@@ -99,23 +99,11 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 
 	//pPed->SetArmedWeapon(0);
 
-	if (!pVeh)
-	{
-		if (!pPed->IsAPassenger())
-		{
-			*(uint16_t*)(pCam + 14) = 16;
+	if (!pVeh) {
+		if (!pPed->IsAPassenger()) {
+			*(uint16_t *) (pCam + 14) = 16;
 		}
 		return;
-	}
-
-	if (!pPed->IsAPassenger())
-	{
-		CVector vecSpeed;
-		pVeh->GetMoveSpeedVector(&vecSpeed);
-		float speed = sqrt((vecSpeed.x * vecSpeed.x) + (vecSpeed.y * vecSpeed.y) + (vecSpeed.z * vecSpeed.z)) * 2.0f * 100.0f;
-
-		
-		
 	}
 }
 

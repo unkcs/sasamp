@@ -18,6 +18,18 @@ enum ModelInfoType : uint8_t {
     MODEL_INFO_LOD = 8
 };
 
+enum eModelInfoSpecialType : uint8_t {
+    TREE = 1,
+    PALM = 2,
+    GLASS_TYPE_1 = 4,
+    GLASS_TYPE_2 = 5,
+    TAG = 6,
+    GARAGE_DOOR = 7,
+    CRANE = 9,
+    UNKNOWN = 10,
+    BREAKABLE_STATUE = 11,
+};
+
 class CTimeInfo;
 
 class CAtomicModelInfo;
@@ -96,6 +108,16 @@ struct CBaseModelInfo {
     CPedModelInfo*     AsPedModelInfoPtr()     { return reinterpret_cast<CPedModelInfo*>(this); }
     CWeaponModelInfo*  AsWeaponModelInfoPtr()  { return reinterpret_cast<CWeaponModelInfo*>(this); }
 
+    [[nodiscard]] bool IsSwayInWind1()         const { return nSpecialType == eModelInfoSpecialType::TREE; }               // 0x0800
+    [[nodiscard]] bool IsSwayInWind2()         const { return nSpecialType == eModelInfoSpecialType::PALM; }               // 0x1000
+    [[nodiscard]] bool SwaysInWind()           const { return IsSwayInWind1() || IsSwayInWind2(); }
+    [[nodiscard]] bool IsGlassType1()          const { return nSpecialType == eModelInfoSpecialType::GLASS_TYPE_1; }       // 0x2000
+    [[nodiscard]] bool IsGlassType2()          const { return nSpecialType == eModelInfoSpecialType::GLASS_TYPE_2; }       // 0x2800
+    [[nodiscard]] bool IsGlass()               const { return IsGlassType1() || IsGlassType2(); }
+    [[nodiscard]] bool IsTagModel()            const { return nSpecialType == eModelInfoSpecialType::TAG; }                // 0x3000
+    [[nodiscard]] bool IsGarageDoor()          const { return nSpecialType == eModelInfoSpecialType::GARAGE_DOOR; }        // 0x3800
+    [[nodiscard]] bool IsBreakableStatuePart() const { return nSpecialType == eModelInfoSpecialType::BREAKABLE_STATUE; }
+    [[nodiscard]] bool IsCrane()               const { return nSpecialType == eModelInfoSpecialType::CRANE; }              // 0x4800
 
 };
 #pragma pack(pop)

@@ -12,6 +12,7 @@
 #include "game/Enums/eEntityType.h"
 #include "game/Enums/eSurfaceType.h"
 #include "game/quaternion.h"
+#include "game/Enums/eAreaCodes.h"
 
 #pragma pack(push, 1)
 struct CEntityGta : CPlaceable
@@ -62,21 +63,38 @@ struct CEntityGta : CPlaceable
             uint32_t m_bTunnelTransition : 1;
         } nEntityFlags;
     };
+    union {
+        struct {
+            uint16 m_nRandomSeedUpperByte : 8;
+            uint16 m_nRandomSeedSecondByte : 8;
+        };
+        uint16 m_nRandomSeed;
+    };
 
-    uint16_t RandomSeed;
+    uint16_t            m_nModelIndex;
+    CReference          *m_pReferences;
+    CLink<CEntityGta*>  *m_pLastRenderedLink;
+    uint16_t            m_nScanCode;
+    uint8_t             m_iplIndex;
+    eAreaCodes          m_areaCode;
+    union {
+        int32       m_nLodIndex; // -1 - without LOD model
+        CEntityGta* m_pLod;
+    };
+    uint8_t         numLodChildren;
+    int8_t          numLodChildrenRendered;
+    eEntityType     m_nType : 3;          // Mask: & 0x7  = 7
+    eEntityStatus   m_nStatus : 5;        // Mask: & 0xF8 = 248 (Remember: In the original code unless this was left shifted the value it's compared to has to be left shifted by 3!)
+    uint8_t         pad_0;
 
-    uint16_t nModelIndex;
-    CReference *pReferences;
-    CLink<CEntityGta*> *m_pLastRenderedLink;
-    uint16_t m_nScanCode;
-    uint8_t m_iplIndex;
-    uint8_t m_areaCode;
-    CEntityGta *m_pLod;
-    uint8_t numLodChildren;
-    int8_t numLodChildrenRendered;
-    eEntityType   m_nType : 3;          // Mask: & 0x7  = 7
-    eEntityStatus m_nStatus : 5;        // Mask: & 0xF8 = 248 (Remember: In the original code unless this was left shifted the value it's compared to has to be left shifted by 3!)
-    uint8_t pad_0;
+public:
+    void UpdateRwFrame();
+    void UpdateRpHAnim();
+    bool HasPreRenderEffects();
+    bool DoesNotCollideWithFlyers();
+
+private:
+    static void InjectHooks();
 };
 static_assert(sizeof(CEntityGta) == 0x38);
 #pragma pack(pop)

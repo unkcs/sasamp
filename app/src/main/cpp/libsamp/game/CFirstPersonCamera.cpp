@@ -62,7 +62,7 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 	vecOffset.y = 0.0f;
 	vecOffset.z = 0.6f;
 
-	uint16_t modelIndex = pPed->GetGtaVehicle()->nModelIndex;
+	uint16_t modelIndex = pPed->GetGtaVehicle()->m_nModelIndex;
 
 	if (modelIndex == 581 || modelIndex == 509 || modelIndex == 481 || modelIndex == 462 || modelIndex == 521 || modelIndex == 463 || modelIndex == 510 ||
 		modelIndex == 522 || modelIndex == 461 || modelIndex == 468 || modelIndex == 448 || modelIndex == 586)

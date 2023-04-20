@@ -1378,8 +1378,8 @@ int g_iLastProcessedModelIndexAutoEnt = 0;
 void (*CAutomobile__ProcessEntityCollision)(CVehicleGta* a1, CEntityGta* a2, int a3);
 void CAutomobile__ProcessEntityCollision_hook(CVehicleGta* a1, CEntityGta* a2, int a3)
 {
-	g_usLastProcessedModelIndexAutomobile = a1->nModelIndex;
-	g_iLastProcessedModelIndexAutoEnt = a2->nModelIndex;
+	g_usLastProcessedModelIndexAutomobile = a1->m_nModelIndex;
+	g_iLastProcessedModelIndexAutoEnt = a2->m_nModelIndex;
 
 	bool bReplace = false;
 	void* pOld = nullptr;
@@ -1397,7 +1397,7 @@ void CAutomobile__ProcessEntityCollision_hook(CVehicleGta* a1, CEntityGta* a2, i
 			{
 				if (pVeh->bHasSuspensionLines && pVeh->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR)
 				{
-					pColData = GetCollisionDataFromModel(a1->nModelIndex);
+					pColData = GetCollisionDataFromModel(a1->m_nModelIndex);
 					if (pColData && pVeh->m_pSuspensionLines)
 					{
 						if (*(void**)(pColData + 16))
@@ -1478,7 +1478,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* a2)
 	v2 = pVeh->m_pVehicle;
 	v3 = *((uintptr_t*)v2 + 5);
 	v4 = a2;
-	v5 = *(float**)(dwModelarray[v2->nModelIndex] + 116);
+	v5 = *(float**)(dwModelarray[v2->m_nModelIndex] + 116);
 	v6 = *v5;
 	v7 = v5[1];
 	if (v3)
@@ -1631,7 +1631,7 @@ void CAutomobile__UpdateWheelMatrix_hook(CVehicleGta* thiz, int nodeIndex, int f
 void (*CAutomobile__PreRender)(CVehicleGta* thiz);
 void CAutomobile__PreRender_hook(CVehicleGta* thiz)
 {
-	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(thiz->nModelIndex);
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(thiz->m_nModelIndex);
 
 	float fOldFront = pModelInfoStart->m_fWheelSizeFront;
 	float fOldRear = pModelInfoStart->m_fWheelSizeRear;
@@ -1829,8 +1829,8 @@ int g_iLastProcessedEntityCollision = 228;
 void (*CPed__ProcessEntityCollision)(CPedGta* thiz, CEntityGta* ent, void* colPoint);
 void CPed__ProcessEntityCollision_hook(CPedGta* thiz, CEntityGta* ent, void* colPoint)
 {
-	g_iLastProcessedSkinCollision = thiz->nModelIndex;
-	g_iLastProcessedEntityCollision = ent->nModelIndex;
+	g_iLastProcessedSkinCollision = thiz->m_nModelIndex;
+	g_iLastProcessedEntityCollision = ent->m_nModelIndex;
 
 //	if(ent->m_nType == ENTITY_TYPE_PED) { // проходить сквозь челов
 //		return;

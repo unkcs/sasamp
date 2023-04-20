@@ -159,8 +159,8 @@ CVehicle::~CVehicle()
 		m_pTrailer = nullptr;
 	}
 
-	if (m_pVehicle->nModelIndex == TRAIN_PASSENGER_LOCO ||
-		m_pVehicle->nModelIndex == TRAIN_FREIGHT_LOCO) {
+	if (m_pVehicle->m_nModelIndex == TRAIN_PASSENGER_LOCO ||
+		m_pVehicle->m_nModelIndex == TRAIN_FREIGHT_LOCO) {
 		ScriptCommand(&destroy_train, m_dwGTAId);
 	}
 	else {
@@ -224,7 +224,7 @@ void CVehicle::toggleRightTurnLight(bool toggle)
     m_bIsOnRightTurnLight = toggle;
 
 
-	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->nModelIndex);
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->m_nModelIndex);
 
 	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
@@ -267,7 +267,7 @@ void CVehicle::toggleRightTurnLight(bool toggle)
 
 void CVehicle::toggleReverseLight(bool toggle)
 {
-	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->nModelIndex);
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->m_nModelIndex);
 
 	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
@@ -311,7 +311,7 @@ void CVehicle::toggleLeftTurnLight(bool toggle)
 {
     m_bIsOnLeftTurnLight = toggle;
 
-	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->nModelIndex);
+	auto pModelInfoStart = CModelInfo::GetVehicleModelInfo(m_pEntity->m_nModelIndex);
 
 	CVector* m_avDummyPos = pModelInfoStart->m_pVehicleStruct->m_avDummyPos;
 
@@ -741,7 +741,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		m_pCustomHandling = new tHandlingData;
 	}
 
-	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->nModelIndex);
+	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->m_nModelIndex);
 
 	if (!pModel)
 	{
@@ -889,7 +889,7 @@ void CVehicle::ResetVehicleHandling()
 	{
 		m_pCustomHandling = new tHandlingData;
 	}
-	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->nModelIndex);
+	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->m_nModelIndex);
 
 
 	if (!pModel)
@@ -1262,7 +1262,7 @@ void CVehicle::CopyGlobalSuspensionLinesToPrivate()
 	if (!bHasSuspensionLines)
 	{
 		int numWheels;
-		void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->nModelIndex, numWheels);
+		void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->m_nModelIndex, numWheels);
 
 		if (pOrigSuspension && numWheels)
 		{
@@ -1272,7 +1272,7 @@ void CVehicle::CopyGlobalSuspensionLinesToPrivate()
 	}
 
 	int numWheels;
-	void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->nModelIndex, numWheels);
+	void* pOrigSuspension = GetSuspensionLinesFromModel(m_pVehicle->m_nModelIndex, numWheels);
 
 	if (pOrigSuspension && numWheels)
 	{
@@ -1540,9 +1540,9 @@ unsigned int CVehicle::GetVehicleSubtype()
 bool CVehicle::IsTrailer()
 {
 	if(!m_pVehicle)return false;
-	if(!m_pVehicle->nModelIndex)return false;
+	if(!m_pVehicle->m_nModelIndex)return false;
 
-	return ((bool (*)(int)) (g_libGTASA + 0x00336940 + 1))(m_pVehicle->nModelIndex);
+	return ((bool (*)(int)) (g_libGTASA + 0x00336940 + 1))(m_pVehicle->m_nModelIndex);
 }
 
 void CVehicle::GetDamageStatusEncoded(uint8_t* byteTyreFlags, uint8_t* byteLightFlags, uint32_t* dwDoorFlags, uint32_t* dwPanelFlags)

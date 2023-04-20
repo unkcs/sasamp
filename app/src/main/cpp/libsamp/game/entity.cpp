@@ -45,7 +45,7 @@ void CEntity::UpdateRwMatrixAndFrame()
 				m_pEntity->m_placement.UpdateRwMatrix(pMatrix);
 
 
-			((void (*) (CEntityGta*))(g_libGTASA + 0x0039194C + 1))(m_pEntity);
+			m_pEntity->UpdateRwFrame();
 		}
 	}
 }
@@ -152,7 +152,7 @@ uint16_t CEntity::GetModelIndex()
 	{
 		return 0;
 	}
-	return m_pEntity->nModelIndex;
+	return m_pEntity->m_nModelIndex;
 }
 
 // 0.3.7
@@ -195,7 +195,7 @@ bool CEntity::SetModelIndex(unsigned int uiModel)
 
 	// CEntity::DeleteRWObject()
 	(( void (*)(CEntityGta*))(*(void**)(m_pEntity->vtable + 0x24)))(m_pEntity);
-	m_pEntity->nModelIndex = uiModel;
+	m_pEntity->m_nModelIndex = uiModel;
 	// CEntity::SetModelIndex()
 	(( void (*)(CEntityGta*, unsigned int))(*(void**)(m_pEntity->vtable + 0x18)))(m_pEntity, uiModel);
 

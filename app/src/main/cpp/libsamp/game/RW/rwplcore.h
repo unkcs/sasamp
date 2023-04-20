@@ -28,13 +28,262 @@
  *
  ************************************************************************/
 
+/****************************************************************************
+ Macro wrappers. These are needed everywhere.
+ */
+
+#ifndef MACRO_START
+#define MACRO_START do
+#endif /* MACRO_START */
+
+#ifndef MACRO_STOP
+#define MACRO_STOP while(0)
+#endif /* MACRO_STOP */
+
+/****************************************************************************
+ Types needed everywhere
+ */
+
+#ifdef FALSE
+#undef FALSE
+#endif
+#define FALSE 0
+
+#ifdef TRUE
+#undef TRUE
+#endif
+#define TRUE !FALSE
+
+
 /* Get components */
 #define RwMatrixGetRight(m)    (&(m)->right)
 #define RwMatrixGetUp(m)       (&(m)->up)
 #define RwMatrixGetAt(m)       (&(m)->at)
 #define RwMatrixGetPos(m)      (&(m)->pos)
 
+/* Debug */
+#define RwObjectGetType(o)                  (((const RwObject *)(o))->type)
+
+#define rwObjectSetType(o, t)               (((RwObject *)(o))->type) = (RwUInt8)(t)
+
+/* Sub type */
+#define rwObjectGetSubType(o)               (((const RwObject *)(o))->subType)
+#define rwObjectSetSubType(o, t)            (((RwObject *)(o))->subType) = (RwUInt8)(t)
+
+/* Flags */
+#define rwObjectGetFlags(o)                 (((const RwObject *)(o))->flags)
+#define rwObjectSetFlags(o, f)              (((RwObject *)(o))->flags) = (RwUInt8)(f)
+#define rwObjectTestFlags(o, f)             ((((const RwObject *)(o))->flags) & (RwUInt8)(f))
+
+/* Private flags */
+#define rwObjectGetPrivateFlags(c)          (((const RwObject *)(c))->privateFlags)
+#define rwObjectSetPrivateFlags(c,f)        (((RwObject *)(c))->privateFlags) = (RwUInt8)(f)
+#define rwObjectTestPrivateFlags(c,flag)    ((((const RwObject *)(c))->privateFlags) & (RwUInt8)(flag))
+
+/* Hierarchy */
+#define rwObjectGetParent(object)           (((const RwObject *)(object))->parent)
+#define rwObjectSetParent(c,p)              (((RwObject *)(c))->parent) = (void *)(p)
+
 #define RWFORCEENUMSIZEINT ((RwInt32)((~((RwUInt32)0))>>1))
+
+/* Vector operations Macros */
+
+#if (!defined(RwV2dAssignMacro))
+#define RwV2dAssignMacro(_target, _source)                      \
+    ( *(_target) = *(_source) )
+#endif /* (!defined(RwV2dAssignMacro)) */
+
+#define RwV2dAddMacro(o, a, b)                                  \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = (((a)->x) + ( (b)->x));                            \
+    (o)->y = (((a)->y) + ( (b)->y));                            \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dSubMacro(o, a, b)                                  \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = (((a)->x) - ( (b)->x));                            \
+    (o)->y = (((a)->y) - ( (b)->y));                            \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dScaleMacro(o, i, s)                                \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = (((i)->x) * ( (s)));                               \
+    (o)->y = (((i)->y) * ( (s)));                               \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dDotProductMacro(a,b)                               \
+    (( ((((a)->x) * ( (b)->x))) +                               \
+      ( (((a)->y) * ( (b)->y)))))
+
+#define _rwV2dNormalizeMacro(_result, _out, _in)                \
+MACRO_START                                                     \
+{                                                               \
+    RwReal length2 = RwV2dDotProductMacro((_in), (_in));        \
+    rwInvSqrtMacro(&(_result), length2);                        \
+    RwV2dScaleMacro((_out), (_in), (_result));                  \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dNormalizeMacro(_result, _out, _in)                 \
+MACRO_START                                                     \
+{                                                               \
+    RwReal length2 = RwV2dDotProductMacro((_in), (_in));        \
+    RwReal recip;                                               \
+                                                                \
+    rwSqrtInvSqrtMacro(&(_result), &recip, length2);            \
+    RwV2dScaleMacro((_out), (_in), recip);                      \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dLengthMacro(_result, _in)                          \
+MACRO_START                                                     \
+{                                                               \
+    (_result) = RwV2dDotProductMacro(_in, _in);                 \
+    rwSqrtMacro(&(_result), (_result));                         \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dLineNormalMacro(_o, _a, _b)                        \
+MACRO_START                                                     \
+{                                                               \
+    RwReal recip;                                               \
+                                                                \
+    (_o)->y = (((_b)->x) - ( (_a)->x));                         \
+    (_o)->x = (((_a)->y) - ( (_b)->y));                         \
+    _rwV2dNormalizeMacro(recip, _o,_o);                         \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dPerpMacro(o, a)                                    \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = -(a)->y;                                           \
+    (o)->y = (a)->x;                                            \
+}                                                               \
+MACRO_STOP
+
+/* RwV3d */
+
+#if (!defined(RwV3dAssignMacro))
+#define RwV3dAssignMacro(_target, _source)                     \
+    ( *(_target) = *(_source) )
+#endif /* (!defined(RwV3dAssignMacro)) */
+
+
+#define RwV3dAddMacro(o, a, b)                                  \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = (((a)->x) + ( (b)->x));                            \
+    (o)->y = (((a)->y) + ( (b)->y));                            \
+    (o)->z = (((a)->z) + ( (b)->z));                            \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dSubMacro(o, a, b)                                  \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = (((a)->x) - ( (b)->x));                            \
+    (o)->y = (((a)->y) - ( (b)->y));                            \
+    (o)->z = (((a)->z) - ( (b)->z));                            \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dScaleMacro(o, a, s)                                \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = (((a)->x) * ( (s)));                               \
+    (o)->y = (((a)->y) * ( (s)));                               \
+    (o)->z = (((a)->z) * ( (s)));                               \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dIncrementScaledMacro(o, a, s)                      \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x += (((a)->x) * ( (s)));                              \
+    (o)->y += (((a)->y) * ( (s)));                              \
+    (o)->z += (((a)->z) * ( (s)));                              \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dNegateMacro(o, a)                                  \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x = -(a)->x;                                           \
+    (o)->y = -(a)->y;                                           \
+    (o)->z = -(a)->z;                                           \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dDotProductMacro(a, b)                              \
+    ((((( (((a)->x) * ((b)->x))) +                              \
+        ( (((a)->y) * ((b)->y))))) +                            \
+        ( (((a)->z) * ((b)->z)))))
+
+#define RwV3dCrossProductMacro(o, a, b)                         \
+MACRO_START                                                     \
+{                                                               \
+    (o)->x =                                                    \
+        (( (((a)->y) * ( (b)->z))) -                            \
+         ( (((a)->z) * ( (b)->y))));                            \
+    (o)->y =                                                    \
+        (( (((a)->z) * ( (b)->x))) -                            \
+         ( (((a)->x) * ( (b)->z))));                            \
+    (o)->z =                                                    \
+        (( (((a)->x) * ( (b)->y))) -                            \
+         ( (((a)->y) * ( (b)->x))));                            \
+}                                                               \
+MACRO_STOP
+
+#define _rwV3dNormalizeMacro(_result, _out, _in)                \
+MACRO_START                                                     \
+{                                                               \
+    RwReal length2 = RwV3dDotProductMacro(_in, _in);            \
+    rwInvSqrtMacro(&(_result), length2);                        \
+    RwV3dScaleMacro(_out, _in, _result);                        \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dNormalizeMacro(_result, _out, _in)                 \
+MACRO_START                                                     \
+{                                                               \
+    RwReal length2 = RwV3dDotProductMacro((_in), (_in));        \
+    RwReal recip;                                               \
+                                                                \
+    rwSqrtInvSqrtMacro(&(_result), &recip, length2);            \
+    RwV3dScaleMacro((_out), (_in), recip);                      \
+}                                                               \
+MACRO_STOP
+
+#define RwV3dLengthMacro(_result, _in)                          \
+MACRO_START                                                     \
+{                                                               \
+    (_result) = RwV3dDotProductMacro(_in, _in);                 \
+    rwSqrtMacro(&(_result), _result);                           \
+}                                                               \
+MACRO_STOP
+
+#define RwV2dAssign(o, a)               RwV2dAssignMacro(o, a)
+#define RwV2dAdd(o, a, b)               RwV2dAddMacro(o, a, b)
+#define RwV2dSub(o, a, b)               RwV2dSubMacro(o, a, b)
+#define RwV2dLineNormal(_o, _a, _b)     RwV2dLineNormalMacro(_o, _a, _b)
+#define RwV2dScale(o, i, s)             RwV2dScaleMacro(o, i, s)
+#define RwV2dDotProduct(a,b)            RwV2dDotProductMacro(a,b)
+#define RwV2dPerp(o, a)                 RwV2dPerpMacro(o, a)
+#define RwV3dAssign(o, a)               RwV3dAssignMacro(o, a)
+#define RwV3dAdd(o, a, b)               RwV3dAddMacro(o, a, b)
+#define RwV3dSub(o, a, b)               RwV3dSubMacro(o, a, b)
+#define RwV3dScale(o, a, s)             RwV3dScaleMacro(o, a, s)
+#define RwV3dIncrementScaled(o, a, s)   RwV3dIncrementScaledMacro(o, a, s)
+#define RwV3dNegate(o, a)               RwV3dNegateMacro(o, a)
+#define RwV3dDotProduct(a, b)           RwV3dDotProductMacro(a, b)
+#define RwV3dCrossProduct(o, a, b)      RwV3dCrossProductMacro(o, a, b)
 
 typedef long RwFixed;
 typedef int  RwInt32;
@@ -47,6 +296,146 @@ typedef signed char RwInt8;
 typedef char RwChar;
 typedef float RwReal;
 typedef RwInt32 RwBool;
+
+/****************************************************************************
+ Defines
+ */
+
+#define rwSTREAMSTACKSIZE    512
+
+/****************************************************************************
+ Global Types
+ */
+
+/**
+ * \ingroup rwstream
+ * \ref RwStreamType
+ * This type represents the different types of stream that
+ * can be used.
+ * See API section \ref rwstream
+ */
+enum RwStreamType
+{
+    rwNASTREAM = 0,     /**<Invalid stream type */
+    rwSTREAMFILE,       /**<File */
+    rwSTREAMFILENAME,   /**<File name */
+    rwSTREAMMEMORY,     /**<Memory*/
+    rwSTREAMCUSTOM,     /**<Custom */
+    rwSTREAMTYPEFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwStreamType RwStreamType;
+
+/**
+ * \ingroup rwstream
+ * \ref RwStreamAccessType
+ * This type represents the options available for
+ * accessing a stream when it is opened.
+ * See API section \ref rwstream */
+enum RwStreamAccessType
+{
+    rwNASTREAMACCESS = 0,   /**<Invalid stream access */
+    rwSTREAMREAD,           /**<Read */
+    rwSTREAMWRITE,          /**<Write */
+    rwSTREAMAPPEND,         /**<Append */
+    rwSTREAMACCESSTYPEFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwStreamAccessType RwStreamAccessType;
+
+/* Memory stream */
+/**
+ * \ingroup rwstream
+ * \struct RwStreamMemory
+ * This should be considered an opaque type.
+ * Use the RwStream API functions to access.
+ */
+typedef struct RwStreamMemory RwStreamMemory;
+#if (!defined(DOXYGEN))
+struct RwStreamMemory
+{
+    RwUInt32            position; /* Current 'memory' position 0 is first byte */
+    RwUInt32            nSize;  /* Space allocated currently */
+    RwUInt8            *memBlock; /* Current memory block pointer */
+};
+#endif /* (!defined(DOXYGEN)) */
+
+
+typedef union RwStreamFile RwStreamFile;
+/**
+ * \ingroup rwstream
+ * \union RwStreamFile
+ * This type is used to represent a file pointer for
+ * accessing data on disk through the stream mechanism.
+ * See API section \ref rwstream. */
+union RwStreamFile
+{
+    void    *fpFile;               /**< file pointer */
+    const void    *constfpFile;    /**< const file pointer */
+};
+
+/* Custom stream function pointer types */
+typedef             RwBool(*rwCustomStreamFnClose) (void *data);
+typedef             RwUInt32(*rwCustomStreamFnRead) (void *data, void *buffer,
+                                                     RwUInt32 length);
+typedef             RwBool(*rwCustomStreamFnWrite) (void *data,
+                                                    const void *buffer,
+
+                                                    RwUInt32 length);
+typedef             RwBool(*rwCustomStreamFnSkip) (void *data,
+
+                                                   RwUInt32 offset);
+
+/* Custom stream */
+/**
+ * \ingroup rwstream
+ * \struct  RwStreamCustom
+ * This should be considered an opaque type.
+ * Use the RwStream API functions to access.
+ */
+typedef struct RwStreamCustom RwStreamCustom;
+#if (!defined(DOXYGEN))
+struct RwStreamCustom
+{
+    rwCustomStreamFnClose sfnclose;
+    rwCustomStreamFnRead sfnread;
+    rwCustomStreamFnWrite sfnwrite;
+    rwCustomStreamFnSkip sfnskip;
+    void               *data;
+};
+#endif /* (!defined(DOXYGEN)) */
+
+/* Stream */
+
+typedef union RwStreamUnion RwStreamUnion;
+/**
+ * \ingroup rwstream
+ * \union RwStreamUnion
+ * The union of all supported stream types
+ */
+union RwStreamUnion
+{
+    RwStreamMemory      memory; /**< memory */
+    RwStreamFile        file; /**< file */
+    RwStreamCustom      custom; /**< custom */
+};
+
+/**
+ * \ingroup rwstream
+ * \struct RwStream
+ * Binary stream for reading or writing object data.
+ * This should be considered an opaque type.
+ * Use the RwStream API functions to access.
+ */
+typedef struct RwStream RwStream;
+#if (!defined(DOXYGEN))
+struct RwStream
+{
+    RwStreamType        type;
+    RwStreamAccessType  accessType;
+    RwInt32             position;
+    RwStreamUnion       Type;
+    RwBool              rwOwned;
+};
+#endif /* (!defined(DOXYGEN)) */
 
 /* Limits of types */
 #define RwInt32MAXVAL       0x7FFFFFFF
@@ -776,6 +1165,53 @@ struct RwObject
     /* Often a Frame  */
 };
 
+
+enum RwOpCombineType
+{
+    rwCOMBINEREPLACE = 0,   /**<Replace -
+                                all previous transformations are lost */
+    rwCOMBINEPRECONCAT,     /**<Pre-concatenation -
+                                the given transformation is applied
+                                before all others */
+    rwCOMBINEPOSTCONCAT,    /**<Post-concatenation -
+                                the given transformation is applied
+                                after all others */
+    rwOPCOMBINETYPEFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+
+/*
+ * RwOpCombineType typedef for enum RwOpCombineType
+ */
+typedef enum RwOpCombineType RwOpCombineType;
+
+/* External flags (bits 0-15) */
+
+/* Internal flags (bits 16-31) */
+enum RwMatrixType
+{
+    rwMATRIXTYPENORMAL = 0x00000001,
+    rwMATRIXTYPEORTHOGONAL = 0x00000002,
+    rwMATRIXTYPEORTHONORMAL = 0x00000003,
+    rwMATRIXTYPEMASK = 0x00000003,
+    rwMATRIXTYPEFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwMatrixType RwMatrixType;
+
+enum RwMatrixFlag
+{
+    rwMATRIXINTERNALIDENTITY = 0x00020000,
+    rwMATRIXFLAGFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwMatrixFlag RwMatrixFlag;
+
+/* Flags describing what will optimize for */
+enum RwMatrixOptimizations
+{
+    rwMATRIXOPTIMIZE_IDENTITY = 0x00020000,
+    rwMATRIXOPTIMIZATIONSFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwMatrixOptimizations RwMatrixOptimizations;
+
 struct RwMatrixTag
 {
     /* These are padded to be 16 byte quantities per line */
@@ -791,6 +1227,33 @@ struct RwMatrixTag
 
 typedef RwMatrixTag RwMatrix;
 
+
+typedef struct RwFreeList RwFreeList;
+
+/**
+ * \ingroup rwfreelist
+ * Holds free list info, should be considered opaque. Use API functions to access.
+ */
+struct RwFreeList
+{
+    RwUInt32   entrySize;       /**<Size of an entry in the free list. */
+#if (defined(RWDEBUG) && !defined(DOXYGEN))
+    RwUInt32   nonAlignedEntrySize;
+#endif /* (defined(RWDEBUG) && !defined(DOXYGEN)) */
+    RwUInt32   entriesPerBlock; /**<Number of entries per free list block. */
+    RwUInt32   heapSize;        /**<Size of the heap. */
+    RwUInt32   alignment;       /**<Alignment of a free list entry. */
+    RwLinkList blockList;       /**<List of data blocks. */
+    RwUInt32   flags;           /**<Flags which affect the behavior of the
+                                    free list. <BR>
+                                    rwFREELISTFLAG_FREEBLOCKS */
+    RwLLLink   link;            /**<Link to the free list linked list. */
+
+#if (defined(RWDEBUG) && !defined(DOXYGEN))
+    const RwChar       *fileCreate;
+    RwUInt32            lineCreate;
+#endif /* (defined(RWDEBUG) && !defined(DOXYGEN)) */
+};
 
 
 RwMatrix* RwMatrixUpdate(RwMatrix* matrix);

@@ -9,6 +9,8 @@
 #include "Enums/ePedState.h"
 #include "CWorld.h"
 #include "game/Models/ModelInfo.h"
+#include "game/RW/rphanim.h"
+#include "RwHelper.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -526,8 +528,8 @@ bool CPlayerPed::IsAPassenger()
 		CVehicleGta *pVehicle = (CVehicleGta *)m_pPed->pVehicle;
 
 		if(	pVehicle->pDriver != m_pPed ||
-			pVehicle->nModelIndex == TRAIN_PASSENGER ||
-			pVehicle->nModelIndex == TRAIN_FREIGHT )
+               pVehicle->m_nModelIndex == TRAIN_PASSENGER ||
+               pVehicle->m_nModelIndex == TRAIN_FREIGHT )
 			return true;
 	}
 
@@ -677,8 +679,8 @@ void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
 
 	if(bPassenger)
 	{
-		if(ThisVehicleType->nModelIndex == TRAIN_PASSENGER &&
-			(m_pPed == GamePool_FindPlayerPed()))
+		if(ThisVehicleType->m_nModelIndex == TRAIN_PASSENGER &&
+           (m_pPed == GamePool_FindPlayerPed()))
 		{
 			ScriptCommand(&put_actor_in_car2, m_dwGTAId, iVehicleID, -1);
 		}
@@ -1118,26 +1120,26 @@ void CPlayerPed::ProcessAttach()
 	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
-	((int(*)(CPedGta*))(g_libGTASA + 0x00391968 + 1))(m_pPed); // UpdateRPHAnim
+	m_pPed->UpdateRpHAnim();
 
 	if (IsAdded())
 	{
 		ProcessHeadMatrix();
 	}
-	for (int i = 0; i < MAX_ATTACHED_OBJECTS; i++)
+	for (auto & pAttach : m_aAttachedObjects)
 	{
-		if (!m_aAttachedObjects[i].bState) continue;
-		CObject* pObject = m_aAttachedObjects[i].pObject;
+		if (!pAttach.bState) continue;
+		CObject* pObject = pAttach.pObject;
 		if (IsAdded())
 		{
-			RpHAnimHierarchy* hierarchy = ((RpHAnimHierarchy * (*)(uintptr_t*))(g_libGTASA + 0x00559338 + 1))((uintptr_t*)m_pPed->m_pRwObject); // GetAnimHierarchyFromSkinClump
+			auto hierarchy = GetAnimHierarchyFromSkinClump(m_pPed->m_pRwClump);
+
 			int iID;
-			uint32_t bone = m_aAttachedObjects[i].dwBone;
 			if (hierarchy)
 			{
-				iID = ((int(*)(RpHAnimHierarchy*, int))(g_libGTASA + 0x0019A448 + 1))(hierarchy, bone); // RpHAnimIDGetIndex
+
+				iID = RpHAnimIDGetIndex(hierarchy, pAttach.dwBone);
 			}
 			else
 			{
@@ -1153,27 +1155,27 @@ void CPlayerPed::ProcessAttach()
 			memcpy(&outMat, &hierarchy->pMatrixArray[iID], sizeof(RwMatrix));
 
 			CVector vecOut;
-			RwMatrixMultiplyByVector(&vecOut, &outMat, &m_aAttachedObjects[i].vecOffset);
+			RwMatrixMultiplyByVector(&vecOut, &outMat, &pAttach.vecOffset);
 
 			outMat.pos = vecOut;
 
 			CVector axis { 1.0f, 0.0f, 0.0f };
-			if (m_aAttachedObjects[i].vecRotation.x != 0.0f)
+			if (pAttach.vecRotation.x != 0.0f)
 			{
-				RwMatrixRotate(&outMat, &axis, m_aAttachedObjects[i].vecRotation.x);
+				RwMatrixRotate(&outMat, &axis, pAttach.vecRotation.x);
 			}
 			axis.Set( 0.0f, 1.0f, 0.0f );
-			if (m_aAttachedObjects[i].vecRotation.y != 0.0f)
+			if (pAttach.vecRotation.y != 0.0f)
 			{
-				RwMatrixRotate(&outMat, &axis, m_aAttachedObjects[i].vecRotation.y);
+				RwMatrixRotate(&outMat, &axis, pAttach.vecRotation.y);
 			}
 			axis.Set( 0.0f, 0.0f, 1.0f );
-			if (m_aAttachedObjects[i].vecRotation.z != 0.0f)
+			if (pAttach.vecRotation.z != 0.0f)
 			{
-				RwMatrixRotate(&outMat, &axis, m_aAttachedObjects[i].vecRotation.z);
+				RwMatrixRotate(&outMat, &axis, pAttach.vecRotation.z);
 			}
 
-			RwMatrixScale(&outMat, &m_aAttachedObjects[i].vecScale);
+			RwMatrixScale(&outMat, &pAttach.vecScale);
 			*(uint32_t*)((uintptr_t)pObject->m_pEntity + 28) &= 0xFFFFFFFE; // disable collision
 
 			if (outMat.pos.x >= 10000.0f || outMat.pos.x <= -10000.0f ||
@@ -1198,17 +1200,14 @@ void CPlayerPed::ProcessAttach()
 
 void CPlayerPed::ProcessHeadMatrix()
 {
-	RpHAnimHierarchy* hierarchy = ((RpHAnimHierarchy * (*)(uintptr_t*))(g_libGTASA + 0x00559338 + 1))((uintptr_t*)m_pPed->m_pRwObject); // GetAnimHierarchyFromSkinClump
-	int iID;
-	uint32_t bone = 4;
-	if (hierarchy)
-	{
-		iID = ((int(*)(RpHAnimHierarchy*, int))(g_libGTASA + 0x0019A448 + 1))(hierarchy, bone); // RpHAnimIDGetIndex
-	}
-	else
-	{
+	auto hierarchy = GetAnimHierarchyFromSkinClump(m_pPed->m_pRwClump);
+
+	if(!hierarchy)
 		return;
-	}
+
+	uint32_t bone = 4;
+	int iID = RpHAnimIDGetIndex(hierarchy, bone);
+
 	if (iID == -1)
 	{
 		return;
@@ -1392,7 +1391,7 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 	Log("SetMoveAnim %d", iAnimGroup);
 	if (iAnimGroup == ANIM_GROUP_DEFAULT)
 	{
-		auto pModel = reinterpret_cast<CPedModelInfo*>(CModelInfo::GetModelInfo(m_pEntity->nModelIndex));
+		auto pModel = reinterpret_cast<CPedModelInfo*>(CModelInfo::GetModelInfo(m_pEntity->m_nModelIndex));
 		iAnimGroup = pModel->m_nAnimType;
 	}
 

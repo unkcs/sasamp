@@ -207,14 +207,6 @@ typedef struct _ATTACHED_OBJECT_INFO
 } ATTACHED_OBJECT_INFO;
 #pragma pack(pop)
 
-struct RpHAnimHierarchy
-{
-	int32_t             flags;          /**< Flags for the hierarchy  */
-	int32_t             numNodes;      /**< Number of nodes in the hierarchy  */
-
-	RwMatrix* pMatrixArray;   /**< Pointer to node matrices*/
-};
-
 //-----------------------------------------------------------
 
 enum eDoors

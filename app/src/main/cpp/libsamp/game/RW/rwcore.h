@@ -1,6 +1,7 @@
 #pragma once
 
 #include "rwplcore.h"
+#include "../common.h"
 /**
  * \ingroup rwraster
  * \ref RwRasterLockMode represents the options available for locking 
@@ -438,3 +439,7 @@ struct RwObjectHasFrame
     RwLLLink                     lFrame;
     RwObjectHasFrameSyncFunction sync;
 };
+
+
+
+RwFrame* RwFrameUpdateObjects(RwFrame* frame);

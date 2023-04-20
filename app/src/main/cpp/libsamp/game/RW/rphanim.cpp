@@ -54,7 +54,7 @@ RwBool RpHAnimHierarchyUpdateMatrices(RpHAnimHierarchy* hierarchy) {
 }
 
 RwInt32 RpHAnimIDGetIndex(RpHAnimHierarchy* hierarchy, RwInt32 ID) {
-    return ((RwInt32(__cdecl *)(RpHAnimHierarchy*, RwInt32))(g_libGTASA + 0x0019A448))(hierarchy, ID);
+    return ((RwInt32(__cdecl *)(RpHAnimHierarchy*, RwInt32))(g_libGTASA + 0x0019A448 + 1))(hierarchy, ID);
 }
 
 RwBool RpHAnimPluginAttach() {

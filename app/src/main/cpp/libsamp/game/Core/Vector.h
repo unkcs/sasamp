@@ -13,6 +13,7 @@
 
 class CMatrix;
 
+#pragma pack(push, 4)
 class CVector : public RwV3d {
 public:
     constexpr CVector() = default;
@@ -189,7 +190,7 @@ public:
     }
 #endif
 };
-
+#pragma pack(pop)
 static_assert(sizeof(CVector) == 0xC);
 
 constexpr inline CVector operator-(const CVector& vecOne, const CVector& vecTwo) {

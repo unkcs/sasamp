@@ -1155,9 +1155,7 @@ void CPlayerPed::ProcessAttach()
 			CVector vecOut;
 			RwMatrixMultiplyByVector(&vecOut, &outMat, &m_aAttachedObjects[i].vecOffset);
 
-			outMat.pos.x = vecOut.x;
-			outMat.pos.y = vecOut.y;
-			outMat.pos.z = vecOut.z;
+			outMat.pos = vecOut;
 
 			CVector axis { 1.0f, 0.0f, 0.0f };
 			if (m_aAttachedObjects[i].vecRotation.x != 0.0f)
@@ -1186,20 +1184,9 @@ void CPlayerPed::ProcessAttach()
 			}
 
 			pObject->SetMatrix(outMat); // copy to CMatrix
-			if (pObject->m_pEntity->m_pRwObject)
-			{
-				if (pObject->m_pEntity->m_matrix)
-				{
-					uintptr_t v8 = *(uintptr_t*)(pObject->m_pEntity->m_pRwObject + 4) + 16;
-					if (v8)
-					{
-						pObject->m_pEntity->m_matrix->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(v8));
-					//	((int(*)(RwMatrix*, uintptr_t))(g_libGTASA + 0x003E862C + 1))(pObject->m_pEntity->m_matrix, v8); // CEntity::UpdateRwFrame
-					}
-				}
-			}
-			//Log("pos %f %f %f", outMat.pos.x, outMat.pos.y, outMat.pos.z);
-			((int(*)(CEntityGta*))(g_libGTASA + 0x0039194C + 1))(pObject->m_pEntity); // CEntity::UpdateRwFrame
+
+			pObject->UpdateRwMatrixAndFrame();
+
 			((void (*)(CEntityGta*))(*(void**)(pObject->m_pEntity->vtable + 8)))(pObject->m_pEntity); // CPhysical::Add
 		}
 		else
@@ -1271,7 +1258,7 @@ bool CPlayerPed::IsPlayingAnim(int idx)
 	}
 	const char* pNameAnim = strchr(pAnim, ':') + 1;
 
-	uintptr_t blendAssoc = ((uintptr_t(*)(uintptr_t clump, const char* szName))(g_libGTASA + 0x00340594 + 1))
+	uintptr_t blendAssoc = ((uintptr_t(*)(RwObject* clump, const char* szName))(g_libGTASA + 0x00340594 + 1))
 		(m_pPed->m_pRwObject, pNameAnim);	// RpAnimBlendClumpGetAssociation
 
 	if (blendAssoc)
@@ -1600,10 +1587,10 @@ void CPlayerPed::ClumpUpdateAnimations(float step, int flag)
 {
 	if (m_pPed)
 	{
-		uintptr_t pRwObj = m_pEntity->m_pRwObject;
+		auto pRwObj = m_pEntity->m_pRwObject;
 		if (pRwObj)
 		{
-			((void (*)(uintptr_t, float, int))(g_libGTASA + 0x33D6E4 + 1))(pRwObj, step, flag);
+			((void (*)(RwObject*, float, int))(g_libGTASA + 0x33D6E4 + 1))(pRwObj, step, flag);
 		}
 	}
 }

@@ -107,10 +107,10 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 	m_bWasWheelOffsetProcessedY = true;
 	m_uiLastProcessedWheelOffset = 0;
 
-	RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
-	RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
-	RwFrame* pWheelRB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rb_dummy"); // GetFrameFromname
-	RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lb_dummy"); // GetFrameFromname
+	auto pWheelLF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lf_dummy");
+	auto pWheelRF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rf_dummy");
+	auto pWheelRB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rb_dummy");
+	auto pWheelLB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lb_dummy");
 
 	if (pWheelLF && pWheelRF && pWheelRB && pWheelLB)
 	{
@@ -1030,19 +1030,9 @@ void CVehicle::ProcessWheelsOffset()
 	{
 		if (m_bWheelOffsetX)
 		{
-			//CChatWindow::AddDebugMessage("setting wheel offset X");
-			RwFrame* pWheelLF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lf_dummy"); // GetFrameFromname
-			RwFrame* pWheelRF = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rf_dummy"); // GetFrameFromname
+			auto pWheelLF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lf_dummy");
+			auto pWheelRF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rf_dummy");
 
-			/*if (m_fNewOffsetX)
-			{
-				ProcessWheelOffset(pWheelLF, true, 0.0f - m_fWheelOffsetX);
-				ProcessWheelOffset(pWheelRF, false, 0.0f - m_fWheelOffsetX);
-
-				m_fWheelOffsetX = m_fNewOffsetX;
-				m_fNewOffsetX = 0.0f;
-				//CChatWindow::AddDebugMessage("moved old X");
-			}*/
 			m_fWheelOffsetX = m_fNewOffsetX;
 
 			ProcessWheelOffset(pWheelLF, true, m_fWheelOffsetX, 0);
@@ -1055,19 +1045,9 @@ void CVehicle::ProcessWheelsOffset()
 	{
 		if (m_bWheelOffsetY)
 		{
-			//CChatWindow::AddDebugMessage("setting wheel offset Y");
-			RwFrame* pWheelRB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_rb_dummy"); // GetFrameFromname
-			RwFrame* pWheelLB = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, "wheel_lb_dummy"); // GetFrameFromname
+			auto pWheelRB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rb_dummy");
+			auto pWheelLB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lb_dummy");
 
-			/*if (m_fNewOffsetY)
-			{
-				ProcessWheelOffset(pWheelRB, false, 0.0f - m_fWheelOffsetY);
-				ProcessWheelOffset(pWheelLB, true, 0.0f - m_fWheelOffsetY);
-				m_fWheelOffsetY = m_fNewOffsetY;
-				m_fNewOffsetY = 0.0f;
-
-				//CChatWindow::AddDebugMessage("moved old Y");
-			}*/
 			m_fWheelOffsetY = m_fNewOffsetY;
 			ProcessWheelOffset(pWheelRB, false, m_fWheelOffsetY, 2);
 			ProcessWheelOffset(pWheelLB, true, m_fWheelOffsetY, 3);
@@ -1145,8 +1125,8 @@ void CVehicle::SetComponentVisibleInternal(const char* szComponent, bool bVisibl
 	}
 
 
-	RwFrame* pFrame = ((RwFrame * (*)(uintptr_t, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, szComponent); // GetFrameFromname
-	if (pFrame != NULL)
+	RwFrame* pFrame = ((RwFrame * (*)(RwObject*, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, szComponent); // GetFrameFromname
+	if (pFrame != nullptr)
 	{
 		// Get all atomics for this component - Usually one, or two if there is a damaged version
 		std::vector<RwObject*> atomicList;
@@ -1208,17 +1188,17 @@ std::string CVehicle::GetComponentNameByIDs(uint8_t group, int subgroup)
 		switch (subgroup)
 		{
 			case EXTRA_COMPONENT_BOOT:
-				return std::string("boot_dummy");
+				return {"boot_dummy"};
 			case EXTRA_COMPONENT_BONNET:
-				return std::string("bonnet_dummy");
+				return {"bonnet_dummy"};
 			case EXTRA_COMPONENT_BUMP_REAR:
-				return std::string("bump_rear_dummy");
+				return {"bump_rear_dummy"};
 			case EXTRA_COMPONENT_DEFAULT_DOOR:
-				return std::string("door_lf_dummy");
+				return {"door_lf_dummy"};
 			case EXTRA_COMPONENT_WHEEL:
-				return std::string("wheel_lf_dummy");
+				return {"wheel_lf_dummy"};
 			case EXTRA_COMPONENT_BUMP_FRONT:
-				return std::string("bump_front_dummy");
+				return {"bump_front_dummy"};
 		}
 	}
 

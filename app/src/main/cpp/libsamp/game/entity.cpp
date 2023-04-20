@@ -34,15 +34,18 @@ void CEntity::UpdateRwMatrixAndFrame()
 	{
 		if (m_pEntity->m_pRwObject)
 		{
-			if (m_pEntity->m_matrix)
-			{
-				uintptr_t pRwMatrix = *(uintptr_t*)(m_pEntity->m_pRwObject + 4) + 0x10;
-				// CMatrix::UpdateRwMatrix
-				m_pEntity->m_matrix->UpdateRwMatrix(reinterpret_cast<RwMatrix *>(pRwMatrix));
+			auto parent = (char *)m_pEntity->m_pRwObject->parent;
+			auto m_pMat = m_pEntity->m_matrix;
 
-				// CEntity::UpdateRwFrame
-				((void (*) (CEntityGta*))(g_libGTASA + 0x39194C + 1))(m_pEntity);
-			}
+			auto pMatrix = (RwMatrix *)(parent + 0x10);
+
+			if (m_pMat)
+				m_pMat->UpdateRwMatrix(pMatrix);
+			else
+				m_pEntity->m_placement.UpdateRwMatrix(pMatrix);
+
+
+			((void (*) (CEntityGta*))(g_libGTASA + 0x0039194C + 1))(m_pEntity);
 		}
 	}
 }
@@ -83,13 +86,13 @@ void CEntity::SetCollisionChecking(bool bCheck)
 
 void CEntity::Render()
 {
-	uintptr_t pRwObject = m_pEntity->m_pRwObject;
+	auto pRwObject = m_pEntity->m_pRwObject;
 
 	int iModel = GetModelIndex();
 	if(iModel >= 400 && iModel <= 611 && pRwObject)
 	{
 		// CVisibilityPlugins::SetupVehicleVariables
-		((void (*)(uintptr_t))(g_libGTASA+0x55D4EC+1))(pRwObject);
+		((void (*)(RwObject*))(g_libGTASA+0x55D4EC+1))(pRwObject);
 	}
 
 	// CEntity::PreRender

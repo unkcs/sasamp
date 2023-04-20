@@ -852,6 +852,7 @@ void InjectHooks()
 	CMatrixLinkList::InjectHooks();
 	CStreaming::InjectHooks();
 	CPlaceable::InjectHooks();
+	CMatrix::InjectHooks();
 }
 
 void InstallSpecialHooks()

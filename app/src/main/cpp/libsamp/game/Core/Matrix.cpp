@@ -6,57 +6,17 @@
 */
 
 #include "Matrix.h"
+#include "util/patch.h"
 
-uint8_t* CMatrix::EulerIndices1 = (uint8_t*)0x866D9C;
-uint8_t* CMatrix::EulerIndices2 = (uint8_t*)0x866D94;
-int32_t& numMatrices = *(int32_t*)0xB74238;
-CMatrix& gDummyMatrix = *(CMatrix*)0xB74240;
+//uint8_t* CMatrix::EulerIndices1 = (uint8_t*)0x866D9C;
+//uint8_t* CMatrix::EulerIndices2 = (uint8_t*)0x866D94;
+int32_t numMatrices;
+CMatrix gDummyMatrix;
 
 
 void CMatrix::InjectHooks()
 {
-//    RH_ScopedClass(CMatrix);
-//    RH_ScopedCategory("Core");
-//
-//    RH_ScopedInstall(Attach, 0x59BD10);
-//    RH_ScopedInstall(Detach, 0x59ACF0);
-//    RH_ScopedInstall(CopyOnlyMatrix, 0x59ADD0);
-//    RH_ScopedInstall(Update, 0x59BB60);
-//    RH_ScopedInstall(UpdateMatrix, 0x59AD20);
-//    RH_ScopedInstall(UpdateRW, 0x59BBB0);
-//    RH_ScopedInstall(UpdateRwMatrix, 0x59AD70);
-//    RH_ScopedInstall(SetUnity, 0x59AE70);
-//    RH_ScopedInstall(ResetOrientation, 0x59AEA0);
-//    RH_ScopedOverloadedInstall(SetScale, "f", 0x59AED0, void(CMatrix::*)(float));
-//    RH_ScopedOverloadedInstall(SetScale, "fff", 0x59AF00, void(CMatrix::*)(float, float, float));
-//    RH_ScopedInstall(SetTranslateOnly, 0x59AF80);
-//    RH_ScopedInstall(SetTranslate, 0x59AF40);
-//    RH_ScopedInstall(SetRotateXOnly, 0x59AFA0);
-//    RH_ScopedInstall(SetRotateYOnly, 0x59AFE0);
-//    RH_ScopedInstall(SetRotateZOnly, 0x59B020);
-//    RH_ScopedInstall(SetRotateX, 0x59B060);
-//    RH_ScopedInstall(SetRotateY, 0x59B0A0);
-//    RH_ScopedInstall(SetRotateZ, 0x59B0E0);
-//    RH_ScopedOverloadedInstall(SetRotate, "xyz", 0x59B120, void(CMatrix::*)(float, float, float));
-//    RH_ScopedInstall(RotateX, 0x59B1E0);
-//    RH_ScopedInstall(RotateY, 0x59B2C0);
-//    RH_ScopedInstall(RotateZ, 0x59B390);
-//    RH_ScopedInstall(Rotate, 0x59B460);
-//    RH_ScopedInstall(Reorthogonalise, 0x59B6A0);
-//    RH_ScopedInstall(CopyToRwMatrix, 0x59B8B0);
-//    RH_ScopedOverloadedInstall(SetRotate, "quat", 0x59BBF0, void(CMatrix::*)(const CQuaternion&));
-//    RH_ScopedInstall(Scale, 0x459350);
-//    RH_ScopedInstall(ForceUpVector, 0x59B7E0);
-//    RH_ScopedInstall(ConvertToEulerAngles, 0x59A840);
-//    RH_ScopedInstall(ConvertFromEulerAngles, 0x59AA40);
-//    RH_ScopedInstall(operator=, 0x59BBC0);
-//    RH_ScopedInstall(operator+=, 0x59ADF0);
-//    RH_ScopedInstall(operator*=, 0x411A80);
-//    RH_ScopedGlobalOverloadedInstall(operator*, "Mat", 0x59BE30, CMatrix(*)(const CMatrix&, const CMatrix&));
-//    RH_ScopedGlobalOverloadedInstall(operator*, "Vec", 0x59C890, CVector(*)(const CMatrix&, const CVector&));
-//    RH_ScopedGlobalOverloadedInstall(operator+, "", 0x59BFA0, CMatrix(*)(const CMatrix&, const CMatrix&));
-//    RH_ScopedGlobalOverloadedInstall(Invert, "1", 0x59B920, CMatrix&(*)(CMatrix&, CMatrix&));
-//    RH_ScopedGlobalOverloadedInstall(Invert, "2", 0x59BDD0, CMatrix(*)(const CMatrix&));
+    CHook::Write(g_libGTASA + 0x005CFA8C, &numMatrices);
 }
 
 CMatrix::CMatrix(const CMatrix& matrix) {

@@ -6,6 +6,19 @@
 #include "game/Core/MatrixLinkList.h"
 #include "util/patch.h"
 
+//CPlaceable::CPlaceable() : m_placement() {
+//    m_matrix = nullptr;
+//}
+//
+//CPlaceable::~CPlaceable() {
+//    if (m_matrix) {
+//        CPlaceable::RemoveMatrix();
+//        --numMatrices;
+//    }
+//
+//    m_matrix = reinterpret_cast<CMatrixLink*>(&gDummyMatrix);
+//}
+
 void CPlaceable::InitMatrixArray() {
     gMatrixList.Init(CPlaceable::NUM_MATRICES_TO_CREATE);
 }
@@ -183,17 +196,45 @@ void CPlaceable::FreeStaticMatrix() {
     gMatrixList.MoveToList1(m_matrix);
 }
 
-
-
 // ----------------------------- hooks
 
-void CPlaceable__FreeStaticMatrix(CPlaceable *thiz) {
+void CPlaceable_FreeStaticMatrix(CPlaceable *thiz) {
     thiz->FreeStaticMatrix();
+}
+
+void CPlaceable_AllocateMatrix(CPlaceable *thiz) {
+    thiz->AllocateMatrix();
+}
+
+void CPlaceable_AllocateStaticMatrix(CPlaceable *thiz) {
+    thiz->AllocateStaticMatrix();
+}
+
+bool CPlaceable_IsWithinArea4(CPlaceable *thiz, float x1, float y1, float x2, float y2) {
+    return thiz->IsWithinArea(x1, y1, x2, y2);
+}
+
+bool CPlaceable_IsWithinArea6(CPlaceable *thiz, float x1, float y1, float z1, float x2, float y2, float z2) {
+    return thiz->IsWithinArea(x1, y1, z1, x2, y2, z2);
+}
+
+void CPlaceable_RemoveMatrix(CPlaceable *thiz) {
+    thiz->RemoveMatrix();
+}
+
+void CPlaceable_SetMatrix(CPlaceable *thiz, CMatrix& matrix) {
+    thiz->SetMatrix(matrix);
 }
 
 void CPlaceable::InjectHooks() {
     CHook::Redirect(g_libGTASA, 0x3ABB08, &CPlaceable::InitMatrixArray);
     CHook::Redirect(g_libGTASA, 0x3ABB24, &CPlaceable::ShutdownMatrixArray);
 
-    CHook::Redirect(g_libGTASA, 0x003ABB3C, &CPlaceable__FreeStaticMatrix);
+    CHook::Redirect(g_libGTASA, 0x003ABB3C, &CPlaceable_FreeStaticMatrix);
+    CHook::Redirect(g_libGTASA, 0x003ABC2C, &CPlaceable_AllocateMatrix);
+    CHook::Redirect(g_libGTASA, 0x003ABBE8, &CPlaceable_AllocateStaticMatrix);
+    CHook::Redirect(g_libGTASA, 0x003AB988, &CPlaceable_IsWithinArea4);
+    CHook::Redirect(g_libGTASA, 0x003ABA24, &CPlaceable_IsWithinArea6);
+    CHook::Redirect(g_libGTASA, 0x003ABB58, &CPlaceable_RemoveMatrix);
+    CHook::Redirect(g_libGTASA, 0x003ABC64, &CPlaceable_SetMatrix);
 }

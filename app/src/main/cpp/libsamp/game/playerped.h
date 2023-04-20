@@ -153,7 +153,7 @@ public:
 	bool animFlagFreeze;
 	bool animFlagLockY;
 	bool animFlagLockX;
-	bool IsActionCarry;
+	bool IsActionCarry = false;
     bool m_iPissingState = false;
 	DWORD m_dwPissParticlesHandle = 0;
 

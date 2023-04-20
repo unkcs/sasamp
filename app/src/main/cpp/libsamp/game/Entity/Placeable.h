@@ -18,6 +18,9 @@ struct CPlaceable
 public:
     static void InjectHooks();
 
+ //   CPlaceable();
+   // virtual ~CPlaceable();
+
     CMatrix& GetMatrix();
     CVector GetRightVector();
     CVector GetForwardVector();

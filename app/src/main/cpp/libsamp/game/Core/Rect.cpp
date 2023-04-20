@@ -41,10 +41,10 @@ inline void CRect::Restrict(const CRect& restriction)
 // 0x404260
 inline void CRect::Resize(float resizeX, float resizeY)
 {
-    left   -= resizeX;
-    right  += resizeX;
-    bottom    -= resizeY;
-    top += resizeY;
+    left    -= resizeX;
+    right   += resizeX;
+    bottom  -= resizeY;
+    top     += resizeY;
 }
 
 // 0x404290

@@ -252,20 +252,16 @@ void ScrSetPlayerSpecialAction(RPCParameters *rpcParams)
 	CPlayerPool *pPool=pNetGame->GetPlayerPool();
 
 	CPlayerPed *pPed = pPool->GetLocalPlayer()->GetPlayerPed();
-	if(pPool)
-	{
-		pPed->m_iCurrentSpecialAction = byteSpecialAction;
-		if(byteSpecialAction == SPECIAL_ACTION_NONE)
-		{
-			pGame->isBanJump = false;
+
+	pPed->m_iCurrentSpecialAction = byteSpecialAction;
+	if (byteSpecialAction == SPECIAL_ACTION_NONE) {
+		pGame->isBanJump = false;
 		//	pPed->ClearAnimations();
-		}
-		if(byteSpecialAction == SPECIAL_ACTION_CARRY)
-		{
-			pGame->isBanJump = true;
-		}
-		pPed->ProcessSpecialAction(byteSpecialAction);
 	}
+	if (byteSpecialAction == SPECIAL_ACTION_CARRY) {
+		pGame->isBanJump = true;
+	}
+	pPed->ProcessSpecialAction(byteSpecialAction);
 
 }
 

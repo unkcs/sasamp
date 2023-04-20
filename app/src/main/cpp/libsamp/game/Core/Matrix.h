@@ -137,8 +137,8 @@ public:
     void operator+=(const CMatrix& right);
     void operator*=(const CMatrix& right);
 
-    static uint8_t* EulerIndices1;
-    static uint8_t* EulerIndices2;
+//    static uint8_t* EulerIndices1;
+//    static uint8_t* EulerIndices2;
 
     ///< Returns an identity matrix
     static auto Identity() {
@@ -204,5 +204,5 @@ CMatrix  Invert(const CMatrix& in);
 
 CMatrix  Lerp(CMatrix from, CMatrix to, float t);
 
-extern int32_t& numMatrices;
-extern CMatrix& gDummyMatrix;
+extern int32_t numMatrices;
+extern CMatrix gDummyMatrix;

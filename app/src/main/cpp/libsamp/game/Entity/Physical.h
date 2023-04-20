@@ -9,8 +9,8 @@
 
 #pragma pack(push, 1)
 struct CPhysical : public CEntityGta {
-    float m_fPrevDistFromCam;
-    uint32_t m_LastCollisionTime;
+    float       m_fPrevDistFromCam;
+    uint32_t    m_LastCollisionTime;
     struct
     {
         uint32_t bExtraHeavy : 1;
@@ -47,43 +47,43 @@ struct CPhysical : public CEntityGta {
         uint32_t bCarriedByRope : 1;
     };
 
-    CVector vecMoveSpeed;
-    CVector vecTurnSpeed;
-    CVector m_vecMoveFriction;
-    CVector m_vecTurnFriction;
-    CVector m_vecAverageMoveSpeed;
-    CVector m_vecAverageTurnSpeed;
-    float m_fMass;
-    float m_fTurnMass;
-    float m_fMassMultiplier;
-    float m_fAirResistance;
-    float m_fElasticity;
-    float m_fBuoyancyConstant;
-    CVector m_vecCOM;
-    uint8_t m_pCollisionList[4];
+    CVector         vecMoveSpeed;
+    CVector         vecTurnSpeed;
+    CVector         m_vecMoveFriction;
+    CVector         m_vecTurnFriction;
+    CVector         m_vecAverageMoveSpeed;
+    CVector         m_vecAverageTurnSpeed;
+    float           m_fMass;
+    float           m_fTurnMass;
+    float           m_fMassMultiplier;
+    float           m_fAirResistance;
+    float           m_fElasticity;
+    float           m_fBuoyancyConstant;
+    CVector         m_vecCOM;
+    uint8_t         m_pCollisionList[4];
 
-    uint32_t m_pMovingList;
+    uint32_t        m_pMovingList;
 
-    uint8_t             m_nFakePhysics;
-    uint8_t             m_nNumEntitiesCollided;
-    eSurfaceType        m_nContactSurface;
-    uint8_t             _pad4;
-    CEntityGta*        m_apCollidedEntities[6];
-    float               m_fMovingSpeed; // m_fTrueDistanceTravelled
-    float               m_fDamageIntensity; // m_fDamageImpulseMagnitude
-    CEntityGta         *m_pDamageEntity;
-    CVector             m_vecDamageNormal;
-    CVector             m_vecDamagePos;
-    uint16_t            m_nDamagedPieceType;
-    uint8_t             _pad5[2];
-    CEntityGta         *m_pAttachToEntity;
-    CVector             m_vecAttachPosnOffset;
-    CVector             m_vecAttachTiltOffset;
-    CQuaternion         m_qAttachedEntityRotation;
-    CEntityGta         *m_pNOCollisionVehicle;
-    float               m_lightingFromCollision;
-    float               m_lightingFromPointLights;
-    uintptr_t           *m_pRealTimeShadow;
+    uint8_t         m_nFakePhysics;
+    uint8_t         m_nNumEntitiesCollided;
+    eSurfaceType    m_nContactSurface;
+    uint8_t         _pad4;
+    CEntityGta*     m_apCollidedEntities[6];
+    float           m_fMovingSpeed; // m_fTrueDistanceTravelled
+    float           m_fDamageIntensity; // m_fDamageImpulseMagnitude
+    CEntityGta      *m_pDamageEntity;
+    CVector         m_vecDamageNormal;
+    CVector         m_vecDamagePos;
+    uint16_t        m_nDamagedPieceType;
+    uint8_t         _pad5[2];
+    CEntityGta      *m_pAttachToEntity;
+    CVector         m_vecAttachPosnOffset;
+    CVector         m_vecAttachTiltOffset;
+    CQuaternion     m_qAttachedEntityRotation;
+    CEntityGta     *m_pNOCollisionVehicle;
+    float           m_lightingFromCollision;
+    float           m_lightingFromPointLights;
+    uintptr_t      *m_pRealTimeShadow;
 };
 #pragma pack(pop)
 static_assert(sizeof(CPhysical) == 0x138, "Invalid size CPhysical");

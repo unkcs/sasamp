@@ -414,6 +414,7 @@ public class Donate {
         allItems.add( new DonateItem("Грут", CATEGORY_SKINS, 50000, getResId("skin_14"), 14) );
 
         // cars
+        allItems.add( new DonateItem("Bugatti Veyron", CATEGORY_CARS, 55000, getResId("auc_veh_411"), 411) );
         allItems.add( new DonateItem("Lamborghini Urus", CATEGORY_CARS, 8250, getResId("auc_veh_579"), 579) );
         allItems.add( new DonateItem("Lamborghini Aventador", CATEGORY_CARS, 8500, getResId("auc_veh_451"), 451) );
         allItems.add( new DonateItem("Rolls Royce Wraith", CATEGORY_CARS, 12500, getResId("auc_veh_477"), 477) );

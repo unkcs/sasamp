@@ -200,7 +200,7 @@ void CGUI::RenderVersion()
 {
 	return;
 
-	ImGui::GetOverlayDrawList()->AddText(
+	ImGui::GetForegroundDrawList()->AddText(
 		ImVec2(ScaleX(10), ScaleY(10)), 
 		ImColor(IM_COL32_BLACK), PORT_VERSION);
 }
@@ -221,7 +221,7 @@ void CGUI::RenderRakNetStatistics()
 {
 		//StatisticsToString(rss, message, 0);
 
-		/*ImGui::GetOverlayDrawList()->AddText(
+		/*ImGui::GetForegroundDrawList()->AddText(
 			ImVec2(ScaleX(10), ScaleY(400)),
 			ImColor(IM_COL32_BLACK), message);*/
 }

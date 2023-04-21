@@ -2,7 +2,7 @@
 
 #define STBTT_STATIC
 #define STB_TRUETYPE_IMPLEMENTATION
-#include "..//vendor/imgui/stb_truetype.h"
+#include "..//vendor/imgui/imstb_truetype.h"
 
 class CFontInstance
 {

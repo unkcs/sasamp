@@ -21,6 +21,8 @@ extern "C"
 #include "../util/patch.h"
 #include "java_systems/CSpeedometr.h"
 #include "Timer.h"
+#include <GLES3/gl32.h>
+#include <GLES3/gl3ext.h>
 
 extern CGame* pGame;
 extern CPlayerPed *g_pCurrentFiredPed;
@@ -1876,6 +1878,7 @@ int RwResourcesFreeResEntry_hook(int a1)
 	return result;
 }
 
+
 int (*emu_ArraysGetID)(unsigned int);
 int emu_ArraysGetID_hook(unsigned int a1)
 {
@@ -2513,14 +2516,14 @@ void InstallHooks()
 
 	CHook::InlineHook(g_libGTASA, 0x0031B164, (uintptr_t)FxEmitterBP_c__Render_hook, (uintptr_t*)& FxEmitterBP_c__Render);
 	CHook::InlineHook(g_libGTASA, 0x0043A17C, (uintptr_t)CPed__ProcessEntityCollision_hook, (uintptr_t*)&CPed__ProcessEntityCollision);
-	CHook::InlineHook(g_libGTASA, 0x3AA3C0, (uintptr_t)CPhysical__Add_hook, (uintptr_t*)&CPhysical__Add);
+	//CHook::InlineHook(g_libGTASA, 0x3AA3C0, (uintptr_t)CPhysical__Add_hook, (uintptr_t*)&CPhysical__Add);
 
 	CHook::InlineHook(g_libGTASA, 0x004B97FC, &CTaskSimpleGetUp__ProcessPed_hook, &CTaskSimpleGetUp__ProcessPed); // CTaskSimpleGetUp::ProcessPed
 
 	//==================
-	CHook::InlineHook(g_libGTASA, 0x194B04, &emu_ArraysDelete_hook, &emu_ArraysDelete);
+	//CHook::InlineHook(g_libGTASA, 0x194B04, &emu_ArraysDelete_hook, &emu_ArraysDelete);
 	CHook::InlineHook(g_libGTASA, 0x1BA580, &RwResourcesFreeResEntry_hook, &RwResourcesFreeResEntry);
-	CHook::InlineHook(g_libGTASA, 0x194B20, &emu_ArraysGetID_hook, &emu_ArraysGetID);
+	//CHook::InlineHook(g_libGTASA, 0x194B20, &emu_ArraysGetID_hook, &emu_ArraysGetID);
 	CHook::InlineHook(g_libGTASA, 0x50C5F8, &SetCompAlphaCB_hook, &SetCompAlphaCB);
 
 	//================================

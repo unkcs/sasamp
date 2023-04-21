@@ -13,7 +13,7 @@
 
 class CMatrix;
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CVector : public RwV3d {
 public:
     constexpr CVector() = default;

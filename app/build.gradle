@@ -22,8 +22,8 @@ android {
     //    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         applicationId "com.liverussia.cr"
-        versionName "316"
-        versionCode 316
+        versionName "317"
+        versionCode 317
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled = true

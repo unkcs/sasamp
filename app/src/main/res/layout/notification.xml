@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/notify_background_green"
+        android:background="@drawable/notify_background"
+        android:backgroundTint="#705802"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,14 +35,14 @@
                     android:id="@+id/br_not_view"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:background="@drawable/notify_ruble_bg" />
+                    android:background="@drawable/notify_info_bg" />
 
                 <ImageView
                     android:id="@+id/br_not_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/notify_ruble" />
+                    app:srcCompat="@drawable/notify_info" />
 
             </FrameLayout>
 

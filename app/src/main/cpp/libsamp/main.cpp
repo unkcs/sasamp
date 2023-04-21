@@ -459,7 +459,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	javaVM = vm;
 
 	hGTASA = dlopen("libGTASA.so", RTLD_LAZY);
-	uintptr_t ttt = (uintptr_t)dlsym(hGTASA, "_ZN11CAutomobile15vecHunterGunPosE");
+	auto ttt = (uintptr_t)dlsym(hGTASA, "_ZN11CAutomobile15vecHunterGunPosE");
 
 	g_libGTASA = ttt - 0x00971450;
 

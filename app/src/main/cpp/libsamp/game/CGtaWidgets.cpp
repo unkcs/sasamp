@@ -33,8 +33,8 @@ bool CWidget__IsTouched_hook(uintptr_t* thiz, CVector2D *pVecOut)
 //    if(*thiz == CGtaWidgets::pWidgets[WIDGET_POSITION_HORN]) {
 //        return true;
 //    }
-    if(!CHUD::bIsShow)
-        return false;
+//    if(!CHUD::bIsShow)
+//        return false;
 
     return CWidget__IsTouched(thiz, pVecOut);
 }

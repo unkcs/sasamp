@@ -1,6 +1,9 @@
 package com.liverussia.cr.gui;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.view.GestureDetector;
@@ -84,8 +87,8 @@ public class Notification {
             this.duration = duration;
 
             if (duration != 0) {
-                br_not_progress.setMax(this.duration * 1000);
-                br_not_progress.setProgress(this.duration * 1000);
+                br_not_progress.setMax(this.duration * 990);
+                br_not_progress.setProgress(this.duration * 990);
             } else {
                 br_not_progress.setMax(100);
                 br_not_progress.setProgress(100);
@@ -94,7 +97,8 @@ public class Notification {
             switch (this.type) {
                 case 0:
                     Drawable progressbar = activity.getResources().getDrawable(R.drawable.notify_progressbar_red);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_red);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#9F0A0A")));
+                 //   br_not_bg.setBackgroundResource(R.drawable.notify_background_red);
                     br_not_progress.setProgressDrawable(progressbar);
                     br_not_firstbutton.setVisibility(View.GONE);
                     br_not_secondbutton.setVisibility(View.GONE);
@@ -109,7 +113,8 @@ public class Notification {
                     break;
                 case 1:
                     Drawable progressbar1 = activity.getResources().getDrawable(R.drawable.notify_progressbar_green);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_green);
+                   // br_not_bg.setBackgroundResource(R.drawable.notify_background_green);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#025200")));
                     br_not_progress.setProgressDrawable(progressbar1);
                     br_not_firstbutton.setVisibility(View.GONE);
                     br_not_secondbutton.setVisibility(View.GONE);
@@ -124,7 +129,8 @@ public class Notification {
                     break;
                 case 2:
                     Drawable progressbar2 = activity.getResources().getDrawable(R.drawable.notify_progressbar_red);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_red);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#9F0A0A")));
+                  //  br_not_bg.setBackgroundResource(R.drawable.notify_background_red);
                     br_not_progress.setProgressDrawable(progressbar2);
                     br_not_firstbutton.setVisibility(View.GONE);
                     br_not_secondbutton.setVisibility(View.GONE);
@@ -139,7 +145,8 @@ public class Notification {
                     break;
                 case 3:
                     Drawable progressbar3 = activity.getResources().getDrawable(R.drawable.notify_progressbar_green);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_green);
+                  //  br_not_bg.setBackgroundResource(R.drawable.notify_background_green);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#025200")));
                     br_not_progress.setProgressDrawable(progressbar3);
                     br_not_firstbutton.setVisibility(View.GONE);
                     br_not_secondbutton.setVisibility(View.GONE);
@@ -154,7 +161,8 @@ public class Notification {
                     break;
                 case 4:
                     Drawable progressbar4 = activity.getResources().getDrawable(R.drawable.notify_progressbar_yellow);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_blue);
+                   // br_not_bg.setBackgroundResource(R.drawable.notify_background_blue);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#003752")));
                     br_not_progress.setProgressDrawable(progressbar4);
                     br_not_firstbutton.setVisibility(View.VISIBLE);
                     br_not_secondbutton.setVisibility(View.GONE);
@@ -168,7 +176,8 @@ public class Notification {
                     break;
                 case 5:
                     Drawable progressbar5 = activity.getResources().getDrawable(R.drawable.notify_progressbar_yellow);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_blue);
+                   // br_not_bg.setBackgroundResource(R.drawable.notify_background_blue);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#003752")));
                     br_not_progress.setProgressDrawable(progressbar5);
                     br_not_firstbutton.setVisibility(View.VISIBLE);
                     br_not_secondbutton.setVisibility(View.GONE);
@@ -183,7 +192,8 @@ public class Notification {
                     break;
                 case 6:
                     Drawable progressbar6 = activity.getResources().getDrawable(R.drawable.notify_progressbar_yellow);
-                    br_not_bg.setBackgroundResource(R.drawable.notify_background_blue);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#003752")));
+                  //  br_not_bg.setBackgroundResource(R.drawable.notify_background_blue);
                     br_not_progress.setProgressDrawable(progressbar6);
                     br_not_firstbutton.setVisibility(View.VISIBLE);
                     br_not_secondbutton.setVisibility(View.VISIBLE);
@@ -196,6 +206,23 @@ public class Notification {
                     br_title_text_text.setText(text);
                     br_not_firstbutton.setText("Принять");
                     br_not_secondbutton.setText("Отказать");
+                    break;
+                case 7:
+                    Drawable progressbar7 = activity.getResources().getDrawable(R.drawable.notify_progressbar_yellow);
+                    //  br_not_bg.setBackgroundResource(R.drawable.notify_background_green);
+                    br_not_bg.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#705802")));
+                    br_not_progress.setProgressDrawable(progressbar7);
+                    br_not_firstbutton.setVisibility(View.GONE);
+                    br_not_secondbutton.setVisibility(View.GONE);
+                    br_not_fl.setVisibility(View.VISIBLE);
+                    setMargins(br_title_text, 0, 2, 25, 12);
+                    br_title_text.setVisibility(View.GONE);
+                    br_not_text2.setVisibility(View.VISIBLE);
+                    br_not_text.setVisibility(View.GONE);
+                    br_not_view.setBackgroundResource(R.drawable.notify_success_bg);
+                    br_not_icon.setImageResource(R.drawable.notify_success);
+                    br_not_text2.setText(text);
+                    break;
             }
 
             br_not_firstbutton.setOnClickListener(view -> {

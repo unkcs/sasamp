@@ -82,7 +82,7 @@ public class ServersDialogAdapter extends RecyclerView.Adapter<ServersAdapter.Se
 
         FrameLayout container;
         CircleProgressBar progressBar;
-        ImageView x2,bearPaw, people;
+        ImageView bearPaw, people;
         TextView name, mult, textonline, textmaxonline;
         LinearLayout backColor;
 
@@ -93,7 +93,6 @@ public class ServersDialogAdapter extends RecyclerView.Adapter<ServersAdapter.Se
             mult = itemView.findViewById(R.id.secondName);
             progressBar = itemView.findViewById(R.id.progressBar);
             bearPaw = itemView.findViewById(R.id.bearPaw);
-            x2 = itemView.findViewById(R.id.x2);
             people = itemView.findViewById(R.id.people);
             textonline = itemView.findViewById(R.id.online);
             textmaxonline = itemView.findViewById(R.id.onlineTotal);

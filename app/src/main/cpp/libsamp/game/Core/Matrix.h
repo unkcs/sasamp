@@ -26,7 +26,7 @@ enum eMatrixEulerFlags : uint32_t {
     _ORDER_NEEDS_SWAP = 0x4
 };
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CMatrix {
 public:
     CMatrix() = default;
@@ -81,8 +81,8 @@ public:
     uint32_t    pad3;           // 0x3C
 
 public:
-    RwMatrix* m_pAttachMatrix{};       // 0x40
-    bool      m_bOwnsAttachedMatrix{}; // 0x44 - Do we need to delete attached matrix at detaching
+    RwMatrix*   m_pAttachMatrix{};       // 0x40
+    uint32_t    m_bOwnsAttachedMatrix{}; // 0x44 - Do we need to delete attached matrix at detaching
 
 public:
     static void InjectHooks();

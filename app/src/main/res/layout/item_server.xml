@@ -71,15 +71,6 @@
                 android:layout_height="@dimen/_50sdp"
                 android:src="@drawable/bear_paw" />
 
-            <ImageView
-                android:id="@+id/x2"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_10sdp"
-                android:layout_gravity="bottom|center|right"
-                android:layout_marginRight="@dimen/_minus5sdp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/x2"
-				android:visibility="gone" />
         </FrameLayout>
 
         <LinearLayout

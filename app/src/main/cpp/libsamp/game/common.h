@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include "game/RW/rwplcore.h"
+#include "Core/Matrix.h"
 
+#include "rgba.h"
 #include "tHandlingData.h"
 
 

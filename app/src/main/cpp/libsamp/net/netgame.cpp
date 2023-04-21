@@ -151,18 +151,7 @@ CNetGame::~CNetGame() {
 int last_process_cnetgame = 0;
 
 void CNetGame::Process() {
-    // 30 fps
-    if (GetTickCount() - last_process_cnetgame >= 1000 / 30) {
-        last_process_cnetgame = GetTickCount();
-    } else {
-        return;
-    }
-    //CSkyBox::Process();
-    CSpeedometr::update();
-
-    UpdateNetwork();
-
-    // server checkpoints update
+    // need all frame
     if (pGame->m_bCheckpointsEnabled) {
         CPlayerPed *pPlayerDed = m_pPlayerPool->GetLocalPlayer()->GetPlayerPed();
         if (pPlayerDed) {
@@ -176,6 +165,17 @@ void CNetGame::Process() {
                           1);
         }
     }
+
+    // 30 fps
+    if (GetTickCount() - last_process_cnetgame >= 1000 / 30) {
+        last_process_cnetgame = GetTickCount();
+    } else {
+        return;
+    }
+    //CSkyBox::Process();
+    CSpeedometr::update();
+
+    UpdateNetwork();
 
     if (m_bHoldTime)
         pGame->SetWorldTime(m_byteWorldTime, m_byteWorldMinute);
@@ -929,10 +929,10 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->tonerColor.a);
 
             //
-            uint8_t vinyls2;
+           // uint8_t vinyls2;
 
             bs.Read(pVeh->m_iVinylId);
-            bs.Read(vinyls2);
+         //   bs.Read(vinyls2);
 
             // pPlateTexture
             uint8_t bPlateType, bLen;

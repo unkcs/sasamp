@@ -25,12 +25,13 @@
 
 uintptr_t g_libGTASA = 0;
 void* hGTASA;
-char* g_pszStorage = new char[255];
+char* g_pszStorage = nullptr;
 
 #include "CServerManager.h"
 #include "CLocalisation.h"
 #include "java_systems/CHUD.h"
 #include "java_systems/CInventory.h"
+#include "util/CStackTrace.h"
 
 const cryptor::string_encryptor encLib = cryptor::create("libsamp.so", 11);
 void CrashLog(const char* fmt, ...);
@@ -61,15 +62,14 @@ char g_iLastBlock[512];
 
 void PrintBuildCrashInfo()
 {
-
-	CrashLog("SA:MP version: %d.%01d", SAMP_MAJOR_VERSION, SAMP_MINOR_VERSION);
 	CrashLog("Build times: %s %s", __TIME__, __DATE__);
 	CrashLog("Last processed auto and entity: %d %d", g_usLastProcessedModelIndexAutomobile, g_iLastProcessedModelIndexAutoEnt);
 	CrashLog("Last processed skin and entity: %d %d", g_iLastProcessedSkinCollision, g_iLastProcessedEntityCollision);
 
-	CrashLog("Last rendered object: %d", g_iLastRenderedObject);
+//	CrashLog("Last rendered object: %d", g_iLastRenderedObject);
 	CrashLog("Last texture: %s", g_iLastBlock);
 	CrashLog("Last file: %s", lastFile);
+
 }
 
 #include <sstream>
@@ -221,8 +221,8 @@ void handler3(int signum, siginfo_t* info, void* contextPtr)
 
 		CrashLog("SIGBUS | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
-		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
+		CrashLog("libsamp base address: 0x%X", CUtil::FindLibrary("libsamp.so"));
+		CrashLog("libc base address: 0x%X", CUtil::FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
 			context->uc_mcontext.arm_r0,
@@ -249,13 +249,14 @@ void handler3(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("1: libGTASA.so + 0x%X", context->uc_mcontext.arm_pc - g_libGTASA);
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libsamp.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libsamp.so"));
 
 
-		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
-		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libc.so"));
+		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libc.so"));
+		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libc.so"));
 
+		CStackTrace::printBacktrace(context);
 		//DumpLibraries();
 
 		//exit(0);
@@ -280,8 +281,8 @@ void handler(int signum, siginfo_t *info, void* contextPtr)
 
 		CrashLog("SIGSEGV | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
-		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
+		CrashLog("libsamp base address: 0x%X", CUtil::FindLibrary("libsamp.so"));
+		CrashLog("libc base address: 0x%X", CUtil::FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
 			context->uc_mcontext.arm_r0, 
@@ -308,11 +309,13 @@ void handler(int signum, siginfo_t *info, void* contextPtr)
 		CrashLog("1: libGTASA.so + 0x%X", context->uc_mcontext.arm_pc - g_libGTASA);
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libsamp.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libsamp.so"));
 
-		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
-		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libc.so"));
+		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libc.so"));
+		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libc.so"));
+
+		CStackTrace::printBacktrace(context);
 	}
 }
 
@@ -331,8 +334,8 @@ void handler2(int signum, siginfo_t* info, void* contextPtr)
 
 		CrashLog("SIGFPE | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
-		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
+		CrashLog("libsamp base address: 0x%X", CUtil::FindLibrary("libsamp.so"));
+		CrashLog("libc base address: 0x%X", CUtil::FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
 			context->uc_mcontext.arm_r0,
@@ -359,21 +362,22 @@ void handler2(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("1: libGTASA.so + 0x%X", context->uc_mcontext.arm_pc - g_libGTASA);
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libsamp.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libsamp.so"));
 
 
-		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
-		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libc.so"));
+		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libc.so"));
+		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libc.so"));
+
+		CStackTrace::printBacktrace(context);
 
 	}
 
-	return;
 }
 
 void handler1(int signum, siginfo_t* info, void* contextPtr)
 {
-	ucontext* context = (ucontext_t*)contextPtr;
+	auto context = (ucontext_t*)contextPtr;
 
 	if (act1_old.sa_sigaction)
 	{
@@ -387,8 +391,8 @@ void handler1(int signum, siginfo_t* info, void* contextPtr)
 
 		CrashLog("SIGABRT | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
-		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
+		CrashLog("libsamp base address: 0x%X", CUtil::FindLibrary("libsamp.so"));
+		CrashLog("libc base address: 0x%X", CUtil::FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
 			context->uc_mcontext.arm_r0,
@@ -416,15 +420,14 @@ void handler1(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libsamp.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libsamp.so"));
 
-		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
-		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libc.so"));
+		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - CUtil::FindLibrary("libc.so"));
+		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - CUtil::FindLibrary("libc.so"));
 
 	}
 
-	return;
 }
 
 extern "C"
@@ -573,6 +576,7 @@ JNIEXPORT void JNICALL
 Java_com_liverussia_cr_core_Samp_initSAMP(JNIEnv *env, jobject thiz, jstring game_path) {
 	const char *path = env->GetStringUTFChars(game_path, nullptr);
 
+	g_pszStorage = new char[256];
 	strcpy(g_pszStorage, path);
 
 	env->ReleaseStringUTFChars(game_path, path);

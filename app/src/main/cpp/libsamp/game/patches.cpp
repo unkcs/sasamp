@@ -146,7 +146,7 @@ void ApplyPatches_level0()
 	// CdStreamInit(6);
 	CHook::WriteMemory(g_libGTASA + 0x3981EC, (uintptr_t)"\x06\x20", 2);
 
-	uintptr_t g_libSCAnd = FindLibrary("libSCAnd.so");
+	uintptr_t g_libSCAnd = CUtil::FindLibrary("libSCAnd.so");
 	if (g_libSCAnd)
 	{
 		CHook::UnFuck(g_libSCAnd + 0x001E1738);

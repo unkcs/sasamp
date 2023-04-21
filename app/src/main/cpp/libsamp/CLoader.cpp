@@ -32,8 +32,8 @@ void CLoader::initCrashLytics()
     firebase::crashlytics::SetUserId(CSettings::m_Settings.szNickName);
     firebase::crashlytics::SetCustomKey("Nick", CSettings::m_Settings.szNickName);
 
-    uintptr_t libsamp = FindLibrary("libsamp.so");
-    uintptr_t libc = FindLibrary("libc.so");
+    uintptr_t libsamp = CUtil::FindLibrary("libsamp.so");
+    uintptr_t libc = CUtil::FindLibrary("libc.so");
 
     char str[100];
 

@@ -128,7 +128,7 @@ const char* CUtil::GetWeaponName(int iWeaponID)
 	}
 }
 
-uintptr_t FindLibrary(const char* library)
+uintptr_t CUtil::FindLibrary(const char* library)
 {
 	char filename[0xFF] = { 0 },
 		buffer[2048] = { 0 };

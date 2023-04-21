@@ -1389,7 +1389,7 @@ bool IsBlendAssocGroupLoaded(int iGroup)
 void CPlayerPed::SetMoveAnim(int iAnimGroup)
 {
 	Log("SetMoveAnim %d", iAnimGroup);
-	if (iAnimGroup == ANIM_GROUP_DEFAULT)
+	if (iAnimGroup == ANIM_GROUP_DEFAULT || iAnimGroup == 255)
 	{
 		auto pModel = reinterpret_cast<CPedModelInfo*>(CModelInfo::GetModelInfo(m_pEntity->m_nModelIndex));
 		iAnimGroup = pModel->m_nAnimType;
@@ -1508,11 +1508,6 @@ void CPlayerPed::HideMarker()
 void CPlayerPed::ClearLook()
 {
 	CHook::CallFunction<bool>(g_libGTASA + 0x0043388C + 1, m_pPed);
-}
-
-void CPlayerPed::TurnBody()
-{
-	CHook::CallFunction<bool>(g_libGTASA + 0x43358C + 1, m_pPed);
 }
 
 void CPlayerPed::SetFightingStyle(int iStyle)

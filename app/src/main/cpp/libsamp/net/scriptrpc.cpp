@@ -1627,9 +1627,6 @@ void ScrSetPlayerTeam(RPCParameters *rpcParams)
 	bsData.Read(playerId);
 	bsData.Read(teamId);
 
-	if(teamId == 255)
-		return;
-
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 	if(playerId == pPlayerPool->GetLocalPlayerID())
 		pPlayerPool->GetLocalPlayer()->GetPlayerPed()->SetMoveAnim(teamId);

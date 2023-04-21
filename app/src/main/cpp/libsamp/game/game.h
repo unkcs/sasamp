@@ -80,8 +80,6 @@ public:
 	// 0.3.7
 	void SetRaceCheckpointInformation(uint8_t byteType, CVector *pos, CVector *next, float fSize);
 	// 0.3.7
-	void UpdateCheckpoints();
-	// 0.3.7
 	void MakeRaceCheckpoint();
 	//
 	void DisableCheckpoint();

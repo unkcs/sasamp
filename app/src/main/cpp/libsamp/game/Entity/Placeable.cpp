@@ -46,13 +46,15 @@ CVector CPlaceable::GetUpVector() {
 }
 
 void CPlaceable::SetPosn(float x, float y, float z) {
-    auto& pos = GetPosition();
-    pos.Set(x, y, z);
+   // auto& pos = GetPosition();
+   // pos.Set(x, y, z);
+    (( void (*)(CPlaceable*, float, float, float, bool))(*(void**)(this->vtable+0x3C)))(this, x, y, z, 0);
 }
 
 void CPlaceable::SetPosn(const CVector& posn) {
-    auto& pos = GetPosition();
-    pos = posn;
+   // auto& pos = GetPosition();
+   // pos = posn;
+    (( void (*)(CPlaceable*, float, float, float, bool))(*(void**)(this->vtable+0x3C)))(this, posn.x, posn.y, posn.z, 0);
 }
 
 void CPlaceable::SetOrientation(float x, float y, float z) {

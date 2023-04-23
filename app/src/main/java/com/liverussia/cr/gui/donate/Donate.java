@@ -373,6 +373,10 @@ public class Donate {
         // ДОБАВЛЯТЬ В НАЧАЛО КАТЕГОРИИ ЧТОБЫ ВОРКАЛА СОРТИРОВКА ПО НОВИЗНЕ!!!!!!!!!111111111111111111
 
         // skins
+        allItems.add( new DonateItem("Флеш", CATEGORY_SKINS, 10000, getResId("skin_186"), 186) );
+        allItems.add( new DonateItem("Сорвиголова", CATEGORY_SKINS, 7500, getResId("skin_206"), 206) );
+        allItems.add( new DonateItem("Детстроук", CATEGORY_SKINS, 15000, getResId("skin_221"), 221) );
+        allItems.add( new DonateItem("Мияги", CATEGORY_SKINS, 2500, getResId("skin_299"), 299) );
         allItems.add( new DonateItem("Пивозавр", CATEGORY_SKINS, 500, getResId("skin_138"), 138) );
         allItems.add( new DonateItem("Каха", CATEGORY_SKINS, 1500, getResId("skin_158"), 158) );
         allItems.add( new DonateItem("Джейсон", CATEGORY_SKINS, 1500, getResId("skin_95"), 95) );
@@ -414,6 +418,22 @@ public class Donate {
         allItems.add( new DonateItem("Грут", CATEGORY_SKINS, 50000, getResId("skin_14"), 14) );
 
         // cars
+        allItems.add( new DonateItem("BMW M5 E39", CATEGORY_CARS, 750, getResId("auc_veh_496"), 496) );
+        allItems.add( new DonateItem("Dodge Demon SRT", CATEGORY_CARS, 1750, getResId("auc_veh_503"), 503) );
+        allItems.add( new DonateItem("Cadillac Escadale", CATEGORY_CARS, 5000, getResId("auc_veh_504"), 504) );
+        allItems.add( new DonateItem("Porche 911 Carrera S", CATEGORY_CARS, 5100, getResId("auc_veh_506"), 506) );
+        allItems.add( new DonateItem("Volvo 242 DL", CATEGORY_CARS, 120, getResId("auc_veh_536"), 536) );
+        allItems.add( new DonateItem("Alfa Romeo Guilia", CATEGORY_CARS, 900, getResId("auc_veh_550"), 550) );
+        allItems.add( new DonateItem("Mercedes-Benz a65 AMG", CATEGORY_CARS, 1325, getResId("auc_veh_565"), 565) );
+        allItems.add( new DonateItem("Tesla Cubertruck", CATEGORY_CARS, 3500, getResId("auc_veh_576"), 576) );
+        allItems.add( new DonateItem("VAZ 2115", CATEGORY_CARS, 60, getResId("auc_veh_585"), 585) );
+        allItems.add( new DonateItem("Ford Mustang GT", CATEGORY_CARS, 3640, getResId("auc_veh_600"), 600) );
+        allItems.add( new DonateItem("Mercedes Benz GLE 350", CATEGORY_CARS, 9000, getResId("auc_veh_466"), 466) );
+        allItems.add( new DonateItem("Ducati SuperSport S", CATEGORY_CARS, 750, getResId("auc_veh_461"), 461) );
+        allItems.add( new DonateItem("Yamaha FZ-10", CATEGORY_CARS, 1000, getResId("auc_veh_581"), 581) );
+        allItems.add( new DonateItem("BMW S 1000 RR", CATEGORY_CARS, 1250, getResId("auc_veh_521"), 521) );
+        allItems.add( new DonateItem("Ducati XDiavel S", CATEGORY_CARS, 1750, getResId("auc_veh_463"), 463) );
+        allItems.add( new DonateItem("Aprilia-sxv", CATEGORY_CARS, 500, getResId("auc_veh_468"), 468) );
         allItems.add( new DonateItem("Bugatti Veyron", CATEGORY_CARS, 55000, getResId("auc_veh_411"), 411) );
         allItems.add( new DonateItem("Lamborghini Urus", CATEGORY_CARS, 8250, getResId("auc_veh_579"), 579) );
         allItems.add( new DonateItem("Lamborghini Aventador", CATEGORY_CARS, 8500, getResId("auc_veh_451"), 451) );
@@ -427,7 +447,6 @@ public class Donate {
         allItems.add( new DonateItem("Mercedes-Benz E230", CATEGORY_CARS, 105, getResId("auc_veh_475"), 475) );
         allItems.add( new DonateItem("Subaru Legacy", CATEGORY_CARS, 125, getResId("auc_veh_526"), 526) );
         allItems.add( new DonateItem("Lada Vesta", CATEGORY_CARS, 170, getResId("auc_veh_527"), 527) );
-        allItems.add( new DonateItem("Toyota Celica", CATEGORY_CARS, 225, getResId("auc_veh_496"), 496) );
         allItems.add( new DonateItem("BMW 3 Series E30", CATEGORY_CARS, 245, getResId("auc_veh_401"), 401) );
         allItems.add( new DonateItem("BMW 5 Series E34", CATEGORY_CARS, 265, getResId("auc_veh_421"), 421) );
         allItems.add( new DonateItem("Mercedes-Benz E420", CATEGORY_CARS, 275, getResId("auc_veh_604"), 604) );
@@ -467,12 +486,7 @@ public class Donate {
         allItems.add( new DonateItem("Ferrari La Ferrari", CATEGORY_CARS, 7500, getResId("auc_veh_541"), 541) );
         allItems.add( new DonateItem("BMW M8", CATEGORY_CARS, 8250, getResId("auc_veh_603"), 603) );
         allItems.add( new DonateItem("Квадроцикл", CATEGORY_CARS, 370, getResId("auc_veh_424"), 424) );
-        allItems.add( new DonateItem("Санчез", CATEGORY_CARS, 500, getResId("auc_veh_468"), 468) );
         allItems.add( new DonateItem("Путник", CATEGORY_CARS, 750, getResId("auc_veh_586"), 586) );
-        allItems.add( new DonateItem("ПСЖ 600", CATEGORY_CARS, 750, getResId("auc_veh_461"), 461) );
-        allItems.add( new DonateItem("БФ-400", CATEGORY_CARS, 1000, getResId("auc_veh_581"), 581) );
-        allItems.add( new DonateItem("ФКР-900", CATEGORY_CARS, 1250, getResId("auc_veh_521"), 521) );
-        allItems.add( new DonateItem("Байк", CATEGORY_CARS, 1750, getResId("auc_veh_463"), 463) );
         allItems.add( new DonateItem("Каваски", CATEGORY_CARS, 2350, getResId("auc_veh_522"), 522) );
         allItems.add( new DonateItem("Снегоход", CATEGORY_CARS, 2500, getResId("auc_veh_471"), 471) );
         allItems.add( new DonateItem("Bandito", CATEGORY_CARS, 2500, getResId("auc_veh_568"), 568) );

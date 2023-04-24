@@ -1,6 +1,5 @@
 package com.liverussia.launcher.async.task;
 
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.UiThread;
@@ -33,7 +32,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -192,7 +194,56 @@ public class CacheChecker implements Listener<FileInfo[]> {
                 .concat(filePath)
         );
     //    !MD5.checkMD5(fileInfo.getHash(), file)
-        return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
+//        return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
+        return !file.exists() || !isValidHash(filePath, fileInfo);
+    }
+
+    private boolean isValidHash(String filePath, FileInfo fileInfo) {
+        String hash = calculateHash(activity.getExternalFilesDir(null).toString()
+                .concat("/")
+                .concat(filePath)
+        );
+
+        return hash.equalsIgnoreCase(fileInfo.getHash());
+    }
+
+    private String calculateHash(String filename) {
+
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//
+//            try (DigestInputStream dis = new DigestInputStream(new FileInputStream(filename), md)) {
+//                while (dis.read() != -1) ; // пустой цикл для очистки данных
+//                md = dis.getMessageDigest();
+//            }
+//
+//            StringBuilder result = new StringBuilder();
+//
+//            for (byte b : md.digest()) {
+//                result.append(String.format("%02x", b));
+//            }
+//
+//            return result.toString();
+//        } catch (NoSuchAlgorithmException | IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] buffer = new byte[8192];
+
+            try (InputStream is = new BufferedInputStream(new FileInputStream(filename))) {
+                int read;
+                while ((read = is.read(buffer)) > 0) {
+                    md.update(buffer, 0, read);
+                }
+            }
+            byte[] digest = md.digest();
+            return bytesToHex(digest);
+        } catch (NoSuchAlgorithmException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static long checksum(File file) { // TODO:оценить скорость

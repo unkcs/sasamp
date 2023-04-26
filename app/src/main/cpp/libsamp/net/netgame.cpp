@@ -853,19 +853,19 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             g_pJavaWrapper->UpdateAutoShop(utf8, price, count, maxspeed, acceleration, gear);
             break;
         }
-        case RPC_CUSTOM_HANDLING_DEFAULTS: {
-            uint16_t vehId;
-            bs.Read(vehId);
-
-            if (GetVehiclePool()) {
-                CVehicle *pVeh = GetVehiclePool()->GetAt(vehId);
-                if (pVeh) {
-                    pVeh->ResetVehicleHandling();
-                }
-            }
-
-            break;
-        }
+//        case RPC_CUSTOM_HANDLING_DEFAULTS: {
+//            uint16_t vehId;
+//            bs.Read(vehId);
+//
+//            if (GetVehiclePool()) {
+//                CVehicle *pVeh = GetVehiclePool()->GetAt(vehId);
+//                if (pVeh) {
+//                    pVeh->ResetVehicleHandling();
+//                }
+//            }
+//
+//            break;
+//        }
         case RPC_CUSTOM_VISUALS: {
             uint16_t vehId;
             bs.Read(vehId);
@@ -909,16 +909,31 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->mainColor.r);
             bs.Read(pVeh->mainColor.g);
             bs.Read(pVeh->mainColor.b);
+            CChatWindow::AddDebugMessage("main (rgb) = %d, %d, %d, %d",
+                                         pVeh->tonerColor.r,
+                                         pVeh->tonerColor.g,
+                                         pVeh->tonerColor.b,
+                                         pVeh->tonerColor.a);
 
             //
             bs.Read(pVeh->secondColor.r);
             bs.Read(pVeh->secondColor.g);
             bs.Read(pVeh->secondColor.b);
+            CChatWindow::AddDebugMessage("2main (rgb) = %d, %d, %d, %d",
+                                         pVeh->tonerColor.r,
+                                         pVeh->tonerColor.g,
+                                         pVeh->tonerColor.b,
+                                         pVeh->tonerColor.a);
 
             // wheel coolor
             bs.Read(pVeh->wheelColor.r);
             bs.Read(pVeh->wheelColor.g);
             bs.Read(pVeh->wheelColor.b);
+            CChatWindow::AddDebugMessage("wheel (rgb) = %d, %d, %d, %d",
+                                         pVeh->tonerColor.r,
+                                         pVeh->tonerColor.g,
+                                         pVeh->tonerColor.b,
+                                         pVeh->tonerColor.a);
            // Log("Serv send ==== %d, %d, %d", pVeh->wheelColor.r, pVeh->wheelColor.g, pVeh->wheelColor.b);
           //  bs.Read(pVeh->wheelColor.a);
 
@@ -927,6 +942,11 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->tonerColor.g);
             bs.Read(pVeh->tonerColor.b);
             bs.Read(pVeh->tonerColor.a);
+            CChatWindow::AddDebugMessage("Toner (rgba) = %d, %d, %d, %d",
+                                         pVeh->tonerColor.r,
+                                         pVeh->tonerColor.g,
+                                         pVeh->tonerColor.b,
+                                         pVeh->tonerColor.a);
 
             //
            // uint8_t vinyls2;
@@ -969,24 +989,23 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             break;
         }
         case RPC_CUSTOM_HANDLING: {
-            uint16_t veh;
-            uint8_t value;
-            bs.Read(veh);
-            bs.Read(value);
+            VEHICLEID vehId;
+            bs.Read(vehId);
+
             std::vector<SHandlingData> comps;
-            for (uint8_t i = 0; i < value; i++) {
+            for (uint8_t i = 0; i < E_HANDLING_PARAMS::hpCount; i++) {
                 uint8_t id;
                 float fvalue;
                 bs.Read(id);
                 bs.Read(fvalue);
-                comps.push_back(SHandlingData(id, fvalue, 0));
+                comps.emplace_back(id, fvalue, 0);
                 Log("Pushed %d %f", id, fvalue);
             }
-            if (m_pVehiclePool) {
-                if (m_pVehiclePool->GetAt(veh)) {
-                    m_pVehiclePool->GetAt(veh)->SetHandlingData(comps);
-                }
-            }
+            auto pVeh = GetVehiclePool()->GetAt(vehId);
+
+            if(pVeh)
+                pVeh->SetHandlingData(comps);
+
             break;
         }
         case RPC_CUSTOM_COMPONENT: {
@@ -1148,8 +1167,8 @@ void CNetGame::ResetObjectPool() {
 
 void CNetGame::ResetPickupPool() {
     Log("ResetPickupPool");
-    if (m_pPickupPool)
-        delete m_pPickupPool;
+
+    delete m_pPickupPool;
 
     m_pPickupPool = new CPickupPool();
 }
@@ -1242,7 +1261,7 @@ void CNetGame::SendCheckClientPacket(const char password[]) {
     bsSend.Write(RPC);
     bsSend.Write(bytePasswordLen);
     bsSend.Write(password, bytePasswordLen);
-    GetRakClient()->Send(&bsSend, SYSTEM_PRIORITY, RELIABLE, 0);
+    GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
 
     //CChatWindow::AddDebugMessage("key: %s", password);
 }

@@ -750,18 +750,19 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 
 	CHandlingDefault::GetDefaultHandling(pModel->m_nHandlingId, m_pCustomHandling);
 
-	bool bNeedRecalculate = false;
+	//bool bNeedRecalculate = false;
 
 	for (auto& i : vHandlingData)
 	{
+		if(i.fValue == 0.0f)
+			continue;
+
 		switch (i.flag)
 		{
 			case E_HANDLING_PARAMS::hpMaxSpeed:
 				m_pCustomHandling->m_transmissionData.m_fMaxGearVelocity = i.fValue * 0.84;
 				break;
 			case E_HANDLING_PARAMS::hpAcceleration: {
-				//float sampSpeed = m_pCustomHandling->m_transmissionData.m_fMaxGearVelocity * 1.2f;
-				//m_pCustomHandling->m_transmissionData.m_fEngineAcceleration = sampSpeed / 12.0f;
 				m_pCustomHandling->m_transmissionData.m_fEngineAcceleration =  i.fValue;
 				break;
 			}
@@ -815,57 +816,43 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 			case E_HANDLING_PARAMS::hpSuspensionLowerLimit:
 			{
 				m_pCustomHandling->m_fSuspensionLowerLimit = i.fValue;
-				bNeedRecalculate = true;
 				break;
 			}
 			case E_HANDLING_PARAMS::hpSuspensionBias:
 			{
 				m_pCustomHandling->m_fSuspensionBiasBetweenFrontAndRear = i.fValue;
-				bNeedRecalculate = true;
 				break;
 			}
 			case E_HANDLING_PARAMS::hpWheelSize:
 			{
-				m_bWheelSize = true;
 				m_fWheelSize = i.fValue;
-				bNeedRecalculate = true;
 				break;
 			}
 		}
 	}
 
-	float fOldFrontWheelSize = 0.0f;
-	float fOldRearWheelSize = 0.0f;
+	auto fDefaultFrontWheelSize = pModel->m_fWheelSizeFront;
+	auto fDefaultRearWheelSize = pModel->m_fWheelSizeRear;
 
-	if (m_bWheelSize)
-	{
-		fOldFrontWheelSize = pModel->m_fWheelSizeFront;
+	if(m_fWheelSize != 0.0f) {
 		pModel->m_fWheelSizeFront = m_fWheelSize;
-
-		fOldRearWheelSize = pModel->m_fWheelSizeRear;
 		pModel->m_fWheelSizeRear = m_fWheelSize;
 	}
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
 	m_pVehicle->pHandling = m_pCustomHandling;
 
-	if (bNeedRecalculate)
-	{
-		((void (*)(CVehicleGta*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
+	((void (*)(CVehicleGta*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
 
-		CopyGlobalSuspensionLinesToPrivate();
-	}
+	CopyGlobalSuspensionLinesToPrivate();
 
-	if (m_bWheelSize)
-	{
-		pModel->m_fWheelSizeFront = fOldFrontWheelSize;
-		pModel->m_fWheelSizeRear = fOldRearWheelSize;
-	}
+	pModel->m_fWheelSizeFront = fDefaultFrontWheelSize;
+	pModel->m_fWheelSizeRear = fDefaultRearWheelSize;
 
-	if (bNeedRecalculate)
-	{
-		((void (*)(CVehicleGta*))(g_libGTASA + 0x004D6078 + 1))(m_pVehicle); // process suspension
-	}
+	//if (bNeedRecalculate)
+	//{
+	((void (*)(CVehicleGta*))(g_libGTASA + 0x004D6078 + 1))(m_pVehicle); // process suspension
+	//}
 }
 
 void CVehicle::ResetVehicleHandling()
@@ -988,7 +975,11 @@ void CVehicle::SetWheelOffset(int iWheel, float offset)
 	{
 		return;
 	}
-
+	if(offset <= 0) {
+		m_bWheelOffsetX = false;
+		m_fNewOffsetY = false;
+		return;
+	}
 	//CChatWindow::AddDebugMessage("set for %d wheel %f offset", iWheel, offset);
 	if (iWheel == 0)
 	{
@@ -1008,11 +999,6 @@ void CVehicle::SetWheelOffset(int iWheel, float offset)
 
 void CVehicle::SetWheelWidth(float fValue)
 {
-	if (fValue == 20.0f)
-	{
-		m_bWheelWidth = false;
-		return;
-	}
 	m_bWheelWidth = true;
 	m_fWheelWidth = fValue;
 }

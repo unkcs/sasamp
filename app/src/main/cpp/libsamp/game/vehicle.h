@@ -40,7 +40,8 @@ enum E_HANDLING_PARAMS
 
 	hpWheelSize,
 
-	hpMax
+	hpMax,
+	hpCount
 };
 
 #define EXTRA_COMPONENT_BOOT			10

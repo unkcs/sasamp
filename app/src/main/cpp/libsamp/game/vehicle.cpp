@@ -835,8 +835,12 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 	auto fDefaultRearWheelSize = pModel->m_fWheelSizeRear;
 
 	if(m_fWheelSize != 0.0f) {
+		m_bWheelSize = true;
 		pModel->m_fWheelSizeFront = m_fWheelSize;
 		pModel->m_fWheelSizeRear = m_fWheelSize;
+	}
+	else {
+		m_bWheelSize = false;
 	}
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);

@@ -92,8 +92,8 @@ public:
 public:
 	bool				m_bShowNameTag;
 	bool				m_bKeyboardOpened;
-	float 				m_fCurrentHealth;
-	float 				m_fCurrentArmor;
+	float 				m_fCurrentHealth = 0;
+	float 				m_fCurrentArmor = 0;
 
 private:
 	CPlayerPed			*m_pPlayerPed;

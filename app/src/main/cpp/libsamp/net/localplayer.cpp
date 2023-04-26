@@ -512,7 +512,6 @@ void CLocalPlayer::GoEnterVehicle(bool passenger)
 		return;
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
-	// CTouchInterface::IsHoldDown
 
 	VEHICLEID ClosetVehicleID = pVehiclePool->FindNearestToLocalPlayerPed();
 	if (ClosetVehicleID != INVALID_VEHICLE_ID)

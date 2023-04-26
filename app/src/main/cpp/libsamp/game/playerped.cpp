@@ -670,7 +670,6 @@ void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
 	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 	CVehicleGta* ThisVehicleType;
 	if((ThisVehicleType = GamePool_Vehicle_GetAt(iVehicleID)) == 0) return;
@@ -679,15 +678,7 @@ void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
 
 	if(bPassenger)
 	{
-		if(ThisVehicleType->m_nModelIndex == TRAIN_PASSENGER &&
-           (m_pPed == GamePool_FindPlayerPed()))
-		{
-			ScriptCommand(&put_actor_in_car2, m_dwGTAId, iVehicleID, -1);
-		}
-		else
-		{
-			ScriptCommand(&send_actor_to_car_passenger,m_dwGTAId,iVehicleID, 3000, -1);
-		}
+		ScriptCommand(&send_actor_to_car_passenger,m_dwGTAId,iVehicleID, 3000, -1);
 	}
 	else{
 		ScriptCommand(&TASK_ENTER_CAR_AS_DRIVER, m_dwGTAId, iVehicleID, -1);
@@ -708,7 +699,6 @@ void CPlayerPed::ExitCurrentVehicle()
 	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
 		return;
 	}
-	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
 	//CVehicleGta* ThisVehicleType = 0;
 

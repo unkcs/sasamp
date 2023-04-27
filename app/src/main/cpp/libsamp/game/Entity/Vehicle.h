@@ -9,6 +9,17 @@
 #include "Ped.h"
 #include "game/tHandlingData.h"
 
+enum eCarLock : uint32 {
+    CARLOCK_NOT_USED,
+    CARLOCK_UNLOCKED,
+    CARLOCK_LOCKED,
+    CARLOCK_LOCKOUT_PLAYER_ONLY,
+    CARLOCK_LOCKED_PLAYER_INSIDE,
+    CARLOCK_COP_CAR,
+    CARLOCK_FORCE_SHUT_DOORS,
+    CARLOCK_SKIP_SHUT_DOORS
+};
+
 #pragma pack(push, 1)
 struct CVehicleGta : CPhysical
 {
@@ -198,7 +209,7 @@ struct CVehicleGta : CPhysical
     uint8_t skip14[3]; // wtf?
     float OilSpillLastX;
     float OilSpillLastY;
-    uint32_t dwDoorsLocked;
+    eCarLock m_nDoorLock;
     uint32_t m_LastTimePrimaryFired;
     uint32_t m_LastTimeSecondaryFired;
     uint32_t m_LastTimeGunFired;

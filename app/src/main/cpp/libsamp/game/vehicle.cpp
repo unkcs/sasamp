@@ -47,7 +47,7 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		if (m_pVehicle)
 		{
 			//m_pVehicle->m_nOverrideLights = eVehicleOverrideLightsState::NO_CAR_LIGHT_OVERRIDE;
-			m_pVehicle->dwDoorsLocked = 0;
+			m_pVehicle->m_nDoorLock = CARLOCK_UNLOCKED;
 			m_pVehicle->fHealth = 1000.0;
 			m_bIsLocked = false;
 
@@ -582,12 +582,12 @@ void CVehicle::SetDoorState(int iState)
 	if (!m_pVehicle) return;
 	if (iState)
 	{
-		m_pVehicle->dwDoorsLocked = 2;
+		m_pVehicle->m_nDoorLock = CARLOCK_LOCKED;
 		m_bIsLocked = true;
 	}
 	else
 	{
-		m_pVehicle->dwDoorsLocked = 0;
+		m_pVehicle->m_nDoorLock = CARLOCK_UNLOCKED;
 		m_bIsLocked = false;
 	}
 }

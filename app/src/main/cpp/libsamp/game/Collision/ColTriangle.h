@@ -9,6 +9,9 @@
 #include "../Enums/eSurfaceType.h"
 #include "ColPoint.h"
 #include "../CompressedVector.h"
+#include "game/Core/Rect.h"
+#include "game/StoredCollPoly.h"
+#include "ColTrianglePlane.h"
 
 #pragma pack(push, 4)
 class CColTriangle {
@@ -32,10 +35,10 @@ public:
     * @param transform Transformation matrix to be used
     */
 //    void DrawWireFrame(CRGBA color, const CompressedVector* vertices, const CMatrix& transform) const;
-//    auto GetPlane(const CompressedVector* vertices) const -> CColTrianglePlane;
-//    auto GetPoly(const CompressedVector* verts) const -> CStoredCollPoly;
-//
-//    static auto GetBoundingRect(const CVector& a, const CVector& b, const CVector& c) -> CRect;
+    auto GetPlane(const CompressedVector* vertices) const -> CColTrianglePlane;
+    auto GetPoly(const CompressedVector* verts) const -> CStoredCollPoly;
+
+    static auto GetBoundingRect(const CVector& a, const CVector& b, const CVector& c) -> CRect;
 
     auto GetSurfaceType() const { return m_nMaterial; }
 public:

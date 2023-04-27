@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Enums/eSurfaceType.h"
+
 struct CColSurface {
     eSurfaceType m_nMaterial{};
     uint8        m_nPiece{}; // ePedPieceTypes, eCarPiece, etc

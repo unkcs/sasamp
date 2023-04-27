@@ -909,31 +909,16 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->mainColor.r);
             bs.Read(pVeh->mainColor.g);
             bs.Read(pVeh->mainColor.b);
-            CChatWindow::AddDebugMessage("main (rgb) = %d, %d, %d, %d",
-                                         pVeh->tonerColor.r,
-                                         pVeh->tonerColor.g,
-                                         pVeh->tonerColor.b,
-                                         pVeh->tonerColor.a);
 
             //
             bs.Read(pVeh->secondColor.r);
             bs.Read(pVeh->secondColor.g);
             bs.Read(pVeh->secondColor.b);
-            CChatWindow::AddDebugMessage("2main (rgb) = %d, %d, %d, %d",
-                                         pVeh->tonerColor.r,
-                                         pVeh->tonerColor.g,
-                                         pVeh->tonerColor.b,
-                                         pVeh->tonerColor.a);
 
             // wheel coolor
             bs.Read(pVeh->wheelColor.r);
             bs.Read(pVeh->wheelColor.g);
             bs.Read(pVeh->wheelColor.b);
-            CChatWindow::AddDebugMessage("wheel (rgb) = %d, %d, %d, %d",
-                                         pVeh->tonerColor.r,
-                                         pVeh->tonerColor.g,
-                                         pVeh->tonerColor.b,
-                                         pVeh->tonerColor.a);
            // Log("Serv send ==== %d, %d, %d", pVeh->wheelColor.r, pVeh->wheelColor.g, pVeh->wheelColor.b);
           //  bs.Read(pVeh->wheelColor.a);
 
@@ -942,12 +927,6 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->tonerColor.g);
             bs.Read(pVeh->tonerColor.b);
             bs.Read(pVeh->tonerColor.a);
-            CChatWindow::AddDebugMessage("Toner (rgba) = %d, %d, %d, %d",
-                                         pVeh->tonerColor.r,
-                                         pVeh->tonerColor.g,
-                                         pVeh->tonerColor.b,
-                                         pVeh->tonerColor.a);
-
             //
            // uint8_t vinyls2;
 

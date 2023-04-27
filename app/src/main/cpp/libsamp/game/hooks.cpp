@@ -183,21 +183,22 @@ open:
 
 /* ====================================================== */
 bool bGameStarted = false;
-uint32_t bProcessedCleanStreamPool = 0;
+
 void RenderBackgroundHud();
 
 #include "keyboard.h"
 
 void Render2dStuff()
 {
+	if( CHook::CallFunction<bool>(g_libGTASA + 0x00193170 + 1) ) // emu_IsAltRenderTarget()
+		CHook::CallFunction<void>(g_libGTASA + 0x001934F4 + 1); // emu_FlushAltRenderTarget()
+
     RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)0);
     RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)0);
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)1);
     RwRenderStateSet(rwRENDERSTATESRCBLEND, (void*)5);
     RwRenderStateSet(rwRENDERSTATEDESTBLEND, (void*)6);
     RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void*)0);
-
-
 
 	( ( void(*)() )(g_libGTASA + 0x003D44CC + 1) )(); // прицел
 

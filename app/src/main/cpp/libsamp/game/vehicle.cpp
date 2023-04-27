@@ -979,11 +979,7 @@ void CVehicle::SetWheelOffset(int iWheel, float offset)
 	{
 		return;
 	}
-	if(offset <= 0) {
-		m_bWheelOffsetX = false;
-		m_fNewOffsetY = false;
-		return;
-	}
+
 	//CChatWindow::AddDebugMessage("set for %d wheel %f offset", iWheel, offset);
 	if (iWheel == 0)
 	{

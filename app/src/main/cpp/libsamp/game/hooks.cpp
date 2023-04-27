@@ -1605,11 +1605,11 @@ void CMatrix__SetScale_hook(void* thiz, float x, float y, float z)
 		if (g_iLastProcessedWheelVehicle >= 2 || g_iLastProcessedWheelVehicle <= 7)
 		{
 			// front wheel
-			if (g_pLastProcessedVehicleMatrix->m_bWheelSize)
-			{
+		//	if (g_pLastProcessedVehicleMatrix->m_bWheelSize)
+		//	{
 				y *= g_pLastProcessedVehicleMatrix->m_fWheelSize * 1.3f;
 				z *= g_pLastProcessedVehicleMatrix->m_fWheelSize * 1.3f;
-			}
+			//}
 			if (g_pLastProcessedVehicleMatrix->m_bWheelWidth)
 			{
 				x = g_pLastProcessedVehicleMatrix->m_fWheelWidth;
@@ -1646,11 +1646,11 @@ void CAutomobile__PreRender_hook(CVehicleGta* thiz)
 			pVeh->ProcessWheelsOffset();
 			g_pLastProcessedVehicleMatrix = pVeh;
 
-			if (pVeh->m_bWheelSize)
-			{
+			//if (pVeh->m_bWheelSize)
+			//{
 				pModelInfoStart->m_fWheelSizeFront = pVeh->m_fWheelSize;
 				pModelInfoStart->m_fWheelSizeRear = pVeh->m_fWheelSize;
-			}
+			//}
 			if (pVeh->m_bShadow && pVeh->m_Shadow.pTexture) {
 				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->m_matrix);
 			}

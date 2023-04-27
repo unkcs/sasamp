@@ -92,7 +92,6 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		CopyGlobalSuspensionLinesToPrivate();
 	}
 
-	m_bWheelSize = false;
 	m_bWheelWidth = false;
 	m_bWheelAlignmentX = false;
 	m_bWheelAlignmentY = false;
@@ -835,12 +834,8 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 	auto fDefaultRearWheelSize = pModel->m_fWheelSizeRear;
 
 	if(m_fWheelSize != 0.0f) {
-		m_bWheelSize = true;
 		pModel->m_fWheelSizeFront = m_fWheelSize;
 		pModel->m_fWheelSizeRear = m_fWheelSize;
-	}
-	else {
-		m_bWheelSize = false;
 	}
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
@@ -857,47 +852,6 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 	//{
 	((void (*)(CVehicleGta*))(g_libGTASA + 0x004D6078 + 1))(m_pVehicle); // process suspension
 	//}
-}
-
-void CVehicle::ResetVehicleHandling()
-{
-
-	if (!m_pVehicle || !m_dwGTAId)
-	{
-		return;
-	}
-	if (!GamePool_Vehicle_GetAt(m_dwGTAId))
-	{
-		return;
-	}
-
-	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR)
-	{
-		return;
-	}
-
-	if (!m_pCustomHandling)
-	{
-		m_pCustomHandling = new tHandlingData;
-	}
-	auto pModel = CModelInfo::GetVehicleModelInfo(m_pVehicle->m_nModelIndex);
-
-
-	if (!pModel)
-	{
-		return;
-	}
-
-	CHandlingDefault::GetDefaultHandling(pModel->m_nHandlingId, m_pCustomHandling);
-
-	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
-
-	m_pVehicle->pHandling = m_pCustomHandling;
-
-	((void (*)(CVehicleGta*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
-	CopyGlobalSuspensionLinesToPrivate();
-
-	Log("Reseted to defaults");
 }
 
 void CVehicle::setPlate(ePlateType type, char* szNumber, char* szRegion)
@@ -1080,9 +1034,8 @@ void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int
 	CVector vecOut;
 	RwMatrixMultiplyByVector(&vecOut, &(m_vInitialWheelMatrix[iID]), &vecOffset);
 
-	pFrame->modelling.pos.x = vecOut.x;
-	pFrame->modelling.pos.y = vecOut.y;
-	pFrame->modelling.pos.z = vecOut.z;
+
+	pFrame->modelling.pos = vecOut;
 }
 
 void CVehicle::SetComponentAngle(bool bUnk, int iID, float angle)

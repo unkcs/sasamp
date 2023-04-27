@@ -196,7 +196,6 @@ public:
 	bool m_bWheelAlignmentY;
 	float m_fWheelAlignmentY = 0.0f;
 
-	bool m_bWheelSize;
 	float m_fWheelSize = 0.0f;
 
 	bool m_bWheelWidth;

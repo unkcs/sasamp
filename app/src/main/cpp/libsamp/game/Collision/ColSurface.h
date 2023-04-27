@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Enums/eSurfaceType.h"
+#include "ColPoint.h"
 
 struct CColSurface {
     eSurfaceType m_nMaterial{};

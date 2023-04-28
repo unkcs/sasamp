@@ -614,7 +614,7 @@ void ScrVehicleParamsEx(RPCParameters* rpcParams)
 {
 	Log("RPC: ScrVehicleParamsEx");
 
-	unsigned char* Data = reinterpret_cast<unsigned char*>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data, (iBitLength / 8) + 1, false);
@@ -630,22 +630,26 @@ void ScrVehicleParamsEx(RPCParameters* rpcParams)
 	bsData.Read(boot);
 	bsData.Read(objective);
 
-	if (pNetGame && pNetGame->GetVehiclePool())
-	{
-		if (pNetGame->GetVehiclePool()->GetSlotState(VehicleId))
-		{
-			// doors
-			pNetGame->GetVehiclePool()->GetAt(VehicleId)->SetDoorState(doors);
-			// engine
-			pNetGame->GetVehiclePool()->GetAt(VehicleId)->SetEngineState((engine == 1) ? true : false);
-			// lights
-			pNetGame->GetVehiclePool()->GetAt(VehicleId)->SetLightsState((lights == 1) ? true : false);
+	if (pNetGame->GetVehiclePool()->GetSlotState(VehicleId))
+		return;
+
+	auto pVehicle = pNetGame->GetVehiclePool()->GetAt(VehicleId);
+
+	pVehicle->SetDoorState(doors);
+	// engine
+	pVehicle->SetEngineState((engine == 1) ? true : false);
+	// lights
+	pVehicle->SetLightsState((lights == 1) ? true : false);
+
+	if(alarm)
+		pVehicle->m_pVehicle->m_nAlarmState = 20000;
+	else
+		pVehicle->m_pVehicle->m_nAlarmState = -1;
 
 	//		pNetGame->GetVehiclePool()->AssignSpecialParamsToVehicle(VehicleId, objective,doors);
 
-			pNetGame->GetVehiclePool()->GetAt(VehicleId)->SetBootAndBonnetState((int)boot, (int)bonnet);
-		}
-	}
+	pVehicle->SetBootAndBonnetState((int)boot, (int)bonnet);
+
 }
 
 void ScrHaveSomeMoney(RPCParameters *rpcParams)

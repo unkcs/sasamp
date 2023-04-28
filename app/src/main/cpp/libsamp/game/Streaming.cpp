@@ -18,6 +18,7 @@ void CStreaming::InjectHooks() {
     CHook::Write(g_libGTASA + 0x005D111C, &CStreaming::ms_memoryAvailable);
     CHook::Write(g_libGTASA + 0x005D1508, &CStreaming::desiredNumVehiclesLoaded);
     CHook::Write(g_libGTASA + 0x005CE80C, &CStreaming::ms_files);
+    CHook::Write(g_libGTASA + 0x005CF32C, &CStreaming::ms_rwObjectInstances);
 
     CHook::Redirect(g_libGTASA, 0x28E83C, &CStreaming::InitImageList);
 }

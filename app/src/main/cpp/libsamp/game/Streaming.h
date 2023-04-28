@@ -8,6 +8,8 @@
 #include "constants.h"
 #include "common.h"
 #include "CdStreamInfo.h"
+#include "entity.h"
+#include "game/Core/CLinkList.h"
 
 enum class eChannelState
 {
@@ -146,6 +148,7 @@ public:
     static inline uint32 desiredNumVehiclesLoaded;
     static inline bool ms_bLoadVehiclesInLoadScene;
     static inline tStreamingFileDesc ms_files[TOTAL_IMG_ARCHIVES];
+    static inline CLinkList<CEntity*> ms_rwObjectInstances;
 
 public:
     static void InjectHooks();

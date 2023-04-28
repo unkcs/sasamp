@@ -841,6 +841,7 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVect
 #include "cHandlingDataMgr.h"
 #include "Pools.h"
 #include "game/Core/MatrixLinkList.h"
+#include "Collision/Collision.h"
 
 void InjectHooks()
 {
@@ -856,6 +857,7 @@ void InjectHooks()
 	CStreaming::InjectHooks();
 	CPlaceable::InjectHooks();
 	CMatrix::InjectHooks();
+    CCollision::InjectHooks();
 }
 
 void InstallSpecialHooks()

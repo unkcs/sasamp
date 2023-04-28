@@ -8,6 +8,7 @@
 
 #include "../common.h"
 
+#pragma pack(push, 1)
 class CSphere {
 public:
     CVector m_vecCenter{};
@@ -37,4 +38,5 @@ public:
 
     friend auto TransformObject(const CSphere& sp, const CMatrix& transform) -> CSphere;
 };
+#pragma pack(pop)
 VALIDATE_SIZE(CSphere, 0x10);

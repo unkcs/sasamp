@@ -9,7 +9,7 @@
 #include "common.h"
 #include "CdStreamInfo.h"
 #include "entity.h"
-#include "game/Core/CLinkList.h"
+#include "game/Core/LinkList.h"
 
 enum class eChannelState
 {

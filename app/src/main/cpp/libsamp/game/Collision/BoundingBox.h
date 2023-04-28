@@ -8,7 +8,7 @@
 
 #include "Box.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CBoundingBox : public CBox {
 public:
     constexpr CBoundingBox() : CBox(CVector{1.0f}, CVector{-1.0f}) {}

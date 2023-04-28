@@ -7,6 +7,7 @@
 #include <cstdint>
 
 #include "TimeInfo.h"
+#include "game/Collision/ColModel.h"
 
 enum ModelInfoType : uint8_t {
     MODEL_INFO_ATOMIC = 1,
@@ -96,7 +97,7 @@ struct CBaseModelInfo {
         };
     };
     uint8_t     pad_1[2];
-    uintptr_t   *m_pColModel;     // CColModel
+    CColModel   *m_pColModel;
     float       m_fDrawDistance;  // m_lodDistance
     union {
         struct RwObject *m_pRwObject;

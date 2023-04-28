@@ -50,6 +50,5 @@ public:
 	void InstantRotate(float x, float y, float z);
 	void StopMoving();
 
-	void ApplyMoveSpeed();
 	void GetRotation(float* pfX, float* pfY, float* pfZ);
 };

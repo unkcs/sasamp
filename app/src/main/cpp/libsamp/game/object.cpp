@@ -127,7 +127,7 @@ void CObject::Process(float fElapsedTime)
 		}
 
 		m_pEntity->SetVelocity(vecSpeed);
-		ApplyMoveSpeed();
+		m_pEntity->ApplyMoveSpeed();
 
 		if (m_bNeedRotate)
 		{
@@ -213,6 +213,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 		CVector vecRot;
 		RwMatrix matrix;
 		this->GetRotation(&vecRot.x, &vecRot.y, &vecRot.z);
+
 		m_vecRotationTarget.x = fixAngle(fRotX);
 		m_vecRotationTarget.y = fixAngle(fRotY);
 		m_vecRotationTarget.z = fixAngle(fRotZ);
@@ -288,28 +289,11 @@ void CObject::StopMoving()
 	m_bIsMoving = false;
 }
 
-void CObject::ApplyMoveSpeed()
-{
-	if(m_pEntity)
-	{
-		RwMatrix mat;
-		GetMatrix(&mat);
-
-		mat.pos.x += CTimer::ms_fTimeStep * m_pEntity->m_vecMoveSpeed.x;
-		mat.pos.y += CTimer::ms_fTimeStep * m_pEntity->m_vecMoveSpeed.y;
-		mat.pos.z += CTimer::ms_fTimeStep * m_pEntity->m_vecMoveSpeed.z;
-
-		UpdateMatrix(mat);
-	}
-}
-
 void CObject::GetRotation(float* pfX,float* pfY,float* pfZ)
 {
 	if (!m_pEntity) return;
 
-	CMatrix* mat = m_pEntity->m_matrix;
-
-	if(mat) CHook::CallFunction<void>(g_libGTASA + 0x3E8098 + 1, mat, pfX, pfY, pfZ, 21);
+	m_pEntity->m_matrix->ConvertToEulerAngles(pfX, pfY, pfZ, 21);
 
 	*pfX = *pfX * 57.295776 * -1.0;
 	*pfY = *pfY * 57.295776 * -1.0;

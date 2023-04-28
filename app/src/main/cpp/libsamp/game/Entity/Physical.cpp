@@ -27,3 +27,11 @@ void CPhysical::ApplyTurnSpeed()
         }
     }
 }
+
+void CPhysical::ApplyMoveSpeed()
+{
+    if (physicalFlags.bDontApplySpeed || physicalFlags.bDisableMoveForce)
+        ResetMoveSpeed();
+    else
+        GetPosition() += CTimer::GetTimeStep() * m_vecMoveSpeed;
+}

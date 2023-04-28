@@ -167,7 +167,7 @@ void CNetGame::Process() {
     }
 
     // 30 fps
-    if (GetTickCount() - last_process_cnetgame >= 1000 / 30) {
+    if (GetTickCount() - last_process_cnetgame >= 33) {
         last_process_cnetgame = GetTickCount();
     } else {
         return;
@@ -867,6 +867,7 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
 //            break;
 //        }
         case RPC_CUSTOM_VISUALS: {
+            Log("RPC_CUSTOM_VISUALS");
             uint16_t vehId;
             bs.Read(vehId);
 
@@ -903,7 +904,6 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
 
             float fValueY = ((float) wheelOffsetY / 100.0f);
             pVeh->SetWheelOffset(1, fValueY);
-
 
             //
             bs.Read(pVeh->mainColor.r);

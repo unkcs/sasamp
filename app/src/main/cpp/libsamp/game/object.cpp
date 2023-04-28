@@ -2,6 +2,7 @@
 #include "game.h"
 #include "../net/netgame.h"
 #include "util/patch.h"
+#include "Timer.h"
 #include <cmath>
 
 extern CGame *pGame;
@@ -30,8 +31,6 @@ CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecR
 
 	m_pEntity = GamePool_Object_GetAt(dwRetID);
 	m_dwGTAId = dwRetID;
-	m_byteMoving = 0;
-	m_fMoveSpeed = 0.0;
 
 	m_bIsPlayerSurfing = false;
 	m_bNeedRotate = false;
@@ -65,7 +64,7 @@ void CObject::Process(float fElapsedTime)
 	m_pEntity = GamePool_Object_GetAt(m_dwGTAId);
 	if (!m_pEntity) return;
 	if (!(m_pEntity->m_matrix)) return;
-	if (m_byteMoving & 1)
+	if (m_bIsMoving)
 	{
 		CVector vecSpeed = { 0.0f, 0.0f, 0.0f };
 		RwMatrix matEnt;
@@ -78,7 +77,7 @@ void CObject::Process(float fElapsedTime)
 		float posY = matEnt.pos.y;
 		float posZ = matEnt.pos.z;
 
-		float f1 = ((float)(dwThisTick - m_dwMoveTick)) * 0.001f * m_fMoveSpeed;
+		float f1 = ((float)(dwThisTick - m_iStartMoveTick)) * 0.001f * m_fMoveSpeed;
 		float f2 = m_fDistanceToTargetPoint - remaining;
 
 		if (distance >= remaining)
@@ -187,7 +186,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 	RwMatrix mat;
 	this->GetMatrix(&mat);
 
-	if (m_byteMoving & 1) {
+	if (m_bIsMoving) {
 		this->StopMoving();
 		mat.pos = m_matTarget.pos;
 
@@ -198,12 +197,11 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 		this->UpdateMatrix(mat);
 	}
 
-	m_dwMoveTick = GetTickCount();
+	m_iStartMoveTick = GetTickCount();
 	m_fMoveSpeed = fSpeed;
-	m_matTarget.pos.x = fX;
-	m_matTarget.pos.y = fY;
-	m_matTarget.pos.z = fZ;
-	m_byteMoving |= 1;
+	m_matTarget.pos = {fX, fY, fZ};
+
+	m_bIsMoving = true;
 
 	if (fRotX <= -999.0f || fRotY <= -999.0f || fRotZ <= -999.0f) {
 		m_bNeedRotate = false;
@@ -287,20 +285,20 @@ void CObject::StopMoving()
 	CVector vec = { 0.0f, 0.0f, 0.0f };
 	this->m_pEntity->ResetMoveSpeed();
 	this->SetTurnSpeedVector(vec);
-	m_byteMoving &= ~1;
+	m_bIsMoving = false;
 }
 
 void CObject::ApplyMoveSpeed()
 {
 	if(m_pEntity)
 	{
-		float fTimeStep	= *(float*)(g_libGTASA + 0x8C9BB4); // 2.00 - 0x96B500
-
 		RwMatrix mat;
 		GetMatrix(&mat);
-		mat.pos.x += fTimeStep * m_pEntity->m_vecMoveSpeed.x;
-		mat.pos.y += fTimeStep * m_pEntity->m_vecMoveSpeed.y;
-		mat.pos.z += fTimeStep * m_pEntity->m_vecMoveSpeed.z;
+
+		mat.pos.x += CTimer::ms_fTimeStep * m_pEntity->m_vecMoveSpeed.x;
+		mat.pos.y += CTimer::ms_fTimeStep * m_pEntity->m_vecMoveSpeed.y;
+		mat.pos.z += CTimer::ms_fTimeStep * m_pEntity->m_vecMoveSpeed.z;
+
 		UpdateMatrix(mat);
 	}
 }

@@ -1549,7 +1549,7 @@ void ScrRemoveComponent(RPCParameters* rpcParams)
 void ScrMoveObject(RPCParameters* rpcParams)
 {
 	Log("ScrMoveObject");
-	unsigned char* Data = reinterpret_cast<unsigned char*>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);

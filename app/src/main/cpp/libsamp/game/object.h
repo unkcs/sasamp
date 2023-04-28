@@ -13,8 +13,8 @@ class CObject : public CEntity
 public:
 	RwMatrix	m_matTarget;
 	RwMatrix	m_matCurrent;
-	uint8_t		m_byteMoving;
-	float		m_fMoveSpeed;
+	bool 		m_bIsMoving {false};
+	float		m_fMoveSpeed {0.f};
 	bool		m_bIsPlayerSurfing;
 	bool		m_bNeedRotate;
 
@@ -32,7 +32,7 @@ public:
 	CVector		m_vecRotationTarget;
 	CVector		m_vecSubRotationTarget;
 	float		m_fDistanceToTargetPoint;
-	uint32_t		m_dwMoveTick;
+	uint32_t		m_iStartMoveTick;
 
 	CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance);
 	~CObject();

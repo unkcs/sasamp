@@ -841,6 +841,7 @@ void CPlayerPed::ClearAllTasks()
 
 void CPlayerPed::ClearAnimations()
 {
+	m_pPed->ResetMoveSpeed();
 	m_pPed->m_matrix->UpdateRW();
 	Log("ClearAnimations");
 }

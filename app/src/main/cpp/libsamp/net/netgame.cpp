@@ -883,8 +883,7 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             //
             uint16_t fWheelWidth;
             bs.Read(fWheelWidth);
-            if (fWheelWidth > 0)
-                pVeh->SetWheelWidth((float) fWheelWidth / 100.0f);
+            pVeh->SetWheelWidth((float) fWheelWidth / 100.0f);
 
             //
             int8_t bWheelAlignX, bWheelAlignY;

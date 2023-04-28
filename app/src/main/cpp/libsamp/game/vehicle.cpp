@@ -92,12 +92,9 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		CopyGlobalSuspensionLinesToPrivate();
 	}
 
-	m_bWheelWidth = false;
 	m_bWheelAlignmentX = false;
 	m_bWheelAlignmentY = false;
 
-	m_bWheelOffsetX = false;
-	m_bWheelOffsetY = false;
 	m_fWheelOffsetX = 0.0f;
 	m_fWheelOffsetY = 0.0f;
 	m_fNewOffsetX = 0.0f;
@@ -753,7 +750,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 
 	for (auto& i : vHandlingData)
 	{
-		if(i.fValue == 0.0f)
+		if(i.fValue == 0.0f && i.flag != E_HANDLING_PARAMS::hpWheelSize)
 			continue;
 
 		switch (i.flag)
@@ -828,6 +825,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 				break;
 			}
 		}
+
 	}
 
 	auto fDefaultFrontWheelSize = pModel->m_fWheelSizeFront;
@@ -836,6 +834,8 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 	if(m_fWheelSize != 0.0f) {
 		pModel->m_fWheelSizeFront = m_fWheelSize;
 		pModel->m_fWheelSizeRear = m_fWheelSize;
+	} else {
+		m_fWheelSize = pModel->m_fWheelSizeFront;
 	}
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
@@ -877,18 +877,6 @@ void GetAllAtomicObjects(RwFrame* frame, std::vector<RwObject*>& result)
 {
 
 	((uintptr_t(*)(RwFrame*, void*, uintptr_t))(g_libGTASA + 0x001AEE2C + 1))(frame, (void*)GetAllAtomicObjectCB, (uintptr_t)& result);
-}
-
-void CVehicle::SetHeadlightsColor(uint8_t r, uint8_t g, uint8_t b)
-{
-	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR)
-	{
-		return;
-	}
-
-	lightColor.r = r;
-	lightColor.g = g;
-	lightColor.b = b;
 }
 
 void CVehicle::ProcessHeadlightsColor(uint8_t& r, uint8_t& g, uint8_t& b)
@@ -937,14 +925,12 @@ void CVehicle::SetWheelOffset(int iWheel, float offset)
 	//CChatWindow::AddDebugMessage("set for %d wheel %f offset", iWheel, offset);
 	if (iWheel == 0)
 	{
-		m_bWheelOffsetX = true;
-		m_fNewOffsetX = offset;
+		m_fWheelOffsetX = offset;
 		m_bWasWheelOffsetProcessedX = false;
 	}
 	else
 	{
-		m_bWheelOffsetY = true;
-		m_fNewOffsetY = offset;
+		m_fWheelOffsetX = offset;
 		m_bWasWheelOffsetProcessedY = false;
 	}
 
@@ -953,7 +939,6 @@ void CVehicle::SetWheelOffset(int iWheel, float offset)
 
 void CVehicle::SetWheelWidth(float fValue)
 {
-	m_bWheelWidth = true;
 	m_fWheelWidth = fValue;
 }
 
@@ -968,30 +953,22 @@ void CVehicle::ProcessWheelsOffset()
 
 	if (!m_bWasWheelOffsetProcessedX)
 	{
-		if (m_bWheelOffsetX)
-		{
-			auto pWheelLF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lf_dummy");
-			auto pWheelRF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rf_dummy");
+		auto pWheelLF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lf_dummy");
+		auto pWheelRF = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rf_dummy");
 
-			m_fWheelOffsetX = m_fNewOffsetX;
+		ProcessWheelOffset(pWheelLF, true, m_fWheelOffsetX, 0);
+		ProcessWheelOffset(pWheelRF, false, m_fWheelOffsetX, 1);
 
-			ProcessWheelOffset(pWheelLF, true, m_fWheelOffsetX, 0);
-			ProcessWheelOffset(pWheelRF, false, m_fWheelOffsetX, 1);
-
-		}
 		m_bWasWheelOffsetProcessedX = true;
 	}
 	if (!m_bWasWheelOffsetProcessedY)
 	{
-		if (m_bWheelOffsetY)
-		{
-			auto pWheelRB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rb_dummy");
-			auto pWheelLB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lb_dummy");
+		auto pWheelRB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_rb_dummy");
+		auto pWheelLB = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, "wheel_lb_dummy");
 
-			m_fWheelOffsetY = m_fNewOffsetY;
-			ProcessWheelOffset(pWheelRB, false, m_fWheelOffsetY, 2);
-			ProcessWheelOffset(pWheelLB, true, m_fWheelOffsetY, 3);
-		}
+		ProcessWheelOffset(pWheelRB, false, m_fWheelOffsetY, 2);
+		ProcessWheelOffset(pWheelLB, true, m_fWheelOffsetY, 3);
+		
 		m_bWasWheelOffsetProcessedY = true;
 	}
 }

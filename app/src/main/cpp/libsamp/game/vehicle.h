@@ -124,16 +124,7 @@ public:
 
 	void SetComponentVisible(uint8_t group, uint16_t components);
 	void SetHandlingData(std::vector<SHandlingData>& vHandlingData);
-	void ResetVehicleHandling();
 
-	void ApplyVinyls(uint8_t bSlot1, uint8_t bSlot2);
-
-	void ApplyTexture(const char* szTexture, const char* szNew);
-	void ApplyTexture(const char* szTexture, RwTexture* pTexture);
-	void RemoveTexture(const char* szOldTexture);
-	bool IsRetextured(const char* szOldTexture);
-
-	void SetHeadlightsColor(uint8_t r, uint8_t g, uint8_t b);
 	void ProcessHeadlightsColor(uint8_t& r, uint8_t& g, uint8_t& b);
 	void SetWheelAlignment(int iWheel, float angle);
 	void SetWheelOffset(int iWheel, float offset);
@@ -198,13 +189,10 @@ public:
 
 	float m_fWheelSize = 0.0f;
 
-	bool m_bWheelWidth;
 	float m_fWheelWidth = 0.0f;
 
-	bool m_bWheelOffsetX;
 	float m_fWheelOffsetX = 0.0f;
 
-	bool m_bWheelOffsetY;
 	float m_fWheelOffsetY = 0.0f;
 
 	float m_fNewOffsetX = 0.0f;

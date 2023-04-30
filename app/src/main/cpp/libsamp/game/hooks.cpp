@@ -2395,13 +2395,22 @@ void DrawCrosshair_hook(uintptr_t* thiz)
 	*m_f3rdPersonCHairMultY = save2;
 }
 
+void (*CVehicle__DoVehicleLights)(CVehicleGta* thiz, CMatrix *matVehicle, uint32 nLightFlags);
+void CVehicle__DoVehicleLights_hook(CVehicleGta* thiz, CMatrix *matVehicle, uint32 nLightFlags)
+{
+    uint8_t old = thiz->m_nVehicleFlags.bEngineOn;
+	thiz->m_nVehicleFlags.bEngineOn = 1;
+	CVehicle__DoVehicleLights(thiz, matVehicle, nLightFlags);
+    thiz->m_nVehicleFlags.bEngineOn = old;
+}
+
 void InstallHooks()
 {
 	Log("InstallHooks");
 
-	//CHook::InlineHook(g_libGTASA, 0x00298088, )
+	CHook::InlineHook(g_libGTASA, 0x005198C4, &CVehicle__DoVehicleLights_hook, &CVehicle__DoVehicleLights);
 
-    // Fixing a crosshair by very stupid math ( JPATCH )
+	// Fixing a crosshair by very stupid math ( JPATCH )
 	m_f3rdPersonCHairMultX = (float*)(g_libGTASA + 0x008B07FC);
 	m_f3rdPersonCHairMultY = (float*)(g_libGTASA + 0x008B07F8);
 	ms_fAspectRatio = (float*)(g_libGTASA + 0x0098525C);
@@ -2496,6 +2505,7 @@ void InstallHooks()
 //	CHook::NOP(g_libGTASA + 0x003DA876, 3); // CRadar::LimitRadarPoint
 
 	// headlights color, wheel size, wheel align
+
 	CHook::InlineHook(g_libGTASA, 0x005466EC, &CShadows__StoreCarLightShadow_hook, &CShadows__StoreCarLightShadow);
 	CHook::InlineHook(g_libGTASA, 0x00518EC4, &CVehicle__DoHeadLightBeam_hook, &CVehicle__DoHeadLightBeam);
 

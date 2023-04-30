@@ -89,11 +89,10 @@ public class TheftAuto implements View.OnClickListener {
 
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1
+                    LinearLayout.LayoutParams.WRAP_CONTENT
             );
 
-            shiftInDp = 200;
+            shiftInDp = 500;
 
             Resources r = activity.getResources();
             int shiftInPx = (int) TypedValue.applyDimension(
@@ -125,8 +124,8 @@ public class TheftAuto implements View.OnClickListener {
 
     private void doMainButtonAction() {
 
-        int leftPointWithShift = shiftInDp * SHIFT_FACTOR + POINT_SIZE; //todo ?
-        int rightPointWithShift = shiftInDp * SHIFT_FACTOR + POINT_SIZE + POINT_SIZE; //todo почему 2 раза?
+        int leftPointWithShift = shiftInDp * SHIFT_FACTOR;
+        int rightPointWithShift = shiftInDp * SHIFT_FACTOR + POINT_SIZE;
 
         if (theftAutoProgressBar.getProgress() > leftPointWithShift && theftAutoProgressBar.getProgress() < rightPointWithShift && success != 0)
         {
@@ -148,7 +147,7 @@ public class TheftAuto implements View.OnClickListener {
 
     public void startCountdown() {
 
-        int rightPointWithShift = shiftInDp * SHIFT_FACTOR + POINT_SIZE + POINT_SIZE; //todo почему 2 раза?
+        int rightPointWithShift = shiftInDp * SHIFT_FACTOR + POINT_SIZE;
 
         if (countDownTimer != null) {
             countDownTimer.cancel();

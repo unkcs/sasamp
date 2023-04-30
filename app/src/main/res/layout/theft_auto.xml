@@ -36,8 +36,6 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:paddingStart="@dimen/_20sdp"
-        android:paddingEnd="@dimen/_20sdp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/theft_progress_backbar"
         app:layout_constraintStart_toStartOf="@+id/theft_progress_backbar"
@@ -47,7 +45,7 @@
             android:id="@+id/theft_auto_point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="0dp"
             app:srcCompat="@drawable/samwill_gray" />
 
     </LinearLayout>

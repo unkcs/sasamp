@@ -194,10 +194,10 @@ void ApplyShadowPatch()
 	CHook::RET(g_libGTASA + 0x541AA8); // CRealTimeShadowManager::ReturnRealTimeShadow from ~CPhysical
 	CHook::NOP(g_libGTASA + 0x2661DA, 2); // Display - Shadows ( настройки )
 	CHook::RET(g_libGTASA + 0x541AC4); //shadow CRealTimeShadowManager::Update
-	CHook::RET(g_libGTASA + 0x543B04); // CShadows::RenderStaticShadows
+	//CHook::RET(g_libGTASA + 0x543B04); // CShadows::RenderStaticShadows
 	CHook::NOP(g_libGTASA + 0x0039B2C4, 2); // CMirrors::BeforeMainRender(void)
-	CHook::RET(g_libGTASA + 0x5471F4); // CShadows::RenderStoredShadows
-	CHook::RET(g_libGTASA + 0x545C04); // CShadows::StoreStaticShadow
+	//CHook::RET(g_libGTASA + 0x5471F4); // CShadows::RenderStoredShadows
+	//CHook::RET(g_libGTASA + 0x545C04); // CShadows::StoreStaticShadow
 	CHook::NOP(g_libGTASA + 0x39B2C0, 2);	// CRealTimeShadowManager::Update from Idle
 }
 

@@ -66,8 +66,8 @@ struct SCustomCarShadow
 	uint8_t r {};
 	uint8_t g {};
 	uint8_t b {};
-	uint8_t fSizeX {};
-	uint8_t fSizeY {};
+	float fSizeX {};
+	float fSizeY {};
 };
 
 enum eTurnState

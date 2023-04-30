@@ -630,7 +630,7 @@ void ScrVehicleParamsEx(RPCParameters* rpcParams)
 	bsData.Read(boot);
 	bsData.Read(objective);
 
-	if (pNetGame->GetVehiclePool()->GetSlotState(VehicleId))
+	if (!pNetGame->GetVehiclePool()->GetSlotState(VehicleId))
 		return;
 
 	auto pVehicle = pNetGame->GetVehiclePool()->GetAt(VehicleId);

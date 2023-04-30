@@ -3,310 +3,498 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
-    android:visibility="gone"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/styling_arrow_right"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:layout_marginEnd="32dp"
-        android:src="@drawable/shop_btn"
-        android:rotation="180"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/styling_arrow_left"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/shop_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/styling_buy_butt"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_styling_buy"
-        app:layout_constraintBottom_toTopOf="@+id/styling_arrow_left"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout15"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout15"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout15"/>
-
-    <TextView
-        android:id="@+id/styling_howmuch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:fontFamily="@font/visby_round_cf_extra_bold"
-        android:includeFontPadding="false"
-        android:text="99.999.999 РУБ"
-        android:textColor="#FFFFFF"
-        android:textSize="7dp"
-        app:layout_constraintBottom_toBottomOf="@+id/styling_buy_butt"
-        app:layout_constraintEnd_toEndOf="@+id/styling_buy_butt"
-        app:layout_constraintStart_toStartOf="@+id/styling_buy_butt" />
-
-    <LinearLayout
-        android:id="@+id/styling_exit"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/styling_center_exit_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/styling_exit_image"
-            android:layout_width="25dp"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_styling_exit" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/styling_stock"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/styling_center_stock_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/styling_stock_image"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_styling_stock" />
-    </LinearLayout>
+    android:layout_height="match_parent"
+    android:visibility="gone">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout15"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_25sdp"
-        android:background="@drawable/styling_center_money_bg"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/styilyng_gui_layout"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/styling_money_ic"
-            android:layout_width="wrap_content"
+            android:id="@+id/styling_buy_butt"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_ruble" />
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_styling_buy"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout15"
+            app:layout_constraintStart_toStartOf="@+id/constraintLayout15"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout15" />
 
         <TextView
-            android:id="@+id/styling_money"
+            android:id="@+id/styling_howmuch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montsserat_semibold"
-            android:gravity="center"
+            android:layout_marginBottom="1dp"
+            android:fontFamily="@font/visby_round_cf_extra_bold"
             android:includeFontPadding="false"
-            android:text="999 999 999"
+            android:text="99.999.999 РУБ"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/_9sdp"
+            android:textSize="7dp"
+            app:layout_constraintBottom_toBottomOf="@+id/styling_buy_butt"
+            app:layout_constraintEnd_toEndOf="@+id/styling_buy_butt"
+            app:layout_constraintStart_toStartOf="@+id/styling_buy_butt" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/styling_exit_butt"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@drawable/styling_center_exit_bg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="false"
+                android:src="@drawable/ic_styling_exit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout15"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:background="@drawable/styling_center_money_bg"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/styling_money_ic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_ruble" />
+
+            <TextView
+                android:id="@+id/styling_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montsserat_semibold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="999 999 999"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_9sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/styling_money_ic"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <HorizontalScrollView
+            android:layout_width="@dimen/_320sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/styling_center_bg"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/styling_money_ic"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/neon_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:background="@drawable/styling_item_bg">
+
+                    <TextView
+                        android:id="@+id/neon_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Неон"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_neon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/neon_caption" />
+
+                    <TextView
+                        android:id="@+id/neon_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/lights_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/styling_item_bg"
+                    app:layout_constraintStart_toEndOf="@id/neon_layout">
+
+                    <TextView
+                        android:id="@+id/lights_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Фары"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_lights"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lights_caption" />
+
+                    <TextView
+                        android:id="@+id/lights_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/toner_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/styling_item_bg"
+                    app:layout_constraintStart_toEndOf="@id/lights_layout">
+
+                    <TextView
+                        android:id="@+id/toner_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Тонировка"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_toner"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/toner_caption" />
+
+                    <TextView
+                        android:id="@+id/toner_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/color_body1_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/styling_item_bg"
+                    app:layout_constraintStart_toEndOf="@id/toner_layout">
+
+                    <TextView
+                        android:id="@+id/body1_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Кузов (1)"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_color"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/body1_caption" />
+
+                    <TextView
+                        android:id="@+id/body1_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/color_body2_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/styling_item_bg"
+                    app:layout_constraintStart_toEndOf="@id/toner_layout">
+
+                    <TextView
+                        android:id="@+id/body2_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Кузов (2)"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_color"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/body2_caption" />
+
+                    <TextView
+                        android:id="@+id/body2_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/wheel_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/styling_item_bg"
+                    app:layout_constraintStart_toEndOf="@id/toner_layout">
+
+                    <TextView
+                        android:id="@+id/wheel_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Диски"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_wheel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/wheel_caption" />
+
+                    <TextView
+                        android:id="@+id/wheel_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/vinils_layout"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/styling_item_bg"
+                    app:layout_constraintStart_toEndOf="@id/toner_layout">
+
+                    <TextView
+                        android:id="@+id/vinils_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/inter_light"
+                        android:includeFontPadding="false"
+                        android:text="Винилы"
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_6sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_styling_vinil"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/vinils_caption" />
+
+                    <TextView
+                        android:id="@+id/vinils_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="500 000 руб."
+                        android:textColor="#8CFFFFFF"
+                        android:textSize="@dimen/_4sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <HorizontalScrollView
-        android:layout_width="@dimen/_270sdp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:scrollbars="none"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/styling_center_bg"
-        android:padding="@dimen/_3sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <LinearLayout
-            android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/style_choose_vinyls_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/styling_vin_right"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:adjustViewBounds="true"
+            android:rotation="180"
+            android:src="@drawable/shop_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/styling_vin_left"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/shop_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/neon_layout"
-                android:layout_width="@dimen/_55sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:background="@drawable/styling_item_bg">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/style_vin_ok_butt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/yellow"
+                android:text="Выбрать"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/neon_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:fontFamily="@font/inter_light"
-                    android:includeFontPadding="false"
-                    android:text="Неон"
-                    android:textColor="#8CFFFFFF"
-                    android:textSize="@dimen/_6sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/style_vin_cancel_butt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_50sdp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/blue_"
+                android:text="отмена"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/style_vin_ok_butt" />
 
-                <ImageView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:adjustViewBounds="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/neon_caption"
-                    android:src="@drawable/ic_styling_neon" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/lights_layout"
-                android:layout_width="@dimen/_55sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/styling_item_bg"
-                app:layout_constraintStart_toEndOf="@id/neon_layout">
 
-                <TextView
-                    android:id="@+id/lights_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:fontFamily="@font/inter_light"
-                    android:includeFontPadding="false"
-                    android:text="Фары"
-                    android:textColor="#8CFFFFFF"
-                    android:textSize="@dimen/_6sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="@dimen/_45sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_styling_lights"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lights_caption" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/toner_layout"
-                android:layout_width="@dimen/_55sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/styling_item_bg"
-                app:layout_constraintStart_toEndOf="@id/lights_layout">
-
-                <TextView
-                    android:id="@+id/toner_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:fontFamily="@font/inter_light"
-                    android:includeFontPadding="false"
-                    android:text="Тонировка"
-                    android:textColor="#8CFFFFFF"
-                    android:textSize="@dimen/_6sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_styling_toner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toner_caption" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/color_layout"
-                android:layout_width="@dimen/_55sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/styling_item_bg"
-                app:layout_constraintStart_toEndOf="@id/toner_layout">
-
-                <TextView
-                    android:id="@+id/body1_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:fontFamily="@font/inter_light"
-                    android:includeFontPadding="false"
-                    android:text="Кузов (1)"
-                    android:textColor="#8CFFFFFF"
-                    android:textSize="@dimen/_6sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_styling_color"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/body1_caption" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/wheel_layout"
-                android:layout_width="@dimen/_55sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/styling_item_bg"
-                app:layout_constraintStart_toEndOf="@id/toner_layout">
-
-                <TextView
-                    android:id="@+id/wheel_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:fontFamily="@font/inter_light"
-                    android:includeFontPadding="false"
-                    android:text="Диски"
-                    android:textColor="#8CFFFFFF"
-                    android:textSize="@dimen/_6sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="@dimen/_28sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_styling_wheel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/wheel_caption" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/colorpicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

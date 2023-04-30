@@ -2430,7 +2430,8 @@ bool ProcessLocalCommands(const char str[])
 	}
 	if (strcmp(str, "/style") == 0)
 	{
-		CStyling::show(0, 0, 0, 0, 0, 0);
+		uint32_t prices[6] = {0, 0, 0, 0, 0, 0};
+		CStyling::show(0, 0, prices);
 		return true;
 	}
 	if (strstr(str, "/vin "))

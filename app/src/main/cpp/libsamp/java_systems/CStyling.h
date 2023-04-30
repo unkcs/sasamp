@@ -15,7 +15,7 @@ public:
 
     static bool bIsShow;
 
-    static void show(int money, int total, int price1, int price2, int price3, int price4);
+    static void show(int money, int total, uint32_t arr[]);
 
     static void update(int money, int total);
 };

@@ -957,8 +957,8 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             bs.Read(pVeh->m_Shadow.r);
             bs.Read(pVeh->m_Shadow.g);
             bs.Read(pVeh->m_Shadow.b);
-            bs.Read(pVeh->m_Shadow.fSizeX);
-            bs.Read(pVeh->m_Shadow.fSizeY);
+//            bs.Read(pVeh->m_Shadow.fSizeX);
+//            bs.Read(pVeh->m_Shadow.fSizeY);
 
             if (bPlateType) {
                 pVeh->setPlate(static_cast<ePlateType>(bPlateType), szText, szRegion);

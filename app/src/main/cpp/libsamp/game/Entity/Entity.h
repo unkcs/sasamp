@@ -92,6 +92,7 @@ public:
     void UpdateRpHAnim();
     bool HasPreRenderEffects();
     bool DoesNotCollideWithFlyers();
+    void ModifyMatrixForPoleInWind();
 
 private:
     static void InjectHooks();

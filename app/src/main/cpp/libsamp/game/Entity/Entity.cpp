@@ -25,9 +25,11 @@ void CEntityGta::UpdateRpHAnim() {
     }
 }
 
-
-
-
+bool CEntityGta::DoesNotCollideWithFlyers()
+{
+    auto mi = CModelInfo::GetModelInfo(m_nModelIndex);
+    return mi->SwaysInWind() || mi->bDontCollideWithFlyer;
+}
 
 
 

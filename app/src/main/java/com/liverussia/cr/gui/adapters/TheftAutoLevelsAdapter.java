@@ -1,0 +1,42 @@
+package com.liverussia.cr.gui.adapters;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.liverussia.cr.R;
+
+import java.util.List;
+
+public class TheftAutoLevelsAdapter extends ArrayAdapter<Integer> {
+    private final Activity activity;
+
+    public TheftAutoLevelsAdapter(@NonNull Activity activity, List<Integer> dataModalArrayList) {
+        super(activity, 0, dataModalArrayList);
+        this.activity = activity;
+    }
+
+    @NonNull
+    @Override
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+        View item = convertView;
+        if (item == null) {
+            item = LayoutInflater.from(getContext()).inflate(R.layout.theft_auto_level_item, parent, false);
+        }
+
+        int color = getItem(position);
+        ImageView imageView = item.findViewById(R.id.theft_auto_level_item_image);
+        imageView.setBackgroundResource(color);
+
+        return item;
+    }
+}

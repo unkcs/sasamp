@@ -111,6 +111,7 @@
 #define RPC_TAKE_DAMAGE		76
 #define RPC_GIVE_DAMAGE		77
 #define RPC_DEATH			78
+#define RPC_THEFT_AUTO			79
 
 // Packet 252
 #define RPC_TOGGLE_LOGIN (1)
@@ -277,6 +278,8 @@ public:
 	static void packetFacilityWar(Packet *p);
 
 	static void packetTireShop(Packet *p);
+
+	static void packetTheftAuto(Packet *p);
 
 	static void packetStylingCenter(Packet *p);
 

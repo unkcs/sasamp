@@ -483,6 +483,10 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             packetTireShop(p);
             break;
         }
+        case RPC_THEFT_AUTO: {
+            packetTheftAuto(p);
+            break;
+        }
         case RPC_UPDATE_SATIETY: {
             packetUpdateSatiety(p);
             break;

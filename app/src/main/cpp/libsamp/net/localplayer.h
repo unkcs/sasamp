@@ -138,15 +138,6 @@ typedef struct _PASSENGER_SYNC_DATA
 	CVector vecPos;					// +12
 } PASSENGER_SYNC_DATA;				// size = 24
 
-enum eWeaponState
-{
-	WS_NO_BULLETS = 0,
-	WS_LAST_BULLET = 1,
-	WS_MORE_BULLETS = 2,
-	WS_RELOADING = 3,
-};
-
-
 typedef struct _SPECTATOR_SYNC_DATA
 {
 	uint16_t lrAnalog;

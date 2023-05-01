@@ -880,7 +880,7 @@ CVector* CPlayerPed::GetCurrentWeaponFireOffset() {
 
 	CWeapon* pSlot = GetCurrentWeaponSlot();
 	if (pSlot) {
-		return (CVector*)(GetWeaponInfo(pSlot->dwType, 1) + 0x24);
+		return (CVector*)(GetWeaponInfo(pSlot->m_nType, 1) + 0x24);
 	}
 	return nullptr;
 }

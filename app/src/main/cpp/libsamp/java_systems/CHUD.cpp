@@ -171,7 +171,7 @@ void CHUD::UpdateHudInfo()
                         (int)pPed->GetHealth(),
                         (int)pPed->GetArmour(),
                         (int)CHUD::iSatiety,
-                        (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].dwType,
+                        (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].m_nType,
                         (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].dwAmmo,
                         (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].dwAmmoInClip
                         );

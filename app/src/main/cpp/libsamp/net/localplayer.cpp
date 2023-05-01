@@ -11,6 +11,7 @@
 #include "../util/CJavaWrapper.h"
 #include "java_systems/CHUD.h"
 #include "java_systems/CInventory.h"
+#include "../game/Weapon.h"
 
 extern CGame *pGame;
 
@@ -108,10 +109,10 @@ void CLocalPlayer::CheckWeapons()
 
 	for (int i = 0; i < MAX_WEAPONS_SLOT; i++) {
 
-		if (m_byteLastWeapon[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].dwType ||
+		if (m_byteLastWeapon[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].m_nType ||
                 m_dwLastAmmo[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].dwAmmo)
 		{
-			m_byteLastWeapon[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].dwType;
+			m_byteLastWeapon[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].m_nType;
 			m_dwLastAmmo[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].dwAmmo;
 
             bMSend = true;
@@ -943,12 +944,7 @@ void CLocalPlayer::SendAimSyncData()
     aimSync.byteCamExtZoom = (uint8_t)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);
 
     CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
-    if (pwstWeapon->dwState == 2) {
-        aimSync.byteWeaponState = WS_RELOADING;
-    }
-    else {
-        aimSync.byteWeaponState = (pwstWeapon->dwAmmoInClip > 1) ? WS_MORE_BULLETS : pwstWeapon->dwAmmoInClip;
-    }
+    aimSync.byteWeaponState = pwstWeapon->m_nType;
 
     RakNet::BitStream bsAimSync;
     bsAimSync.Write((char)ID_AIM_SYNC);

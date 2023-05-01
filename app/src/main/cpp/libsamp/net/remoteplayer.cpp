@@ -712,12 +712,9 @@ void CRemotePlayer::UpdateAimFromSyncData(AIM_SYNC_DATA * pAimSync)
 	m_pPlayerPed->SetCameraExtendedZoom(fExtZoom, fAspect);
 
 	CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
-	if (pAimSync->byteWeaponState == WS_RELOADING)
-		pwstWeapon->dwState = 2;		// Reloading
-	else
-	if (pAimSync->byteWeaponState != WS_MORE_BULLETS)
-		pwstWeapon->dwAmmoInClip = (uint32_t)pAimSync->byteWeaponState;
-	else
+
+	pwstWeapon->m_nState = static_cast<eWeaponState>(pAimSync->byteWeaponState);
+
 	if (pwstWeapon->dwAmmoInClip < 2)
 		pwstWeapon->dwAmmoInClip = 2;
 }

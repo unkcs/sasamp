@@ -26,10 +26,17 @@ import java.util.List;
 
 public class TheftAuto implements View.OnClickListener {
 
-    private static final int LEFT_CENTRAL_POINT = 14000;
-    private static final int RIGHT_CENTRAL_POINT = 16000;
+    private static final int MIN_POINT_MARGIN = 100;
+    private static final int MAX_POINT_MARGIN = 500;
     private static final int POINT_SIZE = 2000;
     private static final int SHIFT_FACTOR = 50;
+    private static final int PROGRESS_BAR_MAX_VALUE = 30000;
+    private static final int PROGRESS_SPEED = 300;
+    private static final int GAME_PASSED_STATUS = 1;
+    private static final int GAME_NOT_PASSED_STATUS = 0;
+    private static final int MAX_FAIL_COUNT = 3;
+    private static final int MAX_LEVEL = 10;
+
 
     private ImageView mainButton;
     private ImageView theftAutoPoint;
@@ -38,17 +45,17 @@ public class TheftAuto implements View.OnClickListener {
     private ProgressBar theftAutoProgressBar;
     private Activity activity;
 
+    private TheftAutoLevelsAdapter levelsAdapter;
+
     private Animation animation;
     private Vibrator vibrator;
 
     private int failCount;
+    private int currentLevel;
     private CountDownTimer countDownTimer;
     private long tick;
     private int success;
     private int shiftInDp;
-
-
-
 
     public TheftAuto(Activity activity) {
         this.activity = activity;
@@ -67,10 +74,15 @@ public class TheftAuto implements View.OnClickListener {
         });
     }
 
+    native void finishRendering(int status);
+
     private void init() {
         List<Integer> initLevelsColor = getInitLevelsColor();
-        TheftAutoLevelsAdapter levelsAdapter = new TheftAutoLevelsAdapter(activity, initLevelsColor);
+        levelsAdapter = new TheftAutoLevelsAdapter(activity, initLevelsColor);
         levelsView.setAdapter(levelsAdapter);
+
+        failCount = 0;
+        currentLevel = 1;
     }
 
     private List<Integer> getInitLevelsColor() {
@@ -86,13 +98,14 @@ public class TheftAuto implements View.OnClickListener {
     public void showRendering() {
         activity.runOnUiThread(()-> {
             theftAutoHud.setVisibility(View.VISIBLE);
+            theftAutoPoint.setImageResource(R.drawable.samwill_gray);
 
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
 
-            shiftInDp = 500;
+            shiftInDp = getRandomMargin(MIN_POINT_MARGIN, MAX_POINT_MARGIN);
 
             Resources r = activity.getResources();
             int shiftInPx = (int) TypedValue.applyDimension(
@@ -105,9 +118,13 @@ public class TheftAuto implements View.OnClickListener {
             theftAutoPoint.setLayoutParams(lp);
 
             success = -1;
-            theftAutoProgressBar.setProgress(30000);
+            theftAutoProgressBar.setProgress(PROGRESS_BAR_MAX_VALUE);
             startCountdown();
         });
+    }
+
+    public int getRandomMargin(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     @Override
@@ -132,6 +149,7 @@ public class TheftAuto implements View.OnClickListener {
 //            Samp.soundPool.play(sawSound, 0.1f, 0.1f, 1, 0, 1.2f);
             success = 1;
             theftAutoPoint.setImageResource(R.drawable.samwill_green);
+            levelsAdapter.updateItem(currentLevel - 1, R.color.theft_auto_passed_level_color);
             tick = rightPointWithShift;
             return;
         }else if (theftAutoProgressBar.getProgress() < rightPointWithShift) {
@@ -141,6 +159,7 @@ public class TheftAuto implements View.OnClickListener {
             tick = rightPointWithShift;
             success = 0;
             theftAutoPoint.setImageResource(R.drawable.samwill_red);
+            levelsAdapter.updateItem(currentLevel - 1, R.color.theft_auto_not_passed_level_color);
             return;
         }
     }
@@ -157,21 +176,48 @@ public class TheftAuto implements View.OnClickListener {
         countDownTimer = new CountDownTimer(999999999, 17) {
             @Override
             public void onTick(long j) {
-                tick+=40;
+                tick += PROGRESS_SPEED;
                 theftAutoProgressBar.setProgress((int)tick);
-//                int progresstext = samwill_progress.getProgress() / 25 / 10;
-//                samwill_procent.setText(progresstext + "%");
-                if (theftAutoProgressBar.getProgress() > rightPointWithShift && success != 1)
-                {
+                if (theftAutoProgressBar.getProgress() > rightPointWithShift && success != 1) {
                     success = 0;
                     theftAutoPoint.setImageResource(R.drawable.samwill_red);
+                    levelsAdapter.updateItem(currentLevel - 1, R.color.theft_auto_not_passed_level_color);
+                }
+                if(theftAutoProgressBar.getProgress() >= theftAutoProgressBar.getMax()){
+                    countDownTimer.cancel();
+                    countDownTimer.onFinish();
                 }
 
             }
             @Override
             public void onFinish() {
-                // Hide();
+                goToNextLevelOrHide();
             }
         }.start();
+    }
+
+    private void goToNextLevelOrHide() {
+        if (R.color.theft_auto_not_passed_level_color == levelsAdapter.getItem(currentLevel - 1)) {
+            failCount++;
+        }
+
+        if (failCount == MAX_FAIL_COUNT) {
+            finishRendering(GAME_NOT_PASSED_STATUS);
+            theftAutoHud.setVisibility(View.GONE);
+            return;
+        }
+
+        if (currentLevel == MAX_LEVEL) {
+            finishRendering(GAME_PASSED_STATUS);
+            theftAutoHud.setVisibility(View.GONE);
+            return;
+        }
+
+        currentLevel++;
+        startNewLevel();
+    }
+
+    private void startNewLevel() {
+        showRendering();
     }
 }

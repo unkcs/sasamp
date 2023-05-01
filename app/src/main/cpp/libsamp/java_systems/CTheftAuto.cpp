@@ -8,6 +8,7 @@
 #include "../game/game.h"
 #include "net/netgame.h"
 #include "util/CJavaWrapper.h"
+#include "CNotification.h"
 
 jclass CTheftAuto::clazz = nullptr;
 jobject CTheftAuto::thiz = nullptr;
@@ -46,4 +47,30 @@ void CTheftAuto::show() {
 void CNetGame::packetTheftAuto(Packet* p)
 {
     CTheftAuto::startRendering();
+}
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_theft_1auto_TheftAuto_finishRendering(JNIEnv *env, jobject thiz,
+                                                                 jint status) {
+    if (status == 1) {
+        uint8_t packet = ID_CUSTOM_RPC;
+        uint8_t RPC = RPC_THEFT_AUTO;
+
+        RakNet::BitStream bsSend;
+        bsSend.Write(packet);
+        bsSend.Write(RPC);
+
+        pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
+
+//        CNotification::show(type, (char *) utf_str, time, actionId);
+    } else {
+        char str[256] = "Отмычка сломалась! Попробуйте еще";
+        CNotification::show(0, (char *) str, 5, -1);
+    }
+
+    CTheftAuto::bIsShow = false;
+    env->DeleteGlobalRef(CTheftAuto::thiz);
+    CTheftAuto::thiz = nullptr;
 }

@@ -18,10 +18,12 @@ import java.util.List;
 
 public class TheftAutoLevelsAdapter extends ArrayAdapter<Integer> {
     private final Activity activity;
+    private List<Integer> dataModalArrayList;
 
     public TheftAutoLevelsAdapter(@NonNull Activity activity, List<Integer> dataModalArrayList) {
         super(activity, 0, dataModalArrayList);
         this.activity = activity;
+        this.dataModalArrayList = dataModalArrayList;
     }
 
     @NonNull
@@ -38,5 +40,10 @@ public class TheftAutoLevelsAdapter extends ArrayAdapter<Integer> {
         imageView.setBackgroundResource(color);
 
         return item;
+    }
+
+    public void updateItem(int itemId, int color) {
+        dataModalArrayList.set(itemId, color);
+        notifyDataSetChanged();
     }
 }

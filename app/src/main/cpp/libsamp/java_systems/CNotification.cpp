@@ -33,7 +33,9 @@ void CNotification::show(int type, char* text, int duration, int actionId) {
         Log("No env");
         return;
     }
-    jstring jtext = env->NewStringUTF(text);
+    char utf_str[255];
+    cp1251_to_utf8(utf_str, text, strlen(text));
+    jstring jtext = env->NewStringUTF(utf_str);
 
     jclass clazz = env->GetObjectClass(CNotification::thiz);
     jmethodID method = env->GetMethodID(clazz, "ShowNotification", "(ILjava/lang/String;II)V");
@@ -59,12 +61,11 @@ void CNetGame::packetNotification(Packet* p)
     bs.Read(time);
     bs.Read(actionId);
 
-    char utf_str[256];
-    cp1251_to_utf8(utf_str, str, len);
+    str[len] = '\0';
 
     if (type != 65535)
     {
-        CNotification::show(type, (char *) utf_str, time, actionId);
+        CNotification::show(type, (char *) str, time, actionId);
     }
     else
     {

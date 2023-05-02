@@ -3,6 +3,7 @@
 #include "../game/game.h"
 #include "netgame.h"
 #include "CSettings.h"
+#include "game/Render/Sprite.h"
 
 extern CNetGame *pNetGame;
 extern CGUI *pGUI;
@@ -181,8 +182,9 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 
 				CVector Out;
 				memset((void*)&Out, 0, sizeof(CVector));
-				// CSprite::CalcScreenCoors
-				((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&pos, &Out, 0, 0, 0, 0);
+
+				Sprite::CalcScreenCoors(&pos, &Out, 0, 0, 0, 0);
+
 				if (Out.z < 1.0f)
 				{
 					return;
@@ -243,8 +245,8 @@ void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, CVector* pPos)
 		{
 			CVector Out;
 			memset((void*)&Out, 0, sizeof(CVector));
-			// CSprite::CalcScreenCoors
-			((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(pPos, &Out, 0, 0, 0, 0);
+
+			Sprite::CalcScreenCoors(pPos, &Out, 0, 0, false, false);
 			if (Out.z < 1.0f)
 			{
 				return;

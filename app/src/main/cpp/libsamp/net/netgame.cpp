@@ -147,10 +147,12 @@ CNetGame::~CNetGame() {
 #include "CUDPSocket.h"
 #include "..//CServerManager.h"
 #include "java_systems/CSpeedometr.h"
+#include "game/IdleCam.h"
 
 int last_process_cnetgame = 0;
 
 void CNetGame::Process() {
+
     // need all frame
     if (pGame->m_bCheckpointsEnabled) {
         CPlayerPed *pPlayerDed = m_pPlayerPool->GetLocalPlayer()->GetPlayerPed();

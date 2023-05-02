@@ -4,7 +4,7 @@
 #include "net/netgame.h"
 #include "java_systems/CHUD.h"
 #include "util/patch.h"
-#include "CGtaWidgets.h"
+#include "game/Widgets/WidgetGta.h"
 #include "game/Models/ModelInfo.h"
 
 void ApplyPatches();
@@ -145,7 +145,7 @@ void *Init(void *p)
 	ApplyPatches();
 	InstallHooks();
 
-	CGtaWidgets::init();
+	CWidgetGta::init();
 
 	pthread_exit(0);
 }

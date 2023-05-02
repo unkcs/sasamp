@@ -123,7 +123,6 @@ public:
 
 	static void DrawGangZone(float fPos[], uint32_t dwColor);
 
-
 	// race checkpoint
 	bool			m_bRaceCheckpointsEnabled;
 	// checkpoint

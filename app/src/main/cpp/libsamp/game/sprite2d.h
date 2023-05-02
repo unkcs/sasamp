@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rgba.h"
+
 class CSprite2d
 {
 public:

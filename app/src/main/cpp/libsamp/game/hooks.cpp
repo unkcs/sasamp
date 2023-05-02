@@ -9,7 +9,7 @@
 #include "../java_systems/CHUD.h"
 #include "..///..//santrope-tea-gtasa/encryption/CTinyEncrypt.h"
 #include "..///..//santrope-tea-gtasa/encryption/encrypt.h"
-#include "CGtaWidgets.h"
+#include "game/Widgets/WidgetGta.h"
 extern "C"
 {
 #include "..//santrope-tea-gtasa/encryption/aes.h"
@@ -306,17 +306,16 @@ void InitialiseRenderWare_hook() {
 	InitialiseRenderWare();
 }
 
-int bBlockCWidgetRegionLookUpdate = 0;
-
 /* ====================================================== */
 #include "..//keyboard.h"
+#include "game/Widgets/TouchInterface.h"
 
 void (*TouchEvent)(int, int, int posX, int posY);
 void TouchEvent_hook(int type, int num, int posX, int posY)
 {
 	//Log("TOUCH EVENT HOOK");
 
-	if (CTimer::m_UserPause == true)
+	if (CTimer::m_UserPause)
 	{
 		return TouchEvent(type, num, posX, posY);
 	}
@@ -341,6 +340,8 @@ void TouchEvent_hook(int type, int num, int posX, int posY)
 			return;
 		}
 	}
+	CTouchInterface::lastPosX = posX;
+	CTouchInterface::lastPosY = posY;
 
 	if(bRet) 
 		return TouchEvent(type, num, posX, posY);
@@ -842,6 +843,7 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVect
 #include "Pools.h"
 #include "game/Core/MatrixLinkList.h"
 #include "Collision/Collision.h"
+#include "IdleCam.h"
 
 void InjectHooks()
 {
@@ -858,6 +860,7 @@ void InjectHooks()
 	CPlaceable::InjectHooks();
 	CMatrix::InjectHooks();
     CCollision::InjectHooks();
+	CIdleCam::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -1201,19 +1204,6 @@ int CEventHandler__HandleEvents_hook(uintptr_t *thiz)
 		return CEventHandler__HandleEvents(thiz);
 	}
 	return 0;
-}
-
-void (*CWidgetRegionLook__Update)(uintptr_t thiz);
-void CWidgetRegionLook__Update_hook(uintptr_t thiz)
-{
-	if (bBlockCWidgetRegionLookUpdate)
-	{
-		return;
-	}
-	else
-	{
-		CWidgetRegionLook__Update(thiz);
-	}
 }
 
 #include "..//crashlytics.h"
@@ -2440,7 +2430,6 @@ void InstallHooks()
 	//SetUpHook(g_libGTASA+0x3961C8, (uintptr_t)CFileMgr__ReadLine_hook, (uintptr_t*)&CFileMgr__ReadLine);
 
 	CHook::InlineHook(g_libGTASA, 0x0032217C, &CEventHandler__HandleEvents_hook, &CEventHandler__HandleEvents);
-	CHook::InlineHook(g_libGTASA, 0x00281398, &CWidgetRegionLook__Update_hook, &CWidgetRegionLook__Update);
 
 	CHook::Redirect(g_libGTASA, 0x39AEF4, &Render2dStuff);
 	CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);

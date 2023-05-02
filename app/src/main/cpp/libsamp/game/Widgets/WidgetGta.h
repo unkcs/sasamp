@@ -2,25 +2,54 @@
 // Created by plaka on 03.02.2023.
 //
 
-#ifndef LIVERUSSIA_CGTAWIDGETS_H
-#define LIVERUSSIA_CGTAWIDGETS_H
-
+#pragma once
 
 #include <cstdint>
+#include "game/sprite2d.h"
+#include "game/Core/Rect.h"
+#include "game/rgba.h"
+#include "game/Enums/HIDMapping.h"
+#include "../common.h"
 
-class CGtaWidgets {
-
+#pragma pack(push, 1)
+class CWidgetGta {
+public:
+    int vtable;
+    HIDMapping m_HIDMapping;
+    CSprite2d m_Sprite;
+    float m_fOriginX;
+    float m_fOriginY;
+    float m_fScaleX;
+    float m_fScaleY;
+    float m_fFadeRate;
+    CRect m_RectScreen;
+    float m_fExtraPaddingScale;
+    CRect m_RectPaddedScreen;
+    float m_fTapHoldTime;
+    bool m_bTaphold;
+    CRGBA m_Color;
+    bool m_bEnabled;
+    bool m_bCachedEnabled;
+    uint8_t pad0;
+    float m_fTapHistory[10];
+    int m_nTouchIndex;
+    int m_nFrameCount;
+    unsigned int m_nFlags;
+    float m_fUserData;
+    uintptr_t *m_pHoldEffect;
+    float m_fHoldEffectPeriod;
 
 public:
-    static uintptr_t* pWidgets;
+    static uintptr_t *pWidgets;
 
     static void setEnabled(int thiz, bool bEnabled);
 
     static void init();
-};
 
-enum
-{
+};
+VALIDATE_SIZE(CWidgetGta, 0x90);
+
+enum {
     WIDGET_POSITION_ENTER_CAR,
     WIDGET_POSITION_CAR_SHOOT,
     WIDGET_POSITION_ACCELERATE,
@@ -46,4 +75,4 @@ enum
     WIDGET_POSITION_POOL_ENGLISH
 };
 
-#endif //LIVERUSSIA_CGTAWIDGETS_H
+#pragma pack(pop)

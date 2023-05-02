@@ -5,6 +5,7 @@
 #include "gui/gui.h"
 #include "playertags.h"
 #include "CSettings.h"
+#include "game/Render/Sprite.h"
 
 extern CGame *pGame;
 extern CNetGame *pNetGame;
@@ -180,8 +181,8 @@ void CPlayerTags::DrawChatBubble(PLAYERID playerId, CVector* vec, float fDistanc
 	TagPos.z += 0.45f + (fDistance * 0.0675f) + ((float)m_iOffset[playerId] * pGUI->ScaleY(0.35f));
 
 	CVector Out;
-	// CSprite::CalcScreenCoors
-	((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&TagPos, &Out, 0, 0, 0, 0);
+
+	Sprite::CalcScreenCoors(&TagPos, &Out, nullptr, nullptr, false, false);
 
 	if (Out.z < 1.0f)
 		return;
@@ -233,8 +234,8 @@ void CPlayerTags::Draw(CVector* vec, char* szName, uint32_t dwColor,
 	TagPos.z += 0.25f + (fDist * 0.0475f);
 
 	CVector Out;
-	// CSprite::CalcScreenCoors
-	(( void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA+0x54EEC0+1))(&TagPos, &Out, 0, 0, 0, 0);
+
+	Sprite::CalcScreenCoors(&TagPos, &Out, 0, 0, 0, 0);
 
 	if(Out.z < 1.0f)
 		return;
@@ -344,8 +345,8 @@ void CPlayerTags::Draw(CVector* vec, char* szName, uint32_t dwColor,
 	TagPos_voice.z += 0.65f + (fDist * 0.0475f);
 
 	CVector Out_voice;
-	// CSprite::CalcScreenCoors
-	((void (*)(CVector*, CVector*, float*, float*, bool, bool))(g_libGTASA + 0x54EEC0 + 1))(&TagPos_voice, &Out_voice, 0, 0, 0, 0);
+
+	Sprite::CalcScreenCoors(&TagPos_voice, &Out_voice, 0, 0, 0, 0);
 
 	if (Out_voice.z < 1.0f)
 		return;

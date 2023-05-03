@@ -726,7 +726,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		return;
 	}
 
-	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR)
+	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR && !IsTrailer())
 	{
 		return;
 	}
@@ -821,7 +821,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 			}
 			case E_HANDLING_PARAMS::hpWheelSize:
 			{
-				m_fWheelSize = i.fValue;
+				m_fWheelSize = i.fValue* 1.3f;
 				break;
 			}
 		}

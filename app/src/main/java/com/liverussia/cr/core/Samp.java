@@ -8,6 +8,8 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.liverussia.cr.R;
@@ -16,6 +18,7 @@ import com.liverussia.cr.gui.Casino;
 import com.liverussia.cr.gui.CasinoBaccarat;
 import com.liverussia.cr.gui.casino.Dice;
 import com.liverussia.cr.gui.DailyReward;
+import com.liverussia.cr.gui.hud.Binder;
 import com.liverussia.cr.gui.hud.HudManager;
 import com.liverussia.cr.gui.tab.Tab;
 import com.liverussia.cr.gui.util.Utils;
@@ -26,8 +29,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Samp extends GTASA
+import eltos.simpledialogfragment.SimpleDialog;
+import eltos.simpledialogfragment.color.SimpleColorDialog;
+
+public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
 {
+    public Binder binder;
     public static Activity activity;
     public static final int INVALID_PLAYER_ID = 65535;
     public static native void playUrlSound(String url);
@@ -66,6 +73,7 @@ public class Samp extends GTASA
         new DailyReward(this);
         new Tab(this);
         new Casino(this);
+        binder = new Binder();
     }
 
     public void playLocalSound(int soundID, float speed){
@@ -103,4 +111,16 @@ public class Samp extends GTASA
 
         timer.schedule(task, 900L);
     }
+
+    //FIXME: абстракция :C
+    @Override
+    public boolean onResult(@NonNull String dialogTag, int which, @NonNull Bundle extras) {
+        if ("BINDERCOLOR".equals(dialogTag)){
+            @ColorInt int color = extras.getInt(SimpleColorDialog.COLOR);
+            binder.adapter.changeColor(color);
+            return true;
+        }
+        return false;
+    }
+
 }

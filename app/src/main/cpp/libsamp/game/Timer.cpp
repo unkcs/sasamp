@@ -14,7 +14,7 @@ float CTimer::game_FPS = 0;
 
 bool        CTimer::m_CodePause = false;
 bool        CTimer::m_UserPause = false;
-float       CTimer::ms_fTimeScale = 0;
+float       CTimer::ms_fTimeScale;
 uint32_t    CTimer::m_FrameCounter = 0;
 uint32_t    CTimer::m_snTimeInMilliseconds = 0;
 bool        CTimer::bSkipProcessThisFrame = false;

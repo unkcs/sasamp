@@ -334,6 +334,7 @@ void CKeyBoard::Close()
 #include "java_systems/CStyling.h"
 #include "game/Models/ModelInfo.h"
 #include "game/cHandlingDataMgr.h"
+#include "game/Timer.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -2445,7 +2446,7 @@ bool ProcessLocalCommands(const char str[])
 		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
 		auto pVeh = pPed->GetCurrentVehicle();
 
-		pVeh->m_iVinylId = vin;
+		CTimer::ms_fTimeScale = vin;
 		return true;
 	}
 

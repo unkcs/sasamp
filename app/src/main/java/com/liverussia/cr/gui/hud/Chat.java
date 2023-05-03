@@ -36,7 +36,7 @@ import java.util.List;
 
 public class Chat {
     native void SendChatButton(int buttonID);
-    native void SendChatMessage(byte str[]);
+    static native void SendChatMessage(byte str[]);
     native void toggleNativeKeyboard(boolean toggle);
     native void clickHistoryButt(int buttId);
 
@@ -48,6 +48,7 @@ public class Chat {
     TextView do_button;
     View hide_chat;
     ConstraintLayout chat_box;
+    ConstraintLayout chat_binder_butt;
 
     private final int INVALID = -1;
     private final int ME_BUTTON = 0;
@@ -66,7 +67,14 @@ public class Chat {
     ArrayList<String> chat_lines = new ArrayList<>();
 
     public Chat() {
+
         chat_box = activity.findViewById(R.id.chat_box);
+
+        chat_binder_butt = activity.findViewById(R.id.chat_binder_butt);
+        chat_binder_butt.setOnClickListener(view -> {
+            Binder.toggleMainLayout(true);
+            toggleKeyboard(false);
+        });
 
         hide_chat = activity.findViewById(R.id.hide_chat);
         hide_chat.setOnClickListener(view -> {

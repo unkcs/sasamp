@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.UiThread;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.liverussia.cr.R;
@@ -122,7 +123,6 @@ public class HudManager extends Chat {
 
     int damageSound = 0;
 
-    @SuppressLint("ClickableViewAccessibility")
     public HudManager(Activity aactivity) {
         activity = aactivity;
 

@@ -40,7 +40,7 @@ public class Chat {
     native void toggleNativeKeyboard(boolean toggle);
     native void clickHistoryButt(int buttId);
 
-    EditText chat_input;
+    static EditText chat_input;
     ConstraintLayout chat_input_layout;
 
     TextView me_button;
@@ -142,8 +142,9 @@ public class Chat {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    chat_input.getText().clear();
-                    ClickChatj();
+
+                    toggleKeyboard(false);
+                   // ClickChatj();
                     return true;
                 }
                 return false;
@@ -184,17 +185,6 @@ public class Chat {
         ConstraintLayout chat_down_butt = activity.findViewById(R.id.chat_down_butt);
         chat_down_butt.setOnClickListener(view -> {
             clickHistoryButt(0);
-        });
-    }
-
-    public void ToggleChatInput(boolean toggle){
-        activity.runOnUiThread(() ->
-        {
-            if(toggle){
-                chat_input_layout.setVisibility(View.VISIBLE);
-            }else {
-                chat_input_layout.setVisibility(View.GONE);
-            }
         });
     }
 
@@ -249,9 +239,25 @@ public class Chat {
 
     }
 
+    public void ToggleChatInput(boolean toggle){
+        activity.runOnUiThread(() ->
+        {
+            if(toggle){
+                chat_input_layout.setVisibility(View.VISIBLE);
+            }else {
+                chat_input_layout.setVisibility(View.GONE);
+                chat_input.getText().clear();
+            }
+        });
+    }
+
     void toggleKeyboard(boolean toggle) {
+        ToggleChatInput(toggle);
+
         if(Storage.getBoolean("isAndroidKeyboard")) {
             // android клава
+            chat_input.requestFocus();
+
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
             if(toggle)
@@ -267,12 +273,9 @@ public class Chat {
     public void ClickChatj(){
         activity.runOnUiThread(() -> {
             if (chat_input_layout.getVisibility() == View.VISIBLE) {
-                chat_input_layout.setVisibility(View.GONE);
                 toggleKeyboard(false);
 
             } else {
-                chat_input_layout.setVisibility(View.VISIBLE);
-                chat_input.requestFocus();
                 toggleKeyboard(true);
             }
         });
@@ -281,7 +284,7 @@ public class Chat {
     public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
         private final LayoutInflater inflater;
-        private List<String> chat_lines;
+        private final List<String> chat_lines;
 
         ChatAdapter(Context context, List<String> chat_lines) {
             this.chat_lines = chat_lines;

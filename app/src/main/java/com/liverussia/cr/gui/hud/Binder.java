@@ -73,6 +73,11 @@ public class Binder {
         MaterialButton binder_add_ok_butt = activity.findViewById(R.id.binder_add_ok_butt);
         binder_add_ok_butt.setOnClickListener(view -> {
             EditText binder_add_edittext = activity.findViewById(R.id.binder_add_edittext);
+
+            if(binder_add_edittext.getText().length() > 400) {
+                Toast.makeText(activity, "Не больше 400 символов!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             adapter.addItem( new BinderItem(binder_add_edittext.getText().toString(), 0xff009688) );
 
             binder_add_layout.setVisibility(View.GONE);
@@ -186,11 +191,18 @@ public class Binder {
                     toggleMainLayout(false);
 
                     int pos = getBindingAdapterPosition();
-                    try {
-                        Chat.SendChatMessage( list.get(pos).text.getBytes("windows-1251") );
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
+
+                    String[] messages = list.get(pos).text.split(";");
+
+                    for (String message : messages) {
+                        try {
+                            Chat.SendChatMessage(message.getBytes("windows-1251"));
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                    Chat.chat_input.getText().clear();
+
                 });
             }
         }

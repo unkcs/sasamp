@@ -642,9 +642,9 @@ void ScrVehicleParamsEx(RPCParameters* rpcParams)
 	pVehicle->SetLightsState((lights == 1) ? true : false);
 
 	if(alarm)
-		pVehicle->m_pVehicle->m_nAlarmState = 20000;
-	else
 		pVehicle->m_pVehicle->m_nAlarmState = -1;
+	else
+		pVehicle->m_pVehicle->m_nAlarmState = 0;
 
 	//		pNetGame->GetVehiclePool()->AssignSpecialParamsToVehicle(VehicleId, objective,doors);
 

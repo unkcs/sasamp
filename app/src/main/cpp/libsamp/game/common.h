@@ -291,8 +291,9 @@ typedef struct _AIM_SYNC_DATA
 	CVector 	vecAimf;
 	CVector 	vecAimPos;
 	float 		fAimZ;
-	uint8_t 	byteCamExtZoom : 6;
-	uint8_t 	byteWeaponState : 2;
+	//uint8_t 	byteCamExtZoom : 6;
+	//uint8_t 	byteWeaponState : 2;
+	uint8_t 	byteWeaponState;
 	uint8_t 	aspect_ratio;
 } AIM_SYNC_DATA;
 #pragma pack(pop)

@@ -707,16 +707,14 @@ void CRemotePlayer::UpdateAimFromSyncData(AIM_SYNC_DATA * pAimSync)
 	m_pPlayerPed->SetAimZ(pAimSync->fAimZ);
 
 	float fAspect = pAimSync->aspect_ratio * 0.0039215689f;
-	float fExtZoom = (pAimSync->byteCamExtZoom) * 0.015873017f;
+	//float fExtZoom = (pAimSync->byteCamExtZoom) * 0.015873017f;
 
-	m_pPlayerPed->SetCameraExtendedZoom(fExtZoom, fAspect);
+	//m_pPlayerPed->SetCameraExtendedZoom(fExtZoom, fAspect);
 
 	CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
 
 	pwstWeapon->m_nState = static_cast<eWeaponState>(pAimSync->byteWeaponState);
 
-	if (pwstWeapon->dwAmmoInClip < 2)
-		pwstWeapon->dwAmmoInClip = 2;
 }
 
 void CRemotePlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync, uint32_t dwTime)

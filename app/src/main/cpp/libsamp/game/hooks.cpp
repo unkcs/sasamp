@@ -2459,7 +2459,7 @@ void InstallHooks()
 	CHook::Redirect(g_libGTASA, 0x00258910, &CUtil::GetTexture);
 
 	// steal objects fix
-	CHook::InlineHook(g_libGTASA, 0x003AD8E0, &CPlayerInfo__Process_hook, &CPlayerInfo__Process);
+	//CHook::InlineHook(g_libGTASA, 0x003AD8E0, &CPlayerInfo__Process_hook, &CPlayerInfo__Process);
 
 	// GetFrameFromID fix
 	CHook::InlineHook(g_libGTASA, 0x00335CC0, &CClumpModelInfo_GetFrameFromId_hook, &CClumpModelInfo_GetFrameFromId);
@@ -2529,7 +2529,7 @@ void InstallHooks()
 
 	// vehicle light processing
 	CHook::InlineHook(g_libGTASA, 0x5189C4, &CVehicle__GetVehicleLightsStatus_hook, &CVehicle__GetVehicleLightsStatus);
-	CHook::NOP(g_libGTASA + 0x408AAA, 2);
+	//CHook::NOP(g_libGTASA + 0x408AAA, 2);
 
 	//RpMaterialDestroy fix ? не точно
 	//CHook::InlineHook(g_libGTASA, 0x001E3C54, &RpMaterialDestroy_hook, &RpMaterialDestroy);

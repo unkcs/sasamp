@@ -183,6 +183,7 @@ extern bool g_uiHeadMoveEnabled;
 #include "java_systems/casino/Baccarat.h"
 #include "java_systems/CTireShop.h"
 #include "java_systems/casino/Dice.h"
+#include "java_systems/CTheftAuto.h"
 
 CAMERA_AIM* caAim = new CAMERA_AIM();
 
@@ -468,18 +469,17 @@ bool CLocalPlayer::Process()
 	////////////////////////////
 	bool needDrawableHud = true;
 	bool needDrawableChat = true;
-//	bool needDrawableMoney = true;
 
 	if(CDialog::bIsShow || CDice::bIsShow || CTab::bIsShow || pGame->isAutoShopActive
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || !m_pPlayerPed->m_bIsSpawned || CEditobject::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow)
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow || CTheftAuto::bIsShow)
 	{
 		needDrawableHud = false;
 	}
 
-	if (CTireShop::bIsShow) {
+	if (CTireShop::bIsShow || CTheftAuto::bIsShow) {
 		needDrawableChat = false;
 	}
 

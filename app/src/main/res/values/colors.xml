@@ -57,4 +57,7 @@
     <color name="colorPrimary">#ff000000</color>
     <color name="colorPrimaryDark">#ff000000</color>
     <color name="item_change_nik_color_bg">#11141E</color>
+    <color name="theft_auto_init_level_color">#FDEE2D</color>
+    <color name="theft_auto_not_passed_level_color">#FE0000</color>
+    <color name="theft_auto_passed_level_color">#05FE00</color>
 </resources>

@@ -14,6 +14,7 @@
 #include "java_systems/CStyling.h"
 #include "java_systems/CTireShop.h"
 #include "java_systems/casino/Dice.h"
+#include "java_systems/CTheftAuto.h"
 
 void InitBASSFuncs();
 void CLoader::loadBassLib()
@@ -84,5 +85,8 @@ void CLoader::initJavaClasses(JavaVM* pjvm)
 
     CDice::clazz = env->FindClass("com/liverussia/cr/gui/casino/Dice");
     CDice::clazz = (jclass) env->NewGlobalRef( CDice::clazz );
+
+    CTheftAuto::clazz = env->FindClass("com/liverussia/cr/gui/theft_auto/TheftAuto");
+    CTheftAuto::clazz = (jclass) env->NewGlobalRef( CTheftAuto::clazz );
 }
 

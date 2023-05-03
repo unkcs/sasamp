@@ -86,6 +86,8 @@
 
         <include layout="@layout/notification" />
 
+        <include layout="@layout/theft_auto" />
+
         <include layout="@layout/binder" />
     </FrameLayout>
 

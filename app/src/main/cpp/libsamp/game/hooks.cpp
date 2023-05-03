@@ -861,6 +861,7 @@ void InjectHooks()
 	CMatrix::InjectHooks();
     CCollision::InjectHooks();
 	CIdleCam::InjectHooks();
+	CTouchInterface::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -1596,8 +1597,8 @@ void CMatrix__SetScale_hook(void* thiz, float x, float y, float z)
 	{
 		if (g_iLastProcessedWheelVehicle >= 2 || g_iLastProcessedWheelVehicle <= 7)
 		{
-			y *= g_pLastProcessedVehicleMatrix->m_fWheelSize * 1.3f;
-			z *= g_pLastProcessedVehicleMatrix->m_fWheelSize * 1.3f;
+			y *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
+			z *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
 
 			if (g_pLastProcessedVehicleMatrix->m_fWheelWidth != 0)
 			{
@@ -2394,6 +2395,84 @@ void CVehicle__DoVehicleLights_hook(CVehicleGta* thiz, CMatrix *matVehicle, uint
     thiz->m_nVehicleFlags.bEngineOn = old;
 }
 
+extern "C" bool NotifyEnterVehicle(CVehicleGta* _pVehicle)
+{
+	//Log("NotifyEnterVehicle");
+
+	if (!pNetGame) return false;
+
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle;
+	VEHICLEID VehicleID = pVehiclePool->FindIDFromGtaPtr(_pVehicle);
+
+	if (VehicleID == INVALID_VEHICLE_ID) return false;
+	if (!pVehiclePool->GetSlotState(VehicleID)) return false;
+	pVehicle = pVehiclePool->GetAt(VehicleID);
+	if (pVehicle->m_bIsLocked) return false;
+	if (pVehicle->m_pVehicle->m_nModelIndex == TRAIN_PASSENGER) return false;
+
+	if (pVehicle->m_pVehicle->pDriver &&
+		pVehicle->m_pVehicle->pDriver->dwPedType != 0)
+		return false;
+
+	CLocalPlayer* pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
+
+	//if(pLocalPlayer->GetPlayerPed() && pLocalPlayer->GetPlayerPed()->GetCurrentWeapon() == WEAPON_PARACHUTE)
+	//  pLocalPlayer->GetPlayerPed()->SetArmedWeapon(0);
+
+	pLocalPlayer->SendEnterVehicleNotification(VehicleID, false);
+
+	return true;
+}
+
+void (*CTaskComplexEnterCarAsDriver)(uint32_t thiz, uint32_t pVehicle);
+extern "C" void call_taskEnterCarAsDriver(uintptr_t a, uint32_t b)
+{
+	CTaskComplexEnterCarAsDriver(a, b);
+}
+void __attribute__((naked)) CTaskComplexEnterCarAsDriver_hook(uint32_t thiz, uint32_t pVehicle)
+{
+	__asm__ volatile("push {r0-r11, lr}\n\t"
+					 "mov r2, lr\n\t"
+					 "blx get_lib\n\t"
+					 "add r0, #0x3A0000\n\t"
+					 "add r0, #0xEE00\n\t"
+					 "add r0, #0xF7\n\t"
+					 "cmp r2, r0\n\t"
+					 "bne 1f\n\t" // !=
+					 "mov r0, r1\n\t"
+					 "blx NotifyEnterVehicle\n\t" // call NotifyEnterVehicle
+					 "1:\n\t"  // call orig
+					 "pop {r0-r11, lr}\n\t"
+					 "push {r0-r11, lr}\n\t"
+					 "blx call_taskEnterCarAsDriver\n\t"
+					 "pop {r0-r11, pc}");
+}
+
+void (*CTaskComplexLeaveCar)(uintptr_t** thiz, CVehicleGta* pVehicle, int iTargetDoor, int iDelayTime, bool bSensibleLeaveCar, bool bForceGetOut);
+void CTaskComplexLeaveCar_hook(uintptr_t** thiz, CVehicleGta* pVehicle, int iTargetDoor, int iDelayTime, bool bSensibleLeaveCar, bool bForceGetOut)
+{
+	uintptr_t dwRetAddr = 0;
+	__asm__ volatile ("mov %0, lr" : "=r" (dwRetAddr));
+	dwRetAddr -= g_libGTASA;
+
+	if (dwRetAddr == 0x3AE905 || dwRetAddr == 0x3AE9CF)
+	{
+		if (pNetGame)
+		{
+			if (pGame->FindPlayerPed()->IsInVehicle())
+			{
+				CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+				VEHICLEID VehicleID = pVehiclePool->FindIDFromGtaPtr(pGame->FindPlayerPed()->GetGtaVehicle());
+				CLocalPlayer* pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
+				pLocalPlayer->SendExitVehicleNotification(VehicleID);
+			}
+		}
+	}
+
+	(*CTaskComplexLeaveCar)(thiz, pVehicle, iTargetDoor, iDelayTime, bSensibleLeaveCar, bForceGetOut);
+}
+
 void InstallHooks()
 {
 	Log("InstallHooks");
@@ -2445,6 +2524,8 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x001AECC0, &RwFrameAddChild_hook, &RwFrameAddChild);
 	CHook::InlineHook(g_libGTASA, 0x002DFD30, &CUpsideDownCarCheck__IsCarUpsideDown_hook, &CUpsideDownCarCheck__IsCarUpsideDown);
 	CHook::InlineHook(g_libGTASA, 0x0033AD78, &CAnimBlendNode__FindKeyFrame_hook, &CAnimBlendNode__FindKeyFrame);
+	CHook::InlineHook(g_libGTASA, 0x482E60, &CTaskComplexEnterCarAsDriver_hook, &CTaskComplexEnterCarAsDriver);
+	CHook::InlineHook(g_libGTASA, 0x4833CC, &CTaskComplexLeaveCar_hook, &CTaskComplexLeaveCar);
 
 	// attached objects
 	CHook::InlineHook(g_libGTASA, 0x003C1BF8, &CWorld_ProcessPedsAfterPreRender_hook, &CWorld_ProcessPedsAfterPreRender);

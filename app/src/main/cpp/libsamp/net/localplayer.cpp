@@ -364,18 +364,12 @@ bool CLocalPlayer::Process()
 					CHUD::togglePassengerButton(false);
 				}
 				if (CHUD::bIsShowEnterExitButt) {
-					CHUD::toggleEnterExitButton(false);
+					CHUD::bIsShowEnterExitButt = false;
 				}
 				if (CHUD::bIsShowLockButt) {
 					CHUD::toggleLockButton(false);
 				}
 			} else if (!m_pPlayerPed->IsInVehicle()) {
-				if (CHUD::bIsShowHornButt) {
-					CHUD::toggleHornButton(false);
-				}
-				if(CHUD::bIsShowSirenButt) {
-					CHUD::toggleSirenButton(false);
-				}
 				if (pVehiclePool) {
 					VEHICLEID ClosetVehicleID = pVehiclePool->FindNearestToLocalPlayerPed();
 
@@ -388,14 +382,14 @@ bool CLocalPlayer::Process()
 									CHUD::togglePassengerButton(true);
 								}
 								if (!CHUD::bIsShowEnterExitButt) {
-									CHUD::toggleEnterExitButton(true);
+									CHUD::bIsShowEnterExitButt = true;
 								}
 							} else {
 								if (CHUD::bIsShowPassengerButt) {
 									CHUD::togglePassengerButton(false);
 								}
 								if (CHUD::bIsShowEnterExitButt) {
-									CHUD::toggleEnterExitButton(false);
+									CHUD::bIsShowEnterExitButt = false;
 								}
 							}
 							if (!CHUD::bIsShowLockButt) {
@@ -407,7 +401,7 @@ bool CLocalPlayer::Process()
 								CHUD::togglePassengerButton(false);
 							}
 							if (CHUD::bIsShowEnterExitButt) {
-								CHUD::toggleEnterExitButton(false);
+								CHUD::bIsShowEnterExitButt = false;
 							}
 							if (CHUD::bIsShowLockButt) {
 								CHUD::toggleLockButton(false);
@@ -418,7 +412,7 @@ bool CLocalPlayer::Process()
 							CHUD::togglePassengerButton(false);
 						}
 						if (CHUD::bIsShowEnterExitButt) {
-							CHUD::toggleEnterExitButton(false);
+							CHUD::bIsShowEnterExitButt = false;
 						}
 						if (CHUD::bIsShowLockButt) {
 							CHUD::toggleLockButton(false);
@@ -429,35 +423,21 @@ bool CLocalPlayer::Process()
 			} else {// в машине
 				if (m_pPlayerPed->IsAPassenger()) {// на пассажирке
 					if (!CHUD::bIsShowEnterExitButt) {
-						CHUD::toggleEnterExitButton(true);
+						CHUD::bIsShowEnterExitButt = true;
 					}
 					if (CHUD::bIsShowLockButt) {
 						CHUD::toggleLockButton(false);
-					}
-					if (CHUD::bIsShowHornButt) {
-						CHUD::toggleHornButton(false);
-					}
-					if(CHUD::bIsShowSirenButt) {
-						CHUD::toggleSirenButton(false);
 					}
 					if (CHUD::bIsShowPassengerButt) {
 						CHUD::togglePassengerButton(false);
 					}
 				} else {
 					if (!CHUD::bIsShowEnterExitButt) {
-						CHUD::toggleEnterExitButton(true);
+						CHUD::bIsShowEnterExitButt = true;
 					}
 
 					if (!CHUD::bIsShowLockButt) {
 						CHUD::toggleLockButton(true);
-					}
-					if (!CHUD::bIsShowHornButt) {
-						CHUD::toggleHornButton(true);
-					}
-					if(!CHUD::bIsShowSirenButt) {
-						if(m_pPlayerPed->GetCurrentVehicle()->m_bHasSiren) {
-							CHUD::toggleSirenButton(true);
-						}
 					}
 					if (CHUD::bIsShowPassengerButt) {
 						CHUD::togglePassengerButton(false);
@@ -941,7 +921,7 @@ void CLocalPlayer::SendAimSyncData()
     aimSync.vecAimPos.z = caAim->pos1z;
     aimSync.fAimZ = m_pPlayerPed->GetAimZ();
     aimSync.aspect_ratio = /*GameGetAspectRatio() * */ 255.0f;
-    aimSync.byteCamExtZoom = (uint8_t)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);
+//    aimSync.byteCamExtZoom = (uint8_t)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);
 
     CWeapon* pwstWeapon = m_pPlayerPed->GetCurrentWeaponSlot();
     aimSync.byteWeaponState = pwstWeapon->m_nType;

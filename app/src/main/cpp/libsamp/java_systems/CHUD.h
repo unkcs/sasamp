@@ -17,17 +17,13 @@ public:
     static void toggleAll(bool toggle, bool withchat = false);
     static void UpdateHudInfo();
     static void togglePassengerButton(bool toggle);
-    static void toggleEnterExitButton(bool toggle);
     static void toggleLockButton(bool toggle);
 
-    CHUD();
     static bool bIsShow;
     static int  iLocalMoney;
     static bool bIsShowPassengerButt;
     static bool bIsShowEnterExitButt;
     static bool bIsShowLockButt;
-    static bool bIsShowHornButt;
-    static bool bIsShowSirenButt;
     static bool bIsShowChat;
     static bool bIsTouchCameraButt;
     static bool bIsCamEditGui;
@@ -37,7 +33,6 @@ public:
 
     static void UpdateMoney();
 
-    static void toggleHornButton(bool toggle);
     static void toggleSirenButton(bool toggle);
 
     static void updateOpgWarLayout(int time, int attack_score, int def_score);

@@ -24,7 +24,7 @@ void SelectEntity::findSelectEntity() {
 
         Sprite::CalcScreenCoors(&vec, &vecOut, nullptr, nullptr, false, false);
 
-        float dist = GetDistanceBetween3DPoints(
+        float dist = CUtil::GetDistanceBetween3DPoints(
                 {(RwReal) CTouchInterface::lastPosX, (RwReal) CTouchInterface::lastPosY, (RwReal) vecOut.z},
                 vecOut
         );

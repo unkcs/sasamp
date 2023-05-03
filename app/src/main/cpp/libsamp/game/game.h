@@ -138,7 +138,6 @@ public:
 	bool isShowMedicGame = false;
 	bool isRegistrationActive = false;
 	bool isShopStoreActive = false;
-	bool isHornActive = false;
 	bool isBanJump = false;
 	bool bIsGameExiting = false;
 

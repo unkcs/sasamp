@@ -60,10 +60,7 @@ public class HudManager extends Chat {
 
     private ImageView enter_passenger;
     ImageView camera_mode_butt;
-    private ImageView enterexit_driver;
     private ImageView lock_vehicle;
-    private ImageView button_horn;
-    ImageView button_siren;
     private ConstraintLayout opg_war_layout;
     private ConstraintLayout family_war_layout;
     private TextView opg_attacker_score;
@@ -111,10 +108,7 @@ public class HudManager extends Chat {
 
     native void HudInit();
     native void ClickEnterPassengerButton();
-    native void ClickEnterExitVehicleButton();
     native void ClickLockVehicleButton();
-    native void PressedHorn(boolean pressed);
-    native void clickSiren();
     native void SetRadarBgPos(float x1, float y1, float x2, float y2);
     native void SetRadarPos(float x1, float y1, float size);
 
@@ -170,33 +164,6 @@ public class HudManager extends Chat {
         opg_war_layout.setVisibility(View.GONE);
         family_war_layout.setVisibility(View.GONE);
 
-        //Кнопка сирены
-        button_siren = activity.findViewById(R.id.button_siren);
-        button_siren.setVisibility(View.GONE);
-        button_siren.setOnClickListener(view -> {
-            clickSiren();
-        });
-
-        // кнопка сигнала
-        button_horn = activity.findViewById(R.id.button_horn);
-        button_horn.setVisibility(View.GONE);
-
-        button_horn.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: // нажатие
-                    case MotionEvent.ACTION_MOVE:
-                        PressedHorn(true);
-                        break;
-                    case MotionEvent.ACTION_UP: // отпускание
-                    case MotionEvent.ACTION_CANCEL:
-                        PressedHorn(false);
-                        break;
-                }
-                return true;
-            }
-        });
         // кнопка закрыть/открыть тачку
         lock_vehicle = activity.findViewById(R.id.vehicle_lock_butt);
         lock_vehicle.setVisibility(View.GONE);
@@ -208,13 +175,6 @@ public class HudManager extends Chat {
             }
             buttonLockCD = currTime+2;
             ClickLockVehicleButton();
-        });
-
-        // кнопка сесть/вылезть водителем
-        enterexit_driver = activity.findViewById(R.id.enterexit_driver);
-        enterexit_driver.setVisibility(View.GONE);
-        enterexit_driver.setOnClickListener(view -> {
-            ClickEnterExitVehicleButton();
         });
 
         // кнопка сесть пассажиром
@@ -421,40 +381,6 @@ public class HudManager extends Chat {
 
     }
 
-    void toggleSirenButton(boolean toggle)
-    {
-        if(toggle)
-        {
-            activity.runOnUiThread(() -> Utils.ShowLayout(button_siren, true) );
-        }
-        else
-        {
-            activity.runOnUiThread(() -> Utils.HideLayout(button_siren, true) );
-        }
-    }
-
-    void toggleHornButton(boolean toggle)
-    {
-        if(toggle)
-        {
-            activity.runOnUiThread(() -> Utils.ShowLayout(button_horn, true) );
-        }
-        else
-        {
-            activity.runOnUiThread(() -> Utils.HideLayout(button_horn, true) );
-        }
-    }
-    void toggleEnterExitButton(boolean toggle)
-    {
-        if(toggle)
-        {
-            activity.runOnUiThread(() -> Utils.ShowLayout(enterexit_driver, true) );
-        }
-        else
-        {
-            activity.runOnUiThread(() -> Utils.HideLayout(enterexit_driver, true) );
-        }
-    }
     void toggleLockButton(boolean toggle)
     {
         if(toggle)

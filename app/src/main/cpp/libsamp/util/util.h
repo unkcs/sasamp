@@ -2,6 +2,7 @@
 
 #include "game/Entity/Vehicle.h"
 #include "game/RW/rwcore.h"
+#include "game/Enums/OSDeviceForm.h"
 
 static class CUtil {
 public:
@@ -33,6 +34,10 @@ public:
     }
 
     static uintptr_t FindLibrary(const char *library);
+
+    static float GetDistanceBetween3DPoints(const RwV3d f, const RwV3d s);
+
+    static OSDeviceForm OS_SystemForm();
 };
 
 void cp1251_to_utf8(char *out, const char *in, unsigned int len = 0);

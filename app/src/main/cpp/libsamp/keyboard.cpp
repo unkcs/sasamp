@@ -300,12 +300,13 @@ void CKeyBoard::Open()
 
 void CKeyBoard::Close()
 {
+	m_sInput.clear();
+
 	if(!m_bEnable)return;
 
 	m_bEnable = false;
 
-	m_sInput.clear();
-	CHUD::SetChatInput(m_sInput.c_str());
+	//CHUD::SetChatInput(m_sInput.c_str());
 	m_iInputOffset = 0;
 	m_utf8Input[0] = 0;
 	m_iCase = LOWER_CASE;
@@ -2376,10 +2377,7 @@ bool ProcessLocalCommands(const char str[])
 		return true;
 	}
 	if (strcmp(str, "/plate") == 0) {
-		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
-		auto pVeh = pPed->GetCurrentVehicle();
 
-		pVeh->setPlate(NUMBERPLATE_TYPE_UA, "test", "AA");
 
 		return true;
 	}

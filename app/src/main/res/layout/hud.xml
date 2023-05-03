@@ -577,14 +577,15 @@
 
         <ImageView
             android:id="@+id/enter_passenger"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="@dimen/_37sdp"
+            android:layout_height="@dimen/_37sdp"
+            android:layout_marginTop="140dp"
+            android:layout_marginEnd="@dimen/_60sdp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/enter_passanger"
-            app:layout_constraintEnd_toStartOf="@+id/enterexit_driver"
-            app:layout_constraintTop_toTopOf="@+id/enterexit_driver" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
@@ -601,50 +602,14 @@
 
         <ImageView
             android:id="@+id/vehicle_lock_butt"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
+            android:layout_width="@dimen/_37sdp"
+            android:layout_height="@dimen/_37sdp"
             android:layout_marginTop="140dp"
             android:layout_marginEnd="8dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/vehicle_lock_butt"
             app:layout_constraintEnd_toStartOf="@+id/enter_passenger"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/button_horn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/horn"
-            app:layout_constraintBottom_toTopOf="@+id/enterexit_driver"
-            app:layout_constraintEnd_toEndOf="@+id/enterexit_driver"
-            app:layout_constraintStart_toStartOf="@+id/enterexit_driver" />
-
-        <ImageView
-            android:id="@+id/button_siren"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/siren_butt"
-            app:layout_constraintBottom_toTopOf="@+id/enterexit_driver"
-            app:layout_constraintEnd_toStartOf="@+id/button_horn" />
-
-        <ImageView
-            android:id="@+id/enterexit_driver"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
-            android:layout_marginTop="140dp"
-            android:layout_marginEnd="16dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/enter_car_butt_type_car"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

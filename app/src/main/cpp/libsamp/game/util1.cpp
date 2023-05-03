@@ -1990,7 +1990,7 @@ float FloatOffset(float f1, float f2)
     else return (f2 - f1);
 }
 #include <cmath>
-float GetDistanceBetween3DPoints(const RwV3d f, const RwV3d s)
+float CUtil::GetDistanceBetween3DPoints(const RwV3d f, const RwV3d s)
 {
 	return sqrt(pow(s.x - f.x, 2) + pow(s.y - f.y, 2) + pow(s.z - f.z, 2));
 }

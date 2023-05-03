@@ -232,4 +232,5 @@ private:
 	uint8_t				m_byteLastWeapon[MAX_WEAPONS_SLOT];
 	uint32_t			m_dwLastAmmo[MAX_WEAPONS_SLOT];
 	uint32_t 			m_dwLastUpdateHudButtons;
+
 };

@@ -439,12 +439,11 @@ uint32_t CPad__GetHorn_hook(uintptr_t* thiz)
 			if (!pPlayerPed->IsInVehicle())
 				return 0;
 		}
+		int ret = (*CPad__GetHorn)(thiz);
 		// local player
-		LocalPlayerKeys.bKeys[ePadKeys::KEY_CROUCH] = pGame->isHornActive;
+		LocalPlayerKeys.bKeys[ePadKeys::KEY_CROUCH] = ret;
 		return LocalPlayerKeys.bKeys[ePadKeys::KEY_CROUCH];
 	}
-	//return (*CPad__GetHorn)(thiz);
-
 }
 
 uint32_t (*CVehicle__UsesSiren)(uintptr_t* thiz);
@@ -629,6 +628,7 @@ uint32_t CPad__GetWeapon_hook(uintptr_t thiz, uintptr_t ped, bool unk)
 }
 
 #include "gui/gui.h"
+#include "java_systems/CHUD.h"
 
 
 uintptr_t g_playerPed;
@@ -776,6 +776,14 @@ uint32_t CPad__CycleWeaponRightJustDown_hook(uintptr_t thiz)
 	return CPad__CycleWeaponRightJustDown(thiz);
 }
 
+uint32_t (*CPad__ExitVehicleJustDown)(uintptr_t* thiz, int bCheckTouch, uintptr_t vehicle, bool bEntering, uintptr_t vec);
+uint32_t CPad__ExitVehicleJustDown_hook(uintptr_t* thiz, int bCheckTouch, uintptr_t vehicle, bool bEntering, uintptr_t vec)
+{
+	//uintptr_t* localPad = CHook::CallFunction<uintptr_t*>(g_libGTASA + 0x0045441C + 1, pGame->FindPlayerPed()->m_pPed);
+
+	return CPad__ExitVehicleJustDown(thiz, true, vehicle, bEntering, vec);
+}
+
 void HookCPad()
 {
 	memset(&LocalPlayerKeys, 0, sizeof(PAD_KEYS));
@@ -839,7 +847,10 @@ void HookCPad()
 
 	//SetUpHook(g_libGTASA+0x39E7B0, (uintptr_t)CPad__DuckJustDown_hook, (uintptr_t*)&CPad__DuckJustDown);
 	CHook::InlineHook(g_libGTASA, 0x39E7B0, &CPad__DuckJustDown_hook, &CPad__DuckJustDown);
+	CHook::InlineHook(g_libGTASA, 0x39DB50, &CPad__GetBlock_hook, &CPad__GetBlock);
 
+//	CHook::NOP(g_libGTASA + 0x003FAAE6, 4); // fix draw entercar
+//	CHook::InlineHook(g_libGTASA, 0x39DA1C, &CPad__ExitVehicleJustDown_hook, &CPad__ExitVehicleJustDown);
 
 	// steering lr/ud (incar)
 	CHook::InlineHook(g_libGTASA, 0x39C9E4, &CPad__GetSteeringLeftRight_hook, &CPad__GetSteeringLeftRight);

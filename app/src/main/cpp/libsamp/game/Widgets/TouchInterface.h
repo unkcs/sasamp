@@ -207,5 +207,9 @@ public:
         NUM_WIDGETS = 0xBE,
     };
 
+public:
+    static void LoadDefaultConfigFile();
+    static void LoadFromFile(const char *pszFilename, bool bFullLoad);
+    static void InjectHooks();
 };
 

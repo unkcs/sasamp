@@ -24,8 +24,6 @@ bool        CHUD::bIsShow = false;
 bool        CHUD::bIsShowPassengerButt = false;
 bool        CHUD::bIsShowEnterExitButt = false;
 bool        CHUD::bIsShowLockButt = false;
-bool        CHUD::bIsShowHornButt = false;
-bool        CHUD::bIsShowSirenButt = false;
 bool        CHUD::bIsShowChat = true;
 int         CHUD::iLocalMoney = 0;
 int         CHUD::iWantedLevel = 0;
@@ -107,16 +105,6 @@ void CHUD::togglePassengerButton(bool toggle)
     env->CallVoidMethod(thiz, method, toggle);
 }
 
-void CHUD::toggleEnterExitButton(bool toggle)
-{
-    bIsShowEnterExitButt = toggle;
-
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID ToggleEnterExitVehicleButton = env->GetMethodID(clazz, "toggleEnterExitButton", "(Z)V");
-    env->CallVoidMethod(thiz, ToggleEnterExitVehicleButton, toggle);
-}
-
 void CHUD::toggleLockButton(bool toggle)
 {
     bIsShowLockButt = toggle;
@@ -126,28 +114,6 @@ void CHUD::toggleLockButton(bool toggle)
 
     jmethodID ToggleLockVehicleButton = env->GetMethodID(clazz, "toggleLockButton", "(Z)V");
     env->CallVoidMethod(thiz, ToggleLockVehicleButton, toggle);
-}
-
-void CHUD::toggleSirenButton(bool toggle)
-{
-    bIsShowSirenButt = toggle;
-
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-    jclass clazz = env->GetObjectClass(thiz);
-
-    jmethodID method = env->GetMethodID(clazz, "toggleSirenButton", "(Z)V");
-    env->CallVoidMethod(thiz, method, toggle);
-}
-
-void CHUD::toggleHornButton(bool toggle)
-{
-    bIsShowHornButt = toggle;
-
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-    jclass clazz = env->GetObjectClass(thiz);
-
-    jmethodID ToggleHornButton = env->GetMethodID(clazz, "toggleHornButton", "(Z)V");
-    env->CallVoidMethod(thiz, ToggleHornButton, toggle);
 }
 
 int tickUpdate;
@@ -343,43 +309,13 @@ Java_com_liverussia_cr_gui_hud_HudManager_ClickEnterPassengerButton(JNIEnv *env,
     }
 
 }
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_hud_HudManager_ClickEnterExitVehicleButton(JNIEnv *env, jobject thiz) {
-    if(!pNetGame)return;
-    if(!pNetGame->GetPlayerPool())return;
 
-    CLocalPlayer *pPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
-    if(!pPlayer)return;
-
-    CPlayerPed *pPed = pPlayer->GetPlayerPed();
-    if(!pPed) return;
-
-    if(pPed->IsInVehicle())
-    {
-        VEHICLEID vehicleId = pPed->GetCurrentSampVehicleID();
-
-        if(vehicleId == INVALID_VEHICLE_ID) return;
-
-        pPlayer->GetPlayerPed()->ExitCurrentVehicle();
-
-        pPlayer->SendExitVehicleNotification(vehicleId);
-    }
-    else {
-        pPlayer->GoEnterVehicle(false);
-    }
-}
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_hud_HudManager_ClickLockVehicleButton(JNIEnv *env, jobject thiz) {
     pNetGame->SendChatCommand("/lock");
 }
 
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_hud_HudManager_PressedHorn(JNIEnv *env, jobject thiz, jboolean pressed) {
-    pGame->isHornActive = pressed;
-}
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_Speedometer_ClickSpedometr(JNIEnv *env, jobject thiz, jint turn_id,
@@ -676,25 +612,6 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_hud_HudManager_clickMultText(JNIEnv *env, jobject thiz) {
     pNetGame->SendChatCommand("/action");
-}
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_hud_HudManager_clickSiren(JNIEnv *env, jobject thiz) {
-    CLocalPlayer *pPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
-    if(!pPlayer)return;
-
-    CPlayerPed *pPed = pPlayer->GetPlayerPed();
-    if(!pPed) return;
-
-    if(pPed->IsInVehicle())
-    {
-        CVehicle* pVehicle = pPed->GetCurrentVehicle();
-        if(pVehicle)
-        {
-            pVehicle->m_bIsSirenOn = !pVehicle->m_bIsSirenOn;
-        }
-
-    }
 }
 
 void CNetGame::packetUpdateSatiety(Packet* p)

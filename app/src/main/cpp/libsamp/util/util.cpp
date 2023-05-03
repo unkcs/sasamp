@@ -1,6 +1,8 @@
 #include "../main.h"
 #include "game/Enums/eWeaponType.h"
 #include "util.h"
+#include "game/Enums/OSDeviceForm.h"
+#include "patch.h"
 
 #include <vector>
 
@@ -8,6 +10,11 @@ bool CUtil::IsValidGameVehicle(CVehicleGta *pVehicle)
 {
 	// IsVehiclePointerValid
 	return (((bool (*)(CVehicleGta *))(g_libGTASA + 0x5109E8 + 1))(pVehicle));
+}
+
+OSDeviceForm CUtil::OS_SystemForm()
+{
+	return CHook::CallFunction<OSDeviceForm>(g_libGTASA + 0x0023827C + 1);
 }
 
 bool CUtil::IsValidGamePed(CPedGta * pPed)

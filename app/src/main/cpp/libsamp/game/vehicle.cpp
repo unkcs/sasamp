@@ -213,6 +213,12 @@ CVehicle::~CVehicle()
 		delete m_pRightReverseLight;
 		m_pRightReverseLight = nullptr;
 	}
+
+	if (!GetModelReferenceCount(m_pVehicle->m_nModelIndex) &&
+		pGame->IsModelLoaded(m_pVehicle->m_nModelIndex))
+	{
+		CStreaming::RemoveModel(m_pVehicle->m_nModelIndex);
+	}
 }
 
 void CVehicle::toggleRightTurnLight(bool toggle)

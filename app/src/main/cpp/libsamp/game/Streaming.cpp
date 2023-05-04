@@ -9,6 +9,10 @@
 #include <vector>
 #include <iostream>
 
+void CStreaming::RemoveModel(int32 modelId) {
+    CHook::CallFunction<void>(g_libGTASA + 0x00290C4C + 1, modelId);
+}
+
 void CStreaming::RemoveAllUnusedModels()
 {
     ((void (*) ())(g_libGTASA + 0x293325))();

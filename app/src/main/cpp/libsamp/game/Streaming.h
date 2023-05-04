@@ -156,4 +156,6 @@ public:
 
     static void InitImageList();
     static void RemoveAllUnusedModels();
+
+    static void RemoveModel(int32 modelId);
 };

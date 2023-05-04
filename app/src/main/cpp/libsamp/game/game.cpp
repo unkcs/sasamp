@@ -23,8 +23,7 @@ void CGame::RemoveModel(int iModel, bool bFromStreaming)
 		if (bFromStreaming)
 		{
 			if (ScriptCommand(&is_model_available, iModel))
-				// CStreaming::RemoveModel
-				((void(*)(int))(g_libGTASA + 0x290C4C + 1))(iModel);
+				CStreaming::RemoveModel(iModel);
 		}
 		else
 		{

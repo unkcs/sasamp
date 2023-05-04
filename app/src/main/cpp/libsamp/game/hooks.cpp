@@ -844,10 +844,12 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVect
 #include "game/Core/MatrixLinkList.h"
 #include "Collision/Collision.h"
 #include "IdleCam.h"
+#include "References.h"
 
 void InjectHooks()
 {
 	Log("InjectHooks");
+	CReferences::InjectHooks();
 	CModelInfo::injectHooks();
 	CTimer::InjectHooks();
 	cTransmission::InjectHooks();

@@ -16,7 +16,7 @@ public:
     static PoolAllocator::Pool*      ms_pPtrNodeSingleLinkPool;
     static PoolAllocator::Pool*      ms_pPtrNodeDoubleLinkPool;
     static PoolAllocator::Pool*      ms_pEntryInfoNodePool;
-    static PoolAllocator::Pool*      ms_pPedPool;
+    static inline CPool<CPedGta>*    ms_pPedPool;
     static PoolAllocator::Pool*      ms_pVehiclePool;
     static PoolAllocator::Pool*      ms_pBuildingPool;
     static PoolAllocator::Pool*      ms_pObjectPool;
@@ -37,7 +37,7 @@ public:
     static void Initialise();
 };
 
-            // 0x404550
+static auto& GetPedPoolGta()                     { return CPools::ms_pPedPool; }               // 0x404550
 static auto& GetVehiclePoolGta()           { return CPools::ms_pVehiclePool; }           // 0x404560
 static auto& GetBuildingPoolGta()          { return CPools::ms_pBuildingPool; }          // 0x403DF0
 static auto& GetObjectPoolGta()            { return CPools::ms_pObjectPool; }            // 0x404570

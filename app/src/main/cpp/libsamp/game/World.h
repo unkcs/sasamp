@@ -30,6 +30,59 @@ public:
 
     static inline CPlayerInfoGta Players[MAX_PLAYERS];
     static inline int PlayerInFocus;
+
+public:
+    // Returns sector index in range -60 to 60 (Example: -3000 => -60, 3000 => 60)
+    static float GetHalfMapSectorX(float x) { return x / static_cast<float>(MAX_WORLD_UNITS / MAX_SECTORS_X); }
+    static float GetHalfMapSectorY(float y) { return y / static_cast<float>(MAX_WORLD_UNITS / MAX_SECTORS_Y); }
+
+    // Returns sector index in range 0 to 120 (Example: -3000 => 0, 3000 => 120)
+    static float GetSectorfX(float x) { return GetHalfMapSectorX(x) + static_cast<float>(MAX_SECTORS_X / 2); }
+    static float GetSectorfY(float y) { return GetHalfMapSectorY(y) + static_cast<float>(MAX_SECTORS_Y / 2); }
+
+    // returns sector index in range 0 to 120 (covers full map)
+    static int32 GetSectorX(float x) { return static_cast<int32>(std::floor(GetSectorfX(x))); }
+    static int32 GetSectorY(float y) { return static_cast<int32>(std::floor(GetSectorfY(y))); }
+
+    static float GetSectorPosX(int32 sector)
+    {
+        constexpr auto HalfOfTotalSectorsX = MAX_SECTORS_X / 2;
+        constexpr auto fTotalMapUnitsX = MAX_WORLD_UNITS / MAX_SECTORS_X;
+        return static_cast<float>((sector - HalfOfTotalSectorsX) * fTotalMapUnitsX + (fTotalMapUnitsX / 2));
+    }
+    static float GetSectorPosY(int32 sector)
+    {
+        constexpr auto HalfOfTotalSectorsY = MAX_SECTORS_Y / 2;
+        constexpr auto fTotalMapUnitsY = MAX_WORLD_UNITS / MAX_SECTORS_Y;
+        return static_cast<float>((sector - HalfOfTotalSectorsY) * fTotalMapUnitsY + (fTotalMapUnitsY / 2));
+    }
+
+    static CVector2D GetSectorPos(int32 sector) { return { GetSectorPosX(sector), GetSectorPosY(sector) }; }
+
+    // returns sector index in range 0 to 15 (covers half of the map)
+    static float GetHalfMapLodSectorX(float sector) { return sector / static_cast<float>(MAX_WORLD_UNITS / MAX_LOD_PTR_LISTS_X); }
+    static float GetHalfMapLodSectorY(float sector) { return sector / static_cast<float>(MAX_WORLD_UNITS / MAX_LOD_PTR_LISTS_Y); }
+    static float GetLodSectorfX(float sector) { return GetHalfMapLodSectorX(sector) + static_cast<float>(MAX_LOD_PTR_LISTS_X / 2); }
+    static float GetLodSectorfY(float sector) { return GetHalfMapLodSectorY(sector) + static_cast<float>(MAX_LOD_PTR_LISTS_Y / 2); }
+    // returns sector index in range 0 to 30 (covers full map)
+    static int32 GetLodSectorX(float fSector) { return static_cast<int32>(std::floor(GetLodSectorfX(fSector))); }
+    static int32 GetLodSectorY(float fSector) { return static_cast<int32>(std::floor(GetLodSectorfY(fSector))); }
+    static float GetLodSectorPosX(int32 sector)
+    {
+        const int32 HalfOfTotalSectorsX = MAX_LOD_PTR_LISTS_X / 2;
+        const float fTotalMapUnitsX = static_cast<float>(MAX_WORLD_UNITS / MAX_LOD_PTR_LISTS_X);
+        return (sector - HalfOfTotalSectorsX) * fTotalMapUnitsX + (fTotalMapUnitsX / 2);
+    }
+    static float GetLodSectorPosY(int32 sector)
+    {
+        const int32 HalfOfTotalSectorsY = MAX_LOD_PTR_LISTS_Y / 2;
+        const float fTotalMapUnitsY = static_cast<float>(MAX_WORLD_UNITS / MAX_LOD_PTR_LISTS_Y);
+        return (sector - HalfOfTotalSectorsY) * fTotalMapUnitsY + (fTotalMapUnitsY / 2);
+    }
+    static bool IsInWorldBounds(CVector2D pos) { // NOTSA
+        return pos.x > -3000.0f && pos.x < 3000.0f
+               && pos.y > -3000.0f && pos.y < 3000.0f;
+    }
 };
 
 CPlayerInfoGta&   FindPlayerInfo(int32 playerId = -1);

@@ -8,6 +8,7 @@
 #include "game/RW/rpskin.h"
 #include "util/patch.h"
 #include "game/Models/ModelInfo.h"
+#include "game/References.h"
 
 void CEntityGta::UpdateRwFrame()
 {
@@ -25,12 +26,58 @@ void CEntityGta::UpdateRpHAnim() {
     }
 }
 
+void CEntityGta::ResolveReferences()
+{
+    auto refs = m_pReferences;
+    while (refs) {
+        if (*refs->m_ppEntity == this)
+            *refs->m_ppEntity = nullptr;
+
+        refs = refs->m_pNext;
+    }
+
+    refs = m_pReferences;
+    if (!refs)
+        return;
+
+    refs->m_ppEntity = nullptr;
+    while (refs->m_pNext)
+        refs = refs->m_pNext;
+
+    refs->m_pNext = CReferences::pEmptyList;
+    CReferences::pEmptyList = m_pReferences;
+    m_pReferences = nullptr;
+}
+
+void CEntityGta::PruneReferences()
+{
+    if (!m_pReferences)
+        return;
+
+    auto refs = m_pReferences;
+    auto ppPrev = &m_pReferences;
+    while (refs) {
+        if (*refs->m_ppEntity == this) {
+            ppPrev = &refs->m_pNext;
+            refs = refs->m_pNext;
+        }
+        else {
+            auto refTemp = refs->m_pNext;
+            *ppPrev = refs->m_pNext;
+            refs->m_pNext = CReferences::pEmptyList;
+            CReferences::pEmptyList = refs;
+            refs->m_ppEntity = nullptr;
+            refs = refTemp;
+        }
+    }
+}
+
+
 bool CEntityGta::DoesNotCollideWithFlyers()
 {
     auto mi = CModelInfo::GetModelInfo(m_nModelIndex);
     return mi->SwaysInWind() || mi->bDontCollideWithFlyer;
 }
-
 
 
 // ------------- hooks

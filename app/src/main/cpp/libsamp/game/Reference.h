@@ -11,7 +11,7 @@
 class CReference {
 public:
     class CReference*       m_pNext;
-    struct ENTITY_TYPE**    m_ppEntity;
+    class CEntityGta**      m_ppEntity;
 };
 
 static_assert(sizeof(CReference) == 0x8, "Invalid size CReference");

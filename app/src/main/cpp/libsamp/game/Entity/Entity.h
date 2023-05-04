@@ -93,9 +93,13 @@ public:
     bool HasPreRenderEffects();
     bool DoesNotCollideWithFlyers();
     void ModifyMatrixForPoleInWind();
+    void ResolveReferences();
+    void PruneReferences();
+    bool LivesInThisNonOverlapSector(int32 sectorX, int32 sectorY);
 
 private:
     static void InjectHooks();
+
 };
 static_assert(sizeof(CEntityGta) == 0x38);
 #pragma pack(pop)

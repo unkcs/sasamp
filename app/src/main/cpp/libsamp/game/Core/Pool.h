@@ -71,12 +71,13 @@ public:
     using base_type = A;   // Common base of all these objects
     using widest_type = B; // Type using the most memory (So each object takes this much memory basically)
 
-    B*                  m_pObjects;
-    tPoolObjectFlags*   m_byteMap;
-    int32_t             m_nSize;
-    int32_t             m_nFirstFree;
-    bool                m_bOwnsAllocations;
-    bool                m_bIsLocked; // Seemingly not used anywhere, only toggled on/off
+    B*                m_pObjects;
+    tPoolObjectFlags* m_byteMap;
+    int32             m_nSize;
+    int32             m_nFirstFree;
+    bool              m_bOwnsAllocations;
+    bool              m_bIsLocked; // Seemingly not used anywhere, only toggled on/off
+    uint16            pad;
 
     // Default constructor for statically allocated pools
     CPool() {
@@ -87,8 +88,9 @@ public:
         m_bOwnsAllocations = false;
     }
 
+public:
     // Initializes pool
-    CPool(int32_t size, const char* name) {
+    CPool(int32 size, const char* name) {
         m_pObjects = static_cast<B*>(operator new(sizeof(B) * size));
         assert(m_pObjects);
 
@@ -109,7 +111,7 @@ public:
 
     // Initialises a pool with pre-allocated
     // To be called one-time-only for statically allocated pools.
-    void Init(int32_t size, void* objects, void* infos) {
+    void Init(int32 size, void* objects, void* infos) {
         assert(m_pObjects == nullptr); // Since we statically allocated the pools we do not deallocate.
 
         m_pObjects = static_cast<B*>(objects);
@@ -146,37 +148,37 @@ public:
 
     // Returns if specified slot is free
     // 0x404940
-    bool IsFreeSlotAtIndex(int32_t idx) {
+    bool IsFreeSlotAtIndex(int32 idx) {
         assert(IsIndexInBounds(idx));
         return m_byteMap[idx].bEmpty;
     }
 
     // Returns slot index for this object
-    int32_t GetIndex(const A* obj) {
+    int32 GetIndex(const A* obj) {
         assert(IsFromObjectArray(obj));
         return reinterpret_cast<const B*>(obj) - m_pObjects;
     }
 
     // Returns pointer to object by slot index
-    A* GetAt(int32_t idx) {
+    A* GetAt(int32 idx) {
         assert(IsIndexInBounds(idx));
         return !IsFreeSlotAtIndex(idx) ? (A*)&m_pObjects[idx] : nullptr;
     }
 
     // Marks slot as free / used (0x404970)
-    void SetFreeAt(int32_t idx, bool bFree) {
+    void SetFreeAt(int32 idx, bool bFree) {
         assert(IsIndexInBounds(idx));
         m_byteMap[idx].bEmpty = bFree;
     }
 
     // Set new id for slot (0x54F9F0)
-    void SetIdAt(int32_t idx, uint8_t id) {
+    void SetIdAt(int32 idx, uint8 id) {
         assert(IsIndexInBounds(idx));
         m_byteMap[idx].nId = id;
     }
 
     // Get id for slot (0x552200)
-    uint8_t GetIdAt(int32_t idx) {
+    uint8 GetIdAt(int32 idx) {
         assert(IsIndexInBounds(idx));
         return m_byteMap[idx].nId;
     }
@@ -191,7 +193,7 @@ public:
                     if constexpr (DontDebugCheckAlloc) {
                         Log("Allocataion failed!"); // Code can handle alloc failures
                     } else {
-                        //NOTSA_DEBUG_BREAK(); // Code can't handle alloc failures, so break
+                        Log("Allocataion failed!"); // Code can handle alloc failures // Code can't handle alloc failures, so break
                     }
                     return nullptr;
                 }
@@ -207,7 +209,7 @@ public:
     }
 
     // Allocates object at a specific index from a SCM handle (ref) (0x59F610)
-    void CreateAtRef(int32_t ref) {
+    void CreateAtRef(int32 ref) {
         const auto idx = GetIndexFromRef(ref); // GetIndexFromRef asserts if idx out of range
         m_byteMap[idx].bEmpty = false;
         m_byteMap[idx].nId = ref & 0x7F;
@@ -221,7 +223,7 @@ public:
     * @brief Allocate object at ref
     * @returns A ptr to the object at ref
     */
-    A* NewAt(int32_t ref) {
+    A* NewAt(int32 ref) {
         // TODO/NOTE: Maybe check if where we're allocating at is free?
         A* result = &m_pObjects[GetIndexFromRef(ref)]; // GetIndexFromRef asserts if idx out of range
         CreateAtRef(ref);
@@ -230,27 +232,27 @@ public:
 
     // Deallocates object
     void Delete(A* obj) {
-        int32_t index = GetIndex(obj);
+        int32 index = GetIndex(obj);
         m_byteMap[index].bEmpty = true;
         if (index < m_nFirstFree)
             m_nFirstFree = index;
     }
 
     // Returns SCM handle (ref) for object (0x424160)
-    int32_t GetRef(const A* obj) {
+    int32 GetRef(const A* obj) {
         const auto idx = GetIndex(obj);
         return (idx << 8) + m_byteMap[idx].IntValue();
     }
 
     // Returns pointer to object by SCM handle (ref)
-    A* GetAtRef(int32_t ref) {
-        int32_t idx = ref >> 8; // It is possible the ref is invalid here, thats why we check for the idx is valid below (And also why GetIndexFromRef isn't used, it would assert)
+    A* GetAtRef(int32 ref) {
+        int32 idx = ref >> 8; // It is possible the ref is invalid here, thats why we check for the idx is valid below (And also why GetIndexFromRef isn't used, it would assert)
         return IsIndexInBounds(idx) && m_byteMap[idx].IntValue() == (ref & 0xFF)
                ? reinterpret_cast<A*>(&m_pObjects[idx])
                : nullptr;
     }
 
-    A* GetAtRefNoChecks(int32_t ref) {
+    A* GetAtRefNoChecks(int32 ref) {
         return GetAt(GetIndexFromRef(ref));
     }
 
@@ -289,7 +291,7 @@ public:
     //
 
     // Check if index is in array bounds
-    [[nodiscard]] bool IsIndexInBounds(int32_t idx) const {
+    [[nodiscard]] bool IsIndexInBounds(int32 idx) const {
         return idx >= 0 && idx < m_nSize;
     }
 
@@ -299,31 +301,10 @@ public:
     }
 
     // Get slot index from ref
-    int32_t GetIndexFromRef(int32_t ref) {
+    int32 GetIndexFromRef(int32 ref) {
         const auto idx = ref >> 8;
         assert(IsIndexInBounds(idx));
         return idx;
     }
-
-//    // NOTSA - Get all valid objects - Useful for iteration
-//    template<typename T = A&>
-//    auto GetAllValid() {
-//        using namespace std;
-//        return span{ m_pObjects, (size_t)m_nSize }
-//               | rngv::filter([this](auto&& obj) { return !IsFreeSlotAtIndex(GetIndex(&obj)); }) // Filter only slots in use
-//               | rngv::transform([](auto&& obj) -> T {
-//            if constexpr (std::is_pointer_v<T>) { // For pointers we also do an address-of
-//                return static_cast<T>(&obj);
-//            } else {
-//                return static_cast<T>(obj);
-//            }
-//        });
-//    }
-//
-//    // Similar to above, but gives back a pair [index, object]
-//    template<typename T = A>
-//    auto GetAllValidWithIndex() {
-//        return GetAllValid<T&>()
-//               | rng::views::transform([this](auto&& obj) { return std::make_pair(GetIndex(&obj), std::ref(obj)); });
-//    }
 };
+VALIDATE_SIZE(CPool<int32>, 0x14);

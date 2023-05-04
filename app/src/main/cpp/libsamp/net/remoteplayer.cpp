@@ -78,7 +78,6 @@ void CRemotePlayer::Process()
 	CPlayerPool *pPool = pNetGame->GetPlayerPool();
 
 	RwMatrix matPlayer, matVehicle;
-	CVector vecMoveSpeed;
 
 	if(IsActive())
 	{
@@ -170,9 +169,8 @@ void CRemotePlayer::Process()
 				m_ofSync.lrAnalog = 0;
 				m_ofSync.udAnalog = 0;
 
-				vecMoveSpeed = 0.0f;
-
-				m_pPlayerPed->m_pPed->SetVelocity(vecMoveSpeed);
+				m_pPlayerPed->m_pPed->ResetMoveSpeed();
+				m_pPlayerPed->m_pPed->ResetTurnSpeed();
 
 				m_pPlayerPed->GetMatrix(&matPlayer);
 				matPlayer.pos = m_ofSync.vecPos;

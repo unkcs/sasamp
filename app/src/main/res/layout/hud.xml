@@ -580,11 +580,11 @@
             android:layout_width="@dimen/_37sdp"
             android:layout_height="@dimen/_37sdp"
             android:layout_marginTop="140dp"
-            android:layout_marginEnd="@dimen/_60sdp"
+            android:layout_marginEnd="8dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/enter_passanger"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/vehicle_lock_butt"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -605,11 +605,11 @@
             android:layout_width="@dimen/_37sdp"
             android:layout_height="@dimen/_37sdp"
             android:layout_marginTop="140dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/_60sdp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/vehicle_lock_butt"
-            app:layout_constraintEnd_toStartOf="@+id/enter_passenger"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

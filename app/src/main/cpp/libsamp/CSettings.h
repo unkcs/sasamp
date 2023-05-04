@@ -44,4 +44,6 @@ public:
 	static void LoadSettings(const char* szNickName, int iChatLines = -1);
 
 	static stSettings m_Settings;
+
+	static inline int maxFps = 30;
 };

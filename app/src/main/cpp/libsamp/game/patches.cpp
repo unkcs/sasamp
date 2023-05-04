@@ -8,6 +8,7 @@
 #include "chatwindow.h"
 #include "CPlayerInfoGta.h"
 #include "CWorld.h"
+#include "util/CJavaWrapper.h"
 
 void InitInGame();
 
@@ -85,6 +86,12 @@ void DisableAutoAim()
 
 void ApplyFPSPatch(uint8_t fps)
 {
+	JNIEnv* env = g_pJavaWrapper->GetEnv();
+	if(!env)return;
+
+	if(fps > CSettings::maxFps)
+		fps = CSettings::maxFps;
+
 	CHook::WriteMemory(g_libGTASA + 0x463FE8, (uintptr_t)& fps, 1);
 	CHook::WriteMemory(g_libGTASA + 0x56C1F6, (uintptr_t)& fps, 1);
 	CHook::WriteMemory(g_libGTASA + 0x56C126, (uintptr_t)& fps, 1);
@@ -226,8 +233,8 @@ void ApplyPatches()
 	Log("Installing patches..");
 
 	// задние фары
-//	CHook::WriteMemory(g_libGTASA + 0x005197E0, (uintptr_t)"\x04", 1);
-//	CHook::WriteMemory(g_libGTASA + 0x005197BC, (uintptr_t)"\xFA", 1);
+	CHook::WriteMemory(g_libGTASA + 0x005197E0, (uintptr_t)"\x04", 1);
+	CHook::WriteMemory(g_libGTASA + 0x005197BC, (uintptr_t)"\xFA", 1);
 
 	// fix invalid death id
 	CHook::NOP(g_libGTASA + 0x002FEAE6, 2);

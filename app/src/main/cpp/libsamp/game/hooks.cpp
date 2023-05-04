@@ -1597,8 +1597,11 @@ void CMatrix__SetScale_hook(void* thiz, float x, float y, float z)
 	{
 		if (g_iLastProcessedWheelVehicle >= 2 || g_iLastProcessedWheelVehicle <= 7)
 		{
-			y *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
-			z *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
+			auto pModel = CModelInfo::GetVehicleModelInfo(g_pLastProcessedVehicleMatrix->m_pVehicle->m_nModelIndex);
+			if(g_pLastProcessedVehicleMatrix->m_fWheelSize != pModel->m_fWheelSizeFront) {
+				y *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
+				z *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
+			}
 
 			if (g_pLastProcessedVehicleMatrix->m_fWheelWidth != 0)
 			{

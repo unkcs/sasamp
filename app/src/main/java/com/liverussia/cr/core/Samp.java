@@ -7,6 +7,8 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -35,24 +37,36 @@ import eltos.simpledialogfragment.color.SimpleColorDialog;
 public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
 {
     public Binder binder;
+    public static float maxFps;
+    public static WindowManager windowManager = null;
     public static Activity activity;
     public static final int INVALID_PLAYER_ID = 65535;
     public static native void playUrlSound(String url);
     public static DecimalFormat formatter = null;
     public static SoundPool soundPool = null;
 
-    native void initSAMP(String game_path);
+    native void initSAMP(String game_path, float maxFps);
 
     @Override
     public void onCreate(Bundle bundle) {
         activity = this;
 
         Log.i("java", "calling initSAMP");
-        initSAMP(getExternalFilesDir(null).toString() + "/");
+        windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
+
+        Display display = Samp.windowManager.getDefaultDisplay();
+        maxFps = display.getRefreshRate();
+
+        initSAMP(getExternalFilesDir(null).toString() + "/", maxFps);
 
         super.onCreate(bundle);
 
         init();
+    }
+
+    float getMaxFps() {
+        Display display = Samp.windowManager.getDefaultDisplay();
+        return display.getRefreshRate();
     }
 
     void init()

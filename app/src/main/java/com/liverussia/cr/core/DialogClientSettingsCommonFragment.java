@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
@@ -128,6 +130,13 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         fps_plus_butt.setOnClickListener(view -> {
             int curFps = Integer.parseInt(String.valueOf(fps_text.getText()));
             curFps ++;
+
+            if(Samp.maxFps < curFps){
+                curFps = (int) Samp.maxFps;
+
+                Toast toast = Toast.makeText(mContext, String.format("Ваш экран не поддерживает значение выше %.0f", Samp.maxFps),Toast.LENGTH_SHORT);
+                toast.show();
+            }
             fps_text.setText(String.format("%d", curFps));
             setNativeFpsCount(curFps);
         });

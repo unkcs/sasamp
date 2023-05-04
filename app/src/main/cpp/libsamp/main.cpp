@@ -573,7 +573,10 @@ uint32_t GetTickCount()
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_core_Samp_initSAMP(JNIEnv *env, jobject thiz, jstring game_path) {
+Java_com_liverussia_cr_core_Samp_initSAMP(JNIEnv *env, jobject thiz, jstring game_path, jfloat maxFps) {
+
+	CSettings::maxFps = (int)maxFps;
+
 	const char *path = env->GetStringUTFChars(game_path, nullptr);
 
 	g_pszStorage = new char[256];

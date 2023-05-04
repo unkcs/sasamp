@@ -12,6 +12,8 @@
 #include "game/Core/Vector2D.h"
 #include "Physical.h"
 
+class CVehicleGta;
+
 #pragma pack(push, 1)
 struct CPedGta : CPhysical {
  //   CPhysical entity; 		// 0000-0184	;entity
@@ -166,42 +168,42 @@ struct CPedGta : CPhysical {
         uint8_t m_nPedFlags[0x10];
     };
 
-    uintptr_t *m_apBones[19];
-    AssocGroupId m_motionAnimGroup;
-    CVector2D m_extractedVelocity;
-    uint8_t m_acquaintances[0x14];
-    uintptr_t *m_pWeaponClump;
-    uintptr_t *m_pWeaponFlashFrame;
-    uintptr_t *m_pGogglesClump;
-    bool *m_pbGogglesEffect;
-    uint16_t m_nGunFlashBlendAmount;
-    uint16_t m_nGunFlashBlendOutRate;
-    uint16_t m_nGunFlashBlendAmount2;
-    uint16_t m_nGunFlashBlendOutRate2;
-    uint8_t m_ik[0x20];
-    uint32_t m_nAntiSpazTimer;
-    eMoveState m_eMoveStateAnim;
-    eMoveState m_eStoredMoveState;
-    float fHealth;		 		// 1344-1348	;Health
-    float fMaxHealth;			// 1348-1352	;MaxHealth
-    float fArmour;				// 1352-1356	;Armour
-    float fAim;
-    uint8_t _pad104[8];
-    float m_fCurrentRotation;			// 1368-1372	;Rotation1
-    float m_fAimingRotation;			// 1372-1376	;Rotation2
-    uint8_t _pad105[44];
-    uint32_t pVehicle;			// 1420-1424	;pVehicle
-    uint8_t _pad108[8];
-    uint32_t dwPedType;			// 1432-1436	;dwPedType
-    uint32_t dwUnk1;	 // 1436-1440
-    CWeapon WeaponSlots[13]; // 1440-1804
-    uint8_t _pad270[12];
-    uint8_t byteCurWeaponSlot; // 1816-1817
-    uint8_t _pad280[23];
-    uint32_t pFireObject;	 // 1840-1844
-    uint8_t _pad281[44];
-    uint32_t  dwWeaponUsed; // 1888-1892
-    uintptr_t pdwDamageEntity; // 1892-1896
-
+    uintptr_t       *m_apBones[19];
+    AssocGroupId    m_motionAnimGroup;
+    CVector2D       m_extractedVelocity;
+    uint8_t         m_acquaintances[0x14];
+    uintptr_t       *m_pWeaponClump;
+    uintptr_t       *m_pWeaponFlashFrame;
+    uintptr_t       *m_pGogglesClump;
+    bool            *m_pbGogglesEffect;
+    uint16_t        m_nGunFlashBlendAmount;
+    uint16_t        m_nGunFlashBlendOutRate;
+    uint16_t        m_nGunFlashBlendAmount2;
+    uint16_t        m_nGunFlashBlendOutRate2;
+    uint8_t         m_ik[0x20];
+    uint32_t        m_nAntiSpazTimer;
+    eMoveState      m_eMoveStateAnim;
+    eMoveState      m_eStoredMoveState;
+    float           fHealth;
+    float           fMaxHealth;
+    float           fArmour;
+    float           fAim;
+    uint8_t         _pad104[8];
+    float           m_fCurrentRotation;
+    float           m_fAimingRotation;
+    uint8_t         _pad105[44];
+    CVehicleGta*    pVehicle;
+    CVehicleGta*    m_VehDeadInFrontOf;
+    uint8_t         _pad108[4];
+    uint32_t        dwPedType;
+    uint32_t        dwUnk1;
+    CWeapon         WeaponSlots[13];
+    uint8_t         _pad270[12];
+    uint8_t         byteCurWeaponSlot; // 1816-1817
+    uint8_t         _pad280[23];
+    uint32_t        pFireObject;	 // 1840-1844
+    uint8_t         _pad281[44];
+    uint32_t        dwWeaponUsed; // 1888-1892
+    uintptr_t       pdwDamageEntity; // 1892-1896
 };
 #pragma pack(pop)

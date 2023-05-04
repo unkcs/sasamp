@@ -2,7 +2,7 @@
 #include "game.h"
 #include "../net/netgame.h"
 #include "util/patch.h"
-#include "CWorld.h"
+#include "World.h"
 
 #include <jni.h>
 

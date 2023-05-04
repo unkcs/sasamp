@@ -1,7 +1,7 @@
 #include "../main.h"
 #include "game.h"
-#include "CWorld.h"
 #include "game/Models/ModelInfo.h"
+#include "World.h"
 
 #define PI 3.14159265
 

@@ -2,18 +2,15 @@
 // Created by plaka on 07.03.2023.
 //
 
-#ifndef LIVERUSSIA_CPLAYERINFOGTA_H
-#define LIVERUSSIA_CPLAYERINFOGTA_H
-
+#pragma once
 
 #include "common.h"
 #include "game/Entity/Ped/Ped.h"
+#include "game/Entity/Ped/PlayerPedGta.h"
 
 struct CPlayerInfoGta {
-    CPedGta *m_pPed;
+    CPlayerPedGta *m_pPed;
     uint8_t skip[400];
 };
+VALIDATE_SIZE(CPlayerInfoGta, 0x194);
 
-
-
-#endif //LIVERUSSIA_CPLAYERINFOGTA_H

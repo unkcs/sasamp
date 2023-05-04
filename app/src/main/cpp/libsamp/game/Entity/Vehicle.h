@@ -20,6 +20,8 @@ enum eCarLock : uint32 {
     CARLOCK_SKIP_SHUT_DOORS
 };
 
+class CPedGta;
+
 #pragma pack(push, 1)
 struct CVehicleGta : CPhysical
 {

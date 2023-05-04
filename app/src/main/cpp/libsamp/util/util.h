@@ -4,6 +4,9 @@
 #include "game/RW/rwcore.h"
 #include "game/Enums/OSDeviceForm.h"
 
+class CVehicleGta;
+class CPedGta;
+
 static class CUtil {
 public:
     static bool IsValidGameVehicle(CVehicleGta *pVehicle);

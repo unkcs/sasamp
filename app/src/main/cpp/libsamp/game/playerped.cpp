@@ -7,10 +7,10 @@
 #include "..//CDebugInfo.h"
 #include "util/patch.h"
 #include "Enums/ePedState.h"
-#include "CWorld.h"
 #include "game/Models/ModelInfo.h"
 #include "game/RW/rphanim.h"
 #include "RwHelper.h"
+#include "World.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;

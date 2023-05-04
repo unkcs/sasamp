@@ -6,6 +6,9 @@
 #include "rgba.h"
 #include "tHandlingData.h"
 
+#define MAX_PLAYERS		1004
+#define MAX_VEHICLES	2000
+#define MAX_PLAYER_NAME	24
 
 constexpr float E              = 2.71828f;          // e
 constexpr float E_CONST        = 0.577f;            // Euler-Mascheroni constant

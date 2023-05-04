@@ -7,8 +7,8 @@
 #include "util/patch.h"
 #include "chatwindow.h"
 #include "CPlayerInfoGta.h"
-#include "CWorld.h"
 #include "util/CJavaWrapper.h"
+#include "World.h"
 
 void InitInGame();
 
@@ -110,8 +110,8 @@ void ApplyPatches_level0()
 {
 	Log("ApplyPatches_level0");
 
-	CWorld::Players = new CPlayerInfoGta[MAX_PLAYERS]{nullptr};
-	CHook::Write(g_libGTASA + 0x005D021C, CWorld::Players);
+//	CWorld::Players = new CPlayerInfoGta[MAX_PLAYERS]{nullptr};
+	CHook::Write(g_libGTASA + 0x005D021C, &CWorld::Players);
 
 	CHook::Write(g_libGTASA + 0x005D1B24, &CWorld::PlayerInFocus);
 

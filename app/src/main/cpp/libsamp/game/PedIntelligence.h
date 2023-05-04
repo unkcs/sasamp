@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "main.h"
+
 enum ePrimaryTasks //array indexes
 {
     TASK_PRIMARY_PHYSICAL_RESPONSE = 0,
@@ -14,7 +16,7 @@ enum ePrimaryTasks //array indexes
     TASK_PRIMARY_MAX
 };
 
-enum eSecondaryTasks : uint32_t//array indexes
+enum eSecondaryTasks : uint32//array indexes
 {
     TASK_SECONDARY_ATTACK = 0,                // want duck to be after attack
     TASK_SECONDARY_DUCK,                    // because attack controls ducking movement

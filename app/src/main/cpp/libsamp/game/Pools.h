@@ -9,12 +9,13 @@
 #include <cstdint>
 #include "game/Core/Pool.h"
 #include "game/Entity/Object.h"
+#include "game/Core/PtrNodeSingleLink.h"
 
 void CPools_Initialise_hook();
 
 class CPools {
 public:
-    static PoolAllocator::Pool*         ms_pPtrNodeSingleLinkPool;
+    static inline CPool<CPtrNodeSingleLink>*        ms_pPtrNodeSingleLinkPool;
     static PoolAllocator::Pool*         ms_pPtrNodeDoubleLinkPool;
     static PoolAllocator::Pool*         ms_pEntryInfoNodePool;
     static inline CPool<CPedGta>*       ms_pPedPool;
@@ -46,7 +47,7 @@ static auto& GetDummyPoolGta()             { return CPools::ms_pDummyPool; }    
 static auto& GetColModelPoolGta()          { return CPools::ms_pColModelPool; }          // 0x40F000
 static auto& GetTaskPoolGta()              { return CPools::ms_pTaskPool; }              // 0x61A330
 static auto& GetPedIntelligencePoolGta()   { return CPools::ms_pPedIntelligencePool; }   // 0x5FF930
-static auto& GetPtrNodeSingleLinkPoolGta() { return CPools::ms_pPtrNodeSingleLinkPool; } // 0x552190
+static auto& GetPtrNodeSingleLinkPool() { return CPools::ms_pPtrNodeSingleLinkPool; } // 0x552190
 static auto& GetPtrNodeDoubleLinkPoolGta() { return CPools::ms_pPtrNodeDoubleLinkPool; } // 0x5521A0
 static auto& GetEntryInfoNodePoolGta()     { return CPools::ms_pEntryInfoNodePool; }     // 0x536C80
 static auto& GetPointRoutePoolGta()        { return CPools::ms_pPointRoutePool; }        // 0x41B400

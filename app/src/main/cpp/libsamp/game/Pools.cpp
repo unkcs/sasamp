@@ -6,7 +6,7 @@
 #include "../util/patch.h"
 #include "IplDef.h"
 
-PoolAllocator::Pool*      CPools::ms_pPtrNodeSingleLinkPool = nullptr;
+//PoolAllocator::Pool*      CPools::ms_pPtrNodeSingleLinkPool = nullptr;
 PoolAllocator::Pool*      CPools::ms_pPtrNodeDoubleLinkPool;
 PoolAllocator::Pool*      CPools::ms_pEntryInfoNodePool;
 //PoolAllocator::Pool*      CPools::ms_pPedPool;
@@ -27,10 +27,8 @@ PoolAllocator::Pool*      CPools::ms_pPedAttractorPool;
 void (*CPools_Initialise)(void);
 void CPools_Initialise_hook(void)
 {
-
-
-    // 600000 / 75000 = 8
-    CPools::ms_pPtrNodeSingleLinkPool = PoolAllocator::Allocate(100000, 8);		// 75000
+    CPools::ms_pPtrNodeSingleLinkPool = new CPool<CPtrNodeSingleLink>(95000, "PtrNode Single");
+   // CPools::ms_pPtrNodeSingleLinkPool = PoolAllocator::Allocate(100000, 8);		// 75000
     // 72000 / 6000 = 12
     CPools::ms_pPtrNodeDoubleLinkPool = PoolAllocator::Allocate(60000, 12);	// 6000
     // 10000 / 500 = 20
@@ -66,7 +64,8 @@ void CPools_Initialise_hook(void)
     // 15104 / 64 = 236
     CPools::ms_pPedAttractorPool = PoolAllocator::Allocate(200, 236);	// 64
 
-    *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93E0) = CPools::ms_pPtrNodeSingleLinkPool;
+    CHook::Write(g_libGTASA + 0x005CFD38, &CPools::ms_pPtrNodeSingleLinkPool);
+   // *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93E0) = CPools::ms_pPtrNodeSingleLinkPool;
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93DC) = CPools::ms_pPtrNodeDoubleLinkPool;
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D8) = CPools::ms_pEntryInfoNodePool;
     CHook::Write(g_libGTASA + 0x005CE9E4, &CPools::ms_pPedPool);

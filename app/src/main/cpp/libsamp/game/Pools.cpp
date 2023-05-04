@@ -6,13 +6,8 @@
 #include "../util/patch.h"
 #include "IplDef.h"
 
-//PoolAllocator::Pool*      CPools::ms_pPtrNodeSingleLinkPool = nullptr;
-//PoolAllocator::Pool*      CPools::ms_pPtrNodeDoubleLinkPool;
 PoolAllocator::Pool*      CPools::ms_pEntryInfoNodePool;
-//PoolAllocator::Pool*      CPools::ms_pPedPool;
-//PoolAllocator::Pool*      CPools::ms_pVehiclePool;
 PoolAllocator::Pool*      CPools::ms_pBuildingPool;
-//PoolAllocator::Pool*      CPools::ms_pObjectPool;
 PoolAllocator::Pool*      CPools::ms_pDummyPool;
 PoolAllocator::Pool*      CPools::ms_pColModelPool;
 PoolAllocator::Pool*      CPools::ms_pTaskPool;
@@ -24,27 +19,20 @@ PoolAllocator::Pool*      CPools::ms_pTaskAllocatorPool;
 PoolAllocator::Pool*      CPools::ms_pPedIntelligencePool;
 PoolAllocator::Pool*      CPools::ms_pPedAttractorPool;
 
-void (*CPools_Initialise)(void);
-void CPools_Initialise_hook(void)
+void CPools::Initialise()
 {
-    CPools::ms_pPtrNodeSingleLinkPool = new CPool<CPtrNodeSingleLink>(100000, "PtrNode Single");
-   // CPools::ms_pPtrNodeSingleLinkPool = PoolAllocator::Allocate(100000, 8);		// 75000
-    // 72000 / 6000 = 12
-    CPools::ms_pPtrNodeDoubleLinkPool = new CPool<CPtrNodeDoubleLink>(60000, "PtrNode Double");
-    //CPools::ms_pPtrNodeDoubleLinkPool = PoolAllocator::Allocate(60000, 12);	// 6000
+    CPools::ms_pPtrNodeSingleLinkPool   = new CPool<CPtrNodeSingleLink>(100000, "PtrNode Single");
+    CPools::ms_pPtrNodeDoubleLinkPool   = new CPool<CPtrNodeDoubleLink>(60000, "PtrNode Double");
+    CPools::ms_pPedPool                 = new CPool<CPedGta>(240, "Peds");
+    CPools::ms_pVehiclePool             = new CPool<CVehicleGta>(2000, "Vehicles");
+    CPools::ms_pObjectPool              = new CPool<CObjectGta>(3000, "Objects");
+
+
     // 10000 / 500 = 20
     CPools::ms_pEntryInfoNodePool = PoolAllocator::Allocate(20000, 20);	// 500
-    // 279440 / 140 = 1996
-    CPools::ms_pPedPool               = new CPool<CPedGta>(240, "Peds");
-   // CPools::ms_pPedPool = PoolAllocator::Allocate(240, 1996);	// 140
-    // 286440 / 110 = 2604
-    CPools::ms_pVehiclePool = new CPool<CVehicleGta>(2000, "Vehicles");	// 110
-    // 840000 / 14000 = 60
+
     CPools::ms_pBuildingPool = PoolAllocator::Allocate(20000, 60);	// 14000
-    // 147000 / 350 = 420
-    CPools::ms_pObjectPool = new CPool<CObjectGta>(3000, "Objects");
-    //CPools::ms_pObjectPool = PoolAllocator::Allocate(3000, 420);	// 350
-    // 210000 / 3500 = 60
+
     CPools::ms_pDummyPool = PoolAllocator::Allocate(40000, 60);	// 3500
     // 487200 / 10150 = 48
     CPools::ms_pColModelPool = PoolAllocator::Allocate(50000, 48);	// 10150
@@ -65,18 +53,11 @@ void CPools_Initialise_hook(void)
     // 15104 / 64 = 236
     CPools::ms_pPedAttractorPool = PoolAllocator::Allocate(200, 236);	// 64
 
-    CHook::Write(g_libGTASA + 0x005CFD38, &CPools::ms_pPtrNodeSingleLinkPool);
-   // *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93E0) = CPools::ms_pPtrNodeSingleLinkPool;
-   CHook::Write(g_libGTASA + 0x005D01B4, &CPools::ms_pPtrNodeDoubleLinkPool);
-   // *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93DC) = CPools::ms_pPtrNodeDoubleLinkPool;
+
+
+
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D8) = CPools::ms_pEntryInfoNodePool;
-    CHook::Write(g_libGTASA + 0x005CE9E4, &CPools::ms_pPedPool);
-   // *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D4) = CPools::ms_pPedPool;
-   CHook::Write(g_libGTASA + 0x005D039C, &CPools::ms_pVehiclePool);
-  //  *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93D0) = CPools::ms_pVehiclePool;
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93CC) = CPools::ms_pBuildingPool;
-    //*(PoolAllocator::Pool**)(g_libGTASA + 0x8B93C8) = CPools::ms_pObjectPool;
-    CHook::Write(g_libGTASA + 0x005CE900, &CPools::ms_pObjectPool);
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93C4) = CPools::ms_pDummyPool;
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93C0) = CPools::ms_pColModelPool;
     *(PoolAllocator::Pool**)(g_libGTASA + 0x8B93BC) = CPools::ms_pTaskPool;
@@ -90,6 +71,12 @@ void CPools_Initialise_hook(void)
 }
 
 void CPools::InjectHooks() {
-    CHook::InlineHook(g_libGTASA, 0x3AF1A0, &CPools_Initialise_hook, &CPools_Initialise);
+    CHook::Redirect(g_libGTASA, 0x3AF1A0, &CPools::Initialise);
+
+    CHook::Write(g_libGTASA + 0x005CFD38, &CPools::ms_pPtrNodeSingleLinkPool);
+    CHook::Write(g_libGTASA + 0x005D01B4, &CPools::ms_pPtrNodeDoubleLinkPool);
+    CHook::Write(g_libGTASA + 0x005CE9E4, &CPools::ms_pPedPool);
+    CHook::Write(g_libGTASA + 0x005D039C, &CPools::ms_pVehiclePool);
+    CHook::Write(g_libGTASA + 0x005CE900, &CPools::ms_pObjectPool);
 }
 

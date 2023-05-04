@@ -6,7 +6,7 @@
 
 #include "../Enums/eVehicleType.h"
 #include "Physical.h"
-#include "Ped.h"
+#include "game/Entity/Ped/Ped.h"
 #include "game/tHandlingData.h"
 
 enum eCarLock : uint32 {

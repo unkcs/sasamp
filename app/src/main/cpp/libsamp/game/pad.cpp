@@ -570,16 +570,16 @@ void AllVehicles__ProcessControl_hook(uintptr_t thiz)
 		byteCurDriver = FindPlayerNumFromPedPtr((uintptr_t)pVehicle->pDriver);
 	}
 
-	if(pVehicle->pDriver && pVehicle->pDriver->dwPedType == 0 &&
+	if(pVehicle->pDriver && pVehicle->pDriver->m_nPedType == 0 &&
 		pVehicle->pDriver != GamePool_FindPlayerPed() &&
 			CWorld::PlayerInFocus == 0) // CWorld::PlayerInFocus
 	{
 		CWorld::PlayerInFocus = 0;
 
-		pVehicle->pDriver->dwPedType = 4;
+		pVehicle->pDriver->m_nPedType = static_cast<ePedType>(4);
 		//CAEVehicleAudioEntity::Service
 		(( void (*)(uintptr_t))(g_libGTASA+0x364B64+1))(thiz+0x138);
-		pVehicle->pDriver->dwPedType = 0;
+		pVehicle->pDriver->m_nPedType = static_cast<ePedType>(0);
 	}
 	else
 	{

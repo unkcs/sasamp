@@ -982,7 +982,7 @@ void CPlayerPed::FireInstant() {
 void CPlayerPed::ResetDamageEntity()
 {
 	Log("ResetDamageEntity");
-	m_pPed->pdwDamageEntity = 0;
+	m_pPed->m_pLastEntityDamage = nullptr;
 }
 
 // 0.3.7

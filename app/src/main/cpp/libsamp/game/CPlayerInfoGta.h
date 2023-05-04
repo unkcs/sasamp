@@ -7,7 +7,7 @@
 
 
 #include "common.h"
-#include "game/Entity/Ped.h"
+#include "game/Entity/Ped/Ped.h"
 
 struct CPlayerInfoGta {
     CPedGta *m_pPed;

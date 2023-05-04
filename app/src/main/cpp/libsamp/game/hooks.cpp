@@ -1047,8 +1047,6 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
 		if(!pLocalPed->m_bIsSpawned)
 			return;
 
-		pedTake->pdwDamageEntity = reinterpret_cast<uintptr_t>(pedTake);
-
         // player give damage
         if (pedGive == pLocalPed->m_pPed)
 		{
@@ -2415,7 +2413,7 @@ extern "C" bool NotifyEnterVehicle(CVehicleGta* _pVehicle)
 	if (pVehicle->m_pVehicle->m_nModelIndex == TRAIN_PASSENGER) return false;
 
 	if (pVehicle->m_pVehicle->pDriver &&
-		pVehicle->m_pVehicle->pDriver->dwPedType != 0)
+		pVehicle->m_pVehicle->pDriver->m_nPedType != 0)
 		return false;
 
 	CLocalPlayer* pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();

@@ -4,28 +4,49 @@
 
 #pragma once
 
-#include "../PedIntelligence.h"
-#include "../Weapon.h"
-#include "../Enums/ePedState.h"
-#include "game/Enums/eMoveState.h"
-#include "game/Enums/AnimationEnums.h"
-#include "game/Core/Vector2D.h"
-#include "Physical.h"
+#include "../../PedIntelligence.h"
+#include "../../Weapon.h"
+#include "../../Enums/ePedState.h"
+#include "../../Enums/eMoveState.h"
+#include "../../Enums/AnimationEnums.h"
+#include "../../Core/Vector2D.h"
+#include "../Physical.h"
+#include "../../Enums/ePedType.h"
+#include "../../Enums/eWeaponSkill.h"
+#include "../../Enums/eWeaponType.h"
 
 class CVehicleGta;
 
+enum eFightingStyle : int8 {
+    STYLE_STANDARD = 4,
+    STYLE_BOXING,
+    STYLE_KUNG_FU,
+    STYLE_KNEE_HEAD,
+    // various melee weapon styles
+    STYLE_GRAB_KICK = 15,
+    STYLE_ELBOWS = 16,
+};
+
+enum ePedCreatedBy : uint8 {
+    PED_UNKNOWN = 0,
+    PED_GAME = 1,
+    PED_MISSION = 2,
+    PED_GAME_MISSION = 3, // used for the playbacked peds on replay
+};
+
 #pragma pack(push, 1)
 struct CPedGta : CPhysical {
- //   CPhysical entity; 		// 0000-0184	;entity
-    uint8_t _pad106[46];
-    uint32_t _pad107;			// 0358-0362	;dwPedType
-    uint8_t _pad101[722];
-    CPedIntelligence* pPedIntelligence; // 1084-1088
-    uint8_t _pad100[8];
-    ePedState m_nPedState;			// 1096-1100	;Action
-    eMoveState m_eMoveState;
-    uint8_t m_storedCollPoly[0x2c];
-    float m_distTravelledSinceLastHeightCheck;
+    uint8_t             m_PedAudioEntity[0x15C];
+    uint8_t             m_PedSpeechAudioEntity[0x100];
+    uint8_t             m_PedWeaponAudioEntity[0xA8];
+    CPedIntelligence*   pPedIntelligence;
+    uintptr_t           *m_pPlayerData;
+    ePedCreatedBy       m_nCreatedBy;
+    uint8_t             pad6[3];
+    ePedState           m_nPedState;
+    eMoveState          m_eMoveState;
+    uint8_t             m_storedCollPoly[0x2c];
+    float               m_distTravelledSinceLastHeightCheck;
     union {
         /* https://github.com/multitheftauto/mtasa-blue/blob/master/Client/game_sa/CPedSA.h */
         struct {
@@ -194,16 +215,55 @@ struct CPedGta : CPhysical {
     uint8_t         _pad105[44];
     CVehicleGta*    pVehicle;
     CVehicleGta*    m_VehDeadInFrontOf;
-    uint8_t         _pad108[4];
-    uint32_t        dwPedType;
-    uint32_t        dwUnk1;
+    uintptr_t       *m_pAccident;
+    ePedType        m_nPedType;
+    uintptr_t*      m_pStats;
     CWeapon         WeaponSlots[13];
-    uint8_t         _pad270[12];
-    uint8_t         byteCurWeaponSlot; // 1816-1817
-    uint8_t         _pad280[23];
-    uint32_t        pFireObject;	 // 1840-1844
-    uint8_t         _pad281[44];
-    uint32_t        dwWeaponUsed; // 1888-1892
-    uintptr_t       pdwDamageEntity; // 1892-1896
+    eWeaponType     m_nSavedWeapon;   // when we need to hide ped weapon, we save it temporary here
+    eWeaponType     m_nDelayedWeapon; // 'delayed' weapon is like an additional weapon, f.e., simple cop has a nitestick as current and pistol as delayed weapons
+    uint32          m_nDelayedWeaponAmmo;
+    uint8_t         byteCurWeaponSlot;
+    uint8           m_nWeaponShootingRate;
+    uint8           m_nWeaponAccuracy;
+    uint8           pad10;
+    CEntityGta      *m_pEntLockOnTarget;
+    CEntityGta      *m_pEntMagnetizeTarget;
+    CVector         m_vecWeaponPrevPos;
+    eWeaponSkill    m_nWeaponSkill;
+    eFightingStyle  m_nFightingStyle;
+    char            m_nAllowedAttackMoves;
+    uint8           field_72F;
+    uintptr_t       *m_pFire;
+    float           m_fireDmgMult;
+    CEntityGta*     m_pLookTarget;
+    float           m_fLookDirection; // In RAD
+    int32           m_nWeaponModelId;
+    uint32          m_nUnconsciousTimer;
+    uint32          m_nLookTimer;
+    uint32          m_nAttackTimer;
+    uint32          m_nTimeOfDeath;
+    int8            m_nLimbRemoveIndex;
+    int8            pad9;
+    uint16          m_MoneyCarried;
+    float           m_wobble;
+    float           m_wobbleSpeed;
+    uint8           m_nLastDamagedWeaponType; // See eWeaponType
+    uint8           pad8[3];
+    CEntityGta*     m_pLastEntityDamage;
+    uint32          m_nLastDamagedTime;
+    CVector         m_vecAttachOffset;
+    uint16          m_nAttachLookDirn;
+    uint16          pad7;
+    float           m_fAttachHeadingLimit;
+    float           m_fAttachVerticalLimit;
+    int32           m_nOriginalWeaponAmmo;
+    uintptr_t       *m_pCoverPoint;
+    uintptr_t       *m_pLastEntryExit;
+    float           m_fRemoveRangeMultiplier;
+    int16           StreamedScriptBrainToLoad;
+    uint16          pad11;
+    uint32          LastTalkSfx;
 };
 #pragma pack(pop)
+
+VALIDATE_SIZE(CPedGta, 0x7A4-4); // -4 2.10

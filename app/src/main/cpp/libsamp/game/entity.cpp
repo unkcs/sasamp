@@ -73,7 +73,7 @@ bool CEntity::GetCollisionChecking()
 	if(!m_pEntity || CUtil::IsGameEntityArePlaceable(m_pEntity))
 		return true;
 
-	return m_pEntity->nEntityFlags.m_bCollisionProcessed;
+	return m_pEntity->m_bCollisionProcessed;
 }
 
 void CEntity::SetCollisionChecking(bool bCheck)
@@ -81,7 +81,7 @@ void CEntity::SetCollisionChecking(bool bCheck)
 	if(!m_pEntity || CUtil::IsGameEntityArePlaceable(m_pEntity))
 		return;
 
-	m_pEntity->nEntityFlags.m_bCollisionProcessed = bCheck;
+	m_pEntity->m_bCollisionProcessed = bCheck;
 }
 
 void CEntity::Render()

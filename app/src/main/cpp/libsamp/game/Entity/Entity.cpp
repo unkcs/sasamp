@@ -9,6 +9,7 @@
 #include "util/patch.h"
 #include "game/Models/ModelInfo.h"
 #include "game/References.h"
+#include "game/Pools.h"
 
 void CEntityGta::UpdateRwFrame()
 {
@@ -20,9 +21,69 @@ void CEntityGta::UpdateRwFrame()
 
 void CEntityGta::UpdateRpHAnim() {
     if (const auto atomic = GetFirstAtomic(m_pRwClump)) {
-        if (RpSkinGeometryGetSkin(RpAtomicGetGeometry(atomic)) && !nEntityFlags.m_bDontUpdateHierarchy) {
+        if (RpSkinGeometryGetSkin(RpAtomicGetGeometry(atomic)) && !m_bDontUpdateHierarchy) {
             RpHAnimHierarchyUpdateMatrices(GetAnimHierarchyFromSkinClump(m_pRwClump));
         }
+    }
+}
+
+void CEntityGta::RegisterReference(CEntityGta** entity)
+{
+    if (IsBuilding() && !m_bIsTempBuilding && !m_bIsProcObject && !m_nIplIndex)
+        return;
+
+    auto refs = m_pReferences;
+    while (refs) {
+        if (refs->m_ppEntity == entity) {
+            return;
+        }
+        refs = refs->m_pNext;
+    }
+
+    if (!m_pReferences && !CReferences::pEmptyList) {
+        auto iPedsSize = GetPedPoolGta()->GetSize();
+        for (int32 i = 0; i < iPedsSize; ++i) {
+            auto ped = GetPedPoolGta()->GetAt(i);
+            if (ped) {
+                ped->PruneReferences();
+                if (CReferences::pEmptyList)
+                    break;
+            }
+
+        }
+
+        if (!CReferences::pEmptyList) {
+            auto iVehsSize = GetVehiclePoolGta()->GetSize();
+            for (int32 i = 0; i < iVehsSize; ++i) {
+                auto vehicle = GetVehiclePoolGta()->GetAt(i);
+                if (vehicle) {
+                    vehicle->PruneReferences();
+                    if (CReferences::pEmptyList)
+                        break;
+                }
+
+            }
+        }
+
+        if (!CReferences::pEmptyList) {
+            auto iObjectsSize = GetObjectPoolGta()->GetSize();
+            for (int32 i = 0; i < iObjectsSize; ++i) {
+                auto obj = GetObjectPoolGta()->GetAt(i);
+                if (obj) {
+                    obj->PruneReferences();
+                    if (CReferences::pEmptyList)
+                        break;
+                }
+            }
+        }
+    }
+
+    if (CReferences::pEmptyList) {
+        auto pEmptyRef = CReferences::pEmptyList;
+        CReferences::pEmptyList = pEmptyRef->m_pNext;
+        pEmptyRef->m_pNext = m_pReferences;
+        m_pReferences = pEmptyRef;
+        pEmptyRef->m_ppEntity = entity;
     }
 }
 
@@ -72,6 +133,25 @@ void CEntityGta::PruneReferences()
     }
 }
 
+void CEntityGta::CleanUpOldReference(CEntityGta** entity)
+{
+    if (!m_pReferences)
+        return;
+
+    auto refs = m_pReferences;
+    auto ppPrev = &m_pReferences;
+    while (refs->m_ppEntity != entity) {
+        ppPrev = &refs->m_pNext;
+        refs = refs->m_pNext;
+        if (!refs)
+            return;
+    }
+
+    *ppPrev = refs->m_pNext;
+    refs->m_pNext = CReferences::pEmptyList;
+    refs->m_ppEntity = nullptr;
+    CReferences::pEmptyList = refs;
+}
 
 bool CEntityGta::DoesNotCollideWithFlyers()
 {
@@ -82,7 +162,20 @@ bool CEntityGta::DoesNotCollideWithFlyers()
 
 // ------------- hooks
 
+inline void CleanUpOldReference_hook(CEntityGta *thiz, CEntityGta** entity) {
+    thiz->CleanUpOldReference(entity);
+}
+
+inline void ResolveReferences_hook(CEntityGta *thiz) {
+    thiz->ResolveReferences();
+}
+
+inline void PruneReferences_hook(CEntityGta* thiz) {
+    thiz->PruneReferences();
+}
 
 void CEntityGta::InjectHooks() {
-
+    CHook::Redirect(g_libGTASA + 0x003B0D8C, &CleanUpOldReference_hook);
+    CHook::Redirect(g_libGTASA + 0x003B0DD8, &ResolveReferences_hook);
+    CHook::Redirect(g_libGTASA + 0x003B0E28, &PruneReferences_hook);
 }

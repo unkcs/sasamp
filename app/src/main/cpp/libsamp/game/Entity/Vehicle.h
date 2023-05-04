@@ -254,7 +254,7 @@ struct CVehicleGta : CPhysical
 public:
     static void InjectHooks();
 
-    static void SetDriver(CVehicleGta *thiz, CPedGta *pPed);
+    void SetDriver(CPedGta* driver);
 };
 #pragma pack(pop)
 

@@ -14,7 +14,7 @@
 class CReferences {
 public:
     static inline CReference aRefs[MAX_NUM_REFERENCES];
-    static inline CReference* pEmptyList;
+    static inline CReference* pEmptyList{};
 
 public:
     static void InjectHooks();

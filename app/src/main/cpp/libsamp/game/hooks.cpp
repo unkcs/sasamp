@@ -864,6 +864,7 @@ void InjectHooks()
     CCollision::InjectHooks();
 	CIdleCam::InjectHooks();
 	CTouchInterface::InjectHooks();
+	CEntityGta::InjectHooks();
 }
 
 void InstallSpecialHooks()

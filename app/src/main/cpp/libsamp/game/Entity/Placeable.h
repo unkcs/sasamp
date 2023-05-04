@@ -9,8 +9,9 @@
 #include "game/common.h"
 
 #pragma pack(push, 1)
-struct CPlaceable
+class CPlaceable
 {
+public:
     uint32_t            vtable;
     CSimpleTransform    m_placement;
     CMatrixLink         *m_matrix;

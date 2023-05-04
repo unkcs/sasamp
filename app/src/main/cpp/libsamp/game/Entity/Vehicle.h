@@ -257,3 +257,5 @@ public:
     static void SetDriver(CVehicleGta *thiz, CPedGta *pPed);
 };
 #pragma pack(pop)
+
+VALIDATE_SIZE(CVehicleGta, 0x5B4 - 4);

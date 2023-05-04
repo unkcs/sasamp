@@ -113,4 +113,4 @@ public:
 };
 #pragma pack(pop)
 
-static_assert(sizeof(CPhysical) == 0x138, "Invalid size CPhysical");
+static_assert(sizeof(CPhysical) == 0x13C-4, "Invalid size CPhysical");

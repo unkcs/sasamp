@@ -384,7 +384,8 @@ public class DownloadTask implements Listener<TaskStatus> {
         }
 
         loaderActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mWakeLock.release();
+        if (mWakeLock.isHeld())
+            mWakeLock.release();
         loaderActivity.getLoading().setVisibility(View.INVISIBLE);
         loaderActivity.getLoadingPercent().setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);

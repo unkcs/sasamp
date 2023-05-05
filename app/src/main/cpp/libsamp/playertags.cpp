@@ -55,10 +55,9 @@ void CPlayerTags::Render()
 						}
 						if (pPlayerPed->GetDistanceFromCamera() <= m_fDistance[playerId]) {
 							if (!pPlayerPed->IsAdded()) continue;
-							VecPos.x = 0.0f;
-							VecPos.y = 0.0f;
-							VecPos.z = 0.0f;
-							pPlayerPed->GetBonePosition(8, &VecPos);
+							VecPos = 0.0f;
+
+							pPlayerPed->m_pPed->GetBonePosition(&VecPos, 8, false);
 							DrawChatBubble(playerId, &VecPos, pPlayerPed->GetDistanceFromCamera());
 						}
 						if (GetTickCount() - m_dwStartTime[playerId] >= m_dwTime[playerId]) {
@@ -70,10 +69,9 @@ void CPlayerTags::Render()
 
 						{
 							if (!pPlayerPed->IsAdded()) continue;
-							VecPos.x = 0.0f;
-							VecPos.y = 0.0f;
-							VecPos.z = 0.0f;
-							pPlayerPed->GetBonePosition(8, &VecPos);
+							VecPos = 0.0f;
+
+							pPlayerPed->m_pPed->GetBonePosition(&VecPos, 8, false);
 						}
 
 						CAMERA_AIM *pCam = GameGetInternalAim();

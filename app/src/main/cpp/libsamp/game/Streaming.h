@@ -144,6 +144,7 @@ VALIDATE_SIZE(tStreamingFileDesc, 0x30);
 
 class CStreaming {
 public:
+    static inline size_t ms_memoryUsed;
     static inline size_t ms_memoryAvailable;
     static inline uint32 desiredNumVehiclesLoaded;
     static inline bool ms_bLoadVehiclesInLoadScene;

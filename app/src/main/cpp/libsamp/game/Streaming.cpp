@@ -19,6 +19,7 @@ void CStreaming::RemoveAllUnusedModels()
 }
 
 void CStreaming::InjectHooks() {
+    CHook::Write(g_libGTASA + 0x005D1EA8, &CStreaming::ms_memoryUsed);
     CHook::Write(g_libGTASA + 0x005D111C, &CStreaming::ms_memoryAvailable);
     CHook::Write(g_libGTASA + 0x005D1508, &CStreaming::desiredNumVehiclesLoaded);
     CHook::Write(g_libGTASA + 0x005CE80C, &CStreaming::ms_files);

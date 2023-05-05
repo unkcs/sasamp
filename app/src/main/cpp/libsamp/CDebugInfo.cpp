@@ -45,7 +45,7 @@ void CDebugInfo::Draw()
 
 		pGUI->RenderText(pos, (ImU32)0xFFFFFFFF, true, &szStr[0]);
 
-		uint32_t msUsed = *(uint32_t*)(g_libGTASA + 0x0067067C);
+		uint32_t msUsed = CStreaming::ms_memoryUsed;
 		uint32_t msAvailable = CStreaming::ms_memoryAvailable;
 		float percentUsed = ((float)msUsed/(float)msAvailable)*100;
 		snprintf(&szStrMem[0], 256, "MEM: %.1f/%.d (%.1f %%)",

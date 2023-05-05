@@ -905,8 +905,7 @@ void CPlayerPed::GetWeaponInfoForFire(int bLeft, CVector* vecBone, CVector* vecO
 			bone_id = 34;
 		}
 
-		// CPed::GetBonePosition
-		((void (*)(CPedGta*, CVector*, int, bool))(g_libGTASA + 0x00436590 + 1))(m_pPed, vecBone, bone_id, false);
+		m_pPed->GetBonePosition(vecBone, bone_id, false);
 
 		vecBone->z += pFireOffset->z + 0.15f;
 
@@ -1533,15 +1532,6 @@ void CPlayerPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta
 //	animFlagLoop = bLoop;
 
 	ScriptCommand(&apply_animation, m_dwGTAId, szAnimName, szAnimFile, fDelta, bLoop, bLockX, bLockY, bFreeze, uiTime);
-}
-
-// 0.3.7
-void CPlayerPed::GetBonePosition(int iBoneID, CVector* vecOut)
-{
-	if(!m_pPed) return;
-	if(m_pEntity->vtable == g_libGTASA+0x5C7358) return;
-
-	(( void (*)(CPedGta*, CVector*, int, int))(g_libGTASA + 0x436590 + 1))(m_pPed, vecOut, iBoneID, 0);
 }
 
 CEntityGta* CPlayerPed::GetEntityUnderPlayer()

@@ -105,8 +105,7 @@ public:
 	void SetRotation(float fRotation);
 	// 0.3.7
 	void ApplyAnimation( char *szAnimName, char *szAnimFile, float fT, bool opt1, bool opt2, bool opt3, bool opt4, int iUnk );
-	// 0.3.7
-	void GetBonePosition(int iBoneID, CVector* vecOut);
+
 	// roflan
 	//BYTE FindDeathReasonAndResponsiblePlayer(PLAYERID *nPlayer);
 	PLAYERID FindDeathResponsiblePlayer();

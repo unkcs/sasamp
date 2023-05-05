@@ -30,7 +30,7 @@ void CFirstPersonCamera::ProcessCameraOnFoot(uintptr_t pCam, CPlayerPed* pPed)
 
 	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
-		pPed->GetBonePosition(4, &vecOut);
+		pPed->m_pPed->GetBonePosition(&vecOut, 4, false);
 	}
 	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
@@ -86,7 +86,7 @@ void CFirstPersonCamera::ProcessCameraInVeh(uintptr_t pCam, CPlayerPed* pPed, CV
 
 	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{
-		pPed->GetBonePosition(4, &vecOut);
+		pPed->m_pPed->GetBonePosition(&vecOut, 4, false);
 	}
 	if (vecOut.x != vecOut.x || vecOut.y != vecOut.y || vecOut.z != vecOut.z)
 	{

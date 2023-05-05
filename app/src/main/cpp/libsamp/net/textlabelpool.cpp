@@ -84,13 +84,11 @@ void CText3DLabelsPool::DrawAttachedToPlayer(TEXT_LABELS* pLabel)
 		return;
 	}
 	CVector boneOut;
-	pPlayerPed->GetBonePosition(5, &boneOut);
+	pPlayerPed->m_pPed->GetBonePosition(&boneOut, 5, false);
 
 	memcpy((void*)&pos, (const void*)&boneOut, sizeof(CVector));
 
-	pos.x += pLabel->offsetCoords.x;
-	pos.y += pLabel->offsetCoords.y;
-	pos.z += pLabel->offsetCoords.z;
+	pos += pLabel->offsetCoords;
 
    // CPlayerPed* pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed();
     float fDist = pPlayerPed->GetDistanceFromCamera();
@@ -141,9 +139,7 @@ void CText3DLabelsPool::DrawAttachedToVehicle(TEXT_LABELS* pLabel)
 
 	memcpy((void*)& pos, (const void*)& mat.pos, sizeof(CVector));
 
-	pos.x += pLabel->offsetCoords.x;
-	pos.y += pLabel->offsetCoords.y;
-	pos.z += pLabel->offsetCoords.z;
+	pos += pLabel->offsetCoords;
 
 	DrawTextLabel(pLabel, &pos);
 }
@@ -405,7 +401,7 @@ void CText3DLabelsPool::AttachToPlayer(int labelID, PLAYERID playerID, CVector p
 	{
 		return;
 	}
-	if (m_bSlotState[labelID] == true && m_pTextLabels[labelID])
+	if (m_bSlotState[labelID] && m_pTextLabels[labelID])
 	{
 		//tempPlayerID = playerID;
 		m_pTextLabels[labelID]->attachedToPlayerID = playerID;
@@ -420,7 +416,7 @@ void CText3DLabelsPool::AttachToVehicle(int labelID, VEHICLEID vehicleID, CVecto
 	{
 		return;
 	}
-	if (m_bSlotState[labelID] == true && m_pTextLabels[labelID])
+	if (m_bSlotState[labelID] && m_pTextLabels[labelID])
 	{
 		m_pTextLabels[labelID]->attachedToVehicleID = vehicleID;
 		m_pTextLabels[labelID]->pos = pos;

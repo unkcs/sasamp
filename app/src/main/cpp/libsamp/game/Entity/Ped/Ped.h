@@ -263,7 +263,12 @@ struct CPedGta : CPhysical {
     int16           StreamedScriptBrainToLoad;
     uint16          pad11;
     uint32          LastTalkSfx;
+
+public:
+    void GetBonePosition(RwV3d *posn, uint32 boneTag, bool bCalledFromCamera);
 };
+
+
 #pragma pack(pop)
 
 VALIDATE_SIZE(CPedGta, 0x7A4-4); // -4 2.10

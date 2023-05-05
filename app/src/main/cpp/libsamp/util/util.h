@@ -41,6 +41,8 @@ public:
     static float GetDistanceBetween3DPoints(const RwV3d f, const RwV3d s);
 
     static OSDeviceForm OS_SystemForm();
+
+    static void TransformPoint(RwV3d &result, const CSimpleTransform &t, const RwV3d &v);
 };
 
 void cp1251_to_utf8(char *out, const char *in, unsigned int len = 0);

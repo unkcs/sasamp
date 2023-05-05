@@ -157,10 +157,10 @@ struct CVehicleGta : CPhysical
     unsigned char  m_nNumGettingIn;
     unsigned char  m_nGettingInFlags;
     unsigned char  m_nGettingOutFlags;
-    unsigned char  m_nMaxPassengers;
-    unsigned char  m_nWindowsOpenFlags; // initialised, but not used?
-    unsigned char  m_nNitroBoosts;
-    unsigned char  m_nSpecialColModel;
+    uint8             m_nMaxPassengers;
+    uint8             m_nWindowsOpenFlags; // initialised, but not used?
+    uint8             m_nNitroBoosts;
+    int8              m_vehicleSpecialColIndex;
     int32_t m_pEntityWeAreOn;
     int32_t m_pFire;
     float  m_fSteerAngle;
@@ -252,9 +252,13 @@ struct CVehicleGta : CPhysical
     RwTexture *m_pRemapTexture;
 
 public:
+    static inline auto m_aSpecialColModel = std::array<CColModel, 4>();
+
+public:
     static void InjectHooks();
 
     void SetDriver(CPedGta* driver);
+    void ApplyTurnForceToOccupantOnEntry(CPedGta* passenger);
 };
 #pragma pack(pop)
 

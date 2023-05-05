@@ -1,6 +1,7 @@
 
 #include "CollisionData.h"
 #include "game/MemoryMgr.h"
+#include "Collision.h"
 
 void CCollisionData::InjectHooks() {
 //    RH_ScopedClass(CCollisionData);
@@ -53,7 +54,7 @@ void CCollisionData::RemoveCollisionVolumes() {
     CMemoryMgr::Free(m_pShadowTriangles);
     CMemoryMgr::Free(m_pShadowVertices);
 
-  //  CCollision::RemoveTrianglePlanes(this);
+    CCollision::RemoveTrianglePlanes(this);
 
     m_nNumSpheres = 0;
     m_nNumLines = 0;

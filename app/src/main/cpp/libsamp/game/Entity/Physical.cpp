@@ -28,6 +28,23 @@ void CPhysical::ApplyTurnSpeed()
     }
 }
 
+void CPhysical::ApplyTurnForce(CVector force, CVector point)
+{
+    if (!physicalFlags.bDisableTurnForce)
+    {
+        CVector vecCentreOfMassMultiplied{};
+        if (!physicalFlags.bInfiniteMass)
+            vecCentreOfMassMultiplied = Multiply3x3(GetMatrix(), m_vecCentreOfMass);
+
+        if (physicalFlags.bDisableMoveForce) {
+            point.z = 0.0f;
+            force.z = 0.0f;
+        }
+        CVector vecDifference = point - vecCentreOfMassMultiplied;
+        m_vecTurnSpeed += CrossProduct(vecDifference, force) / m_fTurnMass;
+    }
+}
+
 void CPhysical::ApplyMoveSpeed()
 {
     if (physicalFlags.bDontApplySpeed || physicalFlags.bDisableMoveForce)

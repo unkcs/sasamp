@@ -3,6 +3,7 @@
 #include "main.h"
 #include "game/MemoryMgr.h"
 #include "util/patch.h"
+#include "Collision.h"
 
 //#define COL_EXTRA_DEBUG
 
@@ -25,6 +26,24 @@ CColModel::~CColModel() {
         return;
     }
     RemoveCollisionVolumes();
+}
+
+void CColModel::RemoveCollisionVolumes() {
+    if (!m_pColData) {
+        return;
+    }
+
+ //   Log("Removing: % [ColSlot: {}]", LOG_PTR(this), m_nColSlot);
+
+    if (m_bIsSingleColDataAlloc) {
+        CCollision::RemoveTrianglePlanes(m_pColData);
+        CMemoryMgr::Free(m_pColData);
+    } else {
+        m_pColData->RemoveCollisionVolumes();
+        delete m_pColData;
+    }
+
+    m_pColData = nullptr;
 }
 
 // 0x40F7C0

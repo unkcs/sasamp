@@ -13,6 +13,7 @@
 #include "game/Enums/eSurfaceType.h"
 #include "game/quaternion.h"
 #include "game/Enums/eAreaCodes.h"
+#include "game/Collision/ColModel.h"
 
 #pragma pack(push, 1)
 class CEntityGta : public CPlaceable
@@ -102,7 +103,14 @@ public:
     void RegisterReference(CEntityGta** entity);
     bool LivesInThisNonOverlapSector(int32 sectorX, int32 sectorY);
     void CleanUpOldReference(CEntityGta** entity); // See helper SafeCleanUpOldReference
-
+    // is entity touching entity
+    bool GetIsTouching(CEntityGta* entity);
+    CVector* GetBoundCentre(CVector* pOutCentre);
+    void GetBoundCentre(CVector& outCentre);
+    CVector GetBoundCentre();
+    CColModel* GetColModel() const;
+    CVector TransformFromObjectSpace(const CVector& offset);
+    CVector* TransformFromObjectSpace(CVector& outPos, const CVector& offset);
 
     // Wrapper around the mess called `CleanUpOldReference`
     // Takes in `ref` (which is usually a member variable),

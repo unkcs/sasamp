@@ -9,9 +9,28 @@
 void CVehicleGta::SetDriver(CPedGta* driver) {
     CEntityGta::ChangeEntityReference(pDriver, driver);
 
-  //  ApplyTurnForceToOccupantOnEntry(driver);
+    ApplyTurnForceToOccupantOnEntry(driver);
 }
 
+void CVehicleGta::ApplyTurnForceToOccupantOnEntry(CPedGta* passenger) {
+    // Apply some turn force
+    switch (m_nVehicleType) {
+        case VEHICLE_TYPE_BIKE: {
+            ApplyTurnForce(
+                    GetUp() * passenger->m_fMass / -50.f,
+                    GetForward() / -10.f // Behind the bike
+            );
+            break;
+        }
+        default: {
+            ApplyTurnForce(
+                    CVector{ .0f, .0f, passenger->m_fMass / -5.f },
+                    CVector{ CVector2D{passenger->GetPosition() - GetPosition()}, 0.f }
+            );
+            break;
+        }
+    }
+}
 
 // ----------------------------------- hooks
 
@@ -21,5 +40,8 @@ void SetDriver_hook(CVehicleGta *thiz, CPedGta *pPed)
 }
 
 void CVehicleGta::InjectHooks() {
+    // var
+    CHook::Write(g_libGTASA + 0x005CDBF4, &CVehicleGta::m_aSpecialColModel);
+
     CHook::Redirect(g_libGTASA, 0x0050FECC, &SetDriver_hook);
 }

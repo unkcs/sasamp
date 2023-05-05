@@ -17,6 +17,20 @@ OSDeviceForm CUtil::OS_SystemForm()
 	return CHook::CallFunction<OSDeviceForm>(g_libGTASA + 0x0023827C + 1);
 }
 
+void __fastcall CUtil::TransformPoint(RwV3d &result, const CSimpleTransform &t, const RwV3d &v)
+{
+	float m_heading; // r4
+	float v7; // r9
+	float v8; // r0
+
+	m_heading = t.m_fHeading;
+	v7 = cosf(m_heading);
+	v8 = sinf(m_heading);
+	result.x = t.m_vPosn.x + ((v7 * v.x) - (v8 * v.y));
+	result.y = t.m_vPosn.y + ((v8 * v.x) + (v7 * v.y));
+	result.z = v.z + t.m_vPosn.z;
+}
+
 bool CUtil::IsValidGamePed(CPedGta * pPed)
 {
 	// IsPedPointerValid(CPed *) — 0x00435614

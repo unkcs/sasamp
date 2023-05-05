@@ -5,6 +5,7 @@
 
 #include "rgba.h"
 #include "tHandlingData.h"
+#include "SimpleTransform.h"
 
 #define MAX_PLAYERS		1004
 #define MAX_VEHICLES	2000
@@ -402,3 +403,23 @@ typedef struct _BULLET_DATA {
 #define WEAPON_MODEL_PARACHUTE			371
 
 #pragma pack(pop)
+
+template<typename T>
+auto lerp(const T& from, const T& to, float t) {
+	return to * t + from * (1.f - t);
+}
+
+inline const float invLerp(float fMin, float fMax, float fVal) {
+	return (fVal - fMin) / (fMax - fMin);
+}
+
+// 0x4EEA80 - And inlined helluvalot
+inline bool approxEqual(float f1, float f2, float epsilon) {
+	return fabs(f1 - f2) < epsilon;
+}
+
+// Used in some audio functions, mostly CAESmoothFadeThread
+inline bool approxEqual2(float f1, float f2, float epsilon = 0.01F)
+{
+	return f1 == f2 || fabs(f1 - f2) < epsilon;
+}

@@ -17,7 +17,7 @@ struct CPhysical : public CEntityGta {
             uint32_t bDoGravity: 1;
             uint32_t bInfiniteMass: 1;
             uint32_t bInfiniteMassFixed: 1;
-            uint32_t bPedPhysics: 1;
+            uint32_t bDisableTurnForce: 1;
             uint32_t bDisableMoveForce: 1;
             uint32_t bHangingPhysics: 1;
             uint32_t bPoolBallPhysics: 1;

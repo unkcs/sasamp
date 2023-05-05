@@ -27,6 +27,70 @@ void CEntityGta::UpdateRpHAnim() {
     }
 }
 
+CColModel* CEntityGta::GetColModel() const {
+    if (IsVehicle()) {
+        const auto veh = static_cast<const CVehicleGta*>(this);
+        if (veh->m_vehicleSpecialColIndex > -1) {
+            return &CVehicleGta::m_aSpecialColModel[veh->m_vehicleSpecialColIndex];
+        }
+    }
+
+    return CModelInfo::GetModelInfo(m_nModelIndex)->GetColModel();
+}
+
+CVector CEntityGta::TransformFromObjectSpace(const CVector& offset)
+{
+    auto result = CVector();
+    if (m_matrix) {
+        result = *m_matrix * offset;
+        return result;
+    }
+
+    CUtil::TransformPoint(result, m_placement, offset);
+    return result;
+}
+
+// 0x533560
+CVector* CEntityGta::TransformFromObjectSpace(CVector& outPos, const CVector& offset)
+{
+    auto result = TransformFromObjectSpace(offset);
+    outPos = result;
+    return &outPos;
+}
+
+CVector* CEntityGta::GetBoundCentre(CVector* pOutCentre)
+{
+    auto mi = CModelInfo::GetModelInfo(m_nModelIndex);
+    const auto& colCenter = mi->GetColModel()->GetBoundCenter();
+    return TransformFromObjectSpace(*pOutCentre, colCenter);
+}
+
+// 0x534290
+void CEntityGta::GetBoundCentre(CVector& outCentre) {
+    TransformFromObjectSpace(outCentre, GetColModel()->GetBoundCenter());
+}
+
+CVector CEntityGta::GetBoundCentre()
+{
+    CVector v;
+    GetBoundCentre(v);
+    return v;
+}
+
+bool CEntityGta::GetIsTouching(CEntityGta* entity)
+{
+    CVector thisVec;
+    GetBoundCentre(thisVec);
+
+    CVector otherVec;
+    entity->GetBoundCentre(otherVec);
+
+    auto fThisRadius = CModelInfo::GetModelInfo(m_nModelIndex)->GetColModel()->GetBoundRadius();
+    auto fOtherRadius = CModelInfo::GetModelInfo(entity->m_nModelIndex)->GetColModel()->GetBoundRadius();
+
+    return (thisVec - otherVec).Magnitude() <= (fThisRadius + fOtherRadius);
+}
+
 void CEntityGta::RegisterReference(CEntityGta** entity)
 {
     if (IsBuilding() && !m_bIsTempBuilding && !m_bIsProcObject && !m_nIplIndex)

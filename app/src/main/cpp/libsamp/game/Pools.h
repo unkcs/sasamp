@@ -11,21 +11,21 @@
 #include "game/Entity/Object.h"
 #include "game/Core/PtrNodeSingleLink.h"
 #include "game/Core/PtrNodeDoubleLink.h"
-
-void CPools_Initialise_hook();
+#include "game/Tasks/Task.h"
 
 class CPools {
 public:
     static inline CPool<CPtrNodeSingleLink>*        ms_pPtrNodeSingleLinkPool;
     static inline CPool<CPtrNodeDoubleLink>*        ms_pPtrNodeDoubleLinkPool;
+    static inline CPool<CPedGta>*                   ms_pPedPool;
+    static inline CPool<CVehicleGta>*               ms_pVehiclePool;
+    static inline CPool<CObjectGta>*                ms_pObjectPool;
+    static inline CPool<CTask>*                     ms_pTaskPool;
+
     static PoolAllocator::Pool*         ms_pEntryInfoNodePool;
-    static inline CPool<CPedGta>*       ms_pPedPool;
-    static inline CPool<CVehicleGta>*   ms_pVehiclePool;
     static PoolAllocator::Pool*         ms_pBuildingPool;
-    static inline CPool<CObjectGta>*    ms_pObjectPool;
     static PoolAllocator::Pool*         ms_pDummyPool;
     static PoolAllocator::Pool*         ms_pColModelPool;
-    static PoolAllocator::Pool*         ms_pTaskPool;
     static PoolAllocator::Pool*         ms_pEventPool;
     static PoolAllocator::Pool*         ms_pPointRoutePool;
     static PoolAllocator::Pool*         ms_pPatrolRoutePool;
@@ -46,7 +46,7 @@ static auto& GetBuildingPoolGta()          { return CPools::ms_pBuildingPool; }
 static auto& GetObjectPoolGta()           { return CPools::ms_pObjectPool; }
 static auto& GetDummyPoolGta()             { return CPools::ms_pDummyPool; }
 static auto& GetColModelPoolGta()          { return CPools::ms_pColModelPool; }
-static auto& GetTaskPoolGta()              { return CPools::ms_pTaskPool; }
+static auto& GetTaskPool()                    { return CPools::ms_pTaskPool; }
 static auto& GetPedIntelligencePoolGta()   { return CPools::ms_pPedIntelligencePool; }
 static auto& GetPtrNodeSingleLinkPool()          { return CPools::ms_pPtrNodeSingleLinkPool; }
 static auto& GetPtrNodeDoubleLinkPool()          { return CPools::ms_pPtrNodeDoubleLinkPool; }

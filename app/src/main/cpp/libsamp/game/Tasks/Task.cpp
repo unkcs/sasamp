@@ -7,15 +7,16 @@
 
 #include "Task.h"
 #include "game/Pools.h"
+#include "util/patch.h"
 
 // 0x61A5A0
 void* CTask::operator new(size_t size) {
-   // return GetTaskPoolGta()->New();
+    return GetTaskPool()->New();
 }
 
 // 0x61A5B0
 void CTask::operator delete(void* object) {
-   // GetTaskPoolGta()->Delete(static_cast<CTask*>(object));
+    GetTaskPool()->Delete(static_cast<CTask*>(object));
 }
 
 // 0x421180
@@ -36,5 +37,6 @@ bool CTask::IsGoToTask(CTask* task) {
 
 // 0x61A4B0
 bool CTask::IsTaskPtr(CTask* task) {
+    return CHook::CallFunction<bool>(g_libGTASA + 0x00465FC0 + 1, task);
    // return plugin::CallAndReturn<bool, 0x61A4B0>(task);
 }

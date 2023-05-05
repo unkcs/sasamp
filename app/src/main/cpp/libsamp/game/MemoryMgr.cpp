@@ -5,10 +5,15 @@
 #include <cstdlib>
 #include "MemoryMgr.h"
 #include "common.h"
+#include "util/patch.h"
 
 void CMemoryMgr::Free(void* memory) {
 
     return free(memory);
+}
+
+void* CMemoryMgr::MoveMemory(void* memory) {
+    return CHook::CallFunction<void*>(g_libGTASA + 0x0055AE10 + 1, memory);
 }
 
 void* CMemoryMgr::Malloc(uint32 size, uint32 nHint) {
@@ -41,6 +46,29 @@ void* CMemoryMgr::Malloc(uint32 size, uint32 nHint) {
 
 void* CMemoryMgr::Malloc(uint32 size) {
     void* memory = Malloc(size, 0);
+#if defined MEMORY_MGR_USE_HEAP_FLAGS
+    GET_HEAP_DESC(memory)->m_Flags.NoDebugHint = true;
+#endif
+    return memory;
+}
+
+void CMemoryMgr::FreeAlign(void* memory) {
+   // return plugin::Call<0x72F4F0, void*>(memory);
+    Free(*((void**)memory - 1));
+}
+
+uint8* CMemoryMgr::MallocAlign(uint32 size, uint32 align, uint32 nHint) {
+    auto* memory = Malloc(size + align, nHint);
+
+    auto* result = (void*)(uint32((uint8*)memory + align) & ~(align - 1));
+    *((void**)result - 1) = memory;
+    return static_cast<uint8*>(result);
+}
+
+void* CMemoryMgr::MallocAlign(uint32 size, uint32 align) {
+  //  return plugin::CallAndReturn<void*, 0x72F4C0, uint32, uint32>(size, align);
+
+    void* memory = MallocAlign(size, align, 0);
 #if defined MEMORY_MGR_USE_HEAP_FLAGS
     GET_HEAP_DESC(memory)->m_Flags.NoDebugHint = true;
 #endif

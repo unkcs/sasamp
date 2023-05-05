@@ -14,6 +14,14 @@ public:
     static void Free(void *memory);
 
     static void *Malloc(unsigned int size);
+
+    static void FreeAlign(void *memory);
+
+    static unsigned char *MallocAlign(unsigned int size, unsigned int align, unsigned int nHint);
+
+    static void *MallocAlign(unsigned int size, unsigned int align);
+
+    static void *MoveMemory(void *memory);
 };
 
 

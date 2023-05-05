@@ -6,6 +6,8 @@
 
 #include "game/Enums/eSurfaceType.h"
 #include "Entity.h"
+#include "game/Core/PtrNodeDoubleLink.h"
+#include "game/Core/EntryInfoList.h"
 
 #pragma pack(push, 1)
 struct CPhysical : public CEntityGta {
@@ -13,14 +15,14 @@ struct CPhysical : public CEntityGta {
     uint32_t    m_LastCollisionTime;
     union {
         struct {
-            uint32_t bExtraHeavy: 1;
+            uint32_t bMakeMassTwiceAsBig: 1;
             uint32_t bDoGravity: 1;
             uint32_t bInfiniteMass: 1;
             uint32_t bInfiniteMassFixed: 1;
             uint32_t bDisableTurnForce: 1;
             uint32_t bDisableMoveForce: 1;
             uint32_t bHangingPhysics: 1;
-            uint32_t bPoolBallPhysics: 1;
+            uint32_t bDisableZ: 1;
 
             uint32_t bIsInWater: 1;
             uint32_t bCollidedThisFrame: 1;
@@ -53,8 +55,8 @@ struct CPhysical : public CEntityGta {
     };
     CVector         m_vecMoveSpeed;
     CVector         m_vecTurnSpeed;
-    CVector         m_vecMoveFriction;
-    CVector         m_vecTurnFriction;
+    CVector         m_vecFrictionMoveSpeed;
+    CVector         m_vecFrictionTurnSpeed;
     CVector         m_vecAverageMoveSpeed;
     CVector         m_vecAverageTurnSpeed;
     float           m_fMass;
@@ -64,9 +66,9 @@ struct CPhysical : public CEntityGta {
     float           m_fElasticity;
     float           m_fBuoyancyConstant;
     CVector         m_vecCentreOfMass;
-    uint8_t         m_pCollisionList[4];
+    CEntryInfoList  m_pCollisionList;
 
-    uint32_t        m_pMovingList;
+    CPtrNodeDoubleLink *m_pMovingList;
 
     uint8_t         m_nFakePhysics;
     uint8_t         m_nNumEntitiesCollided;
@@ -90,6 +92,21 @@ struct CPhysical : public CEntityGta {
     uintptr_t      *m_pRealTimeShadow;
 
 public:
+    static inline float DAMPING_LIMIT_IN_FRAME = 0.25;
+    static inline float DAMPING_LIMIT_OF_SPRING_FORCE = 0.999;
+    static inline float PHYSICAL_SHIFT_SPEED_DAMP = 0.707;
+    static inline float SOFTCOL_SPEED_MULT = 0.95;
+    static inline float SOFTCOL_SPEED_MULT2 = 1.05;
+    static inline float SOFTCOL_DEPTH_MIN = 0.5;
+    static inline float SOFTCOL_DEPTH_MULT = 2.0;
+    static inline float SOFTCOL_CARLINE_SPEED_MULT = 0.4;
+    static inline float TEST_ADD_AMBIENT_LIGHT_FRAC = 0.5;
+    static inline float HIGHSPEED_ELASTICITY_MULT_COPCAR = 2.0;
+  //  static CVector& fxDirection;
+
+public:
+    static void InjectHooks();
+
     void RemoveAndAdd();
     void AddToMovingList();
 
@@ -99,6 +116,9 @@ public:
     void ApplyMoveForce(CVector force);
     void ApplyTurnForce(CVector force, CVector point);
     void ApplyForce(CVector vecMoveSpeed, CVector point, bool bUpdateTurnSpeed);
+    bool ApplySpringDampening(float fDampingForce, float fSpringForceDampingLimit, CVector& direction, CVector& collisionPoint, CVector& collisionPos);
+    bool ApplySpringDampeningOld(float arg0, float arg1, CVector& arg2, CVector& arg3, CVector& arg4);
+    bool ApplySpringCollisionAlt(float fSuspensionForceLevel, CVector& direction, CVector& collisionPoint, float fSpringLength, float fSuspensionBias, CVector& normal, float& fSpringForceDampingLimit);
 
     CVector GetSpeed( CVector point);
     void ApplyMoveSpeed();
@@ -106,10 +126,18 @@ public:
 
     CVector& GetMoveSpeed()                 { return m_vecMoveSpeed; }
     void     SetVelocity(CVector velocity)  { m_vecMoveSpeed = velocity; } // 0x441130
-    void     ResetMoveSpeed()               { SetVelocity(CVector{}); }
 
     CVector& GetTurnSpeed() { return m_vecTurnSpeed; }
-    void ResetTurnSpeed()   { m_vecTurnSpeed = CVector(); }
+
+    void ResetMoveSpeed() { SetVelocity(CVector{}); }
+    void ResetTurnSpeed() { m_vecTurnSpeed = CVector(); }
+    void ResetFrictionMoveSpeed() { m_vecFrictionMoveSpeed = CVector(); }
+    void ResetFrictionTurnSpeed() { m_vecFrictionTurnSpeed = CVector(); }
+
+    float GetMass(const CVector& pos, const CVector& dir) {
+        return 1.0f / (CrossProduct(pos, dir).SquaredMagnitude() / m_fTurnMass +
+                       1.0f / m_fMass);
+    }
 };
 #pragma pack(pop)
 

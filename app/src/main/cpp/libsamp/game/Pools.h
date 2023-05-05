@@ -12,6 +12,7 @@
 #include "game/Core/PtrNodeSingleLink.h"
 #include "game/Core/PtrNodeDoubleLink.h"
 #include "game/Tasks/Task.h"
+#include "game/Core/EntryInfoNode.h"
 
 class CPools {
 public:
@@ -21,8 +22,8 @@ public:
     static inline CPool<CVehicleGta>*               ms_pVehiclePool;
     static inline CPool<CObjectGta>*                ms_pObjectPool;
     static inline CPool<CTask>*                     ms_pTaskPool;
+    static inline CPool<CEntryInfoNode>*            ms_pEntryInfoNodePool;
 
-    static PoolAllocator::Pool*         ms_pEntryInfoNodePool;
     static PoolAllocator::Pool*         ms_pBuildingPool;
     static PoolAllocator::Pool*         ms_pDummyPool;
     static PoolAllocator::Pool*         ms_pColModelPool;

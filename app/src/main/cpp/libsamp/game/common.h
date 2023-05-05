@@ -404,6 +404,12 @@ typedef struct _BULLET_DATA {
 
 #pragma pack(pop)
 
+template <typename T>
+T clamp(T value, T low, T high)
+{
+	return std::min(std::max(value, low), high);
+}
+
 template<typename T>
 auto lerp(const T& from, const T& to, float t) {
 	return to * t + from * (1.f - t);

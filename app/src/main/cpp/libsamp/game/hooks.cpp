@@ -865,6 +865,7 @@ void InjectHooks()
 	CIdleCam::InjectHooks();
 	CTouchInterface::InjectHooks();
 	CEntityGta::InjectHooks();
+	CPhysical::InjectHooks();
 }
 
 void InstallSpecialHooks()

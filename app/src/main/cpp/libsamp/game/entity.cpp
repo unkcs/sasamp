@@ -76,14 +76,6 @@ bool CEntity::GetCollisionChecking()
 	return m_pEntity->m_bCollisionProcessed;
 }
 
-void CEntity::SetCollisionChecking(bool bCheck)
-{
-	if(!m_pEntity || CUtil::IsGameEntityArePlaceable(m_pEntity))
-		return;
-
-	m_pEntity->m_bCollisionProcessed = bCheck;
-}
-
 void CEntity::Render()
 {
 	auto pRwObject = m_pEntity->m_pRwObject;

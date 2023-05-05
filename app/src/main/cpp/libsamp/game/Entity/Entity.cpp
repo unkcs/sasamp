@@ -58,6 +58,11 @@ CVector* CEntityGta::TransformFromObjectSpace(CVector& outPos, const CVector& of
     return &outPos;
 }
 
+void CEntityGta::SetCollisionChecking(bool bCheck)
+{
+    m_bCollisionProcessed = bCheck;
+}
+
 CVector* CEntityGta::GetBoundCentre(CVector* pOutCentre)
 {
     auto mi = CModelInfo::GetModelInfo(m_nModelIndex);

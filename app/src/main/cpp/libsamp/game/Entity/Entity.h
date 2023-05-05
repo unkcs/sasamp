@@ -112,6 +112,8 @@ public:
     CVector TransformFromObjectSpace(const CVector& offset);
     CVector* TransformFromObjectSpace(CVector& outPos, const CVector& offset);
 
+    void SetCollisionChecking(bool bCheck);
+
     // Wrapper around the mess called `CleanUpOldReference`
     // Takes in `ref` (which is usually a member variable),
     // calls `CleanUpOldReference` on it, then sets it to `nullptr`

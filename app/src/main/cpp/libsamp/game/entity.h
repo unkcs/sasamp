@@ -12,7 +12,6 @@ public:
 	//virtual void Remove();
 	void Render();
 	void UpdateMatrix(RwMatrix mat);
-	void SetCollisionChecking(bool bCheck);
 	void SetGravityProcessing(bool bProcess);
 	void UpdateRwMatrixAndFrame();
 

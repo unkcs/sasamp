@@ -163,7 +163,7 @@ RwTexture* CCustomPlateManager::createUaPlate(char* szNumber, char* szRegion)
 
 	CSprite2d* pText = new CSprite2d();
 
-	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+	pText->m_pRwTexture = RwTextureCreate(pTextRaster); // RwTextureCreate
 
 	CRGBA white {255, 255, 255, 255};
 
@@ -199,7 +199,7 @@ RwTexture* CCustomPlateManager::createBuPlate(char* szNumber, char* szRegion)
 
 	auto pText = new CSprite2d();
 
-	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
+	pText->m_pRwTexture = RwTextureCreate(pTextRaster); // RwTextureCreate
 
 	CRGBA white {255, 255, 255, 255};
 
@@ -255,8 +255,8 @@ RwTexture* CCustomPlateManager::createKzPlate(char* szNumber, char* szRegion)
 	CSprite2d* pText = new CSprite2d();
 	CSprite2d* pRegion = new CSprite2d();
 
-	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
-	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
+	pText->m_pRwTexture = RwTextureCreate(pTextRaster); // RwTextureCreate
+	pRegion->m_pRwTexture = RwTextureCreate(pRegionRaster); // RwTextureCreate
 
 	CRGBA white {255, 255, 255, 255};
 
@@ -305,8 +305,8 @@ RwTexture* CCustomPlateManager::createRuPolicePlate(char* szNumber, char* szRegi
 	auto pRegion = new CSprite2d();
 
 
-	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
-	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
+	pText->m_pRwTexture = RwTextureCreate(pTextRaster); // RwTextureCreate
+	pRegion->m_pRwTexture = RwTextureCreate(pRegionRaster); // RwTextureCreate
 
 	CRGBA white {255, 255, 255, 255};
 
@@ -363,8 +363,8 @@ RwTexture* CCustomPlateManager::createRuPlate(char* szNumber, char* szRegion)
 	CSprite2d* pText = new CSprite2d();
 	CSprite2d* pRegion = new CSprite2d();
 
-	pText->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pTextRaster); // RwTextureCreate
-	pRegion->m_pRwTexture = ((struct RwTexture* (*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRegionRaster); // RwTextureCreate
+	pText->m_pRwTexture = RwTextureCreate(pTextRaster); // RwTextureCreate
+	pRegion->m_pRwTexture = RwTextureCreate(pRegionRaster); // RwTextureCreate
 
 	CRGBA white {255, 255, 255, 255};
 

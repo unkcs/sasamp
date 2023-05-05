@@ -15,14 +15,45 @@ extern uintptr_t g_libGTASA;
 #define RpMaterialGetColorMacro(_material)                          \
     (&((_material)->color))
 
-
-
-
 #define RpAtomicGetGeometry(_atomic) \
     RpAtomicGetGeometryMacro(_atomic)
 
 #define RpMaterialGetColor(_material)                               \
     RpMaterialGetColorMacro(_material)
+
+#define RpMaterialSetColorMacro(_material, _color)                  \
+    (RwRGBAAssign(&((_material)->color), (_color)), (_material))
+
+#define RpMaterialGetColorMacro(_material)                          \
+    (&((_material)->color))
+
+#define RpMaterialSetSurfacePropertiesMacro(_material, _surfProps)  \
+    (RwSurfacePropertiesAssign(&((_material)->surfaceProps),        \
+                               (_surfProps)), (_material))
+
+#define RpMaterialGetSurfacePropertiesMacro(_material)              \
+    (&((_material)->surfaceProps))
+
+#define RpMaterialGetTextureMacro(_material)                        \
+    ((_material)->texture)
+
+#define RpMaterialAddRef(_material)                                 \
+    RpMaterialAddRefMacro(_material)
+
+#define RpMaterialSetColor(_material, _color)                       \
+    RpMaterialSetColorMacro(_material, _color)
+
+#define RpMaterialGetColor(_material)                               \
+    RpMaterialGetColorMacro(_material)
+
+#define RpMaterialSetSurfaceProperties(_material, _surfProps)       \
+    RpMaterialSetSurfacePropertiesMacro(_material, _surfProps)
+
+#define RpMaterialGetSurfaceProperties(_material)                   \
+    RpMaterialGetSurfacePropertiesMacro(_material)
+
+#define RpMaterialGetTexture(_material)                             \
+    RpMaterialGetTextureMacro(_material)
 
 /**
  * \ingroup rpclump

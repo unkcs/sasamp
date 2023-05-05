@@ -1270,12 +1270,6 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 
 				return mat;
 			}
-//			if (!strcmp(m_matrix->texture->name, "remap_cbody_0"))
-//			{
-//
-//
-//				return m_matrix;
-//			}
 		}
 
 		if ( color == 0xff00ff3c )
@@ -1332,7 +1326,6 @@ void CVehicleModelInfo__SetEditableMaterials_hook(RpClump* clump)
 			}
 		}
 	}
-
 	CVehicleModelInfo__SetEditableMaterials(clump);
 }
 

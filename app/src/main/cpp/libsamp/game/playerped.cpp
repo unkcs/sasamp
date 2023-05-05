@@ -1493,13 +1493,6 @@ void CPlayerPed::HideMarker()
 	m_dwArrow = 0;
 }
 
-// 0.3.7
-
-void CPlayerPed::ClearLook()
-{
-	CHook::CallFunction<bool>(g_libGTASA + 0x0043388C + 1, m_pPed);
-}
-
 void CPlayerPed::SetFightingStyle(int iStyle)
 {
 	
@@ -1533,42 +1526,31 @@ void CPlayerPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta
 
 	ScriptCommand(&apply_animation, m_dwGTAId, szAnimName, szAnimFile, fDelta, bLoop, bLockX, bLockY, bFreeze, uiTime);
 }
-
-CEntityGta* CPlayerPed::GetEntityUnderPlayer()
-{
-	uintptr_t entity;
-	CVector vecStart;
-	CVector vecEnd;
-	char buf[100];
-
-	if(!m_pPed) return nullptr;
-	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
-		return 0;
-
-	vecStart.x = m_pPed->m_matrix->m_pos.x;
-	vecStart.y = m_pPed->m_matrix->m_pos.y;
-	vecStart.z = m_pPed->m_matrix->m_pos.z - 0.25f;
-
-	vecEnd.x = m_pPed->m_matrix->m_pos.x;
-	vecEnd.y = m_pPed->m_matrix->m_pos.y;
-	vecEnd.z = vecStart.z - 1.75f;
-
-	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
-		0, 1, 0, 1, 0, 0, 0, 0);
-
-	return (CEntityGta*)entity;
-}
-void CPlayerPed::ClumpUpdateAnimations(float step, int flag)
-{
-	if (m_pPed)
-	{
-		auto pRwObj = m_pEntity->m_pRwObject;
-		if (pRwObj)
-		{
-			((void (*)(RwObject*, float, int))(g_libGTASA + 0x33D6E4 + 1))(pRwObj, step, flag);
-		}
-	}
-}
+//
+//CEntityGta* CPlayerPed::GetEntityUnderPlayer()
+//{
+//	uintptr_t entity;
+//	CVector vecStart;
+//	CVector vecEnd;
+//	char buf[100];
+//
+//	if(!m_pPed) return nullptr;
+//	if( m_pPed->bInVehicle || !GamePool_Ped_GetAt(m_dwGTAId))
+//		return 0;
+//
+//	vecStart.x = m_pPed->m_matrix->m_pos.x;
+//	vecStart.y = m_pPed->m_matrix->m_pos.y;
+//	vecStart.z = m_pPed->m_matrix->m_pos.z - 0.25f;
+//
+//	vecEnd.x = m_pPed->m_matrix->m_pos.x;
+//	vecEnd.y = m_pPed->m_matrix->m_pos.y;
+//	vecEnd.z = vecStart.z - 1.75f;
+//
+//	LineOfSight(&vecStart, &vecEnd, (void*)buf, (uintptr_t)&entity,
+//		0, 1, 0, 1, 0, 0, 0, 0);
+//
+//	return (CEntityGta*)entity;
+//}
 
 uint8_t CPlayerPed::GetExtendedKeys()
 {

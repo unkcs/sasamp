@@ -84,7 +84,7 @@ void CRenderTarget::PreProcessCamera()
 	struct RwRaster* pRaster = RwRasterCreate(m_dwResultSizeX, m_dwResultSizeY, 32, rwRASTERFORMAT8888 | rwRASTERTYPECAMERATEXTURE);
 
 	// RwTextureCreate
-	m_pResultTexture = ((struct RwTexture*(*)(struct RwRaster*))(g_libGTASA + 0x1B1B4C + 1))(pRaster);
+	m_pResultTexture = RwTextureCreate(pRaster);
 	*(RwRaster**)((uintptr_t)m_pCamera + 0x60) = pRaster;
 
 	// CVisibilityPlugins::SetRenderWareCamera

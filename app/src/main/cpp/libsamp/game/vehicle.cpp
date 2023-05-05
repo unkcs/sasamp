@@ -1370,6 +1370,7 @@ void CVehicle::SetBikeWheelStatus(uint8_t bWheel, uint8_t bTireStatus)
 	{
 		if (bWheel == 0)
 		{
+
 			*(uint8_t*)((uintptr_t)m_pVehicle + 1644) = bTireStatus;
 		}
 		else

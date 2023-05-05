@@ -443,3 +443,4 @@ struct RwObjectHasFrame
 
 
 RwFrame* RwFrameUpdateObjects(RwFrame* frame);
+RwTexture* RwTextureCreate(RwRaster* raster);

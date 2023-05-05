@@ -194,8 +194,8 @@ public class CacheChecker implements Listener<FileInfo[]> {
                 .concat(filePath)
         );
     //    !MD5.checkMD5(fileInfo.getHash(), file)
-//        return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
-        return !file.exists() || !isValidHash(filePath, fileInfo);
+        return !file.exists() || file.length() != fileInfo.getSize() || file.lastModified() < fileInfo.getVer();
+      //  return !file.exists() || !isValidHash(filePath, fileInfo);
     }
 
     private boolean isValidHash(String filePath, FileInfo fileInfo) {

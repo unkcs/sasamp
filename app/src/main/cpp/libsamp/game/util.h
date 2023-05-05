@@ -16,7 +16,6 @@ int LineOfSight(CVector* start, CVector* end, void* colpoint, uintptr_t ent,
 
 bool IsPedModel(unsigned int uiModel);
 bool IsValidModel(unsigned int uiModelID);
-uint16_t GetModelReferenceCount(int nModelIndex);
 
 void InitPlayerPedPtrRecords();
 void SetPlayerPedPtrRecord(uint8_t bytePlayer, uintptr_t dwPedPtr);

@@ -243,7 +243,12 @@ inline void PruneReferences_hook(CEntityGta* thiz) {
     thiz->PruneReferences();
 }
 
+inline void RegisterReference_hook(CEntityGta* thiz, CEntityGta** entity) {
+    thiz->RegisterReference(entity);
+}
+
 void CEntityGta::InjectHooks() {
+    CHook::Redirect(g_libGTASA + 0x003B0E6C, &RegisterReference_hook);
     CHook::Redirect(g_libGTASA + 0x003B0D8C, &CleanUpOldReference_hook);
     CHook::Redirect(g_libGTASA + 0x003B0DD8, &ResolveReferences_hook);
     CHook::Redirect(g_libGTASA + 0x003B0E28, &PruneReferences_hook);

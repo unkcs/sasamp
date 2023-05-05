@@ -2,6 +2,7 @@
 #include "../game/game.h"
 #include "netgame.h"
 #include "../gui/gui.h"
+#include "game/Models/ModelInfo.h"
 
 extern CGame *pGame;
 extern CNetGame *pNetGame;
@@ -1015,7 +1016,7 @@ void ScrCreateObject(RPCParameters* rpcParams)
 				while (!pGame->IsModelLoaded(modelId)) sleep(1);
 			}
 
-			if (!GetModelReferenceCount(modelId) && pGame->IsModelLoaded(modelId))
+			if (!CModelInfo::GetModelInfo(modelId)->m_nRefCount && pGame->IsModelLoaded(modelId))
 			{
 				ScriptCommand(&release_model, modelId);
 			}
@@ -1469,7 +1470,7 @@ void ScrSetPlayerObjectMaterial(RPCParameters* rpcParams)
 		while (!pGame->IsModelLoaded(modelId)) sleep(1);
 	}
 
-	if (!GetModelReferenceCount(modelId) && pGame->IsModelLoaded(modelId))
+	if (!CModelInfo::GetModelInfo(modelId)->m_nRefCount && pGame->IsModelLoaded(modelId))
 	{
 		ScriptCommand(&release_model, modelId);
 	}

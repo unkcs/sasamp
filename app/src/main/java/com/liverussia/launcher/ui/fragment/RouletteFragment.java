@@ -47,6 +47,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -81,10 +82,6 @@ public class RouletteFragment extends Fragment implements View.OnClickListener, 
 
     public RouletteFragment(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-    }
-
-    public RouletteFragment() {
-
     }
 
     @Override
@@ -355,9 +352,9 @@ public class RouletteFragment extends Fragment implements View.OnClickListener, 
         authenticatedUserRoulettePanel.setVisibility(View.VISIBLE);
         logoutButton.setVisibility(View.VISIBLE);
 
-        String username = Storage.getProperty(StorageElements.AUTHENTICATED_NICKNAME, this.getActivity());
-        String balance = Storage.getProperty(StorageElements.USER_BALANCE, this.getActivity());
-        String serverName = Storage.getProperty(StorageElements.AUTHENTICATED_SERVER, this.getActivity());
+        String username = Storage.getProperty(StorageElements.AUTHENTICATED_NICKNAME, this.requireActivity());
+        String balance = Storage.getProperty(StorageElements.USER_BALANCE, this.requireActivity());
+        String serverName = Storage.getProperty(StorageElements.AUTHENTICATED_SERVER, this.requireActivity());
 
         ServerInfo serverInfo = ServerInfo.ofName(serverName);
 

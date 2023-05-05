@@ -1934,14 +1934,6 @@ bool IsValidModel(unsigned int uiModelID)
     return false;
 }
 
-uint16_t GetModelReferenceCount(int nModelIndex)
-{
-	auto dwModelarray = CModelInfo::ms_modelInfoPtrs;
-	uint8_t *pModelInfoStart = (uint8_t*)dwModelarray[nModelIndex];
-	
-	return *(uint16_t*)(pModelInfoStart+0x1E);
-}
-
 void InitPlayerPedPtrRecords()
 {
 	memset(&dwPlayerPedPtrs[0], 0, sizeof(uintptr_t) * PLAYER_PED_SLOTS);
@@ -2152,18 +2144,6 @@ void ProjectMatrix(CVector* vecOut, CMatrix* mat, CVector* vecPos)
 	vecOut->x = mat->m_up.x * vecPos->z + mat->m_forward.x * vecPos->y + mat->m_right.x * vecPos->x + mat->m_pos.x;
 	vecOut->y = mat->m_up.y * vecPos->z + mat->m_forward.y * vecPos->y + mat->m_right.y * vecPos->x + mat->m_pos.y;
 	vecOut->z = mat->m_up.z * vecPos->z + mat->m_forward.z * vecPos->y + mat->m_right.z * vecPos->x + mat->m_pos.z;
-}
-
-void RwMatrixRotate(RwMatrix* mat, int axis, float angle)
-{
-	static float matt[3][3] =
-	{
-		{ 1.0f, 0.0f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f },
-		{ 0.0f, 0.0f, 1.0f }
-	};
-
-	((void (*)(RwMatrix*, float*, float, int))(g_libGTASA + 0x1B9118 + 1))(mat, matt[axis], angle, 1);
 }
 
 void RwMatrixScale(RwMatrix* matrix, CVector* vecScale)

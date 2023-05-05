@@ -214,7 +214,7 @@ CVehicle::~CVehicle()
 		m_pRightReverseLight = nullptr;
 	}
 
-	if (!GetModelReferenceCount(m_pVehicle->m_nModelIndex) &&
+	if (!CModelInfo::GetModelInfo(m_pVehicle->m_nModelIndex)->m_nRefCount &&
 		pGame->IsModelLoaded(m_pVehicle->m_nModelIndex))
 	{
 		CStreaming::RemoveModel(m_pVehicle->m_nModelIndex);

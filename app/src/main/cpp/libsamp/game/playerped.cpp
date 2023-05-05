@@ -114,6 +114,12 @@ CPlayerPed::~CPlayerPed()
 		((void (*)(uintptr_t))(g_libGTASA+0x45D82C+1))((uintptr_t)m_pEntity);
 		//ScriptCommand(&DELETE_CHAR, m_dwGTAId);
 
+		if (!CModelInfo::GetModelInfo(m_pPed->m_nModelIndex)->m_nRefCount &&
+			pGame->IsModelLoaded(m_pPed->m_nModelIndex))
+		{
+			CStreaming::RemoveModel(m_pPed->m_nModelIndex);
+		}
+
 		m_pPed = nullptr;
 		m_pEntity = nullptr;
 		m_dwGTAId = 0;

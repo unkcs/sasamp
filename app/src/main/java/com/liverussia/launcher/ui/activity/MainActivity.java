@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
 import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Handler handler;
     private Animation animation;
-	public LinearLayout donateButton;
+    public LinearLayout donateButton;
     public ImageView donateImage;
     public TextView donateTV;
     public LinearLayout monitoringButton;
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE
-                     //   | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        //   | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         container_layout = findViewById(R.id.container);
         animation = AnimationUtils.loadAnimation(this, R.anim.button_click);
 
-		monitoringTV = (TextView) findViewById(R.id.monitoringTV);
+        monitoringTV = (TextView) findViewById(R.id.monitoringTV);
         settingsTV = (TextView) findViewById(R.id.settingsTV);
         rouletteTV = (TextView) findViewById(R.id.forumTV);
         donateTV = (TextView) findViewById(R.id.donateTV);
@@ -150,18 +151,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playButton = (LinearLayout) findViewById(R.id.playButton);
 
         this.handler = new Handler();
-		monitoringFragment = new MonitoringFragment();
+        monitoringFragment = new MonitoringFragment();
         settingsFragment = new SettingsFragment();
 
         if (savedInstanceState != null && savedInstanceState.getBoolean(IS_AFTER_LOADING_KEY)) {
             replaceFragment(settingsFragment);
-        } else if (savedInstanceState == null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(IS_AFTER_LOADING_KEY)){
+        } else if (savedInstanceState == null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(IS_AFTER_LOADING_KEY)) {
             onClickSettings();
         } else {
             replaceFragment(monitoringFragment);
         }
 
-		monitoringButton.setOnClickListener(this);
+        monitoringButton.setOnClickListener(this);
         settingsButton.setOnClickListener(this);
         rouletteButton.setOnClickListener(this);
         donateButton.setOnClickListener(this);
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String tmp = Storage.getProperty(StorageElements.SERVER_LOCKED, this);
         int serverLockedValue = 0;
-        if(tmp != null)
+        if (tmp != null)
             serverLockedValue = Integer.parseInt(tmp);
 
         String password = NativeStorage.getClientProperty(NativeStorageElements.LOCKED_SERVER_PASSWORD, this);
@@ -395,21 +396,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClickSettings() {
-            setTextColor(settingsButton, settingsTV, settingsImage);
-            replaceFragment(this.settingsFragment);
+        setTextColor(settingsButton, settingsTV, settingsImage);
+        replaceFragment(this.settingsFragment);
     }
 
     public void onClickDonate() {
-            setTextColor(donateButton, donateTV, donateImage);
-            donateFragment = new DonateFragment(this);
-            replaceFragment(donateFragment);
+        setTextColor(donateButton, donateTV, donateImage);
+        donateFragment = new DonateFragment(this);
+        replaceFragment(donateFragment);
     }
-    
-	public void onClickMonitoring() {
-            setTextColor(monitoringButton, monitoringTV, monitoringImage);
-            replaceFragment(monitoringFragment);
+
+    public void onClickMonitoring() {
+        setTextColor(monitoringButton, monitoringTV, monitoringImage);
+        replaceFragment(monitoringFragment);
     }
-	
+
     public void setTextColor(LinearLayout linearLayout, TextView textView, ImageView imageView) {
         monitoringButton.setAlpha(0.45f);
         settingsButton.setAlpha(0.45f);
@@ -429,12 +430,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void replaceFragment(Fragment fragment) {
-        FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
-        beginTransaction.replace(R.id.container, fragment);
-        beginTransaction.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
-	
-	public boolean isRecordAudioPermissionGranted() {
+
+    public boolean isRecordAudioPermissionGranted() {
         if (Build.VERSION.SDK_INT < LAST_VERSION_WITHOUT_NEED_PERMS || checkSelfPermission("android.permission.RECORD_AUDIO") == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
@@ -451,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-	public void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
     }
 

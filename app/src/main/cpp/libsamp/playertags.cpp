@@ -33,18 +33,16 @@ CPlayerTags::~CPlayerTags() {}
 void CPlayerTags::Render()
 {
 	CVector VecPos;
-	RwMatrix matLocal, matPlayer;
+
 	int dwHitEntity;
 	char szNickBuf[50];
-	int iVoiceCounter = 0;
-	ImVec2 basePos = ImVec2(pGUI->ScaleX(10.0f), pGUI->ScaleY(600.0f));
+
 	if(pNetGame && pNetGame->m_bShowPlayerTags)
 	{
 		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-		pGame->FindPlayerPed()->GetMatrix(&matLocal);
 
 		for(PLAYERID playerId = 0; playerId < MAX_PLAYERS; playerId++) {
-			if (pPlayerPool->GetSlotState(playerId) == true) {
+			if (pPlayerPool->GetSlotState(playerId)) {
 				CRemotePlayer *pPlayer = pPlayerPool->GetAt(playerId);
 
 				if (pPlayer && pPlayer->IsActive() && pPlayer->m_bShowNameTag) {

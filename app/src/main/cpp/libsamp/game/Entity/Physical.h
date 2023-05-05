@@ -82,7 +82,7 @@ struct CPhysical : public CEntityGta {
     CVector         m_vecDamagePos;
     uint16_t        m_nDamagedPieceType;
     uint8_t         _pad5[2];
-    CEntityGta      *m_pAttachToEntity;
+    CEntityGta      *m_pAttachedTo;
     CVector         m_vecAttachPosnOffset;
     CVector         m_vecAttachTiltOffset;
     CQuaternion     m_qAttachedEntityRotation;

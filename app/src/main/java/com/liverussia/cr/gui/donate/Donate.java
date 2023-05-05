@@ -434,7 +434,7 @@ public class Donate {
         allItems.add( new DonateItem("BMW S 1000 RR", CATEGORY_CARS, 1250, getResId("auc_veh_521"), 521) );
         allItems.add( new DonateItem("Ducati XDiavel S", CATEGORY_CARS, 1750, getResId("auc_veh_463"), 463) );
         allItems.add( new DonateItem("Aprilia-sxv", CATEGORY_CARS, 500, getResId("auc_veh_468"), 468) );
-        allItems.add( new DonateItem("Bugatti Veyron", CATEGORY_CARS, 55000, getResId("auc_veh_411"), 411) );
+        allItems.add( new DonateItem("Bugatti Chiron", CATEGORY_CARS, 55000, getResId("auc_veh_411"), 411) );
         allItems.add( new DonateItem("Lamborghini Urus", CATEGORY_CARS, 8250, getResId("auc_veh_579"), 579) );
         allItems.add( new DonateItem("Lamborghini Aventador", CATEGORY_CARS, 8500, getResId("auc_veh_451"), 451) );
         allItems.add( new DonateItem("Rolls Royce Wraith", CATEGORY_CARS, 12500, getResId("auc_veh_477"), 477) );

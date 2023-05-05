@@ -86,9 +86,6 @@ void DisableAutoAim()
 
 void ApplyFPSPatch(uint8_t fps)
 {
-	JNIEnv* env = g_pJavaWrapper->GetEnv();
-	if(!env)return;
-
 	if(fps > CSettings::maxFps)
 		fps = CSettings::maxFps;
 
@@ -188,13 +185,6 @@ void ApplyPatches_level0()
 	//CHook::RET(g_libGTASA + 0x0036E88C); // CCamera::ClearPlayerWeaponMode не понятен эффект. крашит
 //	CHook::NOP(g_libGTASA + 0x0040881A, 2); // CCranes::InitCranes(void)
 }
-
-//struct _ATOMIC_MODEL
-//{
-//	uintptr_t func_tbl;
-//	char data[56];
-//};
-//struct _ATOMIC_MODEL *ATOMIC_MODELS;
 
 void ApplyShadowPatch()
 {

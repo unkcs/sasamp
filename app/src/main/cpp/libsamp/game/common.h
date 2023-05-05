@@ -11,6 +11,10 @@
 #define MAX_VEHICLES	2000
 #define MAX_PLAYER_NAME	24
 
+typedef unsigned char byte;
+// Macro for unused function arguments - Use it to avoid compiler warnings of unused arguments
+#define UNUSED(x) (void)(x);
+
 constexpr float E              = 2.71828f;          // e
 constexpr float E_CONST        = 0.577f;            // Euler-Mascheroni constant
 constexpr float FRAC_1_TAU     = 0.159154f;         // 1 / τ

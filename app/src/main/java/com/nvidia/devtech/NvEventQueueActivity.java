@@ -1355,6 +1355,7 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
     public void showSamwill() { runOnUiThread(() -> { mSamwillManager.Show(); }); }
 
     public void ExitGame(){
+        FirebaseCrashlytics.getInstance().deleteUnsentReports();
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false);
 
         finishAndRemoveTask();

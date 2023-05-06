@@ -1,24 +1,18 @@
-//
-// Created by plaka on 28.03.2023.
-//
-
 #pragma once
 
-#include <stdint.h>
-
-enum eVehicleType : uint32_t
-{
-    VEHICLE_TYPE_NONE = 0xFFFFFFFF,
-    VEHICLE_TYPE_CAR = 0x0,
-    VEHICLE_TYPE_MONSTERTRUCK = 0x1,
-    VEHICLE_TYPE_QUADBIKE = 0x2,
-    VEHICLE_TYPE_HELI = 0x3,
-    VEHICLE_TYPE_PLANE = 0x4,
-    VEHICLE_TYPE_BOAT = 0x5,
-    VEHICLE_TYPE_TRAIN = 0x6,
-    VEHICLE_TYPE_NOT_USED = 0x7,
-    VEHICLE_TYPE_FAKE_PLANE = 0x8,
-    VEHICLE_TYPE_BIKE = 0x9,
-    VEHICLE_TYPE_BMX = 0xA,
-    VEHICLE_TYPE_TRAILER = 0xB,
+enum eVehicleType : int32 {
+    VEHICLE_TYPE_IGNORE      = -1,
+    VEHICLE_TYPE_AUTOMOBILE  = 0,
+    VEHICLE_TYPE_MTRUCK      = 1,  // MONSTER TRUCK
+    VEHICLE_TYPE_QUAD        = 2,
+    VEHICLE_TYPE_HELI        = 3,
+    VEHICLE_TYPE_PLANE       = 4,
+    VEHICLE_TYPE_BOAT        = 5,
+    VEHICLE_TYPE_TRAIN       = 6,
+    VEHICLE_TYPE_FHELI       = 7,
+    VEHICLE_TYPE_FPLANE      = 8,
+    VEHICLE_TYPE_BIKE        = 9,
+    VEHICLE_TYPE_BMX         = 10,
+    VEHICLE_TYPE_TRAILER     = 11
 };
+

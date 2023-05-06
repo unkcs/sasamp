@@ -10,7 +10,7 @@
 #include "Core/Vector.h"
 #include "Collision/ColPoint.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CStoredCollPoly {
     CVector      verts[3]{}; // triangle vertices
     bool         valid{};

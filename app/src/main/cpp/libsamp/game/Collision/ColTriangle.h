@@ -13,7 +13,7 @@
 #include "game/StoredCollPoly.h"
 #include "ColTrianglePlane.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CColTriangle {
 public:
     CColTriangle() = default;

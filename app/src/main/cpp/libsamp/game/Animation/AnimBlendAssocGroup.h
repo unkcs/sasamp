@@ -10,7 +10,7 @@
 #include "AnimBlock.h"
 #include "../RW/rpworld.h"
 
-
+#pragma pack(push, 1)
 class CAnimBlendAssocGroup {
 public:
     CAnimBlock*                  m_pAnimBlock;
@@ -33,5 +33,6 @@ public:
     void                         InitEmptyAssociations(RpClump* clump);
     ~CAnimBlendAssocGroup();
 };
+#pragma pack(pop)
 
 VALIDATE_SIZE(CAnimBlendAssocGroup, 0x14);

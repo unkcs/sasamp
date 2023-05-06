@@ -10,7 +10,7 @@
 #include "../rgba.h"
 #include "../Core/Matrix.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CBox {
 public:
     CVector m_vecMin{}, m_vecMax{};

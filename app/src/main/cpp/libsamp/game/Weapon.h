@@ -16,7 +16,7 @@ enum eWeaponState : uint32 {
     WEAPONSTATE_MELEE_MADECONTACT,
 };
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct CWeapon
 {
     eWeaponType m_nType;
@@ -26,6 +26,7 @@ struct CWeapon
     uint32_t m_nTimer;
     bool m_bFirstPersonWeaponModeSelected;
     bool m_bDontPlaceInHand;
+    uint8_t pad[2];
     uintptr_t *m_pWeaponFxSys;
 };
 static_assert(sizeof(CWeapon) == 0x1C, "Invalid size CPlaceable");

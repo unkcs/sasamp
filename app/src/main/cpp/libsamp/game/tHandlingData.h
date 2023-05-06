@@ -17,7 +17,7 @@ enum eVehicleLightsSize : uint8_t {
     LIGHTS_TALL
 };
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct tHandlingData
 {
     int32_t       m_nVehicleId;
@@ -27,6 +27,7 @@ struct tHandlingData
     float         m_fDragMult;
     CVector       m_vecCentreOfMass;   // x, y, z - 1.0 to 50000.0
     uint8_t       m_nPercentSubmerged; // 10 to 120 (> 100% vehicle sinks)
+    uint8_t       pad0[3];
     float         m_fBuoyancyConstant;
     float         m_fTractionMultiplier; // 0.5 to 2.0
     cTransmission m_transmissionData;
@@ -128,6 +129,7 @@ struct tHandlingData
     eVehicleLightsSize m_nFrontLights;
     eVehicleLightsSize m_nRearLights;
     uint8_t            m_nAnimGroup;
+    uint8_t            pad2;
 
     cTransmission& GetTransmission() { return m_transmissionData; }
 

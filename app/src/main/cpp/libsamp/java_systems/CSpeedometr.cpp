@@ -77,7 +77,7 @@ void CSpeedometr::update()
     env->CallVoidMethod(
             CSpeedometr::thiz,
             method,
-            (int) (pVehicle->m_pVehicle->pHandling->m_transmissionData.m_fCurrentSpeed * 175.0f),
+            (int) (pVehicle->m_pVehicle->m_pHandlingData->m_transmissionData.m_fCurrentSpeed * 175.0f),
             (int) CSpeedometr::fFuel,
             (int) pVehicle->GetHealth(),
             CSpeedometr::iMilliage,

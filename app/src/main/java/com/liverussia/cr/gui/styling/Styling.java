@@ -154,6 +154,11 @@ public class Styling extends ColorPicker {
             MaterialButton style_vin_cancel_butt = activity.findViewById(R.id.style_vin_cancel_butt);
             style_vin_cancel_butt.setOnClickListener(view -> {
                 toggleVinylsLayout(false);
+            });
+
+            MaterialButton style_vin_ok_butt = activity.findViewById(R.id.style_vin_ok_butt);
+            style_vin_ok_butt.setOnClickListener(view -> {
+                toggleVinylsLayout(false);
                 sendOnChooseVinil();
             });
 

@@ -14,12 +14,12 @@
 #include "AnimBlendAssocGroup.h"
 
 constexpr auto MAX_ANIM_BLOCK_NAME = 16;
-constexpr auto NUM_ANIM_ASSOC_GROUPS = 118;
+constexpr auto NUM_ANIM_ASSOC_GROUPS = 145;
 constexpr auto NUM_ANIM_BLOCKS = 180;
 
 class CAnimManager {
 public:
-    static std::array<AnimAssocDefinition, NUM_ANIM_ASSOC_GROUPS> ms_aAnimAssocDefinitionsX; // replacement
+   // static std::array<AnimAssocDefinition, NUM_ANIM_ASSOC_GROUPS> ms_aAnimAssocDefinitionsX; // replacement
     static inline AnimAssocDefinition ms_aAnimAssocDefinitions[NUM_ANIM_ASSOC_GROUPS]; // std::array - see SurfaceInfos_c
     static inline int32 ms_numAnimAssocDefinitions;
 

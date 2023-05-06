@@ -32,6 +32,14 @@ void CVehicleGta::ApplyTurnForceToOccupantOnEntry(CPedGta* passenger) {
     }
 }
 
+int CVehicleGta::GetPassengerIndex(const CPedGta* passenger) {
+    for(int i = 0; i <  std::size(m_apPassengers); i++) {
+        if(passenger == m_apPassengers[i])
+            return i;
+    }
+    return -1;
+}
+
 // ----------------------------------- hooks
 
 void SetDriver_hook(CVehicleGta *thiz, CPedGta *pPed)

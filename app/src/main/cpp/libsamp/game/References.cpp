@@ -1,3 +1,4 @@
+#include "common.h"
 #include "References.h"
 #include "World.h"
 #include "util/patch.h"

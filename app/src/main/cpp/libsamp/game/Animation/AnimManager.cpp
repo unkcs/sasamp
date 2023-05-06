@@ -26,7 +26,8 @@
 
 void CAnimManager::InjectHooks() {
     CHook::Write(g_libGTASA + 0x005D0370, &ms_numAnimAssocDefinitions);
-    CHook::Write(g_libGTASA + 0x005D0604, &ms_aAnimAssocDefinitions);
+    SET_TO(ms_aAnimAssocDefinitions, g_libGTASA + 0x005E8600);
+   // CHook::Write(g_libGTASA + 0x005D0604, &ms_aAnimAssocDefinitions);
 
     CHook::Write(g_libGTASA + 0x005D12F0, &ms_aAnimBlocks);
     CHook::Write(g_libGTASA + 0x005D0900, &ms_numAnimBlocks);
@@ -36,7 +37,7 @@ void CAnimManager::InjectHooks() {
     CHook::Write(g_libGTASA + 0x005CFD10, &ms_numAnimations);
     CHook::Write(g_libGTASA + 0x005D0ABC, &ms_animCache);
 
-    CHook::Redirect(g_libGTASA + 0x0033F23C, &CAnimManager::LoadAnimFiles);
+   // CHook::Redirect(g_libGTASA + 0x0033F23C, &CAnimManager::LoadAnimFiles);
 }
 
 struct IfpHeader {

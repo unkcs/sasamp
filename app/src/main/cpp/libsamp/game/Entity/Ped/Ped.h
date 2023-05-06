@@ -266,6 +266,7 @@ struct CPedGta : CPhysical {
 
 public:
     void GetBonePosition(RwV3d *posn, uint32 boneTag, bool bCalledFromCamera);
+    void StopNonPartialAnims();
 };
 
 

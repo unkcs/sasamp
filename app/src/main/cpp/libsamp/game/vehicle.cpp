@@ -496,10 +496,10 @@ void CVehicle::RemoveEveryoneFromVehicle()
 
 	for (int i = 0; i < 7; i++)
 	{
-		if (m_pVehicle->pPassengers[i] != nullptr)
+		if (m_pVehicle->m_apPassengers[i] != nullptr)
 		{
-			if(IsValidGamePed(m_pVehicle->pPassengers[i])) {
-				iPlayerID = GamePool_Ped_GetIndex(m_pVehicle->pPassengers[i]);
+			if(IsValidGamePed(m_pVehicle->m_apPassengers[i])) {
+				iPlayerID = GamePool_Ped_GetIndex(m_pVehicle->m_apPassengers[i]);
 				ScriptCommand(&remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY,
 							  fPosZ + 2.0f);
 			}
@@ -513,13 +513,13 @@ bool CVehicle::IsOccupied()
 	if (m_pVehicle)
 	{
 		if (m_pVehicle->pDriver) return true;
-		if (m_pVehicle->pPassengers[0]) return true;
-		if (m_pVehicle->pPassengers[1]) return true;
-		if (m_pVehicle->pPassengers[2]) return true;
-		if (m_pVehicle->pPassengers[3]) return true;
-		if (m_pVehicle->pPassengers[4]) return true;
-		if (m_pVehicle->pPassengers[5]) return true;
-		if (m_pVehicle->pPassengers[6]) return true;
+		if (m_pVehicle->m_apPassengers[0]) return true;
+		if (m_pVehicle->m_apPassengers[1]) return true;
+		if (m_pVehicle->m_apPassengers[2]) return true;
+		if (m_pVehicle->m_apPassengers[3]) return true;
+		if (m_pVehicle->m_apPassengers[4]) return true;
+		if (m_pVehicle->m_apPassengers[5]) return true;
+		if (m_pVehicle->m_apPassengers[6]) return true;
 	}
 
 	return false;
@@ -845,7 +845,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 	}
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
-	m_pVehicle->pHandling = m_pCustomHandling;
+	m_pVehicle->m_pHandlingData = m_pCustomHandling;
 
 	((void (*)(CVehicleGta*))(g_libGTASA + 0x004D3E2C + 1))(m_pVehicle); // CAutomobile::SetupSuspensionLines
 

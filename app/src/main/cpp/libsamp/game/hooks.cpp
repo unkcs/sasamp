@@ -868,7 +868,7 @@ void InjectHooks()
 	CTouchInterface::InjectHooks();
 	CEntityGta::InjectHooks();
 	CPhysical::InjectHooks();
-//	CAnimManager::InjectHooks();
+	CAnimManager::InjectHooks();
 }
 
 void InstallSpecialHooks()

@@ -133,7 +133,7 @@ inline int32 ModelIdToIFP(int32 absId) { return absId - RESOURCE_ID_IFP; }
 inline int32 ModelIdToRRR(int32 absId) { return absId - RESOURCE_ID_RRR; }
 inline int32 ModelIdToSCM(int32 absId) { return absId - RESOURCE_ID_SCM; }
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct tRwStreamInitializeData {
     uint8* m_pBuffer;
     uint32 m_uiBufferSize;
@@ -141,7 +141,7 @@ struct tRwStreamInitializeData {
 #pragma pack(pop)
 static_assert(sizeof(tRwStreamInitializeData) == 0x8);
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct tStreamingFileDesc {
     tStreamingFileDesc() = default;
 
@@ -156,6 +156,7 @@ struct tStreamingFileDesc {
 
     char  m_szName[40]{}; // If this string is empty (eg.: first elem in array is NULL) the entry isnt in use
     bool  m_bNotPlayerImg{};
+    uint8 pad[3];
     int32 m_StreamHandle{-1};
 };
 #pragma pack(pop)

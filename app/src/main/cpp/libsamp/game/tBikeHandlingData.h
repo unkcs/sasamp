@@ -6,7 +6,7 @@
 */
 #pragma once
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct tBikeHandlingData {
     int32_t m_nVehicleId;
     float   m_fLeanFwdCOM;

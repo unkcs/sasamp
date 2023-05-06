@@ -11,6 +11,7 @@
 #include "game/RW/rphanim.h"
 #include "RwHelper.h"
 #include "World.h"
+#include "game/Animation/AnimManager.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -753,13 +754,13 @@ int CPlayerPed::GetVehicleSeatID()
 
 	if( pVehicle->pDriver == m_pPed) return 0;
 
-	if(pVehicle->pPassengers[0] == m_pPed) return 1;
-	if(pVehicle->pPassengers[1] == m_pPed) return 2;
-	if(pVehicle->pPassengers[2] == m_pPed) return 3;
-	if(pVehicle->pPassengers[3] == m_pPed) return 4;
-	if(pVehicle->pPassengers[4] == m_pPed) return 5;
-	if(pVehicle->pPassengers[5] == m_pPed) return 6;
-	if(pVehicle->pPassengers[6] == m_pPed) return 7;
+	if(pVehicle->m_apPassengers[0] == m_pPed) return 1;
+	if(pVehicle->m_apPassengers[1] == m_pPed) return 2;
+	if(pVehicle->m_apPassengers[2] == m_pPed) return 3;
+	if(pVehicle->m_apPassengers[3] == m_pPed) return 4;
+	if(pVehicle->m_apPassengers[4] == m_pPed) return 5;
+	if(pVehicle->m_apPassengers[5] == m_pPed) return 6;
+	if(pVehicle->m_apPassengers[6] == m_pPed) return 7;
 
 	return (-1);
 }
@@ -1364,11 +1365,12 @@ void CPlayerPed::PlayAnimByIdx(int idx, float BlendData, bool loop, bool freeze,
 
 bool IsBlendAssocGroupLoaded(int iGroup)
 {
-	uintptr_t* pBlendAssocGroup = *(uintptr_t * *)(g_libGTASA + 0x00890350); // CAnimManager::ms_aAnimAssocGroups
-	uintptr_t blendAssoc = (uintptr_t)pBlendAssocGroup;
-	blendAssoc += (iGroup * 20);
-	pBlendAssocGroup = (uintptr_t*)blendAssoc;
-	return *(pBlendAssocGroup) != NULL;
+	auto pBlendAssocGroup = CAnimManager::ms_aAnimAssocGroups[iGroup].m_nGroupID;
+//	uintptr_t* pBlendAssocGroup = *(uintptr_t * *)(g_libGTASA + 0x00890350); // CAnimManager::ms_aAnimAssocGroups
+//	uintptr_t blendAssoc = (uintptr_t)pBlendAssocGroup;
+//	blendAssoc += (iGroup * 20);
+//	pBlendAssocGroup = (uintptr_t*)blendAssoc;
+	return pBlendAssocGroup != NULL;
 }
 
 void CPlayerPed::SetMoveAnim(int iAnimGroup)

@@ -62,7 +62,7 @@ void CVehiclePool::Process()
 					pVehicle->SetMatrix(RwMatrix);
 					pVehicle->SetHealth(300.0f);
 				}
-				if(pVehicle->m_pVehicle->m_nCurrentGear == 0 && pVehicle->m_pVehicle->pHandling->m_transmissionData.m_fCurrentSpeed < -0.01 && pVehicle->m_bEngineOn)
+				if(pVehicle->m_pVehicle->m_nCurrentGear == 0 && pVehicle->m_pVehicle->m_pHandlingData->m_transmissionData.m_fCurrentSpeed < -0.01 && pVehicle->m_bEngineOn)
 				{
 					if(pVehicle->m_pLeftReverseLight == nullptr) {
 						pVehicle->toggleReverseLight(true);

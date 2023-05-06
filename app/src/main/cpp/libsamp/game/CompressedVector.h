@@ -8,7 +8,7 @@
 
 #include "common.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CompressedVector {
 public:
     int16 x;

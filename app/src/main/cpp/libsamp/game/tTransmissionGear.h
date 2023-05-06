@@ -6,7 +6,7 @@
 */
 #pragma once
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct tTransmissionGear {
     float m_maxVelocity;
     float m_changeUpVelocity;   // max velocity needed to change the current gear to higher

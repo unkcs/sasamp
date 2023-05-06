@@ -36,11 +36,12 @@ struct HeapBlockFlags {
 /**
  * Common heap block descriptor
  */
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class HeapBlockDesc {
 public:
     int32 m_nSize;
     bool  m_bInUse;
+    uint8_t pad;
 
 #ifdef MEMORYMGR_USE_HEAP_FLAGS
     HeapBlockFlags m_Flags; //< +0x05  gap (I've used this field for my own flags)

@@ -12,6 +12,7 @@
 
 class CAnimBlendSequence;
 
+#pragma pack(push, 1)
 class CAnimBlendStaticAssociation {
 public:
     uint16               m_nNumBlendNodes;
@@ -34,4 +35,6 @@ public:
 
     auto GetHashKey() const noexcept { return m_pHierarchy->m_hashKey; }
 };
+#pragma pack(pop)
+
 VALIDATE_SIZE(CAnimBlendStaticAssociation, 0x14);

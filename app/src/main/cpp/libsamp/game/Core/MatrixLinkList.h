@@ -3,7 +3,7 @@
 #include "MatrixLink.h"
 #include "../common.h"
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 class CMatrixLinkList {
 public:
     CMatrixLinkList();

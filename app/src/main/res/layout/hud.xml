@@ -576,6 +576,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
+            android:visibility="gone"
+            android:id="@+id/butt_torpedo"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginEnd="@dimen/_100sdp"
+            android:layout_marginBottom="@dimen/_50sdp"
+            android:src="@drawable/icon_torpedo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
             android:id="@+id/enter_passenger"
             android:layout_width="@dimen/_37sdp"
             android:layout_height="@dimen/_37sdp"

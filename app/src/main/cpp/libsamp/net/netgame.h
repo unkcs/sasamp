@@ -285,6 +285,8 @@ public:
 	static void sendGiveDamage(PLAYERID taker, int weaponId, float ammount, int bodyPart);
 
 	static void packetDice(Packet *p);
+
+    static void packetTorpedoButt(Packet *p);
 };
 
 extern CNetGame *pNetGame;

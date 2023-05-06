@@ -626,3 +626,37 @@ void CNetGame::packetUpdateSatiety(Packet* p)
 
     CHUD::iSatiety = value;
 }
+
+void CNetGame::packetTorpedoButt(Packet* p)
+{
+    RakNet::BitStream bs((unsigned char*)p->data, p->length, false);
+
+    bs.IgnoreBits(40); // skip packet and rpc id
+
+    uint8_t value;
+
+    bs.Read(value);
+
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
+
+
+    jclass clazz = env->GetObjectClass(CHUD::thiz);
+    jmethodID method = env->GetMethodID(clazz, "toggleTorpedoButt", "(Z)V");
+
+    env->CallVoidMethod(CHUD::thiz, method, value);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_gui_hud_HudManager_sendTorpedo(JNIEnv *env, jobject thiz) {
+    uint8_t packet = ID_CUSTOM_RPC;
+    uint8_t RPC = 80;
+
+
+    RakNet::BitStream bsSend;
+    bsSend.Write(packet);
+    bsSend.Write(RPC);
+    bsSend.Write(1);
+    pNetGame->GetRakClient()->Send(&bsSend, SYSTEM_PRIORITY, RELIABLE_SEQUENCED, 0);
+}

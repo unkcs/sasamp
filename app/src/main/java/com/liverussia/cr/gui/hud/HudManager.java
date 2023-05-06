@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.text.Html;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -114,6 +115,7 @@ public class HudManager extends Chat {
 
     native void clickCameraMode();
     native void clickMultText();
+    native void sendTorpedo();
 
     int damageSound = 0;
 
@@ -276,8 +278,22 @@ public class HudManager extends Chat {
         });
 
         Utils.HideLayout(hud_gpsactive, false);
+
+        ImageView butt_torpedo = activity.findViewById(R.id.butt_torpedo);
+        butt_torpedo.setOnClickListener(view -> {
+            sendTorpedo();
+        });
     }
 
+    void toggleTorpedoButt(boolean toggle) {
+        activity.runOnUiThread(() -> {
+            ImageView butt_torpedo = activity.findViewById(R.id.butt_torpedo);
+            if(toggle)
+                butt_torpedo.setVisibility(View.VISIBLE);
+            else
+                butt_torpedo.setVisibility(View.GONE);
+        });
+    }
     void addGiveDamageNotify(String nick, String weapon, float damage){
         Samp.soundPool.play(damageSound, 0.1f, 0.1f, 1, 0, 1.2f);
 

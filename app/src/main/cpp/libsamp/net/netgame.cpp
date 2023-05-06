@@ -493,6 +493,10 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
             packetUpdateSatiety(p);
             break;
         }
+        case 80: {
+            packetTorpedoButt(p);
+            break;
+        }
         case RPC_SHOW_ACTION_LABEL: {
             packetNotification(p);
             break;

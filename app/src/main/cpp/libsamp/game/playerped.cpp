@@ -214,17 +214,6 @@ bool CPlayerPed::IsCrouching()
 	return m_pPed->bIsDucking;
 }
 
-void CPlayerPed::SetCameraExtendedZoom(float fZoom)
-{
-	GameSetPlayerCameraExtZoom(m_bytePlayerNumber, fZoom);
-}
-
-void CPlayerPed::SetCameraExtendedZoom(float fZoom, float fAspectRatio)
-{
-	GameSetPlayerCameraExtZoom(m_bytePlayerNumber, fZoom, fAspectRatio);
-}
-
-
 void CPlayerPed::SetDead()
 {
 	

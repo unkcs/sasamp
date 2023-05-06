@@ -1,8 +1,9 @@
 //
 // Created by plaka on 20.04.2023.
 //
-#include "Entity.h"
 #include "../common.h"
+
+#include "Entity.h"
 #include "../RW/rwcore.h"
 #include "../RwHelper.h"
 #include "game/RW/rpskin.h"

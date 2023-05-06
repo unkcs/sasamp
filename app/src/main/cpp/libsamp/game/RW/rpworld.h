@@ -196,3 +196,4 @@ typedef RpMaterial *(*RpMaterialCallBack)(RpMaterial *material, void *data);
 
 RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* data);
 RpGeometry* RpGeometryForAllMaterials(RpGeometry* geometry, RpMaterialCallBack fpCallBack, void* data);
+RwBool RpClumpDestroy(RpClump* clump);

@@ -6,7 +6,6 @@
 
 #include "game/SimpleTransform.h"
 #include "game/Core/MatrixLink.h"
-#include "game/common.h"
 
 #pragma pack(push, 1)
 class CPlaceable

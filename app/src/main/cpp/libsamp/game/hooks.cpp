@@ -837,13 +837,15 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVect
 {
 	return atomic;
 }
-
+#include "common.h"
 #include "game/Models/ModelInfo.h"
 #include "cHandlingDataMgr.h"
 #include "Pools.h"
 #include "game/Core/MatrixLinkList.h"
 #include "Collision/Collision.h"
 #include "IdleCam.h"
+#include "Animation/AnimBlendAssociation.h"
+#include "Animation/AnimManager.h"
 #include "References.h"
 
 void InjectHooks()
@@ -866,6 +868,7 @@ void InjectHooks()
 	CTouchInterface::InjectHooks();
 	CEntityGta::InjectHooks();
 	CPhysical::InjectHooks();
+//	CAnimManager::InjectHooks();
 }
 
 void InstallSpecialHooks()

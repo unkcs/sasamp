@@ -2,6 +2,7 @@
 #include "World.h"
 #include "util/patch.h"
 #include "Pools.h"
+#include "Entity/Vehicle.h"
 
 void CReferences::InjectHooks() {
     CHook::Write(g_libGTASA + 0x005CEB28, &CReferences::pEmptyList);

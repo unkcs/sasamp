@@ -105,4 +105,5 @@ namespace CGeneral { // More like `Math` (Or `Meth`, given how bad the code is, 
     {
         return (int)(float)((float)((float)(uint16_t)rand() * 0.000015259) * (float)(1 - Min + Max)) + Min;
     }
+
 };

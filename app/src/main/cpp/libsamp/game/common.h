@@ -1,11 +1,16 @@
 #pragma once
 #include <string>
+#include <span>
+#include <array>
+#include <cassert>
 #include "game/RW/rwplcore.h"
 #include "Core/Matrix.h"
 
 #include "rgba.h"
 #include "tHandlingData.h"
 #include "SimpleTransform.h"
+#include "General.h"
+#include "MemoryMgr.h"
 
 #define MAX_PLAYERS		1004
 #define MAX_VEHICLES	2000

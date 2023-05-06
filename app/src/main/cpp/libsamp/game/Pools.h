@@ -13,6 +13,7 @@
 #include "game/Core/PtrNodeDoubleLink.h"
 #include "game/Tasks/Task.h"
 #include "game/Core/EntryInfoNode.h"
+#include "game/Entity/Ped/Ped.h"
 
 class CPools {
 public:

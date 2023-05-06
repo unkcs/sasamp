@@ -1,7 +1,7 @@
 //
 // Created by plaka on 18.04.2023.
 //
-
+#include "../common.h"
 #include "Vehicle.h"
 #include "util/patch.h"
 #include "game/World.h"

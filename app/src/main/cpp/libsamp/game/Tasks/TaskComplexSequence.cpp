@@ -32,10 +32,10 @@ void CTaskComplexSequence::Flush() {
     m_nSequenceRepeatedCount = 0;
 }
 
-//CTaskComplexSequence* CTaskComplexSequence::Constructor() {
-//    this->CTaskComplexSequence::CTaskComplexSequence();
-//    return this;
-//}
+CTaskComplexSequence* CTaskComplexSequence::Constructor() {
+    CTaskComplexSequence();
+    return this;
+}
 
 // 0x5F6710
 CTask* CTaskComplexSequence::Clone() {

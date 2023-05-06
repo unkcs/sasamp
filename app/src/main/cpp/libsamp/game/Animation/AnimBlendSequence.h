@@ -51,8 +51,8 @@ public:
     KeyFrameTrans* GetUncompressedFrame(int32 frame) const;
     KeyFrameTransCompressed* GetCompressedFrame(int32 frame) const;
 
-   // CAnimBlendSequence* Constructor() { this->CAnimBlendSequence::CAnimBlendSequence(); return this; }
- //   CAnimBlendSequence* Destructor() { this->CAnimBlendSequence::~CAnimBlendSequence(); return this; }
+    CAnimBlendSequence* Constructor() { CAnimBlendSequence(); return this; }
+    CAnimBlendSequence* Destructor() { CAnimBlendSequence::~CAnimBlendSequence(); return this; }
 };
 
 VALIDATE_SIZE(CAnimBlendSequence, 0xC);

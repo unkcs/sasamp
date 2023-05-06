@@ -59,7 +59,7 @@ public:
     static char (&ms_line)[512];
 
 public:
-    static char* LoadLine(int file);
+    static char* LoadLine(auto file);
     static char* LoadLine(char*& outLine, int32& outSize);
 
     char *FindFirstNonNullOrWS(char *it);

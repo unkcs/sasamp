@@ -113,6 +113,26 @@ inline eModelType GetModelType(int32 model) {
     }
 }
 
+// Turn relative IDs into absolute ones.
+inline int32 DFFToModelId(int32 relativeId) { return RESOURCE_ID_DFF + relativeId; }
+inline int32 TXDToModelId(int32 relativeId) { return RESOURCE_ID_TXD + relativeId; }
+inline int32 COLToModelId(int32 relativeId) { return RESOURCE_ID_COL + relativeId; }
+inline int32 IPLToModelId(int32 relativeId) { return RESOURCE_ID_IPL + relativeId; }
+inline int32 DATToModelId(size_t relativeId) { return (size_t)RESOURCE_ID_DAT + relativeId; }
+inline int32 IFPToModelId(int32 relativeId) { return RESOURCE_ID_IFP + relativeId; }
+inline int32 RRRToModelId(int32 relativeId) { return RESOURCE_ID_RRR + relativeId; }
+inline int32 SCMToModelId(int32 relativeId) { return RESOURCE_ID_SCM + relativeId; }
+
+// Turn absolute IDs into relative ones
+inline int32 ModelIdToDFF(int32 absId) { return absId - RESOURCE_ID_DFF; }
+inline int32 ModelIdToTXD(int32 absId) { return absId - RESOURCE_ID_TXD; }
+inline int32 ModelIdToCOL(int32 absId) { return absId - RESOURCE_ID_COL; }
+inline int32 ModelIdToIPL(int32 absId) { return absId - RESOURCE_ID_IPL; }
+inline int32 ModelIdToDAT(int32 absId) { return absId - RESOURCE_ID_DAT; }
+inline int32 ModelIdToIFP(int32 absId) { return absId - RESOURCE_ID_IFP; }
+inline int32 ModelIdToRRR(int32 absId) { return absId - RESOURCE_ID_RRR; }
+inline int32 ModelIdToSCM(int32 absId) { return absId - RESOURCE_ID_SCM; }
+
 #pragma pack(push, 4)
 struct tRwStreamInitializeData {
     uint8* m_pBuffer;

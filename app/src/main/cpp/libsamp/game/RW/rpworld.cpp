@@ -11,3 +11,7 @@ RpClump* RpClumpForAllAtomics(RpClump* clump, RpAtomicCallBack callback, void* d
 RpGeometry* RpGeometryForAllMaterials(RpGeometry* geometry, RpMaterialCallBack fpCallBack, void* data) {
     return ((RpGeometry*(__cdecl *)(RpGeometry*, RpMaterialCallBack, void*))(g_libGTASA + 0x001E284C + 1))(geometry, fpCallBack, data);
 }
+
+RwBool RpClumpDestroy(RpClump* clump) {
+    return ((RwBool(__cdecl *)(RpClump*))(g_libGTASA + 0x001E1224 + 1))(clump);
+}

@@ -3,8 +3,9 @@
 //
 
 #include "Pools.h"
-#include "../util/patch.h"
 #include "IplDef.h"
+#include "util/patch.h"
+#include "Entity/Vehicle.h"
 
 PoolAllocator::Pool*      CPools::ms_pBuildingPool;
 PoolAllocator::Pool*      CPools::ms_pDummyPool;

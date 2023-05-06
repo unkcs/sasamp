@@ -28,3 +28,16 @@ RpAtomic* SkinAtomicGetHAnimHierarchCB(RpAtomic* atomic, void* data) {
     *(RpHAnimHierarchy**)(data) = RpSkinAtomicGetHAnimHierarchy(atomic);
     return nullptr;
 }
+
+RpAtomic* AtomicRemoveAnimFromSkinCB(RpAtomic* atomic, void* data) {
+    if (RpSkinGeometryGetSkin(RpAtomicGetGeometry(atomic))) {
+        if (RpHAnimHierarchy* hier = RpSkinAtomicGetHAnimHierarchy(atomic)) {
+            RtAnimAnimation*& currAnim = hier->currentAnim->pCurrentAnim;
+            if (currAnim) {
+                RtAnimAnimationDestroy(currAnim);
+            }
+            currAnim = nullptr;
+        }
+    }
+    return atomic;
+}

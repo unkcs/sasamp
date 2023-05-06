@@ -2,7 +2,6 @@
 
 #include "main.h"
 #include "gui/gui.h"
-#include "game/game.h"
 #include "net/netgame.h"
 #include "game/RW/RenderWare.h"
 #include "chatwindow.h"

@@ -10,3 +10,4 @@ RpAtomic* GetFirstAtomicCallback(RpAtomic* atomic, void* data);
 RpAtomic* GetFirstAtomic(RpClump* clump);
 RpHAnimHierarchy* GetAnimHierarchyFromSkinClump(RpClump* clump);
 RpAtomic* SkinAtomicGetHAnimHierarchCB(RpAtomic* atomic, void* data);
+RpAtomic* AtomicRemoveAnimFromSkinCB(RpAtomic* atomic, void* data);

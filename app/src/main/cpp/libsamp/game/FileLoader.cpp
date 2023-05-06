@@ -6,7 +6,7 @@
 #include "../main.h"
 
 // Load line into static buffer (`ms_line`)
-char* CFileLoader::LoadLine(int file) {
+char* CFileLoader::LoadLine(auto file) {
     ( ( void(*)(int) )(g_libGTASA + 0x00394A30 + 1) )(file);
 }
 

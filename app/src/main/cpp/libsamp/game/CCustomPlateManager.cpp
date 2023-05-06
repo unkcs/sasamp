@@ -5,6 +5,7 @@
 #include "game.h"
 #include "..//net/netgame.h"
 #include "..//chatwindow.h"
+#include "util/util.h"
 
 extern CNetGame* pNetGame;
 

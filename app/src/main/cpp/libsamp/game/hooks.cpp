@@ -1450,18 +1450,9 @@ void CShadows__StoreCarLightShadow_hook(CVehicleGta* vehicle, int id, RwTexture*
 	CShadows__StoreCarLightShadow(vehicle, id, texture, posn, frontX, frontY, sideX, sideY, r, g, b, maxViewAngle);
 }
 
-void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* a2)
+void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* pMat)
 {
-	CVehicleGta* v2; // r4
-	int v3; // r2
-	CMatrix* v4; // r5
-	float* v5; // r3
 	float v6; // s12
-	float v7; // s5
-	float* v8; // r2
-	float v9; // r0
-	float v10; // r1
-	float v11; // r2
 	float v12; // s14
 	float v13; // s11
 	float v14; // s15
@@ -1471,41 +1462,30 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* a2)
 	float v18; // s15
 	float v19; // ST08_4
 
-	uintptr_t* dwModelarray = (uintptr_t*)CModelInfo::ms_modelInfoPtrs;
+	auto pGtaVeh = pVeh->m_pVehicle;
+	auto pModel = CModelInfo::GetVehicleModelInfo(pGtaVeh->m_nModelIndex);
 
-	v2 = pVeh->m_pVehicle;
-	v3 = *((uintptr_t*)v2 + 5);
-	v4 = a2;
-	v5 = *(float**)(dwModelarray[v2->m_nModelIndex] + 116);
-	v6 = *v5;
-	v7 = v5[1];
-	if (v3)
-		v8 = (float*)(v3 + 48);
-	else
-		v8 = (float*)((char*)v2 + 4);
-	v9 = *v8;
-	v10 = v8[1];
-	v11 = v8[2];
-	v12 = *((float*)v4 + 5);
-	v13 = *((float*)v4 + 4);
+	v6 = pModel->m_pVehicleStruct->m_avDummyPos[0].x;
+
+	v12 = *((float*)pMat + 5);
+	v13 = *((float*)pMat + 4);
 	v14 = (float)(v12 * v12) + (float)(v13 * v13);
 	if (v14 != 0.0)
-		v14 = 1.0 / sqrtf(v14);
+		v14 = 1.0f / sqrtf(v14);
 	v15 = v6 * 4.0;
-	v16 = (float)(v15 + v15) + 1.0;
 	v17 = v13 * v14;
 	v18 = v12 * v14;
 
 	v19 = v15 * v18;
 
-	CVector pos;
-	memcpy(&pos, &(v2->m_matrix->m_pos), sizeof(CVector));
+	CVector pos = pGtaVeh->GetPosition();
+	//memcpy(&pos, &(pGtaVeh->m_matrix->m_pos), sizeof(CVector));
 	pos.z += 2.0f;
 
 	CShadows__StoreCarLightShadow(
-			v2,
-			(uintptr_t)v2 + 24,
-			pVeh->m_Shadow.pTexture,
+			pGtaVeh,
+			(uintptr_t)pGtaVeh + 24,
+			CVehicle::pNeonTex,
 			&pos,
 			(float)(v15 + v15) * v17 * pVeh->m_Shadow.fSizeX,
 			(float)(v15 + v15) * v18 * pVeh->m_Shadow.fSizeX,
@@ -1644,7 +1624,7 @@ void CAutomobile__PreRender_hook(CVehicleGta* thiz)
 			pModelInfoStart->m_fWheelSizeFront = pVeh->m_fWheelSize;
 			pModelInfoStart->m_fWheelSizeRear = pVeh->m_fWheelSize;
 
-			if (pVeh->m_bShadow && pVeh->m_Shadow.pTexture) {
+			if (pVeh->m_bShadow) {
 				CVehicle__DoHeadLightReflectionTwin(pVeh, pVeh->m_pVehicle->m_matrix);
 			}
 		}

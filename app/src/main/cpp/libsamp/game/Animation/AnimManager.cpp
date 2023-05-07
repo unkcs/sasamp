@@ -115,7 +115,7 @@ void CAnimManager::Shutdown() {
     delete[] ms_aAnimAssocGroups;
 }
 
-CAnimBlock* CAnimManager::GetAnimationBlock(AssocGroupId animGroup) {
+CAnimBlock* CAnimManager::GetAnimationBlock(AssocGroupId animGroup) { // это не так работает. мать ебал
     return ms_aAnimAssocGroups[animGroup].m_pAnimBlock;
 }
 

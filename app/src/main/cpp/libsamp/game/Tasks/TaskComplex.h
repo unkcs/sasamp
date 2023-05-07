@@ -8,7 +8,7 @@
 
 #include "Task.h"
 
-class CPed;
+class CPedGta;
 
 class CTaskComplex : public CTask {
 public:
@@ -20,11 +20,11 @@ public:
 
     CTask* GetSubTask() override;
     bool IsSimple() override;
-    bool MakeAbortable(class CPed* ped, eAbortPriority priority, const CEvent* event) override; // Seems like priority defaults to `ABORT_PRIORITY_URGENT` and `event = nullptr`
+    bool MakeAbortable(class CPedGta* ped, eAbortPriority priority, const CEvent* event) override; // Seems like priority defaults to `ABORT_PRIORITY_URGENT` and `event = nullptr`
 
     virtual void SetSubTask(CTask* subTask);
-    virtual CTask* CreateNextSubTask(CPed* ped) = 0;
-    virtual CTask* CreateFirstSubTask(CPed* ped) = 0;
-    virtual CTask* ControlSubTask(CPed* ped) = 0;
+    virtual CTask* CreateNextSubTask(CPedGta* ped) = 0;
+    virtual CTask* CreateFirstSubTask(CPedGta* ped) = 0;
+    virtual CTask* ControlSubTask(CPedGta* ped) = 0;
 };
-static_assert(sizeof(CTaskComplex)==0xC);
+VALIDATE_SIZE(CTaskComplex, 0xC);

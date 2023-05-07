@@ -6,7 +6,6 @@
 
 #include "../Enums/eVehicleType.h"
 #include "Physical.h"
-#include "game/Entity/Ped/Ped.h"
 #include "game/tHandlingData.h"
 #include "game/Enums/eModelID.h"
 #include "game/RideAnimData.h"
@@ -307,6 +306,11 @@ public: // NOTSA functions
     [[nodiscard]] eVehicleCreatedBy GetCreatedBy() const      { return m_nCreatedBy; }
     [[nodiscard]] bool IsCreatedBy(eVehicleCreatedBy v) const { return v == m_nCreatedBy; }
     [[nodiscard]] bool IsMissionVehicle() const { return m_nCreatedBy == MISSION_VEHICLE; }
+
+    void SetGettingInFlags(uint8 doorId);
+    void SetGettingOutFlags(uint8 doorId);
+    void ClearGettingInFlags(uint8 doorId);
+    void ClearGettingOutFlags(uint8 doorId);
 
 public:
     static inline auto m_aSpecialColModel = std::array<CColModel, 4>();

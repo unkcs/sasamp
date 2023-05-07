@@ -9,6 +9,7 @@
 #include "../common.h"
 #include "../Enums/AnimationEnums.h"
 
+#pragma pack(push, 1)
 class CAnimBlock {
 public:
     char         szName[16];
@@ -19,5 +20,6 @@ public:
     int32        animationCount;
     AssocGroupId animationStyle;
 };
+#pragma pack(pop)
 
 VALIDATE_SIZE(CAnimBlock, 0x20);

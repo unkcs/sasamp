@@ -15,6 +15,7 @@
 #include "chatwindow.h"
 #include "CSpeedometr.h"
 #include "util/patch.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CJavaWrapper *g_pJavaWrapper;
 extern CGame *pGame;

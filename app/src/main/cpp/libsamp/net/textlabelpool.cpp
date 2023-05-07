@@ -4,6 +4,7 @@
 #include "netgame.h"
 #include "CSettings.h"
 #include "game/Render/Sprite.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CNetGame *pNetGame;
 extern CGUI *pGUI;

@@ -1,6 +1,7 @@
 #include "../main.h"
 #include "game.h"
 #include "CWeaponsOutFit.h"
+#include "game/Entity/Ped/Ped.h"
 
 int GameGetWeaponModelIDFromWeaponID(int iWeaponID);
 

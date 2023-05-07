@@ -24,19 +24,24 @@
 #include "game/General.h"
 #include "AnimAssocDescriptions.h"
 
+AnimAssocDefinition CAnimManager::*ms_aAnimAssocDefinitions[NUM_ANIM_ASSOC_GROUPS];
+
 void CAnimManager::InjectHooks() {
     CHook::Write(g_libGTASA + 0x005D0370, &ms_numAnimAssocDefinitions);
-    SET_TO(ms_aAnimAssocDefinitions, g_libGTASA + 0x005E8600);
+   // SET_TO(ms_aAnimAssocDefinitions, g_libGTASA + 0x005E8600);
    // CHook::Write(g_libGTASA + 0x005D0604, &ms_aAnimAssocDefinitions);
 
     CHook::Write(g_libGTASA + 0x005D12F0, &ms_aAnimBlocks);
     CHook::Write(g_libGTASA + 0x005D0900, &ms_numAnimBlocks);
 
     CHook::Write(g_libGTASA + 0x005CFDAC, &ms_aAnimAssocGroups);
+   // SET_TO(ms_aAnimAssocGroups, g_libGTASA + 0x00890350);
+
     CHook::Write(g_libGTASA + 0x005CEF50, &ms_aAnimations);
     CHook::Write(g_libGTASA + 0x005CFD10, &ms_numAnimations);
     CHook::Write(g_libGTASA + 0x005D0ABC, &ms_animCache);
 
+  //  CHook::Redirect(g_libGTASA + 0x0040C7D8, &CAnimManager::Initialise);
    // CHook::Redirect(g_libGTASA + 0x0033F23C, &CAnimManager::LoadAnimFiles);
 }
 
@@ -47,12 +52,14 @@ struct IfpHeader {
 
 // 0x5BF6B0
 void CAnimManager::Initialise() {
-    return CHook::CallFunction<void>(g_libGTASA + 0x0040C7D8 + 1);
+   // return CHook::CallFunction<void>(g_libGTASA + 0x0040C7D8 + 1);
    // return plugin::Call<0x5BF6B0>();
 
-    ms_numAnimations = 0;
-    ms_numAnimBlocks = 0;
-    ms_numAnimAssocDefinitions = 118; // ANIM_TOTAL_GROUPS aka NUM_ANIM_ASSOC_GROUPS
+    CAnimManager::ms_numAnimations = 0;
+    CAnimManager::ms_numAnimBlocks = 0;
+    CAnimManager::ms_numAnimAssocDefinitions = 0x76;
+
+  //  ms_numAnimAssocDefinitions = 118; // ANIM_TOTAL_GROUPS aka NUM_ANIM_ASSOC_GROUPS
     ms_animCache.Init(50);
     ReadAnimAssociationDefinitions();
     RegisterAnimBlock("ped");
@@ -60,36 +67,38 @@ void CAnimManager::Initialise() {
 
 // 0x5BC910
 void CAnimManager::ReadAnimAssociationDefinitions() {
+    return CHook::CallFunction<void>(g_libGTASA + 0x0040C6E0 + 1);
     // return plugin::Call<0x5BC910>();
 
-    char name[32], block[32], type[32];
-    bool isAnimSection = false;
-    AnimAssocDefinition* animStyle;
-    int animCount;
-
-    CFileMgr::SetDir("");
-    auto* file = CFileMgr::OpenFile("DATA\\ANIMGRP.DAT", "rb");
-    for (auto line = CFileLoader::LoadLine(file); line; line = CFileLoader::LoadLine(file)) {
-        if (!*line || *line == '#')
-            continue;
-
-        if (isAnimSection) {
-            if (sscanf(line, "%s", name) == 1) {
-                if (!memcmp(name, "end", 4)) {
-                    isAnimSection = false;
-                } else {
-                    AddAnimToAssocDefinition(animStyle, name);
-                }
-            }
-        }
-        else
-        {
-            sscanf(line, "%s %s %s %d", name, block, type, &animCount) == 4;
-            animStyle = AddAnimAssocDefinition(name, block, MODEL_MALE01, animCount, aStdAnimDescs);
-            isAnimSection = true;
-        }
-    }
-    CFileMgr::CloseFile(file);
+//    char name[32], block[32], type[32];
+//    bool isAnimSection = false;
+//    AnimAssocDefinition* animStyle;
+//    int animCount;
+//
+//  //  CFileMgr::SetDir("");
+//    auto file = CFileMgr::OpenFile("DATA/ANIMGRP.DAT", "rb");
+//
+//    for (auto line = CFileLoader::LoadLine(file); line; line = CFileLoader::LoadLine(file)) {
+//        if (!*line || *line == '#')
+//            continue;
+//
+//        if (isAnimSection) {
+//            if (sscanf(CFileLoader::ms_line, "%s", name) == 1) {
+//                if (!memcmp(name, "end", 4)) {
+//                    isAnimSection = false;
+//                } else {
+//                    AddAnimToAssocDefinition(animStyle, name);
+//                }
+//            }
+//        }
+//        else
+//        {
+//            sscanf(CFileLoader::ms_line, "%s %s %s %d", name, block, type, &animCount) == 4;
+//            animStyle = AddAnimAssocDefinition(name, block, MODEL_MALE01, animCount, aStdAnimDescs);
+//            isAnimSection = true;
+//        }
+//    }
+//    CFileMgr::CloseFile(file);
 }
 
 // 0x4D4130
@@ -135,7 +144,7 @@ int32 CAnimManager::GetAnimationBlockIndex(const char* name) {
 
 // 0x4D39B0
 AssocGroupId CAnimManager::GetFirstAssocGroup(const char* name) {
-    return CHook::CallFunction<AssocGroupId>(g_libGTASA + 0x0033DBEC + 1, name);
+  //  return CHook::CallFunction<AssocGroupId>(g_libGTASA + 0x0033DBEC + 1, name);
 
     // ANIM_TOTAL_GROUPS
     for (auto i = 0; i < ANIM_GROUP_MAN; i++) {
@@ -292,16 +301,27 @@ AnimAssocDefinition* CAnimManager::AddAnimAssocDefinition(const char* groupName,
 }
 
 // 0x4D3C80
-void CAnimManager::AddAnimToAssocDefinition(AnimAssocDefinition* definition, const char* animName) {
-    return CHook::CallFunction<void>(g_libGTASA + 0x0033E410 + 1, definition, animName);
+void CAnimManager::AddAnimToAssocDefinition(AnimAssocDefinition* pDef, const char* animName) {
+    //return CHook::CallFunction<void>(g_libGTASA + 0x0033E410 + 1, definition, animName);
 
-    /*
-    int i = 0;
-    while (*definition->animNames[i]) {
-        i++;
+    char **v2; // r3
+    char *v3; // r0
+    char *v4; // t1
+
+    v2 = *(char ***)(pDef + 0x28);
+    v3 = *v2;
+    if ( **v2 )
+    {
+        do
+        {
+            v4 = v2[1];
+            ++v2;
+            v3 = v4;
+        }
+        while ( *v4 );
     }
-    strcpy_s(definition->animNames[i], animName);
-    */
+    strcpy(v3, animName);
+
 }
 
 // 0x4C4DC0
@@ -312,7 +332,7 @@ bool IsClumpSkinned(RpClump *clump) {
 
 // 0x4D3CC0
 void CAnimManager::CreateAnimAssocGroups() {
-   // return CHook::CallFunction<void>(g_libGTASA + 0x0033E430 + 1);
+    return CHook::CallFunction<void>(g_libGTASA + 0x0033E430 + 1);
 
 //    for (auto i = 0; i < ms_numAnimAssocDefinitions; i++) {
 //        CAnimBlendAssocGroup* group = &ms_aAnimAssocGroups[i];
@@ -345,7 +365,7 @@ void CAnimManager::CreateAnimAssocGroups() {
 
 // 0x4D3E50
 int32 CAnimManager::RegisterAnimBlock(const char* name) {
-    return CHook::CallFunction<int32>(g_libGTASA + 0x0033E550 + 1, name);
+  //  return CHook::CallFunction<int32>(g_libGTASA + 0x0033E550 + 1, name);
 
     CAnimBlock* animBlock = GetAnimationBlock(name);
     if (animBlock == nullptr) {

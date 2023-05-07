@@ -7,6 +7,7 @@
 #include "../util/CJavaWrapper.h"
 #include "java_systems/CHUD.h"
 #include "java_systems/CEditobject.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CGame *pGame;
 extern CNetGame *pNetGame;

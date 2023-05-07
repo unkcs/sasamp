@@ -34,6 +34,6 @@ CTask* CTaskSimpleCarSetPedInAsDriver::Clone() {
 }
 
 // 0x64B950
-bool CTaskSimpleCarSetPedInAsDriver::ProcessPed(CPed* ped) {
+bool CTaskSimpleCarSetPedInAsDriver::ProcessPed(CPedGta* ped) {
     return CHook::CallFunction<bool>(g_libGTASA + 0x004904AC + 1, this, ped);
 }

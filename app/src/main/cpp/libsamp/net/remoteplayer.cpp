@@ -2,6 +2,7 @@
 #include "../game/game.h"
 #include "netgame.h"
 #include "../chatwindow.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CGame *pGame;
 

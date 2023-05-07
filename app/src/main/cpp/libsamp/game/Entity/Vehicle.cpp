@@ -40,6 +40,26 @@ int CVehicleGta::GetPassengerIndex(const CPedGta* passenger) {
     return -1;
 }
 
+// 0x6D3000
+void CVehicleGta::SetGettingInFlags(uint8 doorId) {
+    m_nGettingInFlags |= doorId;
+}
+
+// 0x6D3020
+void CVehicleGta::SetGettingOutFlags(uint8 doorId) {
+    m_nGettingOutFlags |= doorId;
+}
+
+// 0x6D3040
+void CVehicleGta::ClearGettingInFlags(uint8 doorId) {
+    m_nGettingInFlags &= ~doorId;
+}
+
+// 0x6D3060
+void CVehicleGta::ClearGettingOutFlags(uint8 doorId) {
+    m_nGettingOutFlags &= ~doorId;
+}
+
 // ----------------------------------- hooks
 
 void SetDriver_hook(CVehicleGta *thiz, CPedGta *pPed)

@@ -8,7 +8,7 @@
 
 #include "Task.h"
 
-class CPed;
+class CPedGta;
 
 #pragma pack(push, 1)
 class CTaskSimple : public CTask {
@@ -18,7 +18,7 @@ public:
 
     CTask* GetSubTask() override;
     bool IsSimple() override;
-    virtual bool ProcessPed(CPed* ped) = 0;
-    virtual bool SetPedPosition(CPed* ped);
+    virtual bool ProcessPed(CPedGta* ped) = 0;
+    virtual bool SetPedPosition(CPedGta* ped);
 };
 static_assert(sizeof(CTaskSimple)==0x8);

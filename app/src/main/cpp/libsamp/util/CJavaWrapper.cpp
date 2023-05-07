@@ -10,6 +10,7 @@ extern "C" JavaVM *javaVM;
 #include "../str_obfuscator_no_template.hpp"
 #include "java_systems/CTab.h"
 #include "java_systems/CHUD.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CNetGame *pNetGame;
 extern CGame *pGame;

@@ -11,7 +11,7 @@
 #pragma pack(push, 1)
 class CPlayerPedGta : public CPedGta {
 public:
-    CPed* m_p3rdPersonMouseTarget;
+    CPedGta* m_p3rdPersonMouseTarget;
     int32 field_7A0;
 
     // did we display "JCK_HLP" message
@@ -22,6 +22,22 @@ public:
     static bool bDebugTargeting;
     static bool bDebugTapToTarget;
 
+public:
+    static void InjectHooks();
+
+    CPlayerPedGta(int32 playerId, bool bGroupCreated);
+
+    bool Load_Reversed();
+    bool Save_Reversed();
+
+//    void ProcessControl() override;
+//    bool Load() override;
+//    bool Save() override;
+
+  //  CPad* GetPadFromPlayer() const;
+    bool CanPlayerStartMission();
+    bool IsHidden();
+    void ReApplyMoveAnims();
 };
 #pragma pack(pop)
 

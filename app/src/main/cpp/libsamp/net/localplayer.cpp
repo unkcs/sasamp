@@ -12,6 +12,7 @@
 #include "java_systems/CHUD.h"
 #include "java_systems/CInventory.h"
 #include "../game/Weapon.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CGame *pGame;
 

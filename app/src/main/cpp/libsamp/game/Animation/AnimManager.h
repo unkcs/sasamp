@@ -19,8 +19,8 @@ constexpr auto NUM_ANIM_BLOCKS = 180;
 
 class CAnimManager {
 public:
-   // static std::array<AnimAssocDefinition, NUM_ANIM_ASSOC_GROUPS> ms_aAnimAssocDefinitionsX; // replacement
-    static inline AnimAssocDefinition ms_aAnimAssocDefinitions[NUM_ANIM_ASSOC_GROUPS]; // std::array - see SurfaceInfos_c
+    static std::array<AnimAssocDefinition, NUM_ANIM_ASSOC_GROUPS> ms_aAnimAssocDefinitions; // replacement
+  //  static AnimAssocDefinition (*ms_aAnimAssocDefinitions)[NUM_ANIM_ASSOC_GROUPS]; // std::array - see SurfaceInfos_c
     static inline int32 ms_numAnimAssocDefinitions;
 
     static inline CAnimBlendAssocGroup* ms_aAnimAssocGroups;

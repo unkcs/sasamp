@@ -5,6 +5,7 @@
 #include "netgame.h"
 #include "java_systems/CHUD.h"
 #include "CSettings.h"
+#include "../game/Entity/Ped/Ped.h"
 #include <thread>
 #include <chrono>
 

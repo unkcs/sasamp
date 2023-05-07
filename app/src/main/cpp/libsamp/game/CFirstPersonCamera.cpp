@@ -2,7 +2,7 @@
 #include "game.h"
 #include "CFirstPersonCamera.h"
 #include "..//chatwindow.h"
-
+#include "game/Entity/Ped/Ped.h"
 #include "..//net/netgame.h"
 
 extern CNetGame* pNetGame;

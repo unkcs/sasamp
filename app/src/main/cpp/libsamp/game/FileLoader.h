@@ -6,6 +6,7 @@
 
 
 #include "common.h"
+#include "CFileMgr.h"
 
 enum eSection : uint8 {
     UNDEFINED             = 0,
@@ -56,12 +57,12 @@ enum eIPL : uint8 {
 
 class CFileLoader {
 public:
-    static char (&ms_line)[512];
+    static inline char ms_line[512];
 
 public:
-    static char* LoadLine(auto file);
+    static char* LoadLine(FILE* file);
     static char* LoadLine(char*& outLine, int32& outSize);
 
-    char *FindFirstNonNullOrWS(char *it);
+    static char *FindFirstNonNullOrWS(char *it);
 };
 

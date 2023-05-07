@@ -1,5 +1,6 @@
 #include "CDebugInfo.h"
-
+#include "game/Entity/Ped/Ped.h"
+#include "game/Tasks/TaskManager.h"
 #include "main.h"
 #include "gui/gui.h"
 #include "net/netgame.h"

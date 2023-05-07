@@ -48,8 +48,9 @@ CAnimBlendStaticAssociation* CAnimBlendAssocGroup::GetAnimation(const char* Anim
     return CHook::CallFunction<CAnimBlendStaticAssociation*>(g_libGTASA + 0x00339B50 + 1, this, AnimName);
 }
 
-CAnimBlendStaticAssociation* CAnimBlendAssocGroup::GetAnimation(uint32 ID) {
-    return CHook::CallFunction<CAnimBlendStaticAssociation*>(g_libGTASA + 0x00339B90 + 1, this, ID);
+CAnimBlendStaticAssociation* CAnimBlendAssocGroup::GetAnimation(uint32 id) {
+    return &this->m_pAssociations[id - this->m_nIdOffset];
+   // return CHook::CallFunction<CAnimBlendStaticAssociation*>(g_libGTASA + 0x00339B90 + 1, this, ID);
 }
 
 // 0x4CE1B0

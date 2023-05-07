@@ -43,22 +43,22 @@ CTask* CTaskComplexSequence::Clone() {
 }
 
 // 0x632C00
-bool CTaskComplexSequence::MakeAbortable(CPed* ped, eAbortPriority priority, const CEvent* event) {
+bool CTaskComplexSequence::MakeAbortable(CPedGta* ped, eAbortPriority priority, const CEvent* event) {
     return MakeAbortable_Reversed(ped, priority, event);
 }
 
 // 0x638A40
-CTask* CTaskComplexSequence::CreateNextSubTask(CPed* ped) {
+CTask* CTaskComplexSequence::CreateNextSubTask(CPedGta* ped) {
     return CreateNextSubTask_Reversed(ped);
 }
 
 // 0x638A60
-CTask* CTaskComplexSequence::CreateFirstSubTask(CPed* ped) {
+CTask* CTaskComplexSequence::CreateFirstSubTask(CPedGta* ped) {
     return CreateFirstSubTask_Reversed(ped);
 }
 
 // 0x632D00
-CTask* CTaskComplexSequence::ControlSubTask(CPed* ped) {
+CTask* CTaskComplexSequence::ControlSubTask(CPedGta* ped) {
     return ControlSubTask_Reversed(ped);
 }
 
@@ -73,20 +73,20 @@ CTask* CTaskComplexSequence::Clone_Reversed() {
     return sequence;
 }
 
-bool CTaskComplexSequence::MakeAbortable_Reversed(CPed* ped, eAbortPriority priority, const CEvent* event) {
+bool CTaskComplexSequence::MakeAbortable_Reversed(CPedGta* ped, eAbortPriority priority, const CEvent* event) {
     return m_pSubTask->MakeAbortable(ped, priority, event);
 }
 
-CTask* CTaskComplexSequence::CreateNextSubTask_Reversed(CPed* ped) {
+CTask* CTaskComplexSequence::CreateNextSubTask_Reversed(CPedGta* ped) {
     return CreateNextSubTask(ped, m_nCurrentTaskIndex, m_nSequenceRepeatedCount);
 }
 
-CTask* CTaskComplexSequence::CreateFirstSubTask_Reversed(CPed* ped) {
+CTask* CTaskComplexSequence::CreateFirstSubTask_Reversed(CPedGta* ped) {
     CTask* currentTask = m_aTasks[m_nCurrentTaskIndex];
     return currentTask ? currentTask->Clone() : nullptr;
 }
 
-CTask* CTaskComplexSequence::ControlSubTask_Reversed(CPed* ped) {
+CTask* CTaskComplexSequence::ControlSubTask_Reversed(CPedGta* ped) {
     return m_pSubTask;
 }
 
@@ -115,7 +115,7 @@ void CTaskComplexSequence::AddTask(int32 sequenceIdx, CTask* task) {
 }
 
 // 0x632C70
-CTask* CTaskComplexSequence::CreateNextSubTask(CPed* ped, int32& taskIndex, int32& repeatCount) {
+CTask* CTaskComplexSequence::CreateNextSubTask(CPedGta* ped, int32& taskIndex, int32& repeatCount) {
   //  UNUSED(ped);
 
     CTask* nextSubTask = nullptr;

@@ -14,6 +14,7 @@
 #include "java_systems/casino/Baccarat.h"
 #include "java_systems/CSpeedometr.h"
 #include "java_systems/casino/Dice.h"
+#include "game/Entity/Ped/Ped.h"
 
 extern CGUI *pGUI;
 extern CGame *pGame;

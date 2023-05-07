@@ -174,9 +174,9 @@ void CPlayerPed::ApplyCrouch()
 	{
 		if (!IsCrouching())
 		{
-			if (m_pPed->pPedIntelligence)
+			if (m_pPed->m_pIntelligence)
 			{
-				((int (*)(CPedIntelligence*, uint16_t))(g_libGTASA + 0x0044E0F4 + 1))(m_pPed->pPedIntelligence, 0);
+				((int (*)(CPedIntelligence*, uint16_t))(g_libGTASA + 0x0044E0F4 + 1))(m_pPed->m_pIntelligence, 0);
 			}
 		}
 	}
@@ -194,9 +194,9 @@ void CPlayerPed::ResetCrouch()
 		return;
 	}
 	m_pPed->bIsDucking = false;
-	if (m_pPed->pPedIntelligence)
+	if (m_pPed->m_pIntelligence)
 	{
-		((int (*)(CPedIntelligence*))(g_libGTASA + 0x0044E164 + 1))(m_pPed->pPedIntelligence);
+		((int (*)(CPedIntelligence*))(g_libGTASA + 0x0044E164 + 1))(m_pPed->m_pIntelligence);
 	}
 	//bKeepTasksAfterCleanUp
 }
@@ -1276,7 +1276,7 @@ int CPlayerPed::GetCurrentAnimationIndex(float& blendData)
 		return 0;
 	}
 	sizeof(CPedGta);
-	CPedIntelligence* pIntelligence = m_pPed->pPedIntelligence;
+	CPedIntelligence* pIntelligence = m_pPed->m_pIntelligence;
 
 	if (pIntelligence)
 	{
@@ -1365,12 +1365,9 @@ void CPlayerPed::PlayAnimByIdx(int idx, float BlendData, bool loop, bool freeze,
 
 bool IsBlendAssocGroupLoaded(int iGroup)
 {
-	auto pBlendAssocGroup = CAnimManager::ms_aAnimAssocGroups[iGroup].m_nGroupID;
-//	uintptr_t* pBlendAssocGroup = *(uintptr_t * *)(g_libGTASA + 0x00890350); // CAnimManager::ms_aAnimAssocGroups
-//	uintptr_t blendAssoc = (uintptr_t)pBlendAssocGroup;
-//	blendAssoc += (iGroup * 20);
-//	pBlendAssocGroup = (uintptr_t*)blendAssoc;
-	return pBlendAssocGroup != NULL;
+	auto pBlendAssocGroup = CAnimManager::ms_aAnimAssocGroups[iGroup].m_pAnimBlock;
+
+	return pBlendAssocGroup != nullptr;
 }
 
 void CPlayerPed::SetMoveAnim(int iAnimGroup)
@@ -1378,70 +1375,55 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 	Log("SetMoveAnim %d", iAnimGroup);
 	if (iAnimGroup == ANIM_GROUP_DEFAULT || iAnimGroup == 255)
 	{
-		auto pModel = reinterpret_cast<CPedModelInfo*>(CModelInfo::GetModelInfo(m_pEntity->m_nModelIndex));
+		auto pModel = CModelInfo::GetModelInfo(m_pEntity->m_nModelIndex)->AsPedModelInfoPtr();
 		iAnimGroup = pModel->m_nAnimType;
 	}
-
-	// Find which anim block to load
 	const char* strBlockName = nullptr;
-	switch (iAnimGroup)
-	{
-	case 55:
-	case 58:
-	case 61:
-	case 64:
-	case 67:
-		strBlockName = "fat";
-		break;
+	switch (iAnimGroup) {
+		case 55:
+		case 58:
+		case 61:
+		case 64:
+		case 67:
+			strBlockName = "fat";
+			break;
 
-	case 56:
-	case 59:
-	case 62:
-	case 65:
-	case 68:
-		strBlockName = "muscular";
-		break;
+		case 56:
+		case 59:
+		case 62:
+		case 65:
+		case 68:
+			strBlockName = "muscular";
+			break;
+		case 138:
+			strBlockName = "skate";
+			break;
 
-	case 138:
-		strBlockName = "skate";
-		break;
+		default:
+			strBlockName = "ped";
+			break;
+	}
 
-	default:
-		strBlockName = "ped";
-		break;
-	}
-	if (!strBlockName)
-	{
-		return;
-	}
-	if (!m_dwGTAId || !m_pPed)
-	{
-		return;
-	}
-	if (!GamePool_Ped_GetAt(m_dwGTAId))
-	{
-		return;
-	}
+	if (!m_dwGTAId || !m_pPed) return;
+
 	if (!IsBlendAssocGroupLoaded(iAnimGroup))
 	{
 		Log("Animgrp %d not loaded", iAnimGroup);
-		uintptr_t pAnimBlock = ((uintptr_t(*)(const char*))(g_libGTASA + 0x0033DB7C + 1))(strBlockName);
-		if (!pAnimBlock)
-		{
-			return;
-		}
-		uint8_t bLoaded = *((uint8_t*)pAnimBlock + 16);
-		if (!bLoaded)
-		{
-			uintptr_t animBlocks = (uintptr_t)(g_libGTASA + 0x0089035C);
-			uintptr_t idx = (pAnimBlock - animBlocks) / 32;
+		auto pAnimBlock = CAnimManager::GetAnimationBlock(strBlockName);
 
-			uintptr_t modelId = idx + 25575;
-			Log("trying to load modelid %u", modelId);
-			if (!pGame->IsModelLoaded(modelId))
+		if (!pAnimBlock) return;
+
+		if (!pAnimBlock->bLoaded)
+		{
+			auto idx = CAnimManager::GetAnimationBlockIndex(pAnimBlock);
+
+			auto modelId = IFPToModelId(idx);
+			// nned 25680
+			Log("trying to load modelid %d, %d", modelId, idx);
+			if (!CGame::IsModelLoaded(modelId))
 			{
 				pGame->RequestModel(modelId);
-				pGame->LoadRequestedModels();
+				CGame::LoadRequestedModels();
 				int tries = 0;
 				while (!pGame->IsModelLoaded(modelId) && tries <= 10)
 				{
@@ -1458,9 +1440,10 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 		Log("animgrp %d loaded", iAnimGroup);
 	}
 
-	m_pPed->m_motionAnimGroup = static_cast<AssocGroupId>(iAnimGroup);
+	m_pPed->m_nAnimGroup = static_cast<AssocGroupId>(iAnimGroup);
 
-	((void(*)(CPedGta* thiz))(g_libGTASA + 0x004544F4 + 1))(m_pPed); // ReApplyMoveAnims
+	auto pPlayerPed = (CPlayerPedGta*)m_pPed;
+	pPlayerPed->ReApplyMoveAnims();
 }
 
 

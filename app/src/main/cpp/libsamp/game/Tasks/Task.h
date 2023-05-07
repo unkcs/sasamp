@@ -17,7 +17,7 @@ enum eAbortPriority : int32 {
 };
 
 class CEvent;
-class CPed;
+class CPedGta;
 class CTaskSimple;
 class CTaskComplex;
 class CTask;
@@ -40,7 +40,7 @@ public:
     virtual bool IsSimple() = 0;
     virtual eTaskType GetTaskType() = 0;
     virtual void StopTimer(const CEvent* event);
-    virtual bool MakeAbortable(CPed* ped, eAbortPriority priority, const CEvent* event) = 0;
+    virtual bool MakeAbortable(CPedGta* ped, eAbortPriority priority, const CEvent* event) = 0;
 
     static bool IsGoToTask(CTask* task);
     static bool IsTaskPtr(CTask* task);

@@ -32,7 +32,7 @@ public:
 
     eTaskType GetTaskType() override { return Type; }
     CTask* Clone() override;
-    bool MakeAbortable(CPed* ped, eAbortPriority priority, const CEvent* event) override { return false; }
-    bool ProcessPed(CPed* ped) override;
+    bool MakeAbortable(CPedGta* ped, eAbortPriority priority, const CEvent* event) override { return false; }
+    bool ProcessPed(CPedGta* ped) override;
 };
 VALIDATE_SIZE(CTaskSimpleCarSetPedInAsDriver, 0x1C);

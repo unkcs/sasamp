@@ -1,6 +1,7 @@
 #include "../main.h"
 #include "../game/game.h"
 #include "netgame.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CGame* pGame;
 

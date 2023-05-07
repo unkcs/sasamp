@@ -33,6 +33,7 @@
         android:smallScreens="true" />
 
     <application
+        android:gwpAsanMode="always"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:icon="@mipmap/ic_launcher"
         android:isGame="true"

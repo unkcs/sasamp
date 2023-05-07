@@ -37,14 +37,14 @@ public:
 
     eTaskType GetTaskType() override { return Type; } // 0x632C60
     CTask* Clone() override;
-    bool MakeAbortable(class CPed* ped, eAbortPriority priority, const CEvent* event) override;
-    CTask* CreateNextSubTask(CPed* ped) override;
-    CTask* CreateFirstSubTask(CPed* ped) override;
-    CTask* ControlSubTask(CPed* ped) override;
+    bool MakeAbortable(class CPedGta* ped, eAbortPriority priority, const CEvent* event) override;
+    CTask* CreateNextSubTask(CPedGta* ped) override;
+    CTask* CreateFirstSubTask(CPedGta* ped) override;
+    CTask* ControlSubTask(CPedGta* ped) override;
 
     void AddTask(CTask* task);
     void AddTask(int32 id, CTask* task);
-    CTask* CreateNextSubTask(CPed* ped, int32& taskIndex, int32& repeatCount);
+    CTask* CreateNextSubTask(CPedGta* ped, int32& taskIndex, int32& repeatCount);
     void Flush();
     bool Contains(eTaskType taskType);
     void f0x463610(bool flush);
@@ -57,9 +57,9 @@ private:
     CTaskComplexSequence* Constructor();
 
     CTask* Clone_Reversed();
-    bool MakeAbortable_Reversed(class CPed* ped, eAbortPriority priority, const CEvent* event);
-    CTask* CreateNextSubTask_Reversed(CPed* ped);
-    CTask* CreateFirstSubTask_Reversed(CPed* ped);
-    CTask* ControlSubTask_Reversed(CPed* ped);
+    bool MakeAbortable_Reversed(class CPedGta* ped, eAbortPriority priority, const CEvent* event);
+    CTask* CreateNextSubTask_Reversed(CPedGta* ped);
+    CTask* CreateFirstSubTask_Reversed(CPedGta* ped);
+    CTask* ControlSubTask_Reversed(CPedGta* ped);
 };
 VALIDATE_SIZE(CTaskComplexSequence, 0x40);

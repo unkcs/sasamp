@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "../../PedIntelligence.h"
 #include "../../Weapon.h"
 #include "../../Enums/ePedState.h"
 #include "../../Enums/eMoveState.h"
@@ -14,6 +13,7 @@
 #include "../../Enums/ePedType.h"
 #include "../../Enums/eWeaponSkill.h"
 #include "../../Enums/eWeaponType.h"
+#include "game/PedIntelligence.h"
 
 class CVehicleGta;
 
@@ -39,7 +39,7 @@ struct CPedGta : CPhysical {
     uint8_t             m_PedAudioEntity[0x15C];
     uint8_t             m_PedSpeechAudioEntity[0x100];
     uint8_t             m_PedWeaponAudioEntity[0xA8];
-    CPedIntelligence*   pPedIntelligence;
+    CPedIntelligence*   m_pIntelligence;
     uintptr_t           *m_pPlayerData;
     ePedCreatedBy       m_nCreatedBy;
     uint8_t             pad6[3];
@@ -190,7 +190,7 @@ struct CPedGta : CPhysical {
     };
 
     uintptr_t       *m_apBones[19];
-    AssocGroupId    m_motionAnimGroup;
+    AssocGroupId    m_nAnimGroup;
     CVector2D       m_extractedVelocity;
     uint8_t         m_acquaintances[0x14];
     uintptr_t       *m_pWeaponClump;
@@ -267,6 +267,9 @@ struct CPedGta : CPhysical {
 public:
     void GetBonePosition(RwV3d *posn, uint32 boneTag, bool bCalledFromCamera);
     void StopNonPartialAnims();
+
+    CTaskManager& GetTaskManager() { return m_pIntelligence->m_TaskMgr; }
+    CTaskManager& GetTaskManager() const { return m_pIntelligence->m_TaskMgr; }
 };
 
 

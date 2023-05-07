@@ -6,6 +6,7 @@
 #include "playertags.h"
 #include "CSettings.h"
 #include "game/Render/Sprite.h"
+#include "game/Entity/Ped/Ped.h"
 
 extern CGame *pGame;
 extern CNetGame *pNetGame;

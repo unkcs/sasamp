@@ -847,6 +847,8 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVect
 #include "Animation/AnimBlendAssociation.h"
 #include "Animation/AnimManager.h"
 #include "References.h"
+#include "CarEnterExit.h"
+#include "game/Entity/Ped/PlayerPedGta.h"
 
 void InjectHooks()
 {
@@ -869,6 +871,8 @@ void InjectHooks()
 	CEntityGta::InjectHooks();
 	CPhysical::InjectHooks();
 	CAnimManager::InjectHooks();
+	CCarEnterExit::InjectHooks();
+	CPlayerPedGta::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -2525,7 +2529,7 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x001AECC0, &RwFrameAddChild_hook, &RwFrameAddChild);
 	CHook::InlineHook(g_libGTASA, 0x002DFD30, &CUpsideDownCarCheck__IsCarUpsideDown_hook, &CUpsideDownCarCheck__IsCarUpsideDown);
 	CHook::InlineHook(g_libGTASA, 0x0033AD78, &CAnimBlendNode__FindKeyFrame_hook, &CAnimBlendNode__FindKeyFrame);
-	CHook::InlineHook(g_libGTASA, 0x482E60, &CTaskComplexEnterCarAsDriver_hook, &CTaskComplexEnterCarAsDriver);
+	//CHook::InlineHook(g_libGTASA, 0x482E60, &CTaskComplexEnterCarAsDriver_hook, &CTaskComplexEnterCarAsDriver);
 	CHook::InlineHook(g_libGTASA, 0x4833CC, &CTaskComplexLeaveCar_hook, &CTaskComplexLeaveCar);
 
 	// attached objects

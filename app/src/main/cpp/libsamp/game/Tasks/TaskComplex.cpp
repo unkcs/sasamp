@@ -29,7 +29,7 @@ bool CTaskComplex::IsSimple() {
 }
 
 // 0x4211B0
-bool CTaskComplex::MakeAbortable(CPed* ped, eAbortPriority priority, const CEvent* event) {
+bool CTaskComplex::MakeAbortable(CPedGta* ped, eAbortPriority priority, const CEvent* event) {
     return m_pSubTask->MakeAbortable(ped, priority, event);
 }
 

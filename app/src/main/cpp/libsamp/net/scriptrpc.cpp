@@ -3,6 +3,7 @@
 #include "netgame.h"
 #include "../gui/gui.h"
 #include "game/Models/ModelInfo.h"
+#include "../game/Entity/Ped/Ped.h"
 
 extern CGame *pGame;
 extern CNetGame *pNetGame;

@@ -10,8 +10,6 @@ extern CGame* pGame;
 
 extern CNetGame* pNetGame;
 
-RwTexture* CVehicle::m_pVinyls[82]{};
-
 CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRotation, bool bSiren)
 {
 	Log("CVehicle(%d, %4.f, %4.f, %4.f, %4.f)", iType, fPosX, fPosY, fPosZ, fRotation);
@@ -167,12 +165,6 @@ CVehicle::~CVehicle()
 		delete m_pCustomHandling;
 		m_pCustomHandling = nullptr;
 	}
-	if (m_bShadow) {
-		if (m_Shadow.pTexture) {
-			RwTextureDestroy(m_Shadow.pTexture);
-			m_Shadow.pTexture = nullptr;
-		}
-	}
 
 	if (bHasSuspensionLines && m_pSuspensionLines) {
 		delete[] m_pSuspensionLines;
@@ -212,12 +204,6 @@ CVehicle::~CVehicle()
 	{
 		delete m_pRightReverseLight;
 		m_pRightReverseLight = nullptr;
-	}
-
-	if (!CModelInfo::GetModelInfo(m_pVehicle->m_nModelIndex)->m_nRefCount &&
-		pGame->IsModelLoaded(m_pVehicle->m_nModelIndex))
-	{
-		CStreaming::RemoveModel(m_pVehicle->m_nModelIndex);
 	}
 }
 
@@ -981,11 +967,6 @@ void CVehicle::ProcessWheelsOffset()
 
 void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, float fSizeY, const char* szTex)
 {
-	if (m_Shadow.pTexture)
-	{
-		RwTextureDestroy(m_Shadow.pTexture);
-		m_Shadow.pTexture = nullptr;
-	}
 
 	if (fSizeX == 0.0f || fSizeY == 0.0f)
 	{
@@ -1000,7 +981,6 @@ void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, fl
 	m_Shadow.b = b;
 	m_Shadow.fSizeX = fSizeX;
 	m_Shadow.fSizeY = fSizeY;
-	m_Shadow.pTexture = CUtil::LoadTextureFromDB("samp", "neonaper3");
 }
 
 void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID)

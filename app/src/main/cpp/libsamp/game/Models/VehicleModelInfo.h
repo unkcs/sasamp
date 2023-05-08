@@ -69,6 +69,7 @@ static_assert(sizeof(UpgradePosnDesc) == 0x20, "Invalid size UpgradePosnDesc");
 
 #pragma pack(push, 1)
 struct CVehicleModelInfo : public CClumpModelInfo {
+public:
     RpMaterial*         m_pPlateMaterial; // 3C
     char                m_szPlateText[9]; // 40
     unsigned char       m_nPlateType;    //  49

@@ -20,6 +20,8 @@ void LoadSplashTexture()
 		sprintf(name, "remapbody%d", i + 1);
 		CVehicle::m_pVinyls[i] = CUtil::LoadTextureFromDB("gta3", name);
 	}
+
+	CVehicle::pNeonTex = CUtil::LoadTextureFromDB("samp", "neonaper3");
 }
 
 void ImGui_ImplRenderWare_RenderDrawData(ImDrawData* draw_data);

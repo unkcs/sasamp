@@ -2179,6 +2179,7 @@ RwTexture* CUtil::GetTexture(const char* name)
     if (!tex)
     {
         tex = TextureDatabaseRuntime::GetTexture("RepairLR");
+        Log("WARNING! No tex = %s", name);
     }
     ++tex->refCount;
 

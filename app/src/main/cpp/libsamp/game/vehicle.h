@@ -62,7 +62,7 @@ struct SReplacedTexture
 
 struct SCustomCarShadow
 {
-	RwTexture* pTexture {nullptr};
+//	RwTexture* pTexture {nullptr};
 	uint8_t r {};
 	uint8_t g {};
 	uint8_t b {};
@@ -149,7 +149,6 @@ public:
 	CRGBA lightColor{255, 255, 255, 0};
 	int16_t m_iVinylId = -1;
 	RwTexture* pPlateTexture = nullptr;
-	static RwTexture* m_pVinyls[82];
 
 	CVehicleGta* 	m_pVehicle;
 
@@ -267,6 +266,10 @@ public:
 	void setPlate(ePlateType type, char *szNumber, char *szRegion);
 
 	void test();
+
+public:
+	static inline RwTexture *pNeonTex;
+	static inline RwTexture* m_pVinyls[82];
 };
 
 enum eVehicleOverrideLightsState {

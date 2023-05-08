@@ -154,6 +154,7 @@ int last_process_cnetgame = 0;
 
 void CNetGame::Process() {
 
+    auto curTick = GetTickCount();
     // need all frame
     if (pGame->m_bCheckpointsEnabled) {
         CPlayerPed *pPlayerDed = m_pPlayerPool->GetLocalPlayer()->GetPlayerPed();
@@ -170,10 +171,15 @@ void CNetGame::Process() {
     }
 
     // 30 fps
-    if (GetTickCount() - last_process_cnetgame >= 33) {
-        last_process_cnetgame = GetTickCount();
+    if (curTick - last_process_cnetgame >= 33) {
+        last_process_cnetgame = curTick;
     } else {
         return;
+    }
+    static auto nextClearTime = curTick + 60000;
+    if(curTick > nextClearTime) {
+        CStreaming::RemoveAllUnusedModels();
+        nextClearTime = curTick + 60000;
     }
     //CSkyBox::Process();
     CSpeedometr::update();

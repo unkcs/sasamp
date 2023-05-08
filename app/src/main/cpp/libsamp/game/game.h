@@ -38,8 +38,6 @@ public:
 	static void InitInMenu();
 	static void InitInGame();
 
-	static void RemoveModel(int iModel, bool bFromStreaming);
-
 	void HandleChangedHUDStatus();
 	bool IsToggledHUDElement(int iID);
 

@@ -41,7 +41,7 @@ enum eStreamingLoadState : uint8 {
 
 constexpr auto STREAMING_SECTOR_SIZE = 2048u;
 
-class __attribute__((aligned(4))) CStreamingInfo {
+class CStreamingInfo {
 public:
     int16 m_nNextIndex;     // ms_pArrayBase array index
     int16 m_nPrevIndex;     // ms_pArrayBase array index
@@ -57,10 +57,11 @@ public:
             uint8 bLoadingScene : 1;
         };
     };
-    uint8  m_nImgId;        // Index into CStreaming::ms_files
-    uint32 m_nCdPosn;       // Position in directory (in sectors)
-    size_t m_nCdSize;       // Size of resource (in sectors); m_nCdSize * STREAMING_BLOCK_SIZE = actual size in bytes
+    uint8               m_nImgId;        // Index into CStreaming::ms_files
+    uint32              m_nCdPosn;       // Position in directory (in sectors)
+    size_t              m_nCdSize;       // Size of resource (in sectors); m_nCdSize * STREAMING_BLOCK_SIZE = actual size in bytes
     eStreamingLoadState m_nLoadState;
+    uint8_t             pad[3];
 
     static inline CStreamingInfo* ms_pArrayBase;
 

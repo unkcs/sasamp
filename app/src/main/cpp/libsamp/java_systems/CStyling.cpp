@@ -8,6 +8,7 @@
 #include "../game/game.h"
 #include "net/netgame.h"
 #include "util/CJavaWrapper.h"
+#include "CNotification.h"
 
 extern CGame* pGame;
 
@@ -117,6 +118,8 @@ Java_com_liverussia_cr_gui_styling_Styling_sendBuy(JNIEnv *env, jobject thiz) {
     pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
 }
 
+
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject thiz, jint type,
@@ -173,15 +176,14 @@ Java_com_liverussia_cr_gui_styling_Styling_changeVinyls(JNIEnv *env, jobject thi
     if(is_next) {
         pVehicle->m_iVinylId ++;
 
-        if(pVehicle->m_iVinylId > std::size(CVehicle::m_pVinyls))
-            pVehicle->m_iVinylId = 0;
+        if(pVehicle->m_iVinylId > std::size(CVehicle::m_pVinyls) - 1 )
+            pVehicle->m_iVinylId = -1;
     } else {
         pVehicle->m_iVinylId --;
 
         if(pVehicle->m_iVinylId < -1)
             pVehicle->m_iVinylId = std::size(CVehicle::m_pVinyls) - 1;
     }
-
 }
 extern "C"
 JNIEXPORT jint JNICALL
@@ -236,4 +238,46 @@ Java_com_liverussia_cr_gui_styling_Styling_sendOnChooseVinil(JNIEnv *env, jobjec
     bsSend.Write((int16_t)pVehicle->m_iVinylId);
 
     pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE, 0);
+}
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_liverussia_cr_gui_styling_Styling_isAvailableStyle(JNIEnv *env, jobject thiz, jint type) {
+    auto pPed = pGame->FindPlayerPed();
+
+    if(!pPed->IsInVehicle()) return 0;
+
+    auto pVehicle = pPed->GetCurrentVehicle();
+
+    switch(type) {
+        case 1: {
+            // light
+           return true;
+        }
+        case 2: {
+            // toner
+            return true;
+        }
+        case 3: {
+            // body
+            if(pVehicle->m_iVinylId != -1) {
+                CNotification::show(0, "Недоступно с винилами!", 5, 0);
+                return false;
+            }
+            return true;
+        }
+        case 4: {
+            // body2
+            return true;
+        }
+        case 5: {
+            // wheel
+
+            return true;
+        }
+        case 0: {
+            // neon
+            return true;
+            // pVehicle->SetCustomShadow(r, g, b, 5.0, 5.0, nullptr);
+        }
+    }
 }

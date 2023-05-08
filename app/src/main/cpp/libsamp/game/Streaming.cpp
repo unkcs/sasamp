@@ -4,6 +4,8 @@
 
 #include "Streaming.h"
 #include "../util/patch.h"
+#include "StreamingInfo.h"
+#include "game/Models/ModelInfo.h"
 #include <algorithm>
 #include <functional>
 #include <vector>
@@ -13,9 +15,28 @@ void CStreaming::RemoveModel(int32 modelId) {
     CHook::CallFunction<void>(g_libGTASA + 0x00290C4C + 1, modelId);
 }
 
-void CStreaming::RemoveAllUnusedModels()
-{
-    ((void (*) ())(g_libGTASA + 0x293325))();
+//void CStreaming::RemoveAllUnusedModels()
+//{
+//
+//}
+
+// Remove majority of loaded models
+void CStreaming::RemoveAllUnusedModels() {
+  //  return  ((void (*) ())(g_libGTASA + 0x293325))();
+
+    // Remove all possibly removable vehicles
+//    for (int32 i = 0; i < MAX_VEHICLES_LOADED; i++) {
+//        RemoveLoadedVehicle();
+//    }
+
+    // Remove majority of models with no refs
+    for (int32 modelId = 1000; IsModelDFF(modelId); modelId++) {
+        CStreamingInfo& streamingInfo = GetInfo(modelId);
+        if (streamingInfo.IsLoaded() && !CModelInfo::GetModelInfo(modelId)->m_nRefCount) {
+            RemoveModel(modelId);
+            streamingInfo.ClearAllFlags();
+        }
+    }
 }
 
 void CStreaming::InjectHooks() {
@@ -23,7 +44,9 @@ void CStreaming::InjectHooks() {
     CHook::Write(g_libGTASA + 0x005D111C, &CStreaming::ms_memoryAvailable);
     CHook::Write(g_libGTASA + 0x005D1508, &CStreaming::desiredNumVehiclesLoaded);
     CHook::Write(g_libGTASA + 0x005CE80C, &CStreaming::ms_files);
+
     CHook::Write(g_libGTASA + 0x005CF32C, &CStreaming::ms_rwObjectInstances);
+    CHook::Write(g_libGTASA + 0x005CFC04, &CStreaming::ms_aInfoForModel);
 
     CHook::Redirect(g_libGTASA, 0x28E83C, &CStreaming::InitImageList);
 }

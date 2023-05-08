@@ -1453,8 +1453,8 @@ void CShadows__StoreCarLightShadow_hook(CVehicleGta* vehicle, int id, RwTexture*
 void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* pMat)
 {
 	float v6; // s12
-	float v12; // s14
-	float v13; // s11
+	float xy; // s14
+	float yy; // s11
 	float v14; // s15
 	float v15; // s13
 	float v16; // s10
@@ -1467,14 +1467,14 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* pMat)
 
 	v6 = pModel->m_pVehicleStruct->m_avDummyPos[0].x;
 
-	v12 = *((float*)pMat + 5);
-	v13 = *((float*)pMat + 4);
-	v14 = (float)(v12 * v12) + (float)(v13 * v13);
+	xy = pMat->m_forward.x;
+	yy = pMat->m_forward.y;
+	v14 = (xy * xy) + (yy * yy);
 	if (v14 != 0.0)
 		v14 = 1.0f / sqrtf(v14);
 	v15 = v6 * 4.0;
-	v17 = v13 * v14;
-	v18 = v12 * v14;
+	v17 = yy * v14;
+	v18 = xy * v14;
 
 	v19 = v15 * v18;
 
@@ -1484,7 +1484,7 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* pMat)
 
 	CShadows__StoreCarLightShadow(
 			pGtaVeh,
-			(uintptr_t)pGtaVeh + 24,
+			reinterpret_cast<int>(pGtaVeh->m_pRwClump),
 			CVehicle::pNeonTex,
 			&pos,
 			(float)(v15 + v15) * v17 * pVeh->m_Shadow.fSizeX,

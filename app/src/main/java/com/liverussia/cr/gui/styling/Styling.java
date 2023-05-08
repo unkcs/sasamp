@@ -43,6 +43,7 @@ public class Styling extends ColorPicker {
     native void sendBuy();
 
     native void onChangeColor(int type, int r, int g, int b, int a);
+    native boolean isAvailableStyle(int type);
 
     native void changeVinyls(boolean isNext);
 
@@ -211,6 +212,8 @@ public class Styling extends ColorPicker {
     }
 
     void showColorPicker(int type, boolean withAlpha, boolean withBrithness) {
+        if(!isAvailableStyle(type)) return;
+
         activity.runOnUiThread(() -> {
             styilyng_gui_layout.setVisibility(View.GONE);
             showColorPicker(withAlpha, withBrithness, getActiveColor(type));

@@ -10,6 +10,7 @@
 #include "CdStreamInfo.h"
 #include "entity.h"
 #include "game/Core/LinkList.h"
+#include "StreamingInfo.h"
 
 enum class eChannelState
 {
@@ -171,6 +172,7 @@ public:
     static inline bool ms_bLoadVehiclesInLoadScene;
     static inline tStreamingFileDesc ms_files[TOTAL_IMG_ARCHIVES];
     static inline CLinkList<CEntity*> ms_rwObjectInstances;
+    static inline CStreamingInfo ms_aInfoForModel[RESOURCE_ID_TOTAL];
 
 public:
     static void InjectHooks();
@@ -180,4 +182,6 @@ public:
     static void RemoveAllUnusedModels();
 
     static void RemoveModel(int32 modelId);
+
+    static CStreamingInfo& GetInfo(int32 modelId) { assert(modelId >= 0); return ms_aInfoForModel[modelId]; }
 };

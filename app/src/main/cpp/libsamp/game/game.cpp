@@ -16,23 +16,6 @@ void InitScripting();
 uint16_t *szGameTextMessage;
 bool bUsedPlayerSlots[PLAYER_PED_SLOTS];
 
-void CGame::RemoveModel(int iModel, bool bFromStreaming)
-{
-	if (iModel >= 0 && iModel < 20000)
-	{
-		if (bFromStreaming)
-		{
-			if (ScriptCommand(&is_model_available, iModel))
-				CStreaming::RemoveModel(iModel);
-		}
-		else
-		{
-			if (ScriptCommand(&is_model_available, iModel))
-				ScriptCommand(&release_model);
-		}
-	}
-}
-
 CGame::CGame()
 {
 	for (int i = 0; i < HUD_MAX; i++)
@@ -58,11 +41,6 @@ void CGame::exitGame()
     Log("Exiting game...");
 
 	bIsGameExiting = true;
-
-	//delete pNetGame;
-    //exit(0);
-
-   // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	g_pJavaWrapper->ExitGame();
 }

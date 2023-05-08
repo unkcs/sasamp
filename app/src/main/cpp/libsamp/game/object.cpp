@@ -83,8 +83,8 @@ void CObject::Process(float fElapsedTime)
 		if (distance >= remaining)
 		{
 			m_pEntity->SetVelocity(vecSpeed);
+			m_pEntity->SetTurnSpeed(vecSpeed);
 
-			SetTurnSpeedVector(vecSpeed);
 			matEnt.pos = m_matTarget.pos;
 
 			if (m_bNeedRotate) {
@@ -147,7 +147,8 @@ void CObject::Process(float fElapsedTime)
 				vecSpeed.z = 0.001f;
 			}
 
-			SetTurnSpeedVector(vecSpeed);
+			m_pEntity->SetTurnSpeed(vecSpeed);
+
 			GetMatrix(&matEnt);
 			CQuaternion quat;
 			quat.Slerp(&m_quatStart, &m_quatTarget, slerpDelta);
@@ -285,7 +286,7 @@ void CObject::StopMoving()
 {
 	CVector vec = { 0.0f, 0.0f, 0.0f };
 	this->m_pEntity->ResetMoveSpeed();
-	this->SetTurnSpeedVector(vec);
+	this->m_pEntity->SetTurnSpeed(vec);
 	m_bIsMoving = false;
 }
 

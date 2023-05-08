@@ -971,11 +971,11 @@ void CNetGame::Packet_CustomRPC(Packet *p) {
 
 
             // neon
-            bs.Read(pVeh->m_Shadow.r);
-            bs.Read(pVeh->m_Shadow.g);
-            bs.Read(pVeh->m_Shadow.b);
-//            bs.Read(pVeh->m_Shadow.fSizeX);
-//            bs.Read(pVeh->m_Shadow.fSizeY);
+            bs.Read(pVeh->neonColor.r);
+            bs.Read(pVeh->neonColor.g);
+            bs.Read(pVeh->neonColor.b);
+//            bs.Read(pVeh->neonColor.fSizeX);
+//            bs.Read(pVeh->neonColor.fSizeY);
 
             if (bPlateType) {
                 pVeh->setPlate(static_cast<ePlateType>(bPlateType), szText, szRegion);

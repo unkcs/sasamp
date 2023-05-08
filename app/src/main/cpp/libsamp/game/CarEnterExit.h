@@ -14,16 +14,16 @@ class CTask;
 
 class CCarEnterExit {
 public:
-    static const float& ms_fMaxSpeed_CanDragPedOut;
-    static const float& ms_fMaxSpeed_PlayerCanDragPedOut;
-
-    static inline bool& ms_bPedOffsetsCalculated = *(bool*)0xC18C20;
-    static inline CVector& ms_veCPedGtaGetUpAnimOffset = *(CVector*)0xC18C3C;
-    static inline CVector& ms_veCPedGtaBedLAnimOffset = *(CVector*)0xC18C54;
-    static inline CVector& ms_veCPedGtaBedRAnimOffset = *(CVector*)0xC18C60;
-    static inline CVector& ms_veCPedGtaDeskAnimOffset = *(CVector*)0xC18C6C;
-    static inline CVector& ms_veCPedGtaChairAnimOffset = *(CVector*)0xC18C78;
-    static inline CVector& ms_veCPedGtaQuickDraggedOutCarAnimOffset = *(CVector*)0xC18C48;
+//    static const float& ms_fMaxSpeed_CanDragPedOut;
+//    static const float& ms_fMaxSpeed_PlayerCanDragPedOut;
+//
+//    static inline bool& ms_bPedOffsetsCalculated = *(bool*)0xC18C20;
+//    static inline CVector& ms_veCPedGtaGetUpAnimOffset = *(CVector*)0xC18C3C;
+//    static inline CVector& ms_veCPedGtaBedLAnimOffset = *(CVector*)0xC18C54;
+//    static inline CVector& ms_veCPedGtaBedRAnimOffset = *(CVector*)0xC18C60;
+//    static inline CVector& ms_veCPedGtaDeskAnimOffset = *(CVector*)0xC18C6C;
+//    static inline CVector& ms_veCPedGtaChairAnimOffset = *(CVector*)0xC18C78;
+//    static inline CVector& ms_veCPedGtaQuickDraggedOutCarAnimOffset = *(CVector*)0xC18C48;
 
 public:
     static void InjectHooks();

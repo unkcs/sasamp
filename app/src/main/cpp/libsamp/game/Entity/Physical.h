@@ -128,9 +128,10 @@ public:
     void     SetVelocity(CVector velocity)  { m_vecMoveSpeed = velocity; } // 0x441130
 
     CVector& GetTurnSpeed() { return m_vecTurnSpeed; }
+    void ResetTurnSpeed() { m_vecTurnSpeed = CVector(); }
+    void SetTurnSpeed(CVector vec) { m_vecTurnSpeed = vec; }
 
     void ResetMoveSpeed() { SetVelocity(CVector{}); }
-    void ResetTurnSpeed() { m_vecTurnSpeed = CVector(); }
     void ResetFrictionMoveSpeed() { m_vecFrictionMoveSpeed = CVector(); }
     void ResetFrictionTurnSpeed() { m_vecFrictionTurnSpeed = CVector(); }
 

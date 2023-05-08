@@ -95,8 +95,6 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 
 	m_fWheelOffsetX = 0.0f;
 	m_fWheelOffsetY = 0.0f;
-	m_fNewOffsetX = 0.0f;
-	m_fNewOffsetY = 0.0f;
 	m_bWasWheelOffsetProcessedX = true;
 	m_bWasWheelOffsetProcessedY = true;
 	m_uiLastProcessedWheelOffset = 0;
@@ -343,13 +341,6 @@ void CVehicle::toggleLeftTurnLight(bool toggle)
 VEHICLEID CVehicle::getSampId()
 {
 	return pNetGame->GetVehiclePool()->FindIDFromGtaPtr(m_pVehicle);
-}
-
-void CVehicle::test()
-{
-	auto pEnt = m_pVehicle;
-
-	Log("%x", m_pVehicle->m_pRemapTexture);
 }
 
 void CVehicle::LinkToInterior(int iInterior)
@@ -963,24 +954,6 @@ void CVehicle::ProcessWheelsOffset()
 		
 		m_bWasWheelOffsetProcessedY = true;
 	}
-}
-
-void CVehicle::SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, float fSizeY, const char* szTex)
-{
-
-	if (fSizeX == 0.0f || fSizeY == 0.0f)
-	{
-		m_bShadow = false;
-		return;
-	}
-
-	m_bShadow = true;
-
-	m_Shadow.r = r;
-	m_Shadow.g = g;
-	m_Shadow.b = b;
-	m_Shadow.fSizeX = fSizeX;
-	m_Shadow.fSizeY = fSizeY;
 }
 
 void CVehicle::ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID)

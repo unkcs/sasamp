@@ -348,7 +348,8 @@ void CRemotePlayer::UpdateVehicleRotation()
 
 	if(!m_pCurrentVehicle) return;
 
-	m_pCurrentVehicle->GetTurnSpeedVector(&vec);
+	vec = m_pCurrentVehicle->m_pVehicle->GetTurnSpeed();
+
 	if(vec.x <= 0.02f)
 	{
 		if(vec.x < -0.02f) vec.x = -0.02f;
@@ -367,7 +368,7 @@ void CRemotePlayer::UpdateVehicleRotation()
 	}
 	else vec.z = 0.02f;
 
-	m_pCurrentVehicle->SetTurnSpeedVector(vec);
+	m_pCurrentVehicle->m_pVehicle->SetTurnSpeed(vec);
 
 	m_pCurrentVehicle->GetMatrix(&matEnt);
 	quat.SetFromMatrix(matEnt);
@@ -467,7 +468,7 @@ void CRemotePlayer::StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync)
 
 		pVehicle->SetMatrix(matWorld);
 		pVehicle->m_pVehicle->SetVelocity(trSync->vecMoveSpeed);
-		pVehicle->SetTurnSpeedVector(trSync->vecTurnSpeed);
+		pVehicle->m_pVehicle->SetTurnSpeed(trSync->vecTurnSpeed);
 	}
 }
 

@@ -91,9 +91,7 @@ Java_com_liverussia_cr_gui_styling_Styling_exitClick(JNIEnv *env, jobject thiz) 
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_styling_Styling_sendChoosedColor(JNIEnv *env, jobject thiz, jint type, jint r,
-                                                            jint g, jint b, jint a) {
-    // TODO: implement sendChoosedColor()
+Java_com_liverussia_cr_gui_styling_Styling_sendChoosedColor(JNIEnv *env, jobject thiz, jint type, jint r, jint g, jint b, jint a) {
     RakNet::BitStream bsSend;
     bsSend.Write((uint8_t)ID_CUSTOM_RPC);
     bsSend.Write((uint8_t)RPC_STYLING_CENTER);
@@ -109,7 +107,6 @@ Java_com_liverussia_cr_gui_styling_Styling_sendChoosedColor(JNIEnv *env, jobject
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_styling_Styling_sendBuy(JNIEnv *env, jobject thiz) {
-    // TODO: implement sendBuy()
     RakNet::BitStream bsSend;
     bsSend.Write((uint8_t)ID_CUSTOM_RPC);
     bsSend.Write((uint8_t)RPC_STYLING_CENTER);
@@ -122,8 +119,7 @@ Java_com_liverussia_cr_gui_styling_Styling_sendBuy(JNIEnv *env, jobject thiz) {
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject thiz, jint type,
-                                                         jint r, jint g, jint b, jint a) {
+Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject thiz, jint type, jint r, jint g, jint b, jint a) {
     auto pPed = pGame->FindPlayerPed();
 
     if(!pPed->IsInVehicle()) return;
@@ -158,7 +154,9 @@ Java_com_liverussia_cr_gui_styling_Styling_onChangeColor(JNIEnv *env, jobject th
         }
         case 0: {
             // neon
-            pVehicle->SetCustomShadow(r, g, b, 0.7, 0.9, nullptr); // y - ширина
+            pVehicle->neonColor.Set(r, g, b, 255); // y - ширина
+            pVehicle->m_bShadow = true;
+            break;
         }
     }
 

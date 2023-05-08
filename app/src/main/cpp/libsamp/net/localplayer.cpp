@@ -847,7 +847,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 			trSync.quat = syncQuat;
 
 			trSync.vecMoveSpeed = pTrailer->m_pVehicle->GetMoveSpeed();
-			pTrailer->GetTurnSpeedVector(&trSync.vecTurnSpeed);
+			trSync.vecTurnSpeed = pTrailer->m_pVehicle->GetTurnSpeed();
 
 			RakNet::BitStream bsTrailerSync;
 			bsTrailerSync.Write((BYTE)ID_TRAILER_SYNC);

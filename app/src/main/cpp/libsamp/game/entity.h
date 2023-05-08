@@ -20,9 +20,6 @@ public:
 	// 0.3.7
 	void SetMatrix(RwMatrix mat);
 
-	void GetTurnSpeedVector(CVector* Vector);
-	void SetTurnSpeedVector(const CVector Vector);
-	
 	// 0.3.7
 	uint16_t GetModelIndex();
 

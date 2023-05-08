@@ -51,14 +51,7 @@ enum E_HANDLING_PARAMS
 #define EXTRA_COMPONENT_WHEEL			14
 #define EXTRA_COMPONENT_BUMP_FRONT		15
 
-#define MAX_REPLACED_TEXTURES	32
-#define MAX_REPLACED_TEXTURE_NAME	32
-
-struct SReplacedTexture
-{
-	char szOld[MAX_REPLACED_TEXTURE_NAME] {};
-	RwTexture* pTexture {nullptr};
-};
+#define MAX_REPLACED_TEXTURE_NAME		32
 
 struct SCustomCarShadow
 {
@@ -131,8 +124,6 @@ public:
 	void SetWheelWidth(float fValue);
 	void ProcessWheelsOffset();
 
-	void SetCustomShadow(uint8_t r, uint8_t g, uint8_t b, float fSizeX, float fSizeY, const char* szTex);
-
 private:
 	void ProcessWheelOffset(RwFrame* pFrame, bool bLeft, float fValue, int iID);
 	void SetComponentAngle(bool bUnk, int iID, float angle);
@@ -142,11 +133,12 @@ private:
 
 	void CopyGlobalSuspensionLinesToPrivate();
 public:
-	CRGBA tonerColor{255, 255, 255, 110};
-	CRGBA mainColor{0, 0, 0, 255};
-    CRGBA wheelColor{0, 0, 0, 255};
-	CRGBA secondColor{0, 0, 0, 255};
-	CRGBA lightColor{255, 255, 255, 0};
+	CRGBA tonerColor	{255, 255, 255, 110};
+	CRGBA mainColor		{0, 0, 0, 255};
+    CRGBA wheelColor	{0, 0, 0, 255};
+	CRGBA secondColor	{0, 0, 0, 255};
+	CRGBA lightColor	{255, 255, 255, 0};
+	CRGBA neonColor		{};
 	int16_t m_iVinylId = -1;
 	RwTexture* pPlateTexture = nullptr;
 
@@ -194,16 +186,12 @@ public:
 
 	float m_fWheelOffsetY = 0.0f;
 
-	float m_fNewOffsetX = 0.0f;
-	float m_fNewOffsetY = 0.0f;
-
 	bool m_bWasWheelOffsetProcessedX;
 	bool m_bWasWheelOffsetProcessedY;
 	uint32_t m_uiLastProcessedWheelOffset;
 
 	RwMatrix m_vInitialWheelMatrix[4];
 
-	SCustomCarShadow m_Shadow;
 	bool m_bShadow = false;
 
 	bool IsTrailer();
@@ -245,13 +233,9 @@ public:
 
 	void ProcessDamage();
 
-	void
-	GetDamageStatusEncoded(uint8_t *byteTyreFlags, uint8_t *byteLightFlags, uint32_t *dwDoorFlags,
-						   uint32_t *dwPanelFlags);
+	void GetDamageStatusEncoded(uint8_t *byteTyreFlags, uint8_t *byteLightFlags, uint32_t *dwDoorFlags, uint32_t *dwPanelFlags);
 
 	uint8_t GetWheelStatus(eWheelPosition bWheel);
-
-	bool IsValidGameVehicle();
 
 	void toggleRightTurnLight(bool toggle);
 
@@ -259,13 +243,9 @@ public:
 
 	void toggleLeftTurnLight(bool toggle);
 
-	void toggleAllTurnLight(bool toggle);
-
 	void toggleReverseLight(bool toggle);
 
 	void setPlate(ePlateType type, char *szNumber, char *szRegion);
-
-	void test();
 
 public:
 	static inline RwTexture *pNeonTex;

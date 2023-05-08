@@ -871,8 +871,9 @@ void InjectHooks()
 	CEntityGta::InjectHooks();
 	CPhysical::InjectHooks();
 	CAnimManager::InjectHooks();
-	CCarEnterExit::InjectHooks();
+	//CCarEnterExit::InjectHooks();
 	CPlayerPedGta::InjectHooks();
+	//CTaskManager::InjectHooks();
 }
 
 void InstallSpecialHooks()
@@ -1483,16 +1484,16 @@ void CVehicle__DoHeadLightReflectionTwin(CVehicle* pVeh, CMatrix* pMat)
 	pos.z += 2.0f;
 
 	CShadows__StoreCarLightShadow(
-			pGtaVeh,
-			reinterpret_cast<int>(pGtaVeh->m_pRwClump),
-			CVehicle::pNeonTex,
-			&pos,
-			(float)(v15 + v15) * v17 * pVeh->m_Shadow.fSizeX,
-			(float)(v15 + v15) * v18 * pVeh->m_Shadow.fSizeX,
-			v19 * pVeh->m_Shadow.fSizeY,
-			-(float)(v15 * v17) * pVeh->m_Shadow.fSizeY,
-			pVeh->m_Shadow.r, pVeh->m_Shadow.g, pVeh->m_Shadow.b,
-			7.0f);
+            pGtaVeh,
+            reinterpret_cast<int>(pGtaVeh->m_pRwClump),
+            CVehicle::pNeonTex,
+            &pos,
+			(float)(v15 + v15) * v17 * 0.7f,
+			(float)(v15 + v15) * v18 * 0.7f,
+			v19 * 0.9f,
+			-(float)(v15 * v17) * 0.9f,
+            pVeh->neonColor.r, pVeh->neonColor.g, pVeh->neonColor.b,
+            7.0f);
 }
 
 void (*CVehicle__DoHeadLightBeam)(CVehicleGta* vehicle, int arg0, RwMatrix& matrix, unsigned char arg2);

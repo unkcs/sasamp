@@ -129,9 +129,9 @@ CAnimBlock* CAnimManager::GetAnimationBlock(const char* name) {
     return nullptr;
 }
 
-int32 CAnimManager::GetAnimationBlockIndex(AssocGroupId animGroup) {
-    return GetAnimationBlock(animGroup) - ms_aAnimBlocks.data();
-}
+//int32 CAnimManager::GetAnimationBlockIndex(AssocGroupId animGroup) {
+//    return GetAnimationBlock(animGroup) - ms_aAnimBlocks.data();
+//}
 
 int32 CAnimManager::GetAnimationBlockIndex(CAnimBlock* animBlock) {
     return animBlock - ms_aAnimBlocks.data();
@@ -139,7 +139,11 @@ int32 CAnimManager::GetAnimationBlockIndex(CAnimBlock* animBlock) {
 
 // 0x4D3990
 int32 CAnimManager::GetAnimationBlockIndex(const char* name) {
-    return CHook::CallFunction<int32>(g_libGTASA + 0x0033DBCC + 1, name);
+
+    auto animBlock = GetAnimationBlock(name);
+
+    return GetAnimationBlockIndex(animBlock);
+   // return CHook::CallFunction<int32>(g_libGTASA + 0x0033DBCC + 1, name);
 }
 
 // 0x4D39B0

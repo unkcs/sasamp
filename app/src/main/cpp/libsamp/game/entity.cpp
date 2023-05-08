@@ -108,7 +108,7 @@ void CEntity::GetMatrix(RwMatrix* Matrix)
 {
 	if (!m_pEntity || !m_pEntity->m_matrix) return;
 
-	*Matrix = m_pEntity->m_matrix->ToRwMatrix();
+	*Matrix = m_pEntity->GetMatrix().ToRwMatrix();
 }
 
 // 0.3.7
@@ -124,18 +124,6 @@ void CEntity::SetMatrix(RwMatrix mat)
 	m_pEntity->m_matrix->m_up = mat.at;
 
 	m_pEntity->m_matrix->m_pos = mat.pos;
-}
-
-void CEntity::GetTurnSpeedVector(CVector* vec)
-{
-	if (!m_pEntity) return;
-	*vec = m_pEntity->m_vecTurnSpeed;
-}
-
-void CEntity::SetTurnSpeedVector(const CVector vec)
-{
-	if (!m_pEntity) return;
-	m_pEntity->m_vecTurnSpeed = vec;
 }
 
 // 0.3.7

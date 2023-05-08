@@ -62,5 +62,5 @@ bool CCarEnterExit::SetPedInCarDirect(CPedGta* ped, CVehicleGta* vehicle, int32 
 }
 
 void CCarEnterExit::InjectHooks() {
-    CHook::Redirect(g_libGTASA + 0x00494FE4, &CCarEnterExit::SetPedInCarDirect);
+   // CHook::Redirect(g_libGTASA + 0x00494FE4, &CCarEnterExit::SetPedInCarDirect);
 }

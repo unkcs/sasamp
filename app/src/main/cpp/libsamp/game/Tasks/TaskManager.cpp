@@ -10,9 +10,8 @@
 #include "TaskComplex.h"
 #include "TaskSimple.h"
 #include "game/Pools.h"
+#include "util/patch.h"
 
-void CTaskManager::InjectHooks() {
-}
 
 static void DeleteTaskAndNull(CTask*& task) {
     delete task;
@@ -295,4 +294,26 @@ void CTaskManager::ChangeTaskInSlot(CTask*& taskInSlot, CTask* changeTo) {
     if (taskInSlot && !GetSimplestTask(taskInSlot)->IsSimple()) {
         DeleteTaskAndNull(taskInSlot); // Delete it (TODO: Why?)
     }
+}
+
+
+// ------ hooks
+void CTaskManager__FindActiveTaskByType(CTaskManager* thiz, eTaskType taskType) {
+    thiz->FindActiveTaskByType(taskType);
+}
+
+void CTaskManager__AddSubTasks(CTaskManager* thiz, CTask* toTask) {
+    Log("CTaskManager__AddSubTasks");
+    thiz->AddSubTasks(toTask);
+}
+
+void CTaskManager__SetTaskSecondary(CTaskManager* thiz, CTask* task, eSecondaryTask taskIndex) {
+    Log("CTaskManager__SetTaskSecondary");
+    thiz->SetTaskSecondary(task, taskIndex);
+}
+
+void CTaskManager::InjectHooks() {
+    CHook::Redirect(g_libGTASA + 0x004BAB48, &CTaskManager__SetTaskSecondary);
+    CHook::Redirect(g_libGTASA + 0x004BAA30, &CTaskManager__AddSubTasks);
+    CHook::Redirect(g_libGTASA + 0x004BA708, &CTaskManager__FindActiveTaskByType);
 }

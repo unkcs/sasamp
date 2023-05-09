@@ -50,7 +50,7 @@ public:
 		return m_bVehicleSlotState[VehicleID];
 	}
 
-	VEHICLEID FindIDFromGtaPtr(CVehicleGta * pGtaVehicle);
+	VEHICLEID FindIDFromGtaPtr(CEntityGta * pGtaVehicle);
 	VEHICLEID FindIDFromRwObject(RwObject* pRWObject);
 	int FindGtaIDFromID(int ID);
 	

@@ -566,72 +566,33 @@ void CRemotePlayer::StoreBulletSyncData(BULLET_SYNC* pBulletSync)
 	BULLET_DATA btData;
 	memset(&btData, 0, sizeof(BULLET_DATA));
 
-	btData.vecOrigin.x = pBulletSync->vecOrigin.x;
-	btData.vecOrigin.y = pBulletSync->vecOrigin.y;
-	btData.vecOrigin.z = pBulletSync->vecOrigin.z;
+	btData.vecOrigin 	= pBulletSync->vecOrigin;
+	btData.vecPos 		= pBulletSync->vecPos;
+	btData.vecOffset 	= pBulletSync->vecOffset;
 
-	btData.vecPos.x = pBulletSync->vecPos.x;
-	btData.vecPos.y = pBulletSync->vecPos.y;
-	btData.vecPos.z = pBulletSync->vecPos.z;
+	if(pBulletSync->byteHitType == BULLET_HIT_TYPE_PLAYER) {
+        auto pPlayerPool = pNetGame->GetPlayerPool();
+        if (!pPlayerPool) return;
 
-	btData.vecOffset.x = pBulletSync->vecOffset.x;
-	btData.vecOffset.y = pBulletSync->vecOffset.y;
-	btData.vecOffset.z = pBulletSync->vecOffset.z;
+        if (pBulletSync->PlayerID == pPlayerPool->GetLocalPlayerID()) {
+            btData.pEntity = pGame->FindPlayerPed()->m_pPed;
+        } else {
+            auto pRemotePlayer = pPlayerPool->GetAt(pBulletSync->PlayerID);
+            if (!pRemotePlayer || !pRemotePlayer->GetPlayerPed()) return;
 
-	if(pBulletSync->byteHitType != 0)
-	{
-
-		if(pBulletSync->byteHitType == 1)
-		{
-			CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-			if(pPlayerPool)
-			{
-				if(pBulletSync->PlayerID == pPlayerPool->GetLocalPlayerID())
-				{
-					btData.pEntity = pGame->FindPlayerPed()->m_pPed;
-				}
-				else if(pBulletSync->PlayerID == m_PlayerID)
-				{
-					return;
-				}
-				else
-				{
-					CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(pBulletSync->PlayerID);
-					if(pRemotePlayer)
-					{
-						CPlayerPed *pPlayerPed = pRemotePlayer->GetPlayerPed();
-						if(pPlayerPed)
-							btData.pEntity = pPlayerPed->m_pPed;
-					}
-				}
-			}
-		}
-		else if(pBulletSync->byteHitType == 2)
-		{
-			CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
-			if(pVehiclePool)
-			{
-				CVehicle *pVehicle = pVehiclePool->GetAt(pBulletSync->PlayerID);
-				if(pVehicle)
-				{
-					btData.pEntity = pVehicle->m_pVehicle;
-				}
-			}
-		}
-	}
-
-	if(m_pPlayerPed->IsAdded())
-	{
-		uint8_t byteWeapon = pBulletSync->byteWeaponID;
-		if(m_pPlayerPed->GetCurrentWeapon() != byteWeapon)
-		{
-			m_pPlayerPed->SetArmedWeapon(byteWeapon);
-			if(m_pPlayerPed->GetCurrentWeapon() != byteWeapon)
-			{
-				m_pPlayerPed->GiveWeapon(byteWeapon, 9999);
-				m_pPlayerPed->SetArmedWeapon(byteWeapon);
-			}
-		}
+            btData.pEntity = pRemotePlayer->GetPlayerPed()->m_pPed;
+        }
+    }
+    if(pBulletSync->byteHitType == BULLET_HIT_TYPE_VEHICLE) {
+        CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
+        if(pVehiclePool)
+        {
+            CVehicle *pVehicle = pVehiclePool->GetAt(pBulletSync->PlayerID);
+            if(pVehicle)
+            {
+                btData.pEntity = pVehicle->m_pVehicle;
+            }
+        }
 	}
 
 	m_byteWeaponShotID = pBulletSync->byteWeaponID;
@@ -820,7 +781,7 @@ void CRemotePlayer::StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync)
 	if(!m_pPlayerPed->IsInVehicle()){
 		m_pPlayerPed->PutDirectlyInVehicle(m_pCurrentVehicle, m_byteSeatID);
 	}
-	else if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
+	if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
         RemoveFromVehicle();
 	}
 

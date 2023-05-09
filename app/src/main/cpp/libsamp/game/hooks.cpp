@@ -1005,32 +1005,9 @@ struct stPedDamageResponse
 
 extern float m_fWeaponDamages[43 + 1];
 
-void onDamage(CPedGta* issuer, CPedGta* damaged)
-{
-	if (!pNetGame) return;
-	CPedGta* pPedPlayer = GamePool_FindPlayerPed();
-	if (damaged && (pPedPlayer == issuer))
-	{
-		if (pNetGame->GetPlayerPool()->FindRemotePlayerIDFromGtaPtr((CPedGta*)damaged) != INVALID_PLAYER_ID)
-		{
-			CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-			CAMERA_AIM* caAim = pPlayerPool->GetLocalPlayer()->GetPlayerPed()->GetCurrentAim();
-
-			CVector aim;
-			aim.x = caAim->f1x;
-			aim.y = caAim->f1y;
-			aim.z = caAim->f1z;
-
-			pPlayerPool->GetLocalPlayer()->SendBulletSyncData(pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta*)damaged), BULLET_HIT_TYPE_PLAYER, aim);
-		}
-	}
-}
-
 void (*CPedDamageResponseCalculator__ComputeDamageResponse)(stPedDamageResponse* thiz, CEntityGta* pEntity, uintptr_t pDamageResponse, bool bSpeak);
 void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageResponse* thiz, CEntityGta* pEntity, uintptr_t pDamageResponse, bool bSpeak)
 {
-	if (thiz && pEntity) onDamage((CPedGta*)*(uintptr_t*)thiz, (CPedGta*)pEntity);
-
 	if( thiz->iWeaponType < 0 || thiz->iWeaponType > std::size(m_fWeaponDamages) )
 	{
 		thiz->fDamage /= 3.0303030303;
@@ -2177,53 +2154,37 @@ uint32_t CWeapon__FireSniper_hook(CWeapon *pWeaponSlot, CPedGta *pFiringEntity, 
 	return 1;
 }
 
-void SendBulletSync(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CEntityGta **ppEntity)
+void SendBulletSync(CVector *vecOrigin, CVector *vecEnd, CVector *vecPos, CEntityGta *pEntity)
 {
 	BULLET_DATA bulletData;
 	memset(&bulletData, 0, sizeof(BULLET_DATA));
 
-	bulletData.vecOrigin.x = vecOrigin->x;
-	bulletData.vecOrigin.y = vecOrigin->y;
-	bulletData.vecOrigin.z = vecOrigin->z;
+	bulletData.vecOrigin 	= vecOrigin;
+	bulletData.vecPos 		= vecPos;
 
-	bulletData.vecPos.x = vecPos->x;
-	bulletData.vecPos.y = vecPos->y;
-	bulletData.vecPos.z = vecPos->z;
+	if(pEntity) {
+		if (pEntity->m_matrix) {
+			if (pNetGame->m_iLagCompensation) {
+				bulletData.vecOffset.x = vecPos->x - pEntity->m_matrix->m_pos.x;
+				bulletData.vecOffset.y = vecPos->y - pEntity->m_matrix->m_pos.y;
+				bulletData.vecOffset.z = vecPos->z - pEntity->m_matrix->m_pos.z;
+			} else {
+				static RwMatrix mat1;
+				memset(&mat1, 0, sizeof(mat1));
 
-	if(ppEntity)
-	{
-		static CEntityGta *pEntity;
-		pEntity = *ppEntity;
-		if(pEntity)
-		{
-			if(pEntity->m_matrix)
-			{
-				if(pNetGame->m_iLagCompensation)
-				{
-					bulletData.vecOffset.x = vecPos->x - pEntity->m_matrix->m_pos.x;
-					bulletData.vecOffset.y = vecPos->y - pEntity->m_matrix->m_pos.y;
-					bulletData.vecOffset.z = vecPos->z - pEntity->m_matrix->m_pos.z;
-				}
-				else
-				{
-					static RwMatrix mat1;
-					memset(&mat1, 0, sizeof(mat1));
+				static RwMatrix mat2;
+				memset(&mat2, 0, sizeof(mat2));
 
-					static RwMatrix mat2;
-					memset(&mat2, 0, sizeof(mat2));
-
-					RwMatrixOrthoNormalize(&mat2, reinterpret_cast<RwMatrix *>(pEntity->m_matrix));
-					RwMatrixInvert(&mat1, &mat2);
-					ProjectMatrix(&bulletData.vecOffset, reinterpret_cast<CMatrix *>(&mat1), vecPos);
-				}
+				RwMatrixOrthoNormalize(&mat2, reinterpret_cast<RwMatrix *>(pEntity->m_matrix));
+				RwMatrixInvert(&mat1, &mat2);
+				ProjectMatrix(&bulletData.vecOffset, reinterpret_cast<CMatrix *>(&mat1), vecPos);
 			}
-
-			bulletData.pEntity = pEntity;
 		}
+
+		bulletData.pEntity = pEntity;
 	}
 
 	pGame->FindPlayerPed()->ProcessBulletData(&bulletData);
-
 }
 
 bool g_bForceWorldProcessLineOfSight = false;
@@ -2251,8 +2212,7 @@ uint32_t CWorld__ProcessLineOfSight_hook(CVector *vecOrigin, CVector *vecEnd, CV
 	{
 		g_bForceWorldProcessLineOfSight = false;
 
-		CEntityGta *pEntity = nullptr;
-		CMatrix *pMatrix = nullptr;
+		CMatrix *pMatrix;
 		CVector vecPosPlusOffset;
 
 		if(pNetGame->m_iLagCompensation != 2)
@@ -2289,17 +2249,6 @@ uint32_t CWorld__ProcessLineOfSight_hook(CVector *vecOrigin, CVector *vecEnd, CV
 		uint32_t result = 0;
 		result = CWorld__ProcessLineOfSight(vecOrigin, vecEnd, vecPos, ppEntity, b1, b2, b3, b4, b5, b6, b7, b8);
 
-		if(pNetGame->m_iLagCompensation == 2)
-		{
-			if(g_pCurrentFiredPed)
-			{
-				if(g_pCurrentFiredPed == pGame->FindPlayerPed())
-					SendBulletSync(vecOrigin, vecEnd, vecPos, (CEntityGta**)ppEntity);
-			}
-
-			return result;
-		}
-
 		if(g_pCurrentFiredPed)
 		{
 			if(g_pCurrentFiredPed != pGame->FindPlayerPed())
@@ -2319,13 +2268,9 @@ uint32_t CWorld__ProcessLineOfSight_hook(CVector *vecOrigin, CVector *vecEnd, CV
 						}
 					}
 				}
+			} else {
+				SendBulletSync(vecOrigin, vecEnd, vecPos, *ppEntity);
 			}
-		}
-
-		if(g_pCurrentFiredPed)
-		{
-			if(g_pCurrentFiredPed == pGame->FindPlayerPed())
-				SendBulletSync(vecOrigin, vecEnd, vecPos, (CEntityGta **)ppEntity);
 		}
 
 		return result;
@@ -2341,6 +2286,7 @@ signed int CBulletInfo_AddBullet_hook(CEntityGta* pEntity, CWeapon* pWeapon, CVe
 	vec2.y *= 50.0f;
 	vec2.z *= 50.0f;
 	CBulletInfo_AddBullet(pEntity, pWeapon, vec1, vec2);
+
 	// CBulletInfo::Update
 	(( void (*)())(g_libGTASA+0x55E170+1))();
 	return 1;

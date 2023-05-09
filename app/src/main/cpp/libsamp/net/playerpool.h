@@ -47,6 +47,7 @@ public:
 	CRemotePlayer *GetAt(PLAYERID playerId)
 	{
 		if(playerId >= MAX_PLAYERS) return nullptr;
+
 		return m_pPlayers[playerId];
 	}
 
@@ -67,7 +68,7 @@ public:
 		return "None";
 	}
 
-	PLAYERID FindRemotePlayerIDFromGtaPtr(CPedGta * pActor);
+	PLAYERID FindRemotePlayerIDFromGtaPtr(CEntityGta * pActor);
 
 	void ResetCollisionChecking();
 

@@ -26,25 +26,6 @@
 
 AnimAssocDefinition CAnimManager::*ms_aAnimAssocDefinitions[NUM_ANIM_ASSOC_GROUPS];
 
-void CAnimManager::InjectHooks() {
-    CHook::Write(g_libGTASA + 0x005D0370, &ms_numAnimAssocDefinitions);
-   // SET_TO(ms_aAnimAssocDefinitions, g_libGTASA + 0x005E8600);
-   // CHook::Write(g_libGTASA + 0x005D0604, &ms_aAnimAssocDefinitions);
-
-    CHook::Write(g_libGTASA + 0x005D12F0, &ms_aAnimBlocks);
-    CHook::Write(g_libGTASA + 0x005D0900, &ms_numAnimBlocks);
-
-    CHook::Write(g_libGTASA + 0x005CFDAC, &ms_aAnimAssocGroups);
-   // SET_TO(ms_aAnimAssocGroups, g_libGTASA + 0x00890350);
-
-    CHook::Write(g_libGTASA + 0x005CEF50, &ms_aAnimations);
-    CHook::Write(g_libGTASA + 0x005CFD10, &ms_numAnimations);
-    CHook::Write(g_libGTASA + 0x005D0ABC, &ms_animCache);
-
-  //  CHook::Redirect(g_libGTASA + 0x0040C7D8, &CAnimManager::Initialise);
-   // CHook::Redirect(g_libGTASA + 0x0033F23C, &CAnimManager::LoadAnimFiles);
-}
-
 struct IfpHeader {
     uint32 ident;
     uint32 size;
@@ -451,7 +432,7 @@ void CAnimManager::RemoveFromUncompressedCache(CAnimBlendHierarchy* hier) {
 
 // 0x4D4410
 CAnimBlendAssociation* CAnimManager::BlendAnimation(RpClump* clump, CAnimBlendHierarchy* animBlendHier, int32 flags, float clumpAssocBlendData) {
-    return CHook::CallFunction<CAnimBlendAssociation*>(g_libGTASA + 0x0033DE70 + 1, clump, animBlendHier, flags, clumpAssocBlendData);
+//    return CHook::CallFunction<CAnimBlendAssociation*>(g_libGTASA + 0x0033DE70 + 1, clump, animBlendHier, flags, clumpAssocBlendData);
 
     /*
     CAnimBlendClumpData* clumpData = RpClumpGetAnimBlendClumpData(clump);
@@ -874,4 +855,37 @@ inline void CAnimManager::LoadAnimFile_ANP23(RwStream* stream, bool compress, bo
     if (animIndex > ms_numAnimations) {
         ms_numAnimations = animIndex;
     }
+}
+
+
+// ---- hooks
+
+CAnimBlendStaticAssociation* CAnimManager__GetAnimAssociation1(AssocGroupId groupId, AnimationId animId) {
+    return CAnimManager::GetAnimAssociation(groupId, animId);
+}
+
+CAnimBlendStaticAssociation* CAnimManager__GetAnimAssociation2(AssocGroupId groupId, const char* animName) {
+    return CAnimManager::GetAnimAssociation(groupId, animName);
+}
+
+void CAnimManager::InjectHooks() {
+    CHook::Write(g_libGTASA + 0x005D0370, &ms_numAnimAssocDefinitions);
+    // SET_TO(ms_aAnimAssocDefinitions, g_libGTASA + 0x005E8600);
+    // CHook::Write(g_libGTASA + 0x005D0604, &ms_aAnimAssocDefinitions);
+
+    CHook::Write(g_libGTASA + 0x005D12F0, &ms_aAnimBlocks);
+    CHook::Write(g_libGTASA + 0x005D0900, &ms_numAnimBlocks);
+
+    CHook::Write(g_libGTASA + 0x005CFDAC, &ms_aAnimAssocGroups);
+    // SET_TO(ms_aAnimAssocGroups, g_libGTASA + 0x00890350);
+
+    CHook::Write(g_libGTASA + 0x005CEF50, &ms_aAnimations);
+    CHook::Write(g_libGTASA + 0x005CFD10, &ms_numAnimations);
+    CHook::Write(g_libGTASA + 0x005D0ABC, &ms_animCache);
+
+    CHook::Redirect(g_libGTASA + 0x0033DCE4, &CAnimManager__GetAnimAssociation1);
+    CHook::Redirect(g_libGTASA + 0x0033DD08, &CAnimManager__GetAnimAssociation2);
+
+    //  CHook::Redirect(g_libGTASA + 0x0040C7D8, &CAnimManager::Initialise);
+    // CHook::Redirect(g_libGTASA + 0x0033F23C, &CAnimManager::LoadAnimFiles);
 }

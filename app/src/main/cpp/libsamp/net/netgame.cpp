@@ -1406,7 +1406,7 @@ void CNetGame::packetAuthKey(Packet *pkt) {
     bsKey.Write((uint8_t) ID_AUTH_KEY);
     bsKey.Write((uint8_t) byteAuthKeyLen);
     bsKey.Write(szAuthKey, byteAuthKeyLen);
-    m_pRakClient->Send(&bsKey, SYSTEM_PRIORITY, RELIABLE_SEQUENCED, 0);
+    m_pRakClient->Send(&bsKey, MEDIUM_PRIORITY, RELIABLE, 0);
 
 }
 

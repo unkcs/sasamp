@@ -11,6 +11,7 @@
 #include "SimpleTransform.h"
 #include "General.h"
 #include "MemoryMgr.h"
+#include "game/Enums/eBulletSyncHitType.h"
 
 #define MAX_PLAYERS		1004
 #define MAX_VEHICLES	2000
@@ -315,12 +316,12 @@ typedef struct _AIM_SYNC_DATA
 #pragma pack(push, 1)
 typedef struct _BULLET_SYNC
 {
-	uint8_t 	byteHitType;			// +0
-	uint16_t 	PlayerID;				// +1
-	CVector 	vecOrigin;				// +3
-	CVector 	vecPos;					// +12
-	CVector 	vecOffset;				// +20
-	uint8_t 	byteWeaponID;			// +28
+	eBulletSyncHitType 	byteHitType;			// +0
+	uint16_t 			PlayerID;				// +1
+	CVector 			vecOrigin;				// +3
+	CVector 			vecPos;					// +12
+	CVector 			vecOffset;				// +20
+	uint8_t 			byteWeaponID;			// +28
 } BULLET_SYNC;					// size = 29
 
 class CEntityGta;

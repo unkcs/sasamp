@@ -127,13 +127,13 @@ public:
     CVector& GetMoveSpeed()                 { return m_vecMoveSpeed; }
     void     SetVelocity(CVector velocity)  { m_vecMoveSpeed = velocity; } // 0x441130
 
-    CVector& GetTurnSpeed() { return m_vecTurnSpeed; }
-    void ResetTurnSpeed() { m_vecTurnSpeed = CVector(); }
-    void SetTurnSpeed(CVector vec) { m_vecTurnSpeed = vec; }
+    CVector& GetTurnSpeed()         { return m_vecTurnSpeed; }
+    void ResetTurnSpeed()           { m_vecTurnSpeed = CVector(); }
+    void SetTurnSpeed(CVector vec)  { m_vecTurnSpeed = vec; }
 
-    void ResetMoveSpeed() { SetVelocity(CVector{}); }
-    void ResetFrictionMoveSpeed() { m_vecFrictionMoveSpeed = CVector(); }
-    void ResetFrictionTurnSpeed() { m_vecFrictionTurnSpeed = CVector(); }
+    void ResetMoveSpeed()           { SetVelocity(CVector{}); }
+    void ResetFrictionMoveSpeed()   { m_vecFrictionMoveSpeed = CVector(); }
+    void ResetFrictionTurnSpeed()   { m_vecFrictionTurnSpeed = CVector(); }
 
     float GetMass(const CVector& pos, const CVector& dir) {
         return 1.0f / (CrossProduct(pos, dir).SquaredMagnitude() / m_fTurnMass +

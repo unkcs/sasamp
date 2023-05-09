@@ -290,7 +290,8 @@ void ScrCreateExplosion(RPCParameters *rpcParams)
 void ScrSetPlayerHealth(RPCParameters *rpcParams)
 {
 
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	CLocalPlayer *pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();

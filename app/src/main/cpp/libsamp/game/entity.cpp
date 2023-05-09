@@ -108,7 +108,7 @@ void CEntity::GetMatrix(RwMatrix* Matrix)
 {
 	if (!m_pEntity || !m_pEntity->m_matrix) return;
 
-	*Matrix = m_pEntity->GetMatrix().ToRwMatrix();
+	*Matrix = m_pEntity->m_matrix->ToRwMatrix();
 }
 
 // 0.3.7

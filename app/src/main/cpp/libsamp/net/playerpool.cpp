@@ -147,13 +147,13 @@ bool CPlayerPool::Delete(PLAYERID playerId, uint8_t byteReason)
 	return true;
 }
 
-PLAYERID CPlayerPool::FindRemotePlayerIDFromGtaPtr(CPedGta * pActor)
+PLAYERID CPlayerPool::FindRemotePlayerIDFromGtaPtr(CEntityGta * pActor)
 {
 	CPlayerPed *pPlayerPed;
 
 	for(PLAYERID playerId = 0; playerId < MAX_PLAYERS; playerId++)
 	{
-		if(true == m_bPlayerSlotState[playerId])
+		if(m_bPlayerSlotState[playerId])
 		{
 			pPlayerPed = m_pPlayers[playerId]->GetPlayerPed();
 
@@ -167,3 +167,4 @@ PLAYERID CPlayerPool::FindRemotePlayerIDFromGtaPtr(CPedGta * pActor)
 
 	return INVALID_PLAYER_ID;	
 }
+

@@ -31,6 +31,7 @@ static struct stSettings
 	int iOutfitGuns;
 	int isTestMode;
 	int iHPArmourText;
+	int i3dTextsDisable;
 };
 
 static class CSettings

@@ -22,12 +22,21 @@ struct CWeapon
     eWeaponType m_nType;
     eWeaponState m_nState;
     uint32_t dwAmmoInClip;
-    uint32_t dwAmmo;
+    uint32_t m_nTotalAmmo;
     uint32_t m_nTimer;
     bool m_bFirstPersonWeaponModeSelected;
     bool m_bDontPlaceInHand;
     uint8_t pad[2];
     uintptr_t *m_pWeaponFxSys;
+
+public:
+    bool IsTypeMelee();
+    bool IsType2Handed();
+    bool IsTypeProjectile();
+
+    bool HasWeaponAmmoToBeUsed();
+
+    bool IsFiredWeapon() const;
 };
 static_assert(sizeof(CWeapon) == 0x1C, "Invalid size CPlaceable");
 #pragma pack(pop)

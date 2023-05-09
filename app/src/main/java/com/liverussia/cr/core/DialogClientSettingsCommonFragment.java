@@ -35,7 +35,9 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
     native void setNativeFpsCounterSettings(boolean b);
     native void setNativeOutfitGunsSettings(boolean b);
     native void setNativeHpArmourText(boolean b);
+    native void setNativeTexts(boolean b);
     native boolean getNativeFpsCounterSettings();
+    native boolean getNativeTexts();
     native boolean getNativeOutfitGunsSettings();
     native boolean getNativeHpArmourText();
 
@@ -45,6 +47,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
     private SwitchCompat mSwitchFPSCounter;
     private SwitchCompat mSwitchOutfit;
     private SwitchCompat mSwitchHpArmour;
+    SwitchCompat switch_nick_display;
     SwitchCompat switch_damageinformer;
     SwitchCompat switch_3dtext_show;
     SwitchCompat switch_androidkeyboard;
@@ -149,6 +152,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
         });
 
         mSwitchFPSCounter = mRootView.findViewById(R.id.switch_fps_counter);
+        switch_nick_display = mRootView.findViewById(R.id.switch_nick_display);
         mSwitchHpArmour = mRootView.findViewById(R.id.switch_info_bar);
         switch_damageinformer = mRootView.findViewById(R.id.switch_damageinformer);
         switch_3dtext_show = mRootView.findViewById(R.id.switch_3dtext_show);
@@ -213,13 +217,12 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
                 setNativeOutfitGunsSettings(b);
             }
         });
-
-        mSwitchHpArmour.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                setNativeHpArmourText(b);
-            }
+        switch_nick_display.setOnCheckedChangeListener((compoundButton, b) -> {
+            setNativeTexts(b);
         });
+        mSwitchHpArmour.setOnCheckedChangeListener((compoundButton, b) ->
+                setNativeHpArmourText(b)
+        );
 
         switch_damageinformer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -260,6 +263,7 @@ public class DialogClientSettingsCommonFragment extends Fragment implements ISav
     @Override
     public void getValues() {
         mSwitchFPSCounter.setChecked( getNativeFpsCounterSettings() );
+        switch_nick_display.setChecked( getNativeTexts() );
         mSwitchHpArmour.setChecked( getNativeHpArmourText() );
         switch_damageinformer.setChecked(getNativeDamageInformer());
         switch_3dtext_show.setChecked(getNativeShow3dText());

@@ -299,5 +299,19 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_liverussia_cr_core_DialogClientSettingsCommonFragment_getNativeHpArmourText(JNIEnv *env,
 																					 jobject thiz) {
-	CSettings::m_Settings.iHPArmourText;
+	return CSettings::m_Settings.iHPArmourText;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_liverussia_cr_core_DialogClientSettingsCommonFragment_setNativeTexts(JNIEnv *env,
+                                                                              jobject thiz,
+                                                                              jboolean b) {
+	CSettings::m_Settings.i3dTextsDisable = b;
+}
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_liverussia_cr_core_DialogClientSettingsCommonFragment_getNativeTexts(JNIEnv *env,
+																			  jobject thiz) {
+	return CSettings::m_Settings.i3dTextsDisable;
 }

@@ -37,12 +37,6 @@
 // added in 0.3x
 #define SPECIAL_ACTION_CARRY			25
 
-#define BULLET_HIT_TYPE_NONE            0
-#define BULLET_HIT_TYPE_PLAYER          1
-#define BULLET_HIT_TYPE_VEHICLE         2
-#define BULLET_HIT_TYPE_OBJECT          3
-#define BULLET_HIT_TYPE_PLAYER_OBJECT   4
-
 #pragma pack(push, 1)
 typedef struct _ONFOOT_SYNC_DATA
 {
@@ -190,8 +184,6 @@ public:
 	void CheckWeapons();
 
 	CPlayerPed			*m_pPlayerPed;
-
-	void SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, CVector vecHitPos);
 
 public:
 	bool				m_bIsSpectating;

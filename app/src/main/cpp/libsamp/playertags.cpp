@@ -38,7 +38,7 @@ void CPlayerTags::Render()
 	int dwHitEntity;
 	char szNickBuf[50];
 
-	if(pNetGame && pNetGame->m_bShowPlayerTags)
+	if(pNetGame && pNetGame->m_bShowPlayerTags && !CSettings::m_Settings.i3dTextsDisable)
 	{
 		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 

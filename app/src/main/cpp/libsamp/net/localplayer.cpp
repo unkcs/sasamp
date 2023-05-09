@@ -111,10 +111,10 @@ void CLocalPlayer::CheckWeapons()
 	for (int i = 0; i < MAX_WEAPONS_SLOT; i++) {
 
 		if (m_byteLastWeapon[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].m_nType ||
-                m_dwLastAmmo[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].dwAmmo)
+                m_dwLastAmmo[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].m_nTotalAmmo)
 		{
 			m_byteLastWeapon[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].m_nType;
-			m_dwLastAmmo[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].dwAmmo;
+			m_dwLastAmmo[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].m_nTotalAmmo;
 
             bMSend = true;
 			break;
@@ -254,7 +254,7 @@ bool CLocalPlayer::Process()
 		// the number of sends.
 		int iNumberOfPlayersInLocalRange = 0;
 		iNumberOfPlayersInLocalRange = DetermineNumberOfPlayersInLocalRange();
-		if (!iNumberOfPlayersInLocalRange) iNumberOfPlayersInLocalRange = 10;
+	//	if (!iNumberOfPlayersInLocalRange) iNumberOfPlayersInLocalRange = 10;
 
 		// SPECTATING
 		if (m_bIsSpectating) {
@@ -295,12 +295,12 @@ bool CLocalPlayer::Process()
 				m_CurrentVehicle = INVALID_VEHICLE_ID;
 			}
 
-			if ((dwThisTick - m_dwLastSendTick) > (unsigned int) GetOptimumOnFootSendRate()) {
+			if ((dwThisTick - m_dwLastSendTick) > (unsigned int) GetOptimumOnFootSendRate() + iNumberOfPlayersInLocalRange) {
 				m_dwLastSendTick = GetTickCount();
 				SendOnFootFullSyncData();
 			}
 
-			if ((dwThisTick - m_dwLastSendTick) > (unsigned int) GetOptimumOnFootSendRate() ||
+			if ((dwThisTick - m_dwLastSendTick) > (unsigned int) GetOptimumOnFootSendRate() + iNumberOfPlayersInLocalRange ||
 				LocalPlayerKeys.bKeys[ePadKeys::KEY_WALK] ||
 				LocalPlayerKeys.bKeys[ePadKeys::KEY_YES] ||
 				LocalPlayerKeys.bKeys[ePadKeys::KEY_NO] ||
@@ -712,54 +712,6 @@ void CLocalPlayer::SendOnFootFullSyncData()
 
 		memcpy(&m_OnFootData, &ofSync, sizeof(ONFOOT_SYNC_DATA));
 	}
-}
-
-void CLocalPlayer::SendBulletSyncData(PLAYERID byteHitID, uint8_t byteHitType, CVector vecHitPos)
-{
-	if (!m_pPlayerPed) return;
-	switch (byteHitType)
-	{
-		case BULLET_HIT_TYPE_NONE:
-			break;
-		case BULLET_HIT_TYPE_PLAYER:
-			if (!pNetGame->GetPlayerPool()->GetSlotState((PLAYERID)byteHitID)) return;
-			break;
-
-	}
-	uint8_t byteCurrWeapon = m_pPlayerPed->GetCurrentWeapon(), byteShotWeapon;
-
-	RwMatrix matPlayer;
-	BULLET_SYNC blSync;
-
-	m_pPlayerPed->GetMatrix(&matPlayer);
-
-	blSync.PlayerID = byteHitID;
-	blSync.byteHitType = byteHitType;
-
-	if (byteHitType == BULLET_HIT_TYPE_PLAYER)
-	{
-		float fDistance = pNetGame->GetPlayerPool()->GetAt((PLAYERID)byteHitID)->GetPlayerPed()->GetDistanceFromLocalPlayerPed();
-		if (byteCurrWeapon != 0 && fDistance < 1.0f)
-			byteShotWeapon = 0;
-		else
-			byteShotWeapon = byteCurrWeapon;
-	}
-	else
-	{
-		byteShotWeapon = m_pPlayerPed->GetCurrentWeapon();
-	}
-	blSync.byteWeaponID = byteShotWeapon;
-
-	blSync.vecOrigin.x = vecHitPos.x;
-	blSync.vecOrigin.y = vecHitPos.y;
-	blSync.vecOrigin.z = vecHitPos.z;
-
-	blSync.vecOffset.x = blSync.vecOffset.y = blSync.vecOffset.z = 0.0f;
-
-	RakNet::BitStream bsBulletSync;
-	bsBulletSync.Write((uint8_t)ID_BULLET_SYNC);
-	bsBulletSync.Write((const char*)& blSync, sizeof(BULLET_SYNC));
-	pNetGame->GetRakClient()->Send(&bsBulletSync, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
 }
 
 void CLocalPlayer::SendInCarFullSyncData()

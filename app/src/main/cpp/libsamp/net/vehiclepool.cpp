@@ -203,7 +203,7 @@ bool CVehiclePool::Delete(VEHICLEID VehicleID)
 	return true;
 }
 
-VEHICLEID CVehiclePool::FindIDFromGtaPtr(CVehicleGta *pGtaVehicle)
+VEHICLEID CVehiclePool::FindIDFromGtaPtr(CEntityGta *pGtaVehicle)
 {
 	int x=1;
 

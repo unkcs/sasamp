@@ -1798,24 +1798,24 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 											ObjectID = pObjectPool->FindIDFromGtaPtr(btData->pEntity);
 											if (ObjectID == INVALID_OBJECT_ID)
 											{
-												CVector vecOut;
-												vecOut.x = 0.0f;
-												vecOut.y = 0.0f;
-												vecOut.z = 0.0f;
-
-												if (btData->pEntity->m_matrix)
-												{
-													ProjectMatrix(&vecOut, btData->pEntity->m_matrix, &btData->vecOffset);
-													btData->vecOffset.x = vecOut.x;
-													btData->vecOffset.y = vecOut.y;
-													btData->vecOffset.z = vecOut.z;
-												}
-												else
-												{
-													btData->vecOffset.x = btData->pEntity->m_matrix->m_pos.x + btData->vecOffset.x;
-													btData->vecOffset.y = btData->pEntity->m_matrix->m_pos.y + btData->vecOffset.y;
-													btData->vecOffset.z = btData->pEntity->m_matrix->m_pos.z + btData->vecOffset.z;
-												}
+//												CVector vecOut;
+//												vecOut.x = 0.0f;
+//												vecOut.y = 0.0f;
+//												vecOut.z = 0.0f;
+//
+//												if (btData->pEntity->m_matrix)
+//												{
+//													ProjectMatrix(&vecOut, btData->pEntity->m_matrix, &btData->vecOffset);
+//													btData->vecOffset.x = vecOut.x;
+//													btData->vecOffset.y = vecOut.y;
+//													btData->vecOffset.z = vecOut.z;
+//												}
+//												else
+//												{
+//													btData->vecOffset.x = btData->pEntity->m_matrix->m_pos.x + btData->vecOffset.x;
+//													btData->vecOffset.y = btData->pEntity->m_matrix->m_pos.y + btData->vecOffset.y;
+//													btData->vecOffset.z = btData->pEntity->m_matrix->m_pos.z + btData->vecOffset.z;
+//												}
 											}
 											else
 											{
@@ -1840,19 +1840,11 @@ void CPlayerPed::ProcessBulletData(BULLET_DATA* btData)
 								}
 							}
 
-							bulletSyncData.vecOrigin.x = btData->vecOrigin.x;
-							bulletSyncData.vecOrigin.y = btData->vecOrigin.y;
-							bulletSyncData.vecOrigin.z = btData->vecOrigin.z;
+							bulletSyncData.vecOrigin 	= btData->vecOrigin;
+							bulletSyncData.vecPos 		= btData->vecPos;
+							bulletSyncData.vecOffset 	= btData->vecOffset;
 
-							bulletSyncData.vecPos.x = btData->vecPos.x;
-							bulletSyncData.vecPos.y = btData->vecPos.y;
-							bulletSyncData.vecPos.z = btData->vecPos.z;
-
-							bulletSyncData.vecOffset.x = btData->vecOffset.x;
-							bulletSyncData.vecOffset.y = btData->vecOffset.y;
-							bulletSyncData.vecOffset.z = btData->vecOffset.z;
-
-							bulletSyncData.byteHitType = byteHitType;
+							bulletSyncData.byteHitType = static_cast<eBulletSyncHitType>(byteHitType);
 							bulletSyncData.PlayerID = InstanceID;
 							bulletSyncData.byteWeaponID = pPlayerPed->GetCurrentWeapon();
 

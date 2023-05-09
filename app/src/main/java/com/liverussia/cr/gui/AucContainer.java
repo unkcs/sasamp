@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.button.MaterialButton;
 import com.liverussia.cr.R;
+import com.liverussia.cr.core.Samp;
 import com.nvidia.devtech.NvEventQueueActivity;
 
 import java.text.DecimalFormat;
@@ -24,7 +25,6 @@ public class AucContainer {
 
     Activity activity;
     ConstraintLayout auc_main_layout;
-    DecimalFormat price_format;
     TextView auc_price;
     TextView auc_caption;
     MaterialButton auc_give_butt;
@@ -35,9 +35,7 @@ public class AucContainer {
     public AucContainer(Activity activity){
         Init();
         this.activity = activity;
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        otherSymbols.setGroupingSeparator('.');
-        price_format = new DecimalFormat("###,###.###", otherSymbols);
+
         auc_main_layout = activity.findViewById(R.id.auc_main_layout);
         auc_main_layout.setVisibility(View.GONE);
 
@@ -63,7 +61,7 @@ public class AucContainer {
 
     public void show(int id, int type, int price){
         activity.runOnUiThread(() -> {
-            auc_price.setText(price_format.format(price)+" руб.");
+            auc_price.setText(Samp.formatter.format(price)+" руб.");
             int imgres = 0;
 
             if(type == 0){

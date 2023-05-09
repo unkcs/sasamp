@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.button.MaterialButton;
 import com.liverussia.cr.R;
+import com.liverussia.cr.core.Samp;
 import com.liverussia.cr.gui.util.Utils;
 
 import java.text.DecimalFormat;
@@ -24,8 +25,6 @@ import java.util.Locale;
 public class Casino {
     // global
     Activity activity;
-    DecimalFormat price_format;
-
     // chip
     private TextView casino_chip_action_caption;
     private TextView casino_chip_balance_text;
@@ -46,9 +45,6 @@ public class Casino {
         Init();
 
         this.activity = activity;
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        otherSymbols.setGroupingSeparator('.');
-        price_format = new DecimalFormat("###,###.###", otherSymbols);
 
         // покупка продажа фишек
         casino_chip_action_caption = activity.findViewById(R.id.casino_chip_action_caption);
@@ -132,9 +128,9 @@ public class Casino {
     void ChipUpdateGetting(){
         activity.runOnUiThread(() -> {
             if(chip_isSell){
-                casino_chip_get_count.setText(String.format("К оплате: %s руб.", price_format.format(getChipGetCount()* 1000L)));
+                casino_chip_get_count.setText(String.format("К оплате: %s руб.", Samp.formatter.format(getChipGetCount()* 1000L)));
             }else {
-                casino_chip_get_count.setText(String.format("К получению: %s руб.", price_format.format(getChipGetCount()* 950L)));
+                casino_chip_get_count.setText(String.format("К получению: %s руб.", Samp.formatter.format(getChipGetCount()* 950L)));
             }
         });
     }

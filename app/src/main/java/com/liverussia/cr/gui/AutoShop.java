@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.liverussia.cr.R;
+import com.liverussia.cr.core.Samp;
 import com.liverussia.cr.gui.util.Utils;
 import com.nvidia.devtech.NvEventQueueActivity;
 
@@ -43,15 +44,9 @@ public class AutoShop {
     TextView autoshop_acceleration_value;
     TextView autoshop_available_value;
     TextView autoshop_gear_value;
-    DecimalFormat price_format;
-
 
     public AutoShop(Activity activity)
     {
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        otherSymbols.setGroupingSeparator('.');
-        price_format = new DecimalFormat("###,###.###", otherSymbols);
-
         autoshop_exitbutt = activity.findViewById(R.id.autoshop_exitbutt);
         autoshop_buybutt = activity.findViewById(R.id.autoshop_buybutt);
         autoshop_colorright = activity.findViewById(R.id.autoshop_colorright);
@@ -120,7 +115,7 @@ public class AutoShop {
             }
         }
 
-        autoshop_pricevalue.setText(price_format.format(price)+" руб.");
+        autoshop_pricevalue.setText(Samp.formatter.format(price)+" руб.");
         autoshop_available_value.setText(String.format("%d", count));
         autoshop_acceleration_value.setText(String.format("%.1f", acceleration)+" с.");
         autoshop_maxspeed_value.setText(String.format("%.0f", maxspeed)+" км/ч");

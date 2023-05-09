@@ -59,7 +59,6 @@ public class TireShop implements View.OnClickListener {
     private Animation animation;
 
     private List<ItemInfo> viewPagerItems;
-    private DecimalFormat costFormat;
     private Integer tireShopBarProgress;
 
     @Setter
@@ -67,9 +66,6 @@ public class TireShop implements View.OnClickListener {
     private ItemInfo dialogItemInfo;
 
     {
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
-        otherSymbols.setGroupingSeparator('.');
-        costFormat = new DecimalFormat("###,###.###", otherSymbols);
         tireShopBarProgress = BAR_INITIAL_VALUE;
     }
 
@@ -220,13 +216,13 @@ public class TireShop implements View.OnClickListener {
             if (toggle) {
 
                 if (View.VISIBLE == tireShopHud.getVisibility()) {
-                    costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
+                    costText.setText(Samp.formatter.format(price).concat(COST_TEXT_POSTFIX));
                     balanceText.setText(String.format("%s", Samp.formatter.format(currentBalance)));
                     return;
                 }
 
                 balanceText.setText(String.format("%s", Samp.formatter.format(currentBalance)));
-                costText.setText(costFormat.format(price).concat(COST_TEXT_POSTFIX));
+                costText.setText(Samp.formatter.format(price).concat(COST_TEXT_POSTFIX));
                 tireShopHud.setVisibility(View.VISIBLE);
                 closeBtn.setVisibility(View.VISIBLE);
                 viewPagerItems.addAll(ItemInfo.getMainMenuItems());

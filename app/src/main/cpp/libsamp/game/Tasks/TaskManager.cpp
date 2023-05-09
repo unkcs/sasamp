@@ -303,12 +303,10 @@ void CTaskManager__FindActiveTaskByType(CTaskManager* thiz, eTaskType taskType) 
 }
 
 void CTaskManager__AddSubTasks(CTaskManager* thiz, CTask* toTask) {
-    Log("CTaskManager__AddSubTasks");
     thiz->AddSubTasks(toTask);
 }
 
 void CTaskManager__SetTaskSecondary(CTaskManager* thiz, CTask* task, eSecondaryTask taskIndex) {
-    Log("CTaskManager__SetTaskSecondary");
     thiz->SetTaskSecondary(task, taskIndex);
 }
 

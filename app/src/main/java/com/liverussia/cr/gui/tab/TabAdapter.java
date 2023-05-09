@@ -1,5 +1,7 @@
 package com.liverussia.cr.gui.tab;
 
+import static com.liverussia.cr.core.Samp.activity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,7 @@ public class TabAdapter extends RecyclerView.Adapter implements Filterable {
         holder.level.setText(String.valueOf(data.getLevel()));
         holder.ping.setText(String.valueOf(data.getPing()));
         holder.View.setOnClickListener(view ->  {
-            view.startAnimation(AnimationUtils.loadAnimation(MainUtils.currentContext, R.anim.button_click));
+            view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
         });
     }
 
@@ -93,12 +95,12 @@ public class TabAdapter extends RecyclerView.Adapter implements Filterable {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mView = itemView;
-            this.View = (ConstraintLayout) itemView.findViewById(R.id.hassle_tab_item);
-            this.id = (TextView) itemView.findViewById(R.id.player_id);
-            this.name = (TextView) itemView.findViewById(R.id.player_name);
-            this.level = (TextView) itemView.findViewById(R.id.player_level);
-            this.ping = (TextView) itemView.findViewById(R.id.player_ping);
+            this.mView  = itemView;
+            this.View   = itemView.findViewById(R.id.hassle_tab_item);
+            this.id     = itemView.findViewById(R.id.player_id);
+            this.name   = itemView.findViewById(R.id.player_name);
+            this.level  = itemView.findViewById(R.id.player_level);
+            this.ping   = itemView.findViewById(R.id.player_ping);
         }
 
         public View getView() {

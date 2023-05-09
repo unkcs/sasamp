@@ -69,11 +69,6 @@ public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
         init();
     }
 
-    float getMaxFps() {
-        Display display = Samp.windowManager.getDefaultDisplay();
-        return display.getRefreshRate();
-    }
-
     void init()
     {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());

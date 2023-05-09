@@ -16,7 +16,6 @@ import java.util.List;
 
 
 public class MainUtils {
-    public static AppCompatActivity currentContext;
     public static DownloadType TYPE = DownloadType.LOAD_ALL_CACHE;
     public static List<FileInfo> FILES_TO_RELOAD;
     public static LatestVersionInfoDto LATEST_APK_INFO;

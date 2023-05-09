@@ -257,10 +257,10 @@ Java_com_liverussia_cr_gui_styling_Styling_isAvailableStyle(JNIEnv *env, jobject
         }
         case 3: {
             // body
-            if(pVehicle->m_iVinylId != -1) {
-                CNotification::show(0, "Недоступно с винилами!", 5, 0);
-                return false;
-            }
+//            if(pVehicle->m_iVinylId != -1) {
+//                CNotification::show(0, "Недоступно с винилами!", 5, 0);
+//                return false;
+//            }
             return true;
         }
         case 4: {

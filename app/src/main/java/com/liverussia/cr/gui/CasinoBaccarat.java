@@ -1,5 +1,6 @@
 package com.liverussia.cr.gui;
 
+import static com.liverussia.cr.core.Samp.activity;
 import static com.liverussia.cr.gui.CasinoBaccarat.ChipType.CHIP_TYPE_1;
 import static com.liverussia.cr.gui.CasinoBaccarat.ChipType.CHIP_TYPE_100;
 import static com.liverussia.cr.gui.CasinoBaccarat.ChipType.CHIP_TYPE_1000;
@@ -69,7 +70,6 @@ public class CasinoBaccarat
     ImageView casino_bc_chip_500;
     ImageView casino_bc_chip_1000;
 
-    Activity activity;
     ConstraintLayout casino_bc_main_layout;
     ConstraintLayout casino_bc_red_area;
     ConstraintLayout casino_bc_green_area;
@@ -101,170 +101,167 @@ public class CasinoBaccarat
     int betsound = 0;
 
     native void sendAddBet(int sum, int bettype);
-    native void init();
     native void exit();
-    native void close();
 
-    public CasinoBaccarat(Activity activity){
-        init();
-        this.activity = activity;
+    public CasinoBaccarat(){
+        activity.runOnUiThread(()-> {
 
-        casino_bc_off_sound_butt = activity.findViewById(R.id.casino_bc_off_sound_butt);
-        casino_bc_off_sound_butt.setOnClickListener(view -> {
-            activity.runOnUiThread(() -> {
-                view.startAnimation( AnimationUtils.loadAnimation(activity, R.anim.button_click) );
-                bOffSound = !bOffSound;
-                if(bOffSound)
-                    casino_bc_off_sound_butt.setImageTintList( ColorStateList.valueOf(Color.parseColor("#f44336")) );
-                else
-                    casino_bc_off_sound_butt.setImageTintList( ColorStateList.valueOf(Color.parseColor("#9e9e9e")) );
+            casino_bc_off_sound_butt = activity.findViewById(R.id.casino_bc_off_sound_butt);
+            casino_bc_off_sound_butt.setOnClickListener(view -> {
+                activity.runOnUiThread(() -> {
+                    view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
+                    bOffSound = !bOffSound;
+                    if (bOffSound)
+                        casino_bc_off_sound_butt.setImageTintList(ColorStateList.valueOf(Color.parseColor("#f44336")));
+                    else
+                        casino_bc_off_sound_butt.setImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
+                });
             });
+
+            casino_bc_cancel_button = activity.findViewById(R.id.casino_bc_cancel_button);
+            casino_bc_cancel_button.setOnClickListener(view -> {
+                if (last_bets.size() == 0) return;
+                if (curr_time < TIME_TO_BET) {
+                    playNoMoreBets();
+                    return;
+                }
+
+                sendAddBet(last_bets.get(last_bets.size() - 1) * -1, BET_TYPE_NONE);
+
+                last_bets.remove(last_bets.size() - 1);
+                view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
+            });
+
+            casino_bc_repeat_button = activity.findViewById(R.id.casino_bc_repeat_button);
+            casino_bc_repeat_button.setOnClickListener(view -> {
+                if (curr_time < TIME_TO_BET) {
+                    playNoMoreBets();
+                    return;
+                }
+
+                if (current_bet != 0) { // x2
+                    sendAddBet(current_bet, current_bet_type);
+                    last_bets.add(current_bet);
+                } else {
+                    if (last_curr_bet <= 0) return;
+                    sendAddBet(last_curr_bet, last_bet_type);
+                    last_bets.add(last_curr_bet);
+                }
+                view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
+            });
+
+            // last wins
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_1));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_2));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_3));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_4));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_5));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_6));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_7));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_8));
+            casino_bc_last_wins.add(activity.findViewById(R.id.casino_bc_last_win_9));
+
+            casino_bc_balance_value = activity.findViewById(R.id.casino_bc_balance_value);
+
+            casino_bc_red_percent = activity.findViewById(R.id.casino_bc_red_percent);
+            casino_bc_yellow_percent = activity.findViewById(R.id.casino_bc_yellow_percent);
+            casino_bc_green_percent = activity.findViewById(R.id.casino_bc_green_percent);
+
+            casino_bc_exit_butt = activity.findViewById(R.id.casino_bc_exit_butt);
+            casino_bc_exit_butt.setOnClickListener(view -> {
+                exit();
+            });
+            // ==== выделение фишек
+            casino_bc_chip_1 = activity.findViewById(R.id.casino_bc_chip_1);
+            casino_bc_chip_1.setOnClickListener(view -> {
+                changeChipSelect(casino_bc_chip_1);
+                selected_chip_type = CHIP_TYPE_1;
+            });
+
+            casino_bc_chip_5 = activity.findViewById(R.id.casino_bc_chip_5);
+            casino_bc_chip_5.setOnClickListener(view -> {
+                changeChipSelect(casino_bc_chip_5);
+                selected_chip_type = CHIP_TYPE_5;
+            });
+
+            casino_bc_chip_25 = activity.findViewById(R.id.casino_bc_chip_25);
+            casino_bc_chip_25.setOnClickListener(view -> {
+                changeChipSelect(casino_bc_chip_25);
+                selected_chip_type = CHIP_TYPE_25;
+            });
+
+            casino_bc_chip_100 = activity.findViewById(R.id.casino_bc_chip_100);
+            casino_bc_chip_100.setOnClickListener(view -> {
+                changeChipSelect(casino_bc_chip_100);
+                selected_chip_type = CHIP_TYPE_100;
+            });
+
+            casino_bc_chip_500 = activity.findViewById(R.id.casino_bc_chip_500);
+            casino_bc_chip_500.setOnClickListener(view -> {
+                changeChipSelect(casino_bc_chip_500);
+                selected_chip_type = CHIP_TYPE_500;
+            });
+
+            casino_bc_chip_1000 = activity.findViewById(R.id.casino_bc_chip_1000);
+            casino_bc_chip_1000.setOnClickListener(view -> {
+                changeChipSelect(casino_bc_chip_1000);
+                selected_chip_type = CHIP_TYPE_1000;
+            });
+
+            // ==============
+            casino_bc_timer_bg = activity.findViewById(R.id.casino_bc_timer_bg);
+            casino_bc_red_card = activity.findViewById(R.id.casino_bc_red_card);
+            casino_bc_yellow_card = activity.findViewById(R.id.casino_bc_yellow_card);
+
+            casino_bc_main_layout = activity.findViewById(R.id.casino_bc_main_layout);
+
+            casino_bc_red_area = activity.findViewById(R.id.casino_bc_red_area);
+            casino_bc_red_area.setOnClickListener(view -> {
+                if (selected_chip_type == CHIP_TYPE_NONE) return;
+                if (curr_time < TIME_TO_BET) {
+                    playNoMoreBets();
+                    return;
+                }
+
+                sendAddBet(getChipValue(selected_chip_type), BET_TYPE_RED);
+
+                last_bets.add(getChipValue(selected_chip_type));
+
+            });
+
+            casino_bc_green_area = activity.findViewById(R.id.casino_bc_green_area);
+            casino_bc_green_area.setOnClickListener(view -> {
+                if (selected_chip_type == CHIP_TYPE_NONE) return;
+                if (curr_time < TIME_TO_BET) {
+                    playNoMoreBets();
+                    return;
+                }
+
+                sendAddBet(getChipValue(selected_chip_type), BET_TYPE_GREEN);
+
+                last_bets.add(getChipValue(selected_chip_type));
+            });
+
+            casino_bc_yellow_area = activity.findViewById(R.id.casino_bc_yellow_area);
+            casino_bc_yellow_area.setOnClickListener(view -> {
+                if (selected_chip_type == CHIP_TYPE_NONE) return;
+                if (curr_time < TIME_TO_BET) {
+                    playNoMoreBets();
+                    return;
+                }
+
+                sendAddBet(getChipValue(selected_chip_type), BET_TYPE_YELLOW);
+
+                last_bets.add(getChipValue(selected_chip_type));
+            });
+
+            casino_bc_red_chip = activity.findViewById(R.id.casino_bc_red_chip);
+            casino_bc_yellow_chip = activity.findViewById(R.id.casino_bc_yellow_chip);
+            casino_bc_green_chip = activity.findViewById(R.id.casino_bc_green_chip);
+
+            betsound = Samp.soundPool.load(NvEventQueueActivity.getInstance(), R.raw.betchip, 0);
+
         });
-
-        casino_bc_cancel_button = activity.findViewById(R.id.casino_bc_cancel_button);
-        casino_bc_cancel_button.setOnClickListener(view -> {
-            if(last_bets.size() == 0) return;
-            if(curr_time < TIME_TO_BET) {
-                playNoMoreBets();
-                return;
-            }
-
-            sendAddBet( last_bets.get( last_bets.size() - 1 ) * -1, BET_TYPE_NONE );
-
-            last_bets.remove( last_bets.size() - 1 );
-            view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
-        });
-
-        casino_bc_repeat_button = activity.findViewById(R.id.casino_bc_repeat_button);
-        casino_bc_repeat_button.setOnClickListener(view -> {
-            if(curr_time < TIME_TO_BET) {
-                playNoMoreBets();
-                return;
-            }
-
-            if(current_bet != 0) { // x2
-                sendAddBet( current_bet, current_bet_type );
-                last_bets.add( current_bet );
-            }
-            else {
-                if( last_curr_bet <= 0 ) return;
-                sendAddBet( last_curr_bet, last_bet_type );
-                last_bets.add( last_curr_bet );
-            }
-            view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
-        });
-
-        // last wins
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_1) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_2) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_3) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_4) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_5) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_6) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_7) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_8) );
-        casino_bc_last_wins.add( activity.findViewById(R.id.casino_bc_last_win_9) );
-
-        casino_bc_balance_value = activity.findViewById(R.id.casino_bc_balance_value);
-
-        casino_bc_red_percent = activity.findViewById(R.id.casino_bc_red_percent);
-        casino_bc_yellow_percent = activity.findViewById(R.id.casino_bc_yellow_percent);
-        casino_bc_green_percent = activity.findViewById(R.id.casino_bc_green_percent);
-
-        casino_bc_exit_butt = activity.findViewById(R.id.casino_bc_exit_butt);
-        casino_bc_exit_butt.setOnClickListener(view -> {
-            exit();
-        });
-        // ==== выделение фишек
-        casino_bc_chip_1 = activity.findViewById(R.id.casino_bc_chip_1);
-        casino_bc_chip_1.setOnClickListener(view -> {
-            changeChipSelect(casino_bc_chip_1);
-            selected_chip_type = CHIP_TYPE_1;
-        });
-
-        casino_bc_chip_5 = activity.findViewById(R.id.casino_bc_chip_5);
-        casino_bc_chip_5.setOnClickListener(view -> {
-            changeChipSelect(casino_bc_chip_5);
-            selected_chip_type = CHIP_TYPE_5;
-        });
-
-        casino_bc_chip_25 = activity.findViewById(R.id.casino_bc_chip_25);
-        casino_bc_chip_25.setOnClickListener(view -> {
-            changeChipSelect(casino_bc_chip_25);
-            selected_chip_type = CHIP_TYPE_25;
-        });
-
-        casino_bc_chip_100 = activity.findViewById(R.id.casino_bc_chip_100);
-        casino_bc_chip_100.setOnClickListener(view -> {
-            changeChipSelect(casino_bc_chip_100);
-            selected_chip_type = CHIP_TYPE_100;
-        });
-
-        casino_bc_chip_500 = activity.findViewById(R.id.casino_bc_chip_500);
-        casino_bc_chip_500.setOnClickListener(view -> {
-            changeChipSelect(casino_bc_chip_500);
-            selected_chip_type = CHIP_TYPE_500;
-        });
-
-        casino_bc_chip_1000 = activity.findViewById(R.id.casino_bc_chip_1000);
-        casino_bc_chip_1000.setOnClickListener(view -> {
-            changeChipSelect(casino_bc_chip_1000);
-            selected_chip_type = CHIP_TYPE_1000;
-        });
-
-        // ==============
-        casino_bc_timer_bg = activity.findViewById(R.id.casino_bc_timer_bg);
-        casino_bc_red_card = activity.findViewById(R.id.casino_bc_red_card);
-        casino_bc_yellow_card = activity.findViewById(R.id.casino_bc_yellow_card);
-
-        casino_bc_main_layout = activity.findViewById(R.id.casino_bc_main_layout);
-        casino_bc_main_layout.setVisibility(View.GONE);
-
-        casino_bc_red_area = activity.findViewById(R.id.casino_bc_red_area);
-        casino_bc_red_area.setOnClickListener(view -> {
-            if(selected_chip_type == CHIP_TYPE_NONE) return;
-            if(curr_time < TIME_TO_BET) {
-                playNoMoreBets();
-                return;
-            }
-
-            sendAddBet( getChipValue(selected_chip_type), BET_TYPE_RED );
-
-            last_bets.add( getChipValue(selected_chip_type) );
-
-        });
-
-        casino_bc_green_area = activity.findViewById(R.id.casino_bc_green_area);
-        casino_bc_green_area.setOnClickListener(view -> {
-            if(selected_chip_type == CHIP_TYPE_NONE) return;
-            if(curr_time < TIME_TO_BET) {
-                playNoMoreBets();
-                return;
-            }
-
-            sendAddBet( getChipValue(selected_chip_type), BET_TYPE_GREEN );
-
-            last_bets.add( getChipValue(selected_chip_type) );
-        });
-
-        casino_bc_yellow_area = activity.findViewById(R.id.casino_bc_yellow_area);
-        casino_bc_yellow_area.setOnClickListener(view -> {
-            if(selected_chip_type == CHIP_TYPE_NONE) return;
-            if(curr_time < TIME_TO_BET) {
-                playNoMoreBets();
-                return;
-            }
-
-            sendAddBet( getChipValue(selected_chip_type), BET_TYPE_YELLOW );
-
-            last_bets.add( getChipValue(selected_chip_type) );
-        });
-
-        casino_bc_red_chip = activity.findViewById(R.id.casino_bc_red_chip);
-        casino_bc_yellow_chip = activity.findViewById(R.id.casino_bc_yellow_chip);
-        casino_bc_green_chip = activity.findViewById(R.id.casino_bc_green_chip);
-
-        betsound = Samp.soundPool.load(NvEventQueueActivity.getInstance(), R.raw.betchip, 0);
     }
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
@@ -574,18 +571,17 @@ public class CasinoBaccarat
 
     void updateLastWins(int[] lastwins)
     {
-        for(int i = 0; i < lastwins.length; i++)
-        {
-            if(lastwins[i] == BET_TYPE_RED) {
-                casino_bc_last_wins.get(i).setImageTintList( ColorStateList.valueOf(Color.parseColor("#5C1C1D")) );
+        activity.runOnUiThread(()-> {
+            for (int i = 0; i < lastwins.length; i++) {
+                if (lastwins[i] == BET_TYPE_RED) {
+                    casino_bc_last_wins.get(i).setImageTintList(ColorStateList.valueOf(Color.parseColor("#5C1C1D")));
+                } else if (lastwins[i] == BET_TYPE_YELLOW) {
+                    casino_bc_last_wins.get(i).setImageTintList(ColorStateList.valueOf(Color.parseColor("#9F8731")));
+                } else {
+                    casino_bc_last_wins.get(i).setImageTintList(ColorStateList.valueOf(Color.parseColor("#205537")));
+                }
             }
-            else if(lastwins[i] == BET_TYPE_YELLOW) {
-                casino_bc_last_wins.get(i).setImageTintList( ColorStateList.valueOf(Color.parseColor("#9F8731")) );
-            }
-            else {
-                casino_bc_last_wins.get(i).setImageTintList( ColorStateList.valueOf(Color.parseColor("#205537")) );
-            }
-        }
+        });
     }
 
     void hide() {

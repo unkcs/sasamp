@@ -2,10 +2,14 @@ package com.liverussia.cr.core;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -25,6 +29,7 @@ import com.liverussia.cr.gui.hud.HudManager;
 import com.liverussia.cr.gui.tab.Tab;
 import com.liverussia.cr.gui.util.Utils;
 
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -82,7 +87,6 @@ public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
         soundPool = new SoundPool.Builder().setAudioAttributes(attributes).build();
 
         new HudManager(this);
-        new CasinoBaccarat(this);
         new AucContainer(this);
         new DailyReward(this);
         new Tab(this);
@@ -135,6 +139,22 @@ public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
             return true;
         }
         return false;
+    }
+
+    public static String getSignature() {
+        String apkSignature = null;
+        try {
+            PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(
+                    activity.getPackageName(),
+                    PackageManager.GET_SIGNATURES
+            );
+            for (Signature signature : packageInfo.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                apkSignature = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+            }
+        } catch (Exception ignored) {}
+        return apkSignature;
     }
 
 }

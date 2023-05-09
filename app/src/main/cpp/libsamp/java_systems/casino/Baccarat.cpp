@@ -13,11 +13,6 @@
 #include "../../net/netgame.h"
 #include "util/CJavaWrapper.h"
 
-jobject CBaccarat::thiz = nullptr;
-jclass  CBaccarat::clazz = nullptr;
-
-bool CBaccarat::bIsShow = false;
-extern CJavaWrapper *g_pJavaWrapper;
 
 enum PACKET_BACCARAT_TYPE
 {
@@ -29,10 +24,11 @@ enum PACKET_BACCARAT_TYPE
 
 void CBaccarat::updateLastWins(uint8_t* lastwins)
 {
+    CBaccarat::Contructor();
+
     JNIEnv *env = g_pJavaWrapper->GetEnv();
 
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID method = env->GetMethodID(clazz, "updateLastWins", "([I)V");
+    jmethodID method = env->GetMethodID(CBaccarat::clazz, "updateLastWins", "([I)V");
 
     jint idArray[BACCARAT_MAX_HISTORY];
     for (int i = 0; i < BACCARAT_MAX_HISTORY ; i++) {
@@ -48,34 +44,51 @@ void CBaccarat::updateLastWins(uint8_t* lastwins)
 
 void CBaccarat::updateBaccarat(int redCard, int yellowCard, int totalPlayers, int totalRed, int totalYellow, int totalGreen, int time, int betType, int betSum, int winner, int balance)
 {
+    CBaccarat::Contructor();
+
     CBaccarat::bIsShow = true;
 
     JNIEnv *env = g_pJavaWrapper->GetEnv();
 
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID method = env->GetMethodID(clazz, "update", "(IIIIIIIIIII)V");
+    jmethodID method = env->GetMethodID(CBaccarat::clazz, "update", "(IIIIIIIIIII)V");
 
-    env->CallVoidMethod(CBaccarat::thiz, method, redCard, yellowCard, totalPlayers, totalRed, totalYellow, totalGreen, time, betType, betSum, winner, balance);
+    env->CallVoidMethod(CBaccarat::thiz, method, redCard, yellowCard, totalPlayers, totalRed,
+                            totalYellow, totalGreen, time, betType, betSum, winner, balance);
+}
+
+void CBaccarat::Contructor() {
+    if(!CBaccarat::thiz) {
+        JNIEnv *env = g_pJavaWrapper->GetEnv();
+
+        jmethodID constructor = env->GetMethodID(clazz, "<init>", "()V");
+        CBaccarat::thiz = env->NewObject(CBaccarat::clazz, constructor);
+        CBaccarat::thiz = env->NewGlobalRef(CBaccarat::thiz);
+    }
 }
 
 void CBaccarat::tempToggle(bool toggle) {
+    CBaccarat::Contructor();
 
     JNIEnv *env = g_pJavaWrapper->GetEnv();
 
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID method = env->GetMethodID(clazz, "tempToggle", "(Z)V");
+    jmethodID method = env->GetMethodID(CBaccarat::clazz, "tempToggle", "(Z)V");
 
     env->CallVoidMethod(CBaccarat::thiz, method, toggle);
 }
 
 void CBaccarat::hide() {
 
+    CBaccarat::Contructor();
+
     JNIEnv *env = g_pJavaWrapper->GetEnv();
 
-    jclass clazz = env->GetObjectClass(thiz);
-    jmethodID method = env->GetMethodID(clazz, "hide", "()V");
+    jmethodID method = env->GetMethodID(CBaccarat::clazz, "hide", "()V");
 
     env->CallVoidMethod(CBaccarat::thiz, method);
+
+    env->DeleteGlobalRef(CBaccarat::thiz);
+
+    CBaccarat::thiz = nullptr;
 }
 
 void CNetGame::packetCasinoBaccarat(Packet* p) {
@@ -88,7 +101,6 @@ void CNetGame::packetCasinoBaccarat(Packet* p) {
 
     switch (type_packet) {
         case PACKET_BACCARAT_TYPE::PACKET_EXIT: {
-            Log("PACKET_EXIT");
             CBaccarat::bIsShow = false;
             CBaccarat::hide();
             break;
@@ -156,12 +168,6 @@ Java_com_liverussia_cr_gui_CasinoBaccarat_sendAddBet(JNIEnv *env, jobject thiz, 
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_CasinoBaccarat_init(JNIEnv *env, jobject thiz) {
-    CBaccarat::thiz = env->NewGlobalRef(thiz);
-    CBaccarat::clazz = env->GetObjectClass(CBaccarat::thiz);
-}
-extern "C"
-JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_CasinoBaccarat_exit(JNIEnv *env, jobject thiz) {
     RakNet::BitStream bsSend;
     bsSend.Write((uint8_t)ID_CUSTOM_RPC);
@@ -170,9 +176,4 @@ Java_com_liverussia_cr_gui_CasinoBaccarat_exit(JNIEnv *env, jobject thiz) {
     bsSend.Write((uint8_t)PACKET_EXIT);
 
     pNetGame->GetRakClient()->Send(&bsSend, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0);
-}
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_CasinoBaccarat_close(JNIEnv *env, jobject thiz) {
-    // TODO: implement close()
 }

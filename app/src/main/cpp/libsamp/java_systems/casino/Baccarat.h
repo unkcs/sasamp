@@ -11,10 +11,10 @@
 static class CBaccarat {
 
 public:
-    static const int BACCARAT_MAX_HISTORY = 9;
-    static jobject thiz;
-    static jclass clazz;
-    static bool bIsShow;
+    static constexpr int BACCARAT_MAX_HISTORY = 9;
+    static inline jobject thiz = nullptr;
+    static inline jclass clazz = nullptr;
+    static inline bool bIsShow = false;
 
     static void
     updateBaccarat(int redCard, int yellowCard, int totalPlayers, int totalRed, int totalYellow,
@@ -25,6 +25,8 @@ public:
     static void updateLastWins(uint8_t* lastwins);
 
     static void hide();
+
+    static void Contructor();
 };
 
 

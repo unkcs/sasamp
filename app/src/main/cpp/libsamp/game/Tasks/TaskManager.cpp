@@ -311,7 +311,7 @@ void CTaskManager__SetTaskSecondary(CTaskManager* thiz, CTask* task, eSecondaryT
 }
 
 void CTaskManager::InjectHooks() {
-    CHook::Redirect(g_libGTASA + 0x004BAB48, &CTaskManager__SetTaskSecondary);
-    CHook::Redirect(g_libGTASA + 0x004BAA30, &CTaskManager__AddSubTasks);
-    CHook::Redirect(g_libGTASA + 0x004BA708, &CTaskManager__FindActiveTaskByType);
+//    CHook::Redirect(g_libGTASA + 0x004BAB48, &CTaskManager__SetTaskSecondary);
+  //  CHook::Redirect(g_libGTASA + 0x004BAA30, &CTaskManager__AddSubTasks);
+   // CHook::Redirect(g_libGTASA + 0x004BA708, &CTaskManager__FindActiveTaskByType);
 }

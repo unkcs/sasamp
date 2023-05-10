@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../RW/rwplcore.h"
+#include "../RW/RenderWare.h"
 
 class Sprite {
 public:

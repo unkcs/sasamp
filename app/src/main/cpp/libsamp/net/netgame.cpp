@@ -1485,7 +1485,7 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *pkt) {
     bsSend.Write(SAMP_VERSION, byteClientverLen);
 
     m_pRakClient->RPC(&RPC_ClientJoin, &bsSend, HIGH_PRIORITY, RELIABLE, 0, false,
-                      UNASSIGNED_NETWORK_ID, NULL);
+                      UNASSIGNED_NETWORK_ID, nullptr);
     Log("Packet_ConnectionSucceeded");
 }
 

@@ -23,3 +23,7 @@ RwStream* RwStreamOpen(RwStreamType type, RwStreamAccessType accessType, const v
 RwBool RwStreamClose(RwStream* stream, void* data) {
     return ((RwBool(__cdecl *)(RwStream*, void*))(g_libGTASA + 0x001BACF4 + 1))(stream, data);
 }
+
+RwMatrix* RwMatrixTransform(RwMatrix* matrix, const RwMatrix* transform, RwOpCombineType combineOp) {
+    return ((RwMatrix*(__cdecl *)(RwMatrix*, const RwMatrix*, RwOpCombineType))(g_libGTASA + 0x001B95EC + 1))(matrix, transform, combineOp);
+}

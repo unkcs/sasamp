@@ -3,7 +3,6 @@
 #include "CRenderTarget.h"
 #include "..//gui/CFontInstance.h"
 #include "..//gui/CFontRenderer.h"
-#include "game/RW/rwcore.h"
 #include <list>
 
 

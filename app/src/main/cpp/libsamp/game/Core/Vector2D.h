@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "../RW/rwplcore.h"
+#include "../RW/RenderWare.h"
+
 class CVector;
 
 class CVector2D : public RwV2d {
@@ -21,6 +22,15 @@ public:
     //! Because the following should be true: `CVector2D::FromHeading(heading).Heading() + PI == heading` (And it isn't :D)
     //constexpr static auto FromHeading(float headingRad) { return CVector2D{ -std::sin(headingRad), std::cos(headingRad) }; }
 
+    //! Heading of the vector -
+    float Heading() const {
+        return std::atan2(-x, y);
+    }
+
+    // Returns length of vector
+    [[nodiscard]] inline float Magnitude() const {
+        return std::sqrt(x * x + y * y);
+    }
 
     CVector2D(const CVector& vec3d);
 };
@@ -28,3 +38,12 @@ public:
 constexpr inline bool operator==(const CVector2D& vecLeft, const CVector2D& vecRight) {
     return vecLeft.x == vecRight.x && vecLeft.y == vecRight.y;
 }
+
+constexpr inline CVector2D operator-(const CVector2D& vecOne, const CVector2D& vecTwo) {
+    return { vecOne.x - vecTwo.x, vecOne.y - vecTwo.y };
+}
+
+inline float DistanceBetweenPoints2D(const CVector2D& pointOne, const CVector2D& pointTwo) {
+    return (pointTwo - pointOne).Magnitude();
+}
+

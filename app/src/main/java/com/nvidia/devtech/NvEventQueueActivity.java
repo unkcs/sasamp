@@ -57,6 +57,7 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport;
 import com.liverussia.cr.R;
 import com.liverussia.cr.core.DialogClientSettings;
 import com.liverussia.cr.gui.AdminRecon;
@@ -438,6 +439,13 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
             e.printStackTrace();
         }
         return ret;
+    }
+
+    public void nativeCrashed() {
+        System.err.println("nativeCrashed");
+        RuntimeException ex = new RuntimeException("crashed here (native trace should follow after the Java trace)");
+        FirebaseCrashlytics.getInstance().recordException(ex);
+        ex.printStackTrace();
     }
     
     /**

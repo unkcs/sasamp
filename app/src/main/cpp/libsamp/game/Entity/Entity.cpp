@@ -229,6 +229,12 @@ bool CEntityGta::DoesNotCollideWithFlyers()
     return mi->SwaysInWind() || mi->bDontCollideWithFlyer;
 }
 
+RwMatrix* CEntityGta::GetModellingMatrix() {
+    if (!m_pRwObject)
+        return nullptr;
+
+    return RwFrameGetMatrix(RwFrameGetParent(m_pRwObject));
+}
 
 // ------------- hooks
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "game/RW/rwplcore.h"
+#include "game/RW/RenderWare.h"
 
 class CRGBA
 {

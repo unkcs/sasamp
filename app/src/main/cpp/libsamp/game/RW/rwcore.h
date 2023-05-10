@@ -1,7 +1,48 @@
 #pragma once
 
 #include "rwplcore.h"
-#include "../common.h"
+
+#define RwFrameGetParentMacro(_f)   ((RwFrame *)rwObjectGetParent(_f))
+#if (! ( defined(RWDEBUG) || defined(RWSUPPRESSINLINE) ))
+#define RwFrameGetParent(_f)    RwFrameGetParentMacro(_f)
+#endif
+
+#define RwFrameGetMatrixMacro(_f)   (&(_f)->modelling)
+#if (! ( defined(RWDEBUG) || defined(RWSUPPRESSINLINE) ))
+#define RwFrameGetMatrix(_f)    RwFrameGetMatrixMacro(_f)
+#endif
+
+//-----------------------------------------------------------
+
+#define RW_FRAME_NAME_LENGTH      23
+#pragma pack(push, 1)
+struct RwListEntry
+{
+    RwListEntry* next, * prev;
+};
+
+struct RwList
+{
+    RwListEntry root;
+};
+
+struct RwFrame
+{
+    RwObject        object;                 // 0
+    void* pad1, * pad2;            // 8
+    RwMatrix        modelling;              // 16
+    RwMatrix        ltm;                    // 32
+    RwList          objects;                // 48
+    struct RwFrame* child;                  // 56
+    struct RwFrame* next;                   // 60
+    struct RwFrame* root;                   // 64
+
+    // Rockstar Frame extension (0x253F2FE) (24 bytes)
+    unsigned char pluginData[8];                               // padding
+    char          szName[RW_FRAME_NAME_LENGTH + 1];            // name (as stored in the frame extension)
+};
+#pragma pack(pop)
+
 /**
  * \ingroup rwraster
  * \ref RwRasterLockMode represents the options available for locking 

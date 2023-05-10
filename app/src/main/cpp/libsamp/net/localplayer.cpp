@@ -110,11 +110,11 @@ void CLocalPlayer::CheckWeapons()
 
 	for (int i = 0; i < MAX_WEAPONS_SLOT; i++) {
 
-		if (m_byteLastWeapon[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].m_nType ||
-                m_dwLastAmmo[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].m_nTotalAmmo)
+		if (m_byteLastWeapon[i] != m_pPlayerPed->m_pPed->m_aWeapons[i].m_nType ||
+                m_dwLastAmmo[i] != m_pPlayerPed->m_pPed->m_aWeapons[i].m_nTotalAmmo)
 		{
-			m_byteLastWeapon[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].m_nType;
-			m_dwLastAmmo[i] = m_pPlayerPed->m_pPed->WeaponSlots[i].m_nTotalAmmo;
+			m_byteLastWeapon[i] = m_pPlayerPed->m_pPed->m_aWeapons[i].m_nType;
+			m_dwLastAmmo[i] = m_pPlayerPed->m_pPed->m_aWeapons[i].m_nTotalAmmo;
 
             bMSend = true;
 			break;

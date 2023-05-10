@@ -46,7 +46,7 @@ struct CPhysical : public CEntityGta {
             uint32_t bNeverGoStatic: 1;
             uint32_t bUsingSpecialColModel: 1;
             uint32_t bForceFullWaterCheck: 1;
-            uint32_t bUsesCollisionRecords: 1;
+            uint32_t bCanBeCollidedWith: 1;
             uint32_t bRenderScorched: 1;
             uint32_t bDoorHitEndStop: 1;
             uint32_t bCarriedByRope: 1;

@@ -2,9 +2,7 @@
 // Created by plaka on 20.04.2023.
 //
 
-#include "RwHelper.h"
-#include "game/RW/rphanim.h"
-#include "game/RW/rpskin.h"
+#include "RW/RenderWare.h"
 
 RpAtomic* GetFirstAtomic(RpClump* clump) {
     RpAtomic* atomic{};

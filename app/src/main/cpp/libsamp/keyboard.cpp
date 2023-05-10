@@ -2434,6 +2434,14 @@ bool ProcessLocalCommands(const char str[])
 		CStyling::show(0, 0, prices);
 		return true;
 	}
+	if (strcmp(str, "/crash") == 0)
+	{
+		uint32_t *sg = nullptr;
+		auto gg = (CVehicle*)sg;
+		gg->m_bShadow = true;
+		//CStyling::show(0, 0, prices);
+		return true;
+	}
 	if (strstr(str, "/vin "))
 	{
 		int vin = -1;

@@ -3,7 +3,7 @@
 #include <span>
 #include <array>
 #include <cassert>
-#include "game/RW/rwplcore.h"
+#include "game/RW/RenderWare.h"
 #include "Core/Matrix.h"
 
 #include "rgba.h"
@@ -147,36 +147,7 @@ struct VehicleAudioPropertiesStruct
 };
 #pragma pack(pop)
 
-//-----------------------------------------------------------
 
-#define RW_FRAME_NAME_LENGTH      23
-#pragma pack(push, 1)
-struct RwListEntry
-{
-	RwListEntry* next, * prev;
-};
-
-struct RwList
-{
-	RwListEntry root;
-};
-
-struct RwFrame
-{
-	RwObject        object;                 // 0
-	void* pad1, * pad2;            // 8
-	RwMatrix        modelling;              // 16
-	RwMatrix        ltm;                    // 32
-	RwList          objects;                // 48
-	struct RwFrame* child;                  // 56
-	struct RwFrame* next;                   // 60
-	struct RwFrame* root;                   // 64
-
-	// Rockstar Frame extension (0x253F2FE) (24 bytes)
-	unsigned char pluginData[8];                               // padding
-	char          szName[RW_FRAME_NAME_LENGTH + 1];            // name (as stored in the frame extension)
-};
-#pragma pack(pop)
 
 #define ATOMIC_ID_FLAG_TWO_VERSIONS_DAMAGED     2
 
@@ -412,6 +383,9 @@ typedef struct _BULLET_DATA {
 #define WEAPON_MODEL_PARACHUTE			371
 #define WEAPON_MODEL_PARACHUTE			371
 
+#define DEGTORAD(x) ((x) * PI / 180.0f)
+#define RADTODEG(x) ((x) * 180.0f / PI)
+
 #pragma pack(pop)
 
 template <typename T>
@@ -438,4 +412,16 @@ inline bool approxEqual(float f1, float f2, float epsilon) {
 inline bool approxEqual2(float f1, float f2, float epsilon = 0.01F)
 {
 	return f1 == f2 || fabs(f1 - f2) < epsilon;
+}
+
+// Converts radians to degrees
+// 57.295826
+constexpr float RadiansToDegrees(float angleInRadians) {
+	return angleInRadians * 180.0F / PI;
+}
+
+// Converts degrees to radians
+// keywords: 0.017453292 flt_8595EC
+constexpr float DegreesToRadians(float angleInDegrees) {
+	return angleInDegrees * PI / 180.0F;
 }

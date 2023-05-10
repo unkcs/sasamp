@@ -201,7 +201,7 @@ struct CVehicleGta : CPhysical
     uint8_t padd_1[3];
     float   m_fGearChangeCount; // used as parameter for cTransmission::CalculateDriveAcceleration, but doesn't change
     float   m_fWheelSpinForAudio;
-    float fHealth;				// 1224-1228	;fHealth
+    float fHealth;				// 1224-1228	;m_fHealth
     uint32_t m_pTowingVehicle;
     uint32_t dwTrailer;			// 1232 - 1236 - trailer
     uint8_t padd_2[3];

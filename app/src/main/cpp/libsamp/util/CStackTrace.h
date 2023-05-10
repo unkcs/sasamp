@@ -23,13 +23,18 @@ public:
     static void printBacktrace(ucontext_t *uContext)
     {
         CrashLog("------------ START BACKTRACE ------------");
-        for (auto i = 0; i < 1000; ++i)
+        for (auto i = 0; i < 500; ++i)
         {
             const auto address = *reinterpret_cast<uintptr_t*>(uContext->uc_mcontext.arm_sp + 4 * i);
 
             CStackTrace::printAddressBacktrace(address, (void*)(uContext->uc_mcontext.arm_pc + 4 * i), (void*)(uContext->uc_mcontext.arm_lr + 4 * i));
         }
         CrashLog("------------ END BACKTRACE ------------");
+        JNIEnv* env = g_pJavaWrapper->GetEnv();
+        jclass clazz = env->GetObjectClass(g_pJavaWrapper->activity);
+        jmethodID method = env->GetMethodID(clazz, "nativeCrashed", "()V");
+        env->CallVoidMethod(g_pJavaWrapper->activity, method);
+      //  nativeCrashed();
     }
 
 private:

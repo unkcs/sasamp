@@ -227,8 +227,8 @@ void CWeaponsOutFit::ProcessLocalPlayer(CPlayerPed* pPed)
 
 	for (int i = 0; i < 13; i++)
 	{
-		int iWeapon = pPed->m_pPed->WeaponSlots[i].m_nType;
-		if (pPed->m_pPed->WeaponSlots[i].m_nTotalAmmo == 0)
+		int iWeapon = pPed->m_pPed->m_aWeapons[i].m_nType;
+		if (pPed->m_pPed->m_aWeapons[i].m_nTotalAmmo == 0)
 		{
 			iWeapon = 0;
 		}

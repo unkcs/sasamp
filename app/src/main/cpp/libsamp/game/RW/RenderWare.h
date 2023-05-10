@@ -1,7 +1,12 @@
 #pragma once
 
-#include "rwplcore.h"
 #include "rwcore.h"
+#include "rtquat.h"
+#include "rphanim.h"
+#include "rpskin.h"
+
+#include "rpworld.h"
+#include "../RwHelper.h"
 
 /* skeleton.h */
 typedef struct RsGlobalType RsGlobalType;

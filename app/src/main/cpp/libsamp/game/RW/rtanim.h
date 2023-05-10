@@ -6,8 +6,6 @@
 */
 #pragma once
 
-#include "rwplcore.h"
-
 #define rtANIMSTREAMCURRENTVERSION 0x100
 
 /* Doxygen plugin groups. */

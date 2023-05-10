@@ -2,6 +2,7 @@
 #include "AnimManager.h"
 #include "game/Core/KeyGen.h"
 #include "util/patch.h"
+#include "../quaternion.h"
 
 void CAnimBlendHierarchy::InjectHooks() {
 

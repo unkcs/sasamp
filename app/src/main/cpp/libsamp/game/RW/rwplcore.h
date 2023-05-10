@@ -1261,3 +1261,4 @@ RwBool RwMatrixDestroy(RwMatrix* mpMat);
 RwUInt32 RwStreamRead(RwStream* stream, void* buffer, RwUInt32 length);
 RwStream* RwStreamOpen(RwStreamType type, RwStreamAccessType accessType, const void* data);
 RwBool RwStreamClose(RwStream* stream, void* data);
+RwMatrix* RwMatrixTransform(RwMatrix* matrix, const RwMatrix* transform, RwOpCombineType combineOp);

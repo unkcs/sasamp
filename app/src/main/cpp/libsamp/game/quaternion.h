@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RW/rwplcore.h"
+#include "RW/RenderWare.h"
 
 class CQuaternion
 {
@@ -65,6 +65,9 @@ public:
 	CQuaternion operator-() const {
 		return { -x, -y, -z, -w };
 	}
+
+	// NOTSA
+	RtQuat* AsRtQuat() { return (RtQuat*)this; }
 
 public:
 	float w;

@@ -6,7 +6,7 @@
 #define LIVERUSSIA_TEXTUREDATABASERUNTIME_H
 
 #include <cstdint>
-#include "game/RW/rwcore.h"
+#include "game/RW/RenderWare.h"
 
 typedef uintptr_t TextureDatabase;
 

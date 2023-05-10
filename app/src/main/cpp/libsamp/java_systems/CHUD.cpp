@@ -138,9 +138,9 @@ void CHUD::UpdateHudInfo()
                         (int)pPed->GetHealth(),
                         (int)pPed->GetArmour(),
                         (int)CHUD::iSatiety,
-                        (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].m_nType,
-                        (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].m_nTotalAmmo,
-                        (int)pPed->m_pPed->WeaponSlots[pPed->m_pPed->byteCurWeaponSlot].dwAmmoInClip
+                        (int)pPed->m_pPed->m_aWeapons[pPed->m_pPed->m_nActiveWeaponSlot].m_nType,
+                        (int)pPed->m_pPed->m_aWeapons[pPed->m_pPed->m_nActiveWeaponSlot].m_nTotalAmmo,
+                        (int)pPed->m_pPed->m_aWeapons[pPed->m_pPed->m_nActiveWeaponSlot].dwAmmoInClip
                         );
 }
 void CHUD::UpdateWanted()

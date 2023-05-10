@@ -850,7 +850,7 @@ void WorldActorAdd(RPCParameters* rpcParams)
 	bsData.Read(bInvulnerable);
 
 #ifdef _CDEBUG
-	CChatWindow::AddDebugMessage("Add actor %d %d %f %f", actorId, fRotation, fHealth);
+	CChatWindow::AddDebugMessage("Add actor %d %d %f %f", actorId, fRotation, m_fHealth);
 #endif
 	CActorPool* pActorPool = pNetGame->GetActorPool();
 	if (pActorPool) 
@@ -890,7 +890,7 @@ void SetActorHealth(RPCParameters* rpcParams)
 	bsData.Read(actorId);
 	bsData.Read(fHealth);
 #ifdef _CDEBUG
-	CChatWindow::AddDebugMessage("Set actor h[p %d %f", actorId, fHealth);
+	CChatWindow::AddDebugMessage("Set actor h[p %d %f", actorId, m_fHealth);
 #endif
 	CActorPool* pActorPool = pNetGame->GetActorPool();
 	if (pActorPool)

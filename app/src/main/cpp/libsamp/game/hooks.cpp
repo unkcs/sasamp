@@ -874,6 +874,7 @@ void InjectHooks()
 	//CCarEnterExit::InjectHooks();
 	CPlayerPedGta::InjectHooks();
 	//CTaskManager::InjectHooks();
+	CPedIntelligence::InjectHooks();
 }
 
 void InstallSpecialHooks()

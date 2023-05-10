@@ -51,6 +51,10 @@ CPlayerPed::CPlayerPed(uint8_t bytePlayerNumber, int iSkin, float fX, float fY, 
 	m_dwArrow = 0;
 	m_bHaveBulletData = false;
 
+//	CHook::NOP(g_libGTASA + 0x00434C02, 2);// cpedinteligence
+//	CHook::NOP(g_libGTASA + 0x00434C0A, 2);// cpedinteligence
+
+//	new CPedGta(PEDTYPE_PLAYER_NETWORK);
 	ScriptCommand(&create_player, &iPlayerNum, fX, fY, fZ, &dwPlayerActorID);
 	ScriptCommand(&create_actor_from_player, &iPlayerNum, &dwPlayerActorID);
 
@@ -61,10 +65,13 @@ CPlayerPed::CPlayerPed(uint8_t bytePlayerNumber, int iSkin, float fX, float fY, 
 	m_bytePlayerNumber = bytePlayerNumber;
 
 	SetPlayerPedPtrRecord(m_bytePlayerNumber, (uintptr_t)m_pPed);
-	ScriptCommand(&set_actor_weapon_droppable, m_dwGTAId, 1);
+	m_pPed->bDoesntDropWeaponsWhenDead = true;
+
 	ScriptCommand(&set_actor_immunities, m_dwGTAId, 0, 0, 0, 0, 0);
 	ScriptCommand(&set_actor_can_be_decapitated, m_dwGTAId, 0); // отрыв бошки
-	ScriptCommand(&set_char_never_targeted, m_dwGTAId, 1);
+	m_pPed->bNeverEverTargetThisPed = true;
+
+	//ScriptCommand(&set_char_never_targeted, m_dwGTAId, 1);
 
 	ScriptCommand(&set_actor_money, m_dwGTAId, 0); // деньги падают при смерти
 
@@ -225,7 +232,7 @@ void CPlayerPed::SetDead()
 	GetMatrix(&mat);
 	// will reset the tasks
 	m_pPed->SetPosn(mat.pos.x, mat.pos.y, mat.pos.z);
-	m_pPed->fHealth = 0.0f;
+	m_pPed->m_fHealth = 0.0f;
 
 	uint8_t old = CWorld::PlayerInFocus;
 	CWorld::PlayerInFocus = m_bytePlayerNumber;
@@ -565,7 +572,7 @@ void CPlayerPed::SetHealth(float fHealth)
 	if(!m_pPed) return;
 	if (IsValidGamePed(m_pPed))
 	{
-		m_pPed->fHealth = fHealth;
+		m_pPed->m_fHealth = fHealth;
 	}
 
 }
@@ -574,20 +581,20 @@ void CPlayerPed::SetHealth(float fHealth)
 float CPlayerPed::GetHealth()
 {
 	if(!m_pPed) return 0.0f;
-	return m_pPed->fHealth;
+	return m_pPed->m_fHealth;
 }
 
 // 0.3.7
 void CPlayerPed::SetArmour(float fArmour)
 {
 	if(!m_pPed) return;
-	m_pPed->fArmour = fArmour;
+	m_pPed->m_fArmour = fArmour;
 }
 
 float CPlayerPed::GetArmour()
 {
 	if(!m_pPed) return 0.0f;
-	return m_pPed->fArmour;
+	return m_pPed->m_fArmour;
 }
 
 void CPlayerPed::SetInterior(uint8_t byteID, bool refresh)
@@ -1447,7 +1454,7 @@ bool CPlayerPed::IsDead()
 {
 	
 	if(!m_pPed) return true;
-	if(m_pPed->fHealth > 0.0f) return false;
+	if(m_pPed->m_fHealth > 0.0f) return false;
 	return true;
 }
 
@@ -1618,7 +1625,7 @@ CWeapon * CPlayerPed::GetCurrentWeaponSlot()
 {
 	if (m_pPed) 
 	{
-		return &m_pPed->WeaponSlots[m_pPed->byteCurWeaponSlot];
+		return &m_pPed->m_aWeapons[m_pPed->m_nActiveWeaponSlot];
 	}
 	return NULL;
 }

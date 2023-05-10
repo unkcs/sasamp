@@ -98,6 +98,7 @@ public:
     bool HasPreRenderEffects();
     bool DoesNotCollideWithFlyers();
     void ModifyMatrixForPoleInWind();
+    RwMatrix* GetModellingMatrix();
     void ResolveReferences();
     void PruneReferences();
     void RegisterReference(CEntityGta** entity);

@@ -104,7 +104,7 @@ void CActorPed::SetHealth(float fHealth)
 		return;
 	}
 
-	m_pPed->fHealth = fHealth;
+	m_pPed->m_fHealth = fHealth;
 }
 
 void CActorPed::SetDead()
@@ -165,7 +165,7 @@ void CActorPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta,
 //
 //	CVehicleGta* pVehicle = GamePool_Vehicle_GetAt(iVehicleID);
 //
-//	if (pVehicle->fHealth == 0.0f) return;
+//	if (pVehicle->m_fHealth == 0.0f) return;
 //	if (pVehicle->vtable == g_libGTASA + 0x5C7358) return;
 //	// check seatid (��������)
 //

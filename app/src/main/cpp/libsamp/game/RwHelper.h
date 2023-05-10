@@ -3,9 +3,6 @@
 //
 #pragma once
 
-#include "RW/rpworld.h"
-#include "game/RW/rphanim.h"
-
 RpAtomic* GetFirstAtomicCallback(RpAtomic* atomic, void* data);
 RpAtomic* GetFirstAtomic(RpClump* clump);
 RpHAnimHierarchy* GetAnimHierarchyFromSkinClump(RpClump* clump);

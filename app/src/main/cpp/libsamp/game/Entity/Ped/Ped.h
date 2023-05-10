@@ -14,8 +14,33 @@
 #include "../../Enums/eWeaponSkill.h"
 #include "../../Enums/eWeaponType.h"
 #include "game/PedIntelligence.h"
+#include "game/Animation/AnimBlendFrameData.h"
+#include "game/PedIK.h"
 
 class CVehicleGta;
+
+enum ePedNode : int32 {
+    PED_NODE_UPPER_TORSO     = 1,
+    PED_NODE_HEAD            = 2,
+    PED_NODE_LEFT_ARM        = 3,
+    PED_NODE_RIGHT_ARM       = 4,
+    PED_NODE_LEFT_HAND       = 5,
+    PED_NODE_RIGHT_HAND      = 6,
+    PED_NODE_LEFT_LEG        = 7,
+    PED_NODE_RIGHT_LEG       = 8,
+    PED_NODE_LEFT_FOOT       = 9,
+    PED_NODE_RIGHT_FOOT      = 10,
+    PED_NODE_RIGHT_LOWER_LEG = 11,
+    PED_NODE_LEFT_LOWER_LEG  = 12,
+    PED_NODE_LEFT_LOWER_ARM  = 13,
+    PED_NODE_RIGHT_LOWER_ARM = 14,
+    PED_NODE_LEFT_CLAVICLE   = 15,
+    PED_NODE_RIGHT_CLAVICLE  = 16,
+    PED_NODE_NECK            = 17,
+    PED_NODE_JAW             = 18,
+
+    TOTAL_PED_NODES
+};
 
 enum eFightingStyle : int8 {
     STYLE_STANDARD = 4,
@@ -44,7 +69,7 @@ struct CPedGta : CPhysical {
     ePedCreatedBy       m_nCreatedBy;
     uint8_t             pad6[3];
     ePedState           m_nPedState;
-    eMoveState          m_eMoveState;
+    eMoveState          m_nMoveState;
     uint8_t             m_storedCollPoly[0x2c];
     float               m_distTravelledSinceLastHeightCheck;
     union {
@@ -189,40 +214,42 @@ struct CPedGta : CPhysical {
         uint8_t m_nPedFlags[0x10];
     };
 
-    uintptr_t       *m_apBones[19];
+    std::array<AnimBlendFrameData*, TOTAL_PED_NODES>       m_apBones;
     AssocGroupId    m_nAnimGroup;
-    CVector2D       m_extractedVelocity;
-    uint8_t         m_acquaintances[0x14];
-    uintptr_t       *m_pWeaponClump;
-    uintptr_t       *m_pWeaponFlashFrame;
-    uintptr_t       *m_pGogglesClump;
-    bool            *m_pbGogglesEffect;
-    uint16_t        m_nGunFlashBlendAmount;
-    uint16_t        m_nGunFlashBlendOutRate;
-    uint16_t        m_nGunFlashBlendAmount2;
-    uint16_t        m_nGunFlashBlendOutRate2;
-    uint8_t         m_ik[0x20];
+    CVector2D       m_vecAnimMovingShiftLocal;
+    uint8_t         m_acquaintance[0x14];
+    RpClump*        *m_pWeaponObject;
+    RpClump*        *m_pGunflashObject;
+    RpClump*        *m_pGogglesObject;
+    bool            *m_pGogglesState;
+    uint16_t        m_nWeaponGunflashAlphaMP1;
+    uint16_t        m_nWeaponGunFlashAlphaProgMP1;
+    uint16_t        m_nWeaponGunflashAlphaMP2;
+    uint16_t        m_nWeaponGunFlashAlphaProgMP2;
+    CPedIK          m_pedIK;
     uint32_t        m_nAntiSpazTimer;
     eMoveState      m_eMoveStateAnim;
     eMoveState      m_eStoredMoveState;
-    float           fHealth;
-    float           fMaxHealth;
-    float           fArmour;
+    float           m_fHealth;
+    float           m_fMaxHealth;
+    float           m_fArmour;
     float           fAim;
-    uint8_t         _pad104[8];
+    CVector2D       m_vecAnimMovingShift;
     float           m_fCurrentRotation;
     float           m_fAimingRotation;
-    uint8_t         _pad105[44];
+    float           m_fHeadingChangeRate;
+    float           m_fMoveAnim; // not sure about the name here
+    uint8_t         _pad105[36];
     CVehicleGta*    pVehicle;
     CVehicleGta*    m_VehDeadInFrontOf;
     uintptr_t       *m_pAccident;
     ePedType        m_nPedType;
     uintptr_t*      m_pStats;
-    CWeapon         WeaponSlots[13];
+    CWeapon         m_aWeapons[13];
     eWeaponType     m_nSavedWeapon;   // when we need to hide ped weapon, we save it temporary here
     eWeaponType     m_nDelayedWeapon; // 'delayed' weapon is like an additional weapon, f.e., simple cop has a nitestick as current and pistol as delayed weapons
     uint32          m_nDelayedWeaponAmmo;
-    uint8_t         byteCurWeaponSlot;
+    uint8_t         m_nActiveWeaponSlot;
     uint8           m_nWeaponShootingRate;
     uint8           m_nWeaponAccuracy;
     uint8           pad10;
@@ -239,9 +266,9 @@ struct CPedGta : CPhysical {
     float           m_fLookDirection; // In RAD
     int32           m_nWeaponModelId;
     uint32          m_nUnconsciousTimer;
-    uint32          m_nLookTimer;
+    uint32          m_nLookTime;
     uint32          m_nAttackTimer;
-    uint32          m_nTimeOfDeath;
+    uint32          m_nDeathTimeMS;
     int8            m_nLimbRemoveIndex;
     int8            pad9;
     uint16          m_MoneyCarried;
@@ -259,17 +286,25 @@ struct CPedGta : CPhysical {
     int32           m_nOriginalWeaponAmmo;
     uintptr_t       *m_pCoverPoint;
     uintptr_t       *m_pLastEntryExit;
-    float           m_fRemoveRangeMultiplier;
-    int16           StreamedScriptBrainToLoad;
+    float           m_fRemovalDistMultiplier;
+    int16           m_nSpecialModelIndex;
     uint16          pad11;
     uint32          LastTalkSfx;
 
 public:
+    CPedGta(ePedType pedType);
+    ~CPedGta();
+
     void GetBonePosition(RwV3d *posn, uint32 boneTag, bool bCalledFromCamera);
     void StopNonPartialAnims();
 
+    CPedIntelligence* GetIntelligence() { return m_pIntelligence; }
+    CPedIntelligence* GetIntelligence() const { return m_pIntelligence; }
     CTaskManager& GetTaskManager() { return m_pIntelligence->m_TaskMgr; }
     CTaskManager& GetTaskManager() const { return m_pIntelligence->m_TaskMgr; }
+
+    bool IsStateDead() const noexcept { return m_nPedState == PEDSTATE_DEAD; }
+    bool IsStateDying() const noexcept { return m_nPedState == PEDSTATE_DEAD || m_nPedState == PEDSTATE_DIE; }
 };
 
 

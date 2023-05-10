@@ -1,5 +1,4 @@
-#include "rtanim.h"
-#include "rpworld.h"
+#include "RenderWare.h"
 
 void RtAnimAnimationFreeListCreateParams(RwInt32 blockSize, RwInt32 numBlocksToPrealloc) {
     ((void(__cdecl *)(RwInt32, RwInt32))(g_libGTASA + 0x001BF704 + 1))(blockSize, numBlocksToPrealloc);

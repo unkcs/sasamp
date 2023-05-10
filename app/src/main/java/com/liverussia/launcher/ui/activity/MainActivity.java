@@ -292,6 +292,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClickPlay() {
+        Samp.bCacheChecked = true;
+
         if (isCheckSkipping()) {
             startGame();
         } else {

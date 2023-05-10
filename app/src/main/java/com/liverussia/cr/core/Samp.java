@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -49,11 +50,17 @@ public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
     public static native void playUrlSound(String url);
     public static DecimalFormat formatter = null;
     public static SoundPool soundPool = null;
+    public static boolean bCacheChecked = false;
 
     native void initSAMP(String game_path, float maxFps);
 
     @Override
     public void onCreate(Bundle bundle) {
+        if(!bCacheChecked) {
+            Toast.makeText(this, "Проверка файлов не пройдена!", Toast.LENGTH_SHORT).show();
+            ExitGame();
+            return;
+        }
         activity = this;
 
         Log.i("java", "calling initSAMP");

@@ -82,7 +82,7 @@ void CSpeedometr::update()
             (int) pVehicle->GetHealth(),
             CSpeedometr::iMilliage,
             pVehicle->m_bEngineOn,
-            (int) pVehicle->GetLightsState(),
+            (int) pVehicle->m_pVehicle->GetLightsStatus(),
             (int) pVehicle->m_bIsLocked,
             pVehicle->m_iTurnState
             );

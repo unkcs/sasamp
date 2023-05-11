@@ -31,7 +31,7 @@ CVehicle* CVehiclePool::GetVehicleFromTrailer(CVehicle *pTrailer) {
 
 			if (m_bIsActive[x]) {
 				//Log("veh = %d, trailer = %d, needt = %d", pVehicle, pVehicle->m_pTrailer, pTrailer);
-				if(reinterpret_cast<CVehicleGta *>(pVehicle->m_pVehicle->dwTrailer) == pTrailer->m_pVehicle)
+				if(reinterpret_cast<CVehicleGta *>(pVehicle->m_pVehicle->m_pTrailer) == pTrailer->m_pVehicle)
 				{
 					return pVehicle;
 				}
@@ -117,7 +117,7 @@ void CVehiclePool::Process()
 				}
 
 				pVehicle->SetEngineState(pVehicle->m_bEngineOn);
-				pVehicle->SetLightsState(pVehicle->m_bLightsOn);
+			//	pVehicle->SetLightsState(pVehicle->m_bLightsOn);
 
 //				*(bool*)(pVehicle->m_pVehicle + 0x13C + 0x0BF) = 1;
 //                *(bool*)(pVehicle->m_pVehicle + 0x13C + 0x0C8) = 1;

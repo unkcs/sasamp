@@ -1089,16 +1089,6 @@ int CUpsideDownCarCheck__IsCarUpsideDown_hook(int a1, int a2)
 	return 0;
 }
 
-int(*CAnimBlendNode__FindKeyFrame)(int, float, int, int);
-int CAnimBlendNode__FindKeyFrame_hook(int a1, float a2, int a3, int a4)
-{
-	if (*(uintptr_t*)(a1 + 16))
-	{
-		return CAnimBlendNode__FindKeyFrame(a1, a2, a3, a4);
-	}
-	else return 0;
-}
-
 #include "..//keyboard.h"
 
 uint64_t(*CWorld_ProcessPedsAfterPreRender)();
@@ -1137,18 +1127,6 @@ uint64_t CWorld_ProcessPedsAfterPreRender_hook()
 
 #include <list>
 
-int g_iLastRenderedObject;
-
-int(*CPlayerInfo__Process)(uintptr_t *thiz, uintptr_t *a2);
-int CPlayerInfo__Process_hook(uintptr_t *thiz, uintptr_t *a2)
-{
-	float *v23; // r3
-	v23 = *(float **)thiz;
-	if ( !*((BYTE *)thiz + 0xD5)  || (*((BYTE *)v23 + 0x481) & 1) == 0){
-		return 0;
-	}
-	return CPlayerInfo__Process(thiz, a2);
-}
 
 RwFrame* CClumpModelInfo_GetFrameFromId_Post(RwFrame* pFrameResult, RpClump* pClump, int id)
 {
@@ -1184,15 +1162,6 @@ RwFrame* (*CClumpModelInfo_GetFrameFromId)(RpClump*, int);
 RwFrame* CClumpModelInfo_GetFrameFromId_hook(RpClump* a1, int a2)
 {
 	return CClumpModelInfo_GetFrameFromId_Post(CClumpModelInfo_GetFrameFromId(a1, a2), a1, a2);
-}
-
-int (*CEventHandler__HandleEvents)(uintptr_t *thiz);
-int CEventHandler__HandleEvents_hook(uintptr_t *thiz)
-{
-	if(*((DWORD *)thiz + 1)){
-		return CEventHandler__HandleEvents(thiz);
-	}
-	return 0;
 }
 
 #include "..//crashlytics.h"
@@ -1876,124 +1845,6 @@ int MobileSettings__GetMaxResWidth_hook()
 	return (int)( ((int(*)())(g_libGTASA + 0x0023816C + 1))()/1.2 );
 }
 
-char **(*CPhysical__Add)(uintptr_t thiz);
-char **CPhysical__Add_hook(uintptr_t thiz)
-{
-	// char **result = 0;
-
-	if (pNetGame)
-	{
-		CPlayerPed *pPlayerPed = pGame->FindPlayerPed();
-		if (pPlayerPed)
-		{
-			for (size_t i = 0; i < 10; i++)
-			{
-				if (pPlayerPed->m_aAttachedObjects[i].bState)
-				{
-					if (pPlayerPed->m_aAttachedObjects[i].pObject)
-						if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
-						{
-							CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-							if (pObject->m_pEntity->m_matrix->m_pos.x > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.y > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.z > 20000.0f ||
-                                pObject->m_pEntity->m_matrix->m_pos.x < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.y < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.z < -20000.0f)
-							{
-								/*if(pChatWindow)
-								{
-									pChatWindow->AddDebugMessage("WARNING!!! WARNING!!! WARNING!!! CRASH EXCEPTED!!!");
-								}*/
-								return 0;
-							}
-							// Log("Processing local attached object");
-							// result = CPhysical__Add(thiz);
-						}
-				}
-			}
-		}
-
-		CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
-
-		if (pVehiclePool)
-		{
-			for (size_t i = 0; i < MAX_VEHICLES; i++)
-			{
-				if (pVehiclePool->GetSlotState(i))
-				{
-					CVehicle *pVehicle = pVehiclePool->GetAt(i);
-					if (pVehicle && pVehicle->IsAdded())
-					{
-						/*CObject* pObject = pVehicle->Att((CEntityGta*)thiz);
-						if (pObject != nullptr)
-						{
-							if (pObject->m_pEntity->m_matrix->pos.x > 20000.0f || pObject->m_pEntity->m_matrix->pos.y > 20000.0f || pObject->m_pEntity->m_matrix->pos.z > 20000.0f ||
-								pObject->m_pEntity->m_matrix->pos.x < -20000.0f || pObject->m_pEntity->m_matrix->pos.y < -20000.0f || pObject->m_pEntity->m_matrix->pos.z < -20000.0f)
-							{
-								/*if(pChatWindow)
-								{
-									pChatWindow->AddDebugMessage("WARNING!!! WARNING!!! WARNING!!! CRASH EXCEPTED!!!");
-								}
-								return 0;
-							}
-						}*/
-					}
-				}
-			}
-		}
-
-		CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-
-		if (pPlayerPool)
-		{
-			for (size_t i = 0; i < MAX_PLAYERS; i++)
-			{
-				if (pPlayerPool->GetSlotState(i))
-				{
-					CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(i);
-					if (pRemotePlayer)
-					{
-						if (pRemotePlayer->GetPlayerPed() && pRemotePlayer->GetPlayerPed()->IsAdded())
-						{
-							pPlayerPed = pRemotePlayer->GetPlayerPed();
-							for (size_t i = 0; i < 10; i++)
-							{
-								if (pPlayerPed->m_aAttachedObjects[i].bState)
-								{
-									if ((uintptr_t)pPlayerPed->m_aAttachedObjects[i].pObject->m_pEntity == thiz)
-									{
-										CObject *pObject = pPlayerPed->m_aAttachedObjects[i].pObject;
-										if (pObject->m_pEntity->m_matrix->m_pos.x > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.y > 20000.0f || pObject->m_pEntity->m_matrix->m_pos.z > 20000.0f ||
-                                            pObject->m_pEntity->m_matrix->m_pos.x < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.y < -20000.0f || pObject->m_pEntity->m_matrix->m_pos.z < -20000.0f)
-										{
-											/*if(pChatWindow)
-											{
-												pChatWindow->AddDebugMessage("WARNING!!! WARNING!!! WARNING!!! CRASH EXCEPTED!!!");
-											}*/
-											return 0;
-										}
-										// Log("Processing remote attached object. Player: %d", i);
-										// Log("is added: %d | model index: %d | gta id: %d | x: %.2f | y: %.2f | z: %.2f | flags: %d | vtable: %d | unk: %d", pObject->IsAdded(), pObject->GetModelIndex(), pObject->m_dwGTAId, pObject->m_pEntity->m_matrix->pos.x, pObject->m_pEntity->m_matrix->pos.y, pObject->m_pEntity->m_matrix->pos.z, pObject->m_pEntity->dwProcessingFlags, pObject->m_pEntity->vtable, pObject->m_pEntity->m_pMovingList);
-										// result = CPhysical__Add(thiz);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/*if(result == 0)
-	{
-		Log("Processing unknown object.");
-		result = CPhysical__Add(thiz);
-	}*/
-
-	// Log("Processed.");
-
-	return CPhysical__Add(thiz);
-}
-
-
 int (*CCollision__ProcessVerticalLine)(float *a1, float *a2, int a3, int a4, int *a5, int a6, int a7, int a8);
 int CCollision__ProcessVerticalLine_hook(float *a1, float *a2, int a3, int a4, int *a5, int a6, int a7, int a8)
 {
@@ -2094,26 +1945,9 @@ int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
 	return CTaskSimpleUseGun__SetPedPosition(thiz, a2);
 }
 
-uint32_t (*CVehicle__GetVehicleLightsStatus)(CVehicleGta *_pVehicle);
-uint32_t CVehicle__GetVehicleLightsStatus_hook(CVehicleGta *_pVehicle)
+bool CVehicle__GetVehicleLightsStatus_hook(CVehicleGta *pVehicle)
 {
-//	*(bool*)(g_libGTASA + 0x97180D) = false;
-//	//unsigned int v6; // r2
-//	//int v7; // r3
-//	//v6 = *(uint8_t *)(_pVehicle + 0x428);
-//	//(v6 >> 6) = 0;
-//	_pVehicle->byteFlags |= 0x40;
-//	_pVehicle->m_nOverrideLights = 0;
-
-	if(!pNetGame) return false;
-
-	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
-    if(!pVehiclePool) return false;
-
-    CVehicle *pVehicle = pVehiclePool->FindVehicle(_pVehicle);
-	if(!pVehicle)return false;
-
-	return pVehicle->GetLightsState();
+	return pVehicle->GetLightsStatus();
 }
 
 
@@ -2441,7 +2275,7 @@ void InstallHooks()
 	//SetUpHook(g_libGTASA+0x291104, (uintptr_t)CStreaming__ConvertBufferToObject_hook, (uintptr_t*)&CStreaming__ConvertBufferToObject);
 	//SetUpHook(g_libGTASA+0x3961C8, (uintptr_t)CFileMgr__ReadLine_hook, (uintptr_t*)&CFileMgr__ReadLine);
 
-	CHook::InlineHook(g_libGTASA, 0x0032217C, &CEventHandler__HandleEvents_hook, &CEventHandler__HandleEvents);
+//	CHook::InlineHook(g_libGTASA, 0x0032217C, &CEventHandler__HandleEvents_hook, &CEventHandler__HandleEvents);
 
 	CHook::Redirect(g_libGTASA, 0x39AEF4, &Render2dStuff);
 	CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);
@@ -2456,7 +2290,7 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x0033DA5C, &CAnimManager__UncompressAnimation_hook, &CAnimManager__UncompressAnimation);
 	CHook::InlineHook(g_libGTASA, 0x001AECC0, &RwFrameAddChild_hook, &RwFrameAddChild);
 	CHook::InlineHook(g_libGTASA, 0x002DFD30, &CUpsideDownCarCheck__IsCarUpsideDown_hook, &CUpsideDownCarCheck__IsCarUpsideDown);
-	CHook::InlineHook(g_libGTASA, 0x0033AD78, &CAnimBlendNode__FindKeyFrame_hook, &CAnimBlendNode__FindKeyFrame);
+//	CHook::InlineHook(g_libGTASA, 0x0033AD78, &CAnimBlendNode__FindKeyFrame_hook, &CAnimBlendNode__FindKeyFrame);
 	//CHook::InlineHook(g_libGTASA, 0x482E60, &CTaskComplexEnterCarAsDriver_hook, &CTaskComplexEnterCarAsDriver);
 	CHook::InlineHook(g_libGTASA, 0x4833CC, &CTaskComplexLeaveCar_hook, &CTaskComplexLeaveCar);
 
@@ -2542,7 +2376,7 @@ void InstallHooks()
 	//================================
 
 	// vehicle light processing
-	CHook::InlineHook(g_libGTASA, 0x5189C4, &CVehicle__GetVehicleLightsStatus_hook, &CVehicle__GetVehicleLightsStatus);
+	CHook::Redirect(g_libGTASA, 0x5189C4, &CVehicle__GetVehicleLightsStatus_hook);
 	//CHook::NOP(g_libGTASA + 0x408AAA, 2);
 
 	//RpMaterialDestroy fix ? не точно

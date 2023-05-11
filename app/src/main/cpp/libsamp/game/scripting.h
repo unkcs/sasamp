@@ -27,10 +27,6 @@ struct SCRIPT_COMMAND
 
 int ScriptCommand(const SCRIPT_COMMAND* pScriptCommand, ...);
 
-const SCRIPT_COMMAND SET_CAR_AVOID_LEVEL_TRANSITIONS = { 0x0428, "ii" };
-const SCRIPT_COMMAND SET_CHAR_HEALTH = { 0x0223, "ii" };
-const SCRIPT_COMMAND LIMIT_ANGLE = { 0x0656, "ff" };
-const SCRIPT_COMMAND GET_ANGLE_BETWEEN_2D_VECTORS = { 0x05A4, "fffff" };
 const SCRIPT_COMMAND lock_camera_position = { 0x092F, "i" };
 const SCRIPT_COMMAND lock_camera_position1 = { 0x0930, "i" };
 const SCRIPT_COMMAND is_player_targetting_char = { 0x0457, "ii" };
@@ -44,17 +40,6 @@ const SCRIPT_COMMAND turn_car_engine = { 0x0918, "ii" };
 const SCRIPT_COMMAND set_camera_pos_time_smooth = { 0x0936, "ffffffii" };
 const SCRIPT_COMMAND point_camera_transverse = { 0x0920, "ffffffii" };
 const SCRIPT_COMMAND restore_camera_to_user = { 0x0925, "" };
-const SCRIPT_COMMAND set_player_bleeding = { 0x0332, "ii" };
-const SCRIPT_COMMAND set_player_fire_button = { 0x0881, "ii" };
-const SCRIPT_COMMAND set_player_visible = { 0x0337, "ii" };
-const SCRIPT_COMMAND set_object_visible = { 0x0750, "ii" };
-const SCRIPT_COMMAND attach_object_to_object = { 0x069A, "iiffffff" };
-const SCRIPT_COMMAND set_car_visible = { 0x0338, "ii" };
-const SCRIPT_COMMAND set_car_engine_on = { 0x0918, "ii" };
-const SCRIPT_COMMAND SET_CAR_LIGHTS_ON = { 0x0919, "ii" };
-const SCRIPT_COMMAND open_car_door = { 0x0657, "ii" };
-const SCRIPT_COMMAND get_camera_fov = { 0x0801, "f" };
-const SCRIPT_COMMAND open_car_door_a_bit = { 0x08A6, "iif" };
 const SCRIPT_COMMAND create_arrow_above_actor = { 0x0187, "iv" };
 const SCRIPT_COMMAND set_player_skin = { 0x09C7, "ii" };
 const SCRIPT_COMMAND request_model = { 0x0247, "i" };		// (CAR_*|BIKE_*|BOAT_*|WEAPON_*|OBJECT_*)
@@ -93,33 +78,7 @@ const SCRIPT_COMMAND set_car_z_angle = { 0x0175, "if" };		// var_car, angle
 const SCRIPT_COMMAND car_relative_coordinates = { 0x0407, "vfffvvv" };// var_car, x, y, z, var_x, var_y, var_z
 const SCRIPT_COMMAND set_car_max_speed = { 0x00AD, "if" };		// var_car, speed
 const SCRIPT_COMMAND is_model_available = { 0x0248, "i" };		// #MODEL
-const SCRIPT_COMMAND has_valid_model = { 0x0488, "i" };		// #MODEL
-const SCRIPT_COMMAND create_actor_in_driverseat = { 0x0129, "viiv" };	// var_car, pedtype, #MODEL, var_actor
-const SCRIPT_COMMAND create_actor_in_passenger = { 0x01c8, "viiiv" };	// var_car, pedtype, #MODEL, seat, var_actor
-const SCRIPT_COMMAND REMOVE_CHAR_FROM_CAR_MAINTAIN_POSITION = { 0x09C9, "ii" };
-const SCRIPT_COMMAND drive_car_to_point1 = { 0x02c2, "ifff" };	// var_car, x, y, z
-const SCRIPT_COMMAND car_ignore_traffic = { 0x00AE, "vi" };		// var_car, flag
-const SCRIPT_COMMAND set_car_immune_to_nonplayer = { 0x02aa, "vi" };		// var_car, immune(1/0)
 const SCRIPT_COMMAND SET_CHAR_AMMO = { 0x017B, "iii" };	// var_actor, weapon, ammo
-const SCRIPT_COMMAND reset_actor_flags = { 0x01ED, "v" };		// var_actor
-const SCRIPT_COMMAND set_actor_ped_stats = { 0x0243, "vi" };		// var_actor, pedstats
-const SCRIPT_COMMAND toggle_actor_wander = { 0x0319, "vi" };		// var_actor, wander(1/0)
-const SCRIPT_COMMAND play_music = { 0x0394, "i" };		// music
-const SCRIPT_COMMAND report_mission_audio_event_at_char = { 0x09F1, "ii" };		// music
-const SCRIPT_COMMAND clear_player_wanted_level = { 0x0110, "v" };		// PLAYER_CHAR
-const SCRIPT_COMMAND set_car_door_status = { 0x020A, "ii" };		// var_car, status
-const SCRIPT_COMMAND remove_references_to_actor = { 0x01C2, "v" };		// var_actor
-const SCRIPT_COMMAND remove_references_to_car = { 0x01C3, "v" };		// var_car
-const SCRIPT_COMMAND set_player_wanted_level = { 0x010D, "vi" };		// PLAYER_CHAR, level
-const SCRIPT_COMMAND set_player_health = { 0x0222, "vi" };		// PLAYER_CHAR, health
-const SCRIPT_COMMAND get_car_health = { 0x0227, "vv" };		// var_car, var_health
-const SCRIPT_COMMAND text_styled = { 0x00BA, "sii" };	// TEXT, time, style
-const SCRIPT_COMMAND text_now = { 0x00BC, "sii" };	// TEXT, time, style
-const SCRIPT_COMMAND text_1number_styled = { 0x01E3, "siii" };	// TEXT, number, time, style
-const SCRIPT_COMMAND toggle_car_siren = { 0x0397, "ii" };		// var_car, siren(1/0)
-const SCRIPT_COMMAND set_no_resprays = { 0x0A14, "i" };		// var_car, siren(1/0)
-const SCRIPT_COMMAND flash_hud_object = { 0x03E7, "i" };		// var_car, siren(1/0)
-const SCRIPT_COMMAND toggle_widescreen = { 0x02A3, "i" };		// widescreen(1/0)
 const SCRIPT_COMMAND set_camera_behind_player = { 0x0373, "" };		// -/-
 const SCRIPT_COMMAND camera_on_player = { 0x0157, "vii" };	// var_player, ukn, ukn
 const SCRIPT_COMMAND is_char_playing_anim = { 0x0611, "is" };
@@ -151,13 +110,6 @@ const SCRIPT_COMMAND set_player_z_angle = { 0x0171, "vf" };
 const SCRIPT_COMMAND give_player_weapon = { 0x01B1, "iii" };	// PLAYER_CHAR, weapon, ammo
 const SCRIPT_COMMAND get_line_of_sight = { 0x06BD, "ffffffiiiii" }; // x1, y1, z1, x2, y2, z2, solid, vehicle, actor, obj, fx
 
-const SCRIPT_COMMAND add_to_player_money = { 0x0109, "ii" };		// PLAYER_CHAR, money
-const SCRIPT_COMMAND get_player_money = { 0x010b, "iv" };    // PlayerNum, VarInt
-
-const SCRIPT_COMMAND restart_if_busted_at = { 0x016D, "ffff" };	// x, y, z, a
-const SCRIPT_COMMAND is_marker_enabled = { 0x075c, "i" };		// markerID
-const SCRIPT_COMMAND has_car_sunk = { 0x02bf, "i" };	// CarID
-const SCRIPT_COMMAND is_car_wrecked = { 0x0119, "i" }; // CarID
 const SCRIPT_COMMAND get_ground_z = { 0x02ce, "fffv" };	// x, y, z, var_ground_z
 
 //const SCRIPT_COMMAND is_actor_near_point_3d		= {0x00FE,	"iffffffi"};
@@ -253,19 +205,7 @@ const SCRIPT_COMMAND repair_car = { 0x0A30, "i" };
 const SCRIPT_COMMAND SET_PLAYER_ENTER_CAR_BUTTON = { 0x07CC, "ii" };
 const SCRIPT_COMMAND set_car_hydraulics = { 0x07FF,	"ii" }; //iCar, i (0=off/1=on)
 
-const SCRIPT_COMMAND toggle_player_weapons_changable = { 0x0992, "ii" }; // iPlayer,yes/no
-const SCRIPT_COMMAND apply_object_animation = { 0x075a, "issfii" }; // object,szAnim,szIFP,fUnk,iUnk,iUnk2
-const SCRIPT_COMMAND remove_weapon_from_actor = { 0x0555, "ii" }; // iActor,iWeapon
-const SCRIPT_COMMAND get_actor_move_velocity = { 0x083d, "ivvv" }; // iActor,fRetZ,fRetY,fRetZ
-const SCRIPT_COMMAND get_actor_distance_from_ground = { 0x0819, "iv" }; // iActor,fRet
-const SCRIPT_COMMAND is_actor_falling_think = { 0x0818, "i" }; // iActor
-
 const SCRIPT_COMMAND attach_object_to_actor = { 0x069b, "iiffffff" };
-const SCRIPT_COMMAND destroy_object_with_fade = { 0x09A2, "i" };
-const SCRIPT_COMMAND disassociate_object = { 0x0682, "ifffi" };
-const SCRIPT_COMMAND set_object_scaling = { 0x08d2, "if" };
-const SCRIPT_COMMAND set_actor_rotation_angles = { 0x083e, "ifff" };
-const SCRIPT_COMMAND is_actor_in_the_water = { 0x04ad, "i" };
 
 const SCRIPT_COMMAND create_pickup = { 0x0213, "iifffv" };
 const SCRIPT_COMMAND create_pickup_with_ammo = { 0x032b, "iiifffv" };
@@ -283,35 +223,8 @@ const SCRIPT_COMMAND remove_component = { 0x06E8, "ii" };
 const SCRIPT_COMMAND unknown_arrow = { 0x07e0, "ii" };
 const SCRIPT_COMMAND show_on_radar2 = { 0x018b, "ii" };
 
-//[21:14] <@jax> 0360 open_garage
-//[21:14] <@jax> 0361 close_garage
-const SCRIPT_COMMAND open_garage = { 0x0360, "s" };
-const SCRIPT_COMMAND close_garage = { 0x0361, "s" };
-
-const SCRIPT_COMMAND find_ground_z = { 0x02CE, "fffv" };
-const SCRIPT_COMMAND put_car_at = { 0x00AB, "vfff" };
-const SCRIPT_COMMAND is_actor_crouching = { 0x0597, "i" };
-const SCRIPT_COMMAND is_ped_bounding_sphere_visible = { 0x02CB, "i" };
-const SCRIPT_COMMAND is_player_in_a_car = { 0x0443, "i" };
-const SCRIPT_COMMAND set_camera_pos = { 0x03cb, "fff" };
-const SCRIPT_COMMAND set_actor_collision_detection = { 0x0619, "ii" };
 const SCRIPT_COMMAND attach_object_to_car = { 0x0681, "iiffffff" };
 const SCRIPT_COMMAND is_object_attached = { 0x0685, "i" };
-const SCRIPT_COMMAND attach_car_to_car = { 0x0683, "iiffffff" };
-const SCRIPT_COMMAND set_car_collision = { 0x099A, "ii" };
-const SCRIPT_COMMAND set_car_collision2 = { 0x0574, "ii" };
-const SCRIPT_COMMAND set_car_collision3 = { 0x0587, "ii" };
-const SCRIPT_COMMAND get_car_mass = { 0x06A3, "if" };
-const SCRIPT_COMMAND set_car_strong = { 0x03AB, "ii" };
-const SCRIPT_COMMAND set_car_heavy = { 0x01EC, "ii" };
-const SCRIPT_COMMAND set_car_air_resistance_multiplier = { 0x088B, "if" };
-//088B
-//01EC
-//03AB
-//0587
-//0574
-const SCRIPT_COMMAND task_shoot_at_coord = { 0x0668, "ifffi" };
-const SCRIPT_COMMAND task_aim_gun_at_coord = { 0x0667, "ifffi" };
 const SCRIPT_COMMAND set_char_never_targeted = { 0x0568, "ii" };
 const SCRIPT_COMMAND task_stay_in_same_place = { 0x0638, "ii" };
 const SCRIPT_COMMAND toggle_actor_cellphone = { 0x0729, "ii" };
@@ -321,9 +234,6 @@ const SCRIPT_COMMAND actor_task_handsup = { 0x5c4, "ii" };
 const SCRIPT_COMMAND actor_task_use_atm = { 0x5c7, "ii" };
 const SCRIPT_COMMAND change_stat = { 0x0629, "ii" };
 const SCRIPT_COMMAND set_char_weapon_skill = { 0x081A, "ii" };
-const SCRIPT_COMMAND unk_gang_war1 = { 0x08A3, "i" };
-const SCRIPT_COMMAND unk_gang_war2 = { 0x0879, "i" };
-const SCRIPT_COMMAND set_zone_owned_by = { 0x076C, "sii" };
 
 const SCRIPT_COMMAND toggle_car_tires_vulnerable = { 0x053f, "ii" };
 const SCRIPT_COMMAND set_fighting_style = { 0x07fe, "iii" };
@@ -336,26 +246,9 @@ const SCRIPT_COMMAND create_radar_marker_icon = { 0x0570, "fffii" };
 const SCRIPT_COMMAND put_trailer_on_cab = { 0x893, "ii" };
 const SCRIPT_COMMAND detach_trailer_from_cab = { 0x7AC, "ii" };
 const SCRIPT_COMMAND is_trailer_on_cab = { 0x7AB, "ii" };
-const SCRIPT_COMMAND enable_heli_magnet = { 0x0788, "ii" };
-//const SCRIPT_COMMAND create_icon_marker_without_sphere	= { 0x04CE, "fffii" };
-
-const SCRIPT_COMMAND get_player_weapon_ammo = { 0x0419, "iiv" };
-const SCRIPT_COMMAND set_player_weapon_ammo = { 0x017A, "iii" };
-
-const SCRIPT_COMMAND set_train_flag = { 0x09CF, "ii" };
-const SCRIPT_COMMAND put_camera_on_vehicle = { 0x0679, "ifffffffi" };
-const SCRIPT_COMMAND put_camera_on_actor = { 0x067C, "ifffffffi" };
 const SCRIPT_COMMAND create_explosion_with_radius = { 0x0948, "fffii" };
 const SCRIPT_COMMAND set_car_numberplate = { 0x0674, "is" };
 const SCRIPT_COMMAND enable_zone_names = { 0x09BA, "i" };
-
-const SCRIPT_COMMAND remove_panel = { 0x08DA, "i" };
-const SCRIPT_COMMAND create_panel = { 0x08D4, "sfffiiiiv" };
-const SCRIPT_COMMAND set_panel_column_data = { 0x08DB, "iisssssssssssss" };
-const SCRIPT_COMMAND set_panel_column_width = { 0x09DB, "iii" };
-const SCRIPT_COMMAND set_panel_row_enable = { 0x08D9, "iii" };
-const SCRIPT_COMMAND get_panel_selected_row = { 0x08D8, "iv" };
-const SCRIPT_COMMAND get_panel_active_row = { 0x08D7, "iv" };
 
 const SCRIPT_COMMAND destroy_particle = { 0x650, "i" };
 //opcode_066a('PETROLCAN', lhActor47, 0.0, 0.116, 0.048, lf05f, lf060, lf061, 1, l0089);

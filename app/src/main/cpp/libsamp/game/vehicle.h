@@ -109,8 +109,6 @@ public:
 	unsigned int GetVehicleSubtype();
 
 	void SetEngineState(bool bEnable);
-	void SetLightsState(bool iState);
-	bool GetLightsState();
 	void SetBootAndBonnetState(int iBoot, int iBonnet);
 
 	void RemoveComponent(uint16_t uiComponent);
@@ -194,9 +192,6 @@ public:
 
 	bool m_bShadow = false;
 
-	bool IsTrailer();
-
-	bool m_bLightsOn = false;
 	bool m_bEngineOn = false;
 
 	// Damage status

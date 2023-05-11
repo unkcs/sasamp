@@ -21,10 +21,10 @@ public:
     float m_fWheelFriction;
     float m_aResistanceTable[3];
 
-    static std::vector<tHandlingData> m_aHandlingData;
-    static std::vector<tBikeHandlingData> m_aBikeHandlingData;
+    static std::vector<tHandlingData>       m_aHandlingData;
+    static std::vector<tBikeHandlingData>   m_aBikeHandlingData;
     static std::vector<tFlyingHandlingData> m_aFlyingHandlingData;
-    static std::vector<tBoatHandlingData> m_aBoatHandlingData;
+    static std::vector<tBoatHandlingData>   m_aBoatHandlingData;
    // tHandlingData m_aHandlingData[210];
 //    tBikeHandlingData m_aBikeHandlingData[13];
 //    tFlyingHandlingData m_aFlyingHandlingData[24];

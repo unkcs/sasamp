@@ -20,47 +20,38 @@ extern uintptr_t g_libGTASA;
 
 void cHandlingDataMgr::LoadHandlingData()
 {
-    char path[0xFF];
-    sprintf(path, "%sdata/handling.cfg", g_pszStorage);
-    Log("PATH = %s", path);
-    auto pFile = fopen(path, "r");
+    const auto pFile = CFileMgr::OpenFile("DATA/HANDLING.CFG", "rb");
 
-    //std::ifstream file("HANDLING.CFG");
-    if (!pFile) {
-        Log("Error open file handling.cfg");
-        return;
-    }
-
-    char line[500];
-    while (fgets(line, sizeof(line), pFile))
+   // char line[500];
+    while (CFileLoader::LoadLine(pFile))
     {
-        if (strlen(line) == 0 || line[0] == ';' || line[0] == '\r') {
+        if (strlen(CFileLoader::ms_line) == 0 || CFileLoader::ms_line[0] == ';' || CFileLoader::ms_line[0] == '\r') {
             // Пропустить комментарии и пустые строки
             continue;
         }
         char name[32]{};
-        if (sscanf(line, "%31s", name, std::size(name)) != 1) { // FIX_BUGS: Sized string read
+        if (sscanf(CFileLoader::ms_line, "%31s", name, std::size(name)) != 1) { // FIX_BUGS: Sized string read
             return;
         }
         const auto id = FindExactWord(name, &VehicleNames[0][0], std::size(VehicleNames[0]), std::size(VehicleNames));
         if (id == -1) {
             return; // Issue logged by `FindExactWord`, so no need to care about it here
         }
-        switch (line[0]) {
+        switch (CFileLoader::ms_line[0]) {
             case ';': {
                 break; // Comment
             }
             case '!': {
                 // bike
-                tBikeHandlingData d;
-                d.InitFromData(id, line);
+                tBikeHandlingData d{};
+                d.InitFromData(id, CFileLoader::ms_line);
 
                 m_aBikeHandlingData.push_back(d);
                 break;
             }
             case '$': {
-                tFlyingHandlingData d;
-                d.InitFromData(id, line);
+                tFlyingHandlingData d{};
+                d.InitFromData(id, CFileLoader::ms_line);
 
                 m_aFlyingHandlingData.push_back(d);
                 // flying
@@ -68,21 +59,22 @@ void cHandlingDataMgr::LoadHandlingData()
             }
             case '%': {
                 // boat
-                tBoatHandlingData d;
-                d.InitFromData(id, line);
+                tBoatHandlingData d{};
+                d.InitFromData(id, CFileLoader::ms_line);
 
                 m_aBoatHandlingData.push_back(d);
                 break;
             }
             default: {
-                tHandlingData d;
-                d.InitFromData(id, line);
+                tHandlingData d{};
+                d.InitFromData(id, CFileLoader::ms_line);
 
                 m_aHandlingData.push_back(d);
                 break;
             }
         }
     }
+    CFileMgr::CloseFile(pFile);
 }
 
 int32 cHandlingDataMgr::FindExactWord(const char* name, const char* nameTable, uint32 entrySize, uint32 entryCount) {

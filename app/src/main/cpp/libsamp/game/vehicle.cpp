@@ -130,7 +130,7 @@ CVehicle::~CVehicle()
 		pPlateTexture = nullptr;
 	}
 
-	if(IsTrailer()){
+	if(m_pVehicle->IsTrailer()){
 		CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 		CVehicle *tmpVeh = pVehiclePool->GetVehicleFromTrailer(this);
 		if(tmpVeh)
@@ -571,26 +571,6 @@ void CVehicle::SetDoorState(int iState)
 	}
 }
 
-void CVehicle::SetLightsState(bool iState)
-{
-	if(!m_dwGTAId)return;
-	if(!m_pVehicle)return;
-
-	//if (GamePool_Vehicle_GetAt(m_dwGTAId))
-	//{
-
-
-		m_pVehicle->m_nOverrideLights = 0;
-		m_pVehicle->m_nVehicleFlags.bLightsOn = iState;
-//		ScriptCommand(&FORCE_CAR_LIGHTS, m_dwGTAId, iState ? 2 : 1);
-	//}
-	m_bLightsOn = iState;
-}
-
-bool CVehicle::GetLightsState(){
-	return m_bLightsOn;
-}
-
 void CVehicle::SetBootAndBonnetState(int iBoot, int iBonnet)
 {
 	if (GamePool_Vehicle_GetAt(m_dwGTAId) && m_pVehicle)
@@ -709,7 +689,7 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 		return;
 	}
 
-	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR && !IsTrailer())
+	if (GetVehicleSubtype() != VEHICLE_SUBTYPE_CAR && !m_pVehicle->IsTrailer())
 	{
 		return;
 	}
@@ -1000,7 +980,7 @@ void CVehicle::SetComponentVisibleInternal(const char* szComponent, bool bVisibl
 	}
 
 
-	RwFrame* pFrame = ((RwFrame * (*)(RwObject*, const char*))(g_libGTASA + 0x00335CEC + 1))(m_pVehicle->m_pRwObject, szComponent); // GetFrameFromname
+	auto pFrame = CClumpModelInfo::GetFrameFromName(m_pVehicle->m_pRwClump, szComponent);
 	if (pFrame != nullptr)
 	{
 		// Get all atomics for this component - Usually one, or two if there is a damaged version
@@ -1323,7 +1303,6 @@ void CVehicle::SetBikeWheelStatus(uint8_t bWheel, uint8_t bTireStatus)
 	{
 		if (bWheel == 0)
 		{
-
 			*(uint8_t*)((uintptr_t)m_pVehicle + 1644) = bTireStatus;
 		}
 		else
@@ -1411,14 +1390,6 @@ unsigned int CVehicle::GetVehicleSubtype()
 	}
 
 	return 0;
-}
-
-bool CVehicle::IsTrailer()
-{
-	if(!m_pVehicle)return false;
-	if(!m_pVehicle->m_nModelIndex)return false;
-
-	return ((bool (*)(int)) (g_libGTASA + 0x00336940 + 1))(m_pVehicle->m_nModelIndex);
 }
 
 void CVehicle::GetDamageStatusEncoded(uint8_t* byteTyreFlags, uint8_t* byteLightFlags, uint32_t* dwDoorFlags, uint32_t* dwPanelFlags)

@@ -202,8 +202,8 @@ struct CVehicleGta : CPhysical
     float   m_fGearChangeCount; // used as parameter for cTransmission::CalculateDriveAcceleration, but doesn't change
     float   m_fWheelSpinForAudio;
     float fHealth;				// 1224-1228	;m_fHealth
-    uint32_t m_pTowingVehicle;
-    uint32_t dwTrailer;			// 1232 - 1236 - trailer
+    CVehicleGta* m_pTowingVehicle;
+    CVehicleGta* m_pTrailer;
     uint8_t padd_2[3];
     bool m_bFireAutoFlare;
     CEntityGta *pBombOwner;
@@ -311,6 +311,9 @@ public: // NOTSA functions
     void SetGettingOutFlags(uint8 doorId);
     void ClearGettingInFlags(uint8 doorId);
     void ClearGettingOutFlags(uint8 doorId);
+
+    bool GetLightsStatus() { return m_nVehicleFlags.bLightsOn;}
+    void SetLightStatus(bool status) { m_nVehicleFlags.bLightsOn = status; }
 
 public:
     static inline auto m_aSpecialColModel = std::array<CColModel, 4>();

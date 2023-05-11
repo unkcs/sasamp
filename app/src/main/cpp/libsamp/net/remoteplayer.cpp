@@ -733,7 +733,7 @@ void CRemotePlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync, uint32_t dw
 		CVehicle *pTrailer = pVehiclePool->GetAt(m_icSync.TrailerID);
 		if(pTrailer) {
 			if (m_pCurrentVehicle->m_pTrailer) {
-				if ((CVehicleGta*)(m_pCurrentVehicle->m_pVehicle->dwTrailer) != pTrailer->m_pVehicle) {
+				if ((CVehicleGta*)(m_pCurrentVehicle->m_pVehicle->m_pTrailer) != pTrailer->m_pVehicle) {
 					m_pCurrentVehicle->DetachTrailer();
 				}
 			} else {

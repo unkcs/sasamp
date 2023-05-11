@@ -640,9 +640,9 @@ void ScrVehicleParamsEx(RPCParameters* rpcParams)
 
 	pVehicle->SetDoorState(doors);
 	// engine
-	pVehicle->SetEngineState((engine == 1) ? true : false);
+	pVehicle->SetEngineState((engine == 1));
 	// lights
-	pVehicle->SetLightsState((lights == 1) ? true : false);
+	pVehicle->m_pVehicle->SetLightStatus(lights);
 
 	if(alarm)
 		pVehicle->m_pVehicle->m_nAlarmState = -1;

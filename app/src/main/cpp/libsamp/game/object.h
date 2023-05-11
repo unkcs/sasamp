@@ -51,4 +51,8 @@ public:
 	void StopMoving();
 
 	void GetRotation(float* pfX, float* pfY, float* pfZ);
+
+	static float DistanceRemaining(RwMatrix *matPos, RwMatrix *m_matPositionTarget);
+
+	float RotaionRemaining(CVector &matPos, CVector &m_vecRot);
 };

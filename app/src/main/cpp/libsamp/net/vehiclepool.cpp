@@ -266,7 +266,7 @@ int CVehiclePool::FindNearestToLocalPlayerPed()
 	{
 		if(GetSlotState(x) && m_bIsActive[x])
 		{
-			fThisDistance = m_pVehicles[x]->GetDistanceFromLocalPlayerPed();
+			fThisDistance = m_pVehicles[x]->m_pVehicle->GetDistanceFromLocalPlayerPed();
 			if(fThisDistance < fLeastDistance)
 			{
 				fLeastDistance = fThisDistance;

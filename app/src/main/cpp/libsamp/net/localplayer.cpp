@@ -376,7 +376,7 @@ bool CLocalPlayer::Process()
 
 					if (ClosetVehicleID != INVALID_VEHICLE_ID) {
 						CVehicle *pVehicle = pVehiclePool->GetAt(ClosetVehicleID);
-						if (pVehicle && pVehicle->GetDistanceFromLocalPlayerPed() < 4.0f  && !pVehicle->m_pVehicle->IsTrailer()) {
+						if (pVehicle && pVehicle->m_pVehicle->GetDistanceFromLocalPlayerPed() < 4.0f  && !pVehicle->m_pVehicle->IsTrailer()) {
 							//if(!pVehicle->m_bIsLocked)
 							if (!pVehicle->m_bIsLocked) {// тачка открыта
 								if (!CHUD::bIsShowPassengerButt) {
@@ -500,7 +500,7 @@ void CLocalPlayer::GoEnterVehicle(bool passenger)
 	{
 		CVehicle* pVehicle = pVehiclePool->GetAt(ClosetVehicleID);
 
-		if (pVehicle != nullptr && pVehicle->GetDistanceFromLocalPlayerPed() < 4.0f)
+		if (pVehicle != nullptr && pVehicle->m_pVehicle->GetDistanceFromLocalPlayerPed() < 4.0f)
 		{
 			m_pPlayerPed->EnterVehicle(pVehicle->m_dwGTAId, passenger);
 			SendEnterVehicleNotification(ClosetVehicleID, passenger);

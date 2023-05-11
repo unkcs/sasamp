@@ -42,7 +42,7 @@ void CPlayerPool::ApplyCollisionChecking()
 			{
 				if(!pPlayerPed->IsInVehicle())
 				{
-					m_bCollisionChecking[i] = pPlayerPed->GetCollisionChecking();
+					m_bCollisionChecking[i] = pPlayerPed->m_pPed->m_bCollisionProcessed;
 					pPlayerPed->m_pPed->SetCollisionChecking(true);
 				}
 			}

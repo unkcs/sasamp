@@ -92,7 +92,7 @@ void CText3DLabelsPool::DrawAttachedToPlayer(TEXT_LABELS* pLabel)
 	pos += pLabel->offsetCoords;
 
    // CPlayerPed* pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed();
-    float fDist = pPlayerPed->GetDistanceFromCamera();
+    float fDist = pPlayerPed->m_pPed->GetDistanceFromCamera();
     pos.z += (fDist * 0.055);
 
 	DrawTextLabel(pLabel, &pos);
@@ -161,7 +161,7 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 	{
 		if(pVehiclePool->GetSlotState(i) && pVehiclePool->m_bIsActive[i])
 		{
-			int distance = pVehiclePool->m_pVehicles[i]->GetDistanceFromLocalPlayerPed();
+			int distance = pVehiclePool->m_pVehicles[i]->m_pVehicle->GetDistanceFromLocalPlayerPed();
 			if(distance < 20){
 				CVehicle* pVehicle = pVehiclePool->GetAt(i);
 
@@ -192,7 +192,7 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 
 				sprintf(inf, "id: %d, type: %d\nHealth: %.2f\nDistance: %dm\n Immun: %d",
 						i,
-						pVehicle->GetModelIndex(),
+						pVehicle->m_pVehicle->m_nModelIndex,
 						pVehicle->GetHealth(),
 						distance,
 						pVehicle->m_bIsInvulnerable
@@ -238,7 +238,7 @@ void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, CVector* pPos)
 
 	if (!pLabel->useLineOfSight || hitEntity)
 	{
-		if (pPed->GetDistanceFromPoint(pPos->x, pPos->y, pPos->z) <= pLabel->drawDistance)
+		if (pPed->m_pPed->GetDistanceFromPoint(pPos->x, pPos->y, pPos->z) <= pLabel->drawDistance)
 		{
 			CVector Out;
 			memset((void*)&Out, 0, sizeof(CVector));

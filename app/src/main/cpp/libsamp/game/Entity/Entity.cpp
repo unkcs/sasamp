@@ -11,6 +11,9 @@
 #include "game/Models/ModelInfo.h"
 #include "game/References.h"
 #include "game/Pools.h"
+#include "game/game.h"
+
+extern CGame* pGame;
 
 void CEntityGta::UpdateRwFrame()
 {
@@ -26,6 +29,45 @@ void CEntityGta::UpdateRpHAnim() {
             RpHAnimHierarchyUpdateMatrices(GetAnimHierarchyFromSkinClump(m_pRwClump));
         }
     }
+}
+
+float CEntityGta::GetDistanceFromPoint(float X, float Y, float Z) const
+{
+    CVector vec(X, Y, Z);
+
+    return DistanceBetweenPoints(GetPosition(), vec);
+}
+
+float CEntityGta::GetDistanceFromLocalPlayerPed() const
+{
+    auto pLocalPlayerPed = pGame->FindPlayerPed();
+
+    return DistanceBetweenPoints(GetPosition(), pLocalPlayerPed->m_pEntity->GetPosition());
+}
+
+float CEntityGta::GetDistanceFromCamera()
+{
+    CVector camPos = *(CVector*)(g_libGTASA+0x8B1134);
+
+    return DistanceBetweenPoints(GetPosition(), camPos);
+}
+
+void CEntityGta::UpdateRW() {
+    if (!m_pRwObject)
+        return;
+
+    auto parentMatrix = GetModellingMatrix();
+    if (m_matrix)
+        m_matrix->UpdateRwMatrix(parentMatrix);
+    else
+        m_placement.UpdateRwMatrix(parentMatrix);
+}
+
+RwMatrix* CEntityGta::GetModellingMatrix() {
+    if (!m_pRwObject)
+        return nullptr;
+
+    return RwFrameGetMatrix(RwFrameGetParent(m_pRwObject));
 }
 
 CColModel* CEntityGta::GetColModel() const {
@@ -227,13 +269,6 @@ bool CEntityGta::DoesNotCollideWithFlyers()
 {
     auto mi = CModelInfo::GetModelInfo(m_nModelIndex);
     return mi->SwaysInWind() || mi->bDontCollideWithFlyer;
-}
-
-RwMatrix* CEntityGta::GetModellingMatrix() {
-    if (!m_pRwObject)
-        return nullptr;
-
-    return RwFrameGetMatrix(RwFrameGetParent(m_pRwObject));
 }
 
 // ------------- hooks

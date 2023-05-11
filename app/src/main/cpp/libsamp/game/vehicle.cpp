@@ -535,7 +535,7 @@ void CVehicle::ProcessMarkers()
 		}
 	}
 
-	if (GetDistanceFromLocalPlayerPed() < 200.0f && !IsOccupied())
+	if (m_pVehicle->GetDistanceFromLocalPlayerPed() < 200.0f && !IsOccupied())
 	{
 		if (!m_dwMarkerID)
 		{
@@ -545,7 +545,7 @@ void CVehicle::ProcessMarkers()
 		}
 	}
 
-	else if (IsOccupied() || GetDistanceFromLocalPlayerPed() >= 200.0f)
+	else if (IsOccupied() || m_pVehicle->GetDistanceFromLocalPlayerPed() >= 200.0f)
 	{
 		// remove
 		if (m_dwMarkerID)

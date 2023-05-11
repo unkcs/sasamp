@@ -112,6 +112,7 @@ public:
     CColModel* GetColModel() const;
     CVector TransformFromObjectSpace(const CVector& offset);
     CVector* TransformFromObjectSpace(CVector& outPos, const CVector& offset);
+    void UpdateRW();
 
     void SetCollisionChecking(bool bCheck);
 
@@ -174,6 +175,11 @@ public:
         }
     }
 
+    void Teleport(float fX, float fY, float fZ)
+    {
+        (( void (*)(CEntityGta*, float, float, float, bool))(*(void**)(vtable+0x3C)))(this, fX, fY, fZ, 0);
+    }
+
 public:
     [[nodiscard]] bool IsPhysical() const { return m_nType > ENTITY_TYPE_BUILDING && m_nType < ENTITY_TYPE_DUMMY; }
     [[nodiscard]] bool IsNothing()  const { return m_nType == ENTITY_TYPE_NOTHING; }
@@ -183,6 +189,11 @@ public:
     [[nodiscard]] bool IsBuilding() const { return m_nType == ENTITY_TYPE_BUILDING; }
     [[nodiscard]] bool IsDummy()    const { return m_nType == ENTITY_TYPE_DUMMY; }
 
+    float GetDistanceFromCamera();
+
+    float GetDistanceFromLocalPlayerPed() const;
+
+    float GetDistanceFromPoint(float X, float Y, float Z) const;
 };
 static_assert(sizeof(CEntityGta) == 0x38);
 #pragma pack(pop)

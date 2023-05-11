@@ -1174,7 +1174,8 @@ void CPlayerPed::ProcessAttach()
 
 			pObject->SetMatrix(outMat); // copy to CMatrix
 
-			pObject->UpdateRwMatrixAndFrame();
+			pObject->m_pEntity->UpdateRW();
+			pObject->m_pEntity->UpdateRwFrame();
 
 			((void (*)(CEntityGta*))(*(void**)(pObject->m_pEntity->vtable + 8)))(pObject->m_pEntity); // CPhysical::Add
 		}

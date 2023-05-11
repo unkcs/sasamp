@@ -18,6 +18,7 @@
 #include "game/PedIK.h"
 
 class CVehicleGta;
+class CPlayerPedGta;
 
 enum ePedNode : int32 {
     PED_NODE_UPPER_TORSO     = 1,
@@ -305,6 +306,11 @@ public:
 
     bool IsStateDead() const noexcept { return m_nPedState == PEDSTATE_DEAD; }
     bool IsStateDying() const noexcept { return m_nPedState == PEDSTATE_DEAD || m_nPedState == PEDSTATE_DIE; }
+    CPlayerPedGta* AsPlayer()    { return reinterpret_cast<CPlayerPedGta*>(this); }
+
+    CWeapon& GetWeaponInSlot(size_t slot) noexcept { return m_aWeapons[slot]; }
+    CWeapon& GetWeaponInSlot(eWeaponSlot slot) noexcept { return m_aWeapons[(size_t)slot]; }
+    CWeapon& GetActiveWeapon() noexcept { return GetWeaponInSlot(m_nActiveWeaponSlot); }
 };
 
 

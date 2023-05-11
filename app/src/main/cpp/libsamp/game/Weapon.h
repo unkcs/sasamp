@@ -8,6 +8,23 @@
 #include "common.h"
 #include "game/Enums/eWeaponType.h"
 
+enum class eWeaponSlot : uint32 {
+    UNARMED,
+    MELEE,
+    HANDGUN,
+    SHOTGUN,
+    SMG,        // Used for drive-by's
+    RIFLE,
+    SNIPER,
+    HEAVY,
+    THROWN,
+    SPECIAL,
+    GIFT,
+    PARACHUTE,
+    DETONATOR,
+};
+constexpr auto NUM_WEAPON_SLOTS = static_cast<size_t>(eWeaponSlot::DETONATOR) + 1u;
+
 enum eWeaponState : uint32 {
     WEAPONSTATE_READY = 0,
     WEAPONSTATE_FIRING,

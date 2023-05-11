@@ -54,19 +54,19 @@ void CPlayerTags::Render()
 							ResetChatBubble(playerId);
 							continue;
 						}
-						if (pPlayerPed->GetDistanceFromCamera() <= m_fDistance[playerId]) {
+						if (pPlayerPed->m_pPed->GetDistanceFromCamera() <= m_fDistance[playerId]) {
 							if (!pPlayerPed->IsAdded()) continue;
 							VecPos = 0.0f;
 
 							pPlayerPed->m_pPed->GetBonePosition(&VecPos, 8, false);
-							DrawChatBubble(playerId, &VecPos, pPlayerPed->GetDistanceFromCamera());
+							DrawChatBubble(playerId, &VecPos, pPlayerPed->m_pPed->GetDistanceFromCamera());
 						}
 						if (GetTickCount() - m_dwStartTime[playerId] >= m_dwTime[playerId]) {
 							ResetChatBubble(playerId);
 						}
 					}
 
-					if (pPlayerPed->GetDistanceFromCamera() <= pNetGame->m_fNameTagDrawDistance) {
+					if (pPlayerPed->m_pPed->GetDistanceFromCamera() <= pNetGame->m_fNameTagDrawDistance) {
 
 						{
 							if (!pPlayerPed->IsAdded()) continue;
@@ -91,7 +91,7 @@ void CPlayerTags::Render()
 									playerId);
 							Draw(&VecPos, szNickBuf,
 								 pPlayer->GetPlayerColor(),
-								 pPlayerPed->GetDistanceFromCamera(),
+								 pPlayerPed->m_pPed->GetDistanceFromCamera(),
 								 pPlayer->m_fCurrentHealth,
 								 pPlayer->m_fCurrentArmor,
 								 pPlayer->IsAFK(), 0, pPlayer->m_bKeyboardOpened);

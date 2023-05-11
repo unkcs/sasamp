@@ -90,7 +90,17 @@ void CObject::Process(float fElapsedTime)
 			if (m_bNeedRotate) {
 				m_quatTarget.GetMatrix(&matEnt);
 			}
-			UpdateMatrix(matEnt);
+
+			// CPhysical::Remove
+			((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
+
+			SetMatrix(matEnt);
+			m_pEntity->UpdateRW();
+			m_pEntity->UpdateRwFrame();
+
+			// CPhysical::Add
+			((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
+
 			StopMoving();
 			return;
 		}
@@ -160,7 +170,15 @@ void CObject::Process(float fElapsedTime)
 			GetMatrix(&matEnt);
 		}
 
-		UpdateMatrix(matEnt);
+		// CPhysical::Remove
+		((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
+
+		SetMatrix(matEnt);
+		m_pEntity->UpdateRW();
+		m_pEntity->UpdateRwFrame();
+
+		// CPhysical::Add
+		((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
 	}
 }
 
@@ -195,7 +213,15 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 			m_quatTarget.GetMatrix(&mat);
 		}
 
-		this->UpdateMatrix(mat);
+		// CPhysical::Remove
+		((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
+
+		SetMatrix(mat);
+		m_pEntity->UpdateRW();
+		m_pEntity->UpdateRwFrame();
+
+		// CPhysical::Add
+		((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
 	}
 
 	m_iStartMoveTick = GetTickCount();
@@ -239,7 +265,7 @@ void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, fl
 		m_quatTarget.Normalize();
 	}
 
-	m_fDistanceToTargetPoint = this->GetDistanceFromPoint(m_matTarget.pos.x, m_matTarget.pos.y, m_matTarget.pos.z);
+	m_fDistanceToTargetPoint = m_pEntity->GetDistanceFromPoint(m_matTarget.pos.x, m_matTarget.pos.y, m_matTarget.pos.z);
 
 	if (pNetGame) {
 		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();

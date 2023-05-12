@@ -20,7 +20,7 @@ CPlayerTags::CPlayerTags()
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		m_bChatBubbleStatus[i] = 0;
+		m_bChatBubbleStatus[i] = false;
 		m_pSzText[i] = nullptr;
 		m_pSzTextWithoutColors[i] = nullptr;
 		m_iVoiceTime[i] = 0;

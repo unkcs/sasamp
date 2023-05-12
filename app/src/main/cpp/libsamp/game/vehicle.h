@@ -151,6 +151,7 @@ public:
 	bool 			m_bIsOnRightTurnLight = false;
 	bool 			m_bIsOnLeftTurnLight = false;
 	bool 			m_bIsOnAllTurnLight = false;
+	float 			m_fDefaultWheelSize = 0.0f;
 
 	// задний ход
 	CObject*		m_pLeftReverseLight = nullptr;

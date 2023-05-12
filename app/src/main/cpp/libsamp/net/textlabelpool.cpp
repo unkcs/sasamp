@@ -80,7 +80,7 @@ void CText3DLabelsPool::DrawAttachedToPlayer(TEXT_LABELS* pLabel)
 		return;
 	}
 	CPlayerPed* pPlayerPed = pPlayer->GetPlayerPed();
-	if (!pPlayerPed->m_pPed->IsAdded())
+	if (!pPlayerPed->IsAdded())
 	{
 		return;
 	}
@@ -127,7 +127,7 @@ void CText3DLabelsPool::DrawAttachedToVehicle(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	if (!pVehicle->m_pVehicle->IsAdded())
+	if (!pVehicle->IsAdded())
 	{
 		return;
 	}
@@ -198,7 +198,7 @@ void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, CVector* pPos)
 	{
 		return;
 	}
-	if (!pPed->m_pPed->IsAdded())
+	if (!pPed->IsAdded())
 	{
 		return;
 	}

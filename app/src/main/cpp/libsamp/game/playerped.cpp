@@ -646,7 +646,7 @@ void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
 
 	if(iSeat == 0)
 	{
-		if(pVehicle->m_pVehicle->pDriver) return;
+		//if(pVehicle->m_pVehicle->pDriver) return;
 		ScriptCommand(&TASK_WARP_CHAR_INTO_CAR_AS_DRIVER, m_dwGTAId, pVehicle->m_dwGTAId);
 	}
 	else

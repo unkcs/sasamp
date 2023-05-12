@@ -19,6 +19,6 @@ public:
 	void ResetPointer();
 	int m_iCounter;
 private:
-	void AddTextToBuffer(const std::string& msg);
+	static void AddTextToBuffer(const std::string& msg);
 	std::vector<std::string> m_Buffer;
 };

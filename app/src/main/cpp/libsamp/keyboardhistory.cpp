@@ -21,7 +21,7 @@ CKeyBoardHistory::~CKeyBoardHistory()
 
 void CKeyBoardHistory::AddStringToHistory(const std::string& msg)
 {
-	if (msg.size() == 0) return;
+	if (msg.empty()) return;
 	m_Buffer.insert(m_Buffer.begin(), msg);
 	while (m_Buffer.size() >= 20)
 	{
@@ -31,7 +31,7 @@ void CKeyBoardHistory::AddStringToHistory(const std::string& msg)
 
 void CKeyBoardHistory::PageUp()
 {
-	if (!m_Buffer.size())
+	if (m_Buffer.empty())
 	{
 		m_iCounter = 0;
 		return;
@@ -66,6 +66,6 @@ void CKeyBoardHistory::ResetPointer()
 
 void CKeyBoardHistory::AddTextToBuffer(const std::string& msg)
 {
-	for (int i = 0; i < msg.size(); i++)
-		CKeyBoard::AddCharToInput((char)msg[i]);
+	for (char i : msg)
+		CKeyBoard::AddCharToInput((char)i);
 }

@@ -29,10 +29,6 @@ void ImGui_ImplRenderWare_NewFrame();
 
 void RenderBackgroundHud()
 {
-
-	ImGui_ImplRenderWare_NewFrame();
-	ImGui::NewFrame();
-		
 	if (CHUD::bIsShow)
 	{
 
@@ -44,8 +40,4 @@ void RenderBackgroundHud()
 													 ImVec2(0, 0), ImVec2(1, 1));
 		}
 	}
-
-	ImGui::EndFrame();
-	ImGui::Render();
-	ImGui_ImplRenderWare_RenderDrawData(ImGui::GetDrawData());
 }

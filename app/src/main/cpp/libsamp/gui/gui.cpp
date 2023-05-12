@@ -86,7 +86,6 @@ ImFont* CGUI::LoadFont(char *font, float fontsize)
 	char path[0xFF];
 	sprintf(path, "%sSAMP/fonts/%s", g_pszStorage, font);
 
-	Log("abcde = %s", path);
 	// ranges
 	static const ImWchar ranges[] = 
 	{
@@ -117,6 +116,7 @@ CGUI::~CGUI()
 #include "game/Timer.h"
 
 extern CGame* pGame;
+void RenderBackgroundHud();
 
 void CGUI::Render()
 {
@@ -126,6 +126,8 @@ void CGUI::Render()
 
 //	RenderVersion();
 	//RenderRakNetStatistics();
+
+	RenderBackgroundHud();
 
 	if (pPlayerTags) pPlayerTags->Render();
 	

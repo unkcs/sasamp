@@ -184,12 +184,12 @@ open:
 /* ====================================================== */
 bool bGameStarted = false;
 
-void RenderBackgroundHud();
-
 #include "keyboard.h"
 
 void Render2dStuff()
 {
+	if (pGUI && bGameStarted) pGUI->Render();
+
 	if( CHook::CallFunction<bool>(g_libGTASA + 0x00193170 + 1) ) // emu_IsAltRenderTarget()
 		CHook::CallFunction<void>(g_libGTASA + 0x001934F4 + 1); // emu_FlushAltRenderTarget()
 
@@ -206,7 +206,6 @@ void Render2dStuff()
 		CHUD::UpdateHudInfo();
 
 		// radar
-		RenderBackgroundHud();
 
 		auto thiz = (float*) * (uintptr_t*)(g_libGTASA + 0x6580C8);
 		if (thiz)
@@ -237,13 +236,13 @@ void Render2dStuff()
 
 /* ====================================================== */
 
-void (*Render2dStuffAfterFade)();
-void Render2dStuffAfterFade_hook()
-{
-	Render2dStuffAfterFade();
-	if (pGUI && bGameStarted) pGUI->Render();
-	return;
-}
+//void (*Render2dStuffAfterFade)();
+//void Render2dStuffAfterFade_hook()
+//{
+//	Render2dStuffAfterFade();
+//
+//	return;
+//}
 
 void MainMenu_OnStartSAMP()
 {
@@ -2280,7 +2279,7 @@ void InstallHooks()
 //	CHook::InlineHook(g_libGTASA, 0x0032217C, &CEventHandler__HandleEvents_hook, &CEventHandler__HandleEvents);
 
 	CHook::Redirect(g_libGTASA, 0x39AEF4, &Render2dStuff);
-	CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);
+	//CHook::InlineHook(g_libGTASA, 0x39B098, &Render2dStuffAfterFade_hook, &Render2dStuffAfterFade);
 	CHook::InlineHook(g_libGTASA, 0x239D5C, &TouchEvent_hook, &TouchEvent);
     //
 	CHook::InlineHook(g_libGTASA, 0x3DBA88, &CRadar__GetRadarTraceColor_hook, &CRadar__GetRadarTraceColor); // dangerous

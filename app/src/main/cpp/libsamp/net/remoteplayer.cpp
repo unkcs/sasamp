@@ -172,11 +172,7 @@ void CRemotePlayer::Process()
 
 				m_pPlayerPed->m_pPed->ResetMoveSpeed();
 				m_pPlayerPed->m_pPed->ResetTurnSpeed();
-
-				m_pPlayerPed->GetMatrix(&matPlayer);
-				matPlayer.pos = m_ofSync.vecPos;
-
-				m_pPlayerPed->SetMatrix(matPlayer);
+				m_pPlayerPed->m_pPed->SetPosn(m_ofSync.vecPos);
 			}
 		}
 		if(GetState() == PLAYER_STATE_DRIVER && m_pPlayerPed->IsInVehicle())
@@ -718,7 +714,7 @@ void CRemotePlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync, uint32_t dw
 	{
 		m_pPlayerPed->PutDirectlyInVehicle(m_pCurrentVehicle, 0);
 	}
-	else if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
+	if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
         RemoveFromVehicle();
 	}
 

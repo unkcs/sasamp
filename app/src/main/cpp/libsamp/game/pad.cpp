@@ -184,9 +184,9 @@ uint32_t CPad__GetSprint_hook(uintptr_t thiz, uint32_t unk)
 		return LocalPlayerKeys.bKeys[ePadKeys::KEY_SPRINT];
 	}
 }
-
-uint32_t (*CPad__JumpJustDown)(uintptr_t thiz);
-uint32_t CPad__JumpJustDown_hook(uintptr_t thiz)
+//
+bool (*CPad__JumpJustDown)(uintptr_t* thiz);
+bool CPad__JumpJustDown_hook(uintptr_t* thiz)
 {
 	if(dwCurPlayerActor && (byteCurPlayer != 0))
 	{
@@ -198,32 +198,32 @@ uint32_t CPad__JumpJustDown_hook(uintptr_t thiz)
 			return RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_JUMP];
 		}
 
-		return 0;
+		return false;
 	}
 	else
 	{
 		if(pGame->isBanJump)
 		{
-			return 0;
+			return false;
 		}
 		LocalPlayerKeys.bKeys[ePadKeys::KEY_JUMP] = CPad__JumpJustDown(thiz);
 		return LocalPlayerKeys.bKeys[ePadKeys::KEY_JUMP];
 	}
 }
-
-uint32_t (*CPad__GetJump)(uintptr_t thiz);
-uint32_t CPad__GetJump_hook(uintptr_t thiz)
+//
+bool (*CPad__GetJump)(uintptr_t *thiz);
+bool CPad__GetJump_hook(uintptr_t *thiz)
 {
 	if(dwCurPlayerActor && (byteCurPlayer != 0))
 	{
-		if(RemotePlayerKeys[byteCurPlayer].bIgnoreJump) return 0;
+		//if(RemotePlayerKeys[byteCurPlayer].bIgnoreJump) return false;
 		return RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_JUMP];
 	}
 	else
 	{
         if(pGame->isBanJump)
         {
-            return 0;
+            return false;
         }
 
 		LocalPlayerKeys.bKeys[ePadKeys::KEY_JUMP] = CPad__JumpJustDown(thiz);
@@ -307,14 +307,16 @@ uint32_t CPad__MeleeAttackJustDown_hook(uintptr_t thiz)
 {
 	if(dwCurPlayerActor && (byteCurPlayer != 0))
 	{
-		if( RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_HANDBRAKE] &&
-			RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_SECONDARY_ATTACK])
+//		if( RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_HANDBRAKE] &&
+//			RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_SECONDARY_ATTACK])
+//			return 2;
+		if(RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_FIRE])
 			return 2;
 
-		return RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_FIRE];
+		return 0;
+		//return RemotePlayerKeys[byteCurPlayer].bKeys[ePadKeys::KEY_FIRE];
 	}
-	else
-	{
+	else {
 		uint32_t dwResult = CPad__MeleeAttackJustDown(thiz);
 		//LocalPlayerKeys.bKeys[ePadKeys::KEY_HANDBRAKE] = true;
 
@@ -324,7 +326,10 @@ uint32_t CPad__MeleeAttackJustDown_hook(uintptr_t thiz)
 		//}
 		//else if(dwResult == 1)
 		//{
-		LocalPlayerKeys.bKeys[ePadKeys::KEY_FIRE] = dwResult;
+		if (dwResult) {
+			LocalPlayerKeys.bKeys[ePadKeys::KEY_FIRE] = true;
+			return 2; // всегда крутой удар?
+		}
 		//	LocalPlayerKeys.bKeys[ePadKeys::KEY_HANDBRAKE] = false;
 		//}
 

@@ -80,7 +80,7 @@ void CText3DLabelsPool::DrawAttachedToPlayer(TEXT_LABELS* pLabel)
 		return;
 	}
 	CPlayerPed* pPlayerPed = pPlayer->GetPlayerPed();
-	if (!pPlayerPed->IsAdded())
+	if (!pPlayerPed->m_pPed->IsAdded())
 	{
 		return;
 	}
@@ -104,8 +104,6 @@ void CText3DLabelsPool::DrawAttachedToVehicle(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	CVector pos;
-	memset((void*)&pos, 0, sizeof(CVector));
 
 	VEHICLEID vehId = pLabel->attachedToVehicleID;
 
@@ -129,16 +127,11 @@ void CText3DLabelsPool::DrawAttachedToVehicle(TEXT_LABELS* pLabel)
 	{
 		return;
 	}
-	if (!pVehicle->IsAdded())
+	if (!pVehicle->m_pVehicle->IsAdded())
 	{
 		return;
 	}
-	RwMatrix mat;
-	memset((void*)& mat, 0, sizeof(RwMatrix));
-
-	pVehicle->GetMatrix(&mat);
-
-	memcpy((void*)& pos, (const void*)& mat.pos, sizeof(CVector));
+	auto pos = pVehicle->m_pVehicle->GetPosition();
 
 	pos += pLabel->offsetCoords;
 
@@ -161,26 +154,14 @@ void CText3DLabelsPool::DrawVehiclesInfo()
 	{
 		if(pVehiclePool->GetSlotState(i) && pVehiclePool->m_bIsActive[i])
 		{
-			int distance = pVehiclePool->m_pVehicles[i]->m_pVehicle->GetDistanceFromLocalPlayerPed();
+			int distance = pVehiclePool->m_pVehicles[i]->m_pVehicle->GetDistanceFromCamera();
 			if(distance < 20){
 				CVehicle* pVehicle = pVehiclePool->GetAt(i);
-
-				CVector pos;
-				memset((void*)&pos, 0, sizeof(CVector));
-
-				RwMatrix mat;
-				memset((void*)& mat, 0, sizeof(RwMatrix));
-
-				pVehicle->GetMatrix(&mat);
-
-				memcpy((void*)& pos, (const void*)& mat.pos, sizeof(CVector));
-
-				//memcpy((void*)& pos, (const void*)& m_matrix.pos, sizeof(CVector));
 
 				CVector Out;
 				memset((void*)&Out, 0, sizeof(CVector));
 
-				Sprite::CalcScreenCoors(&pos, &Out, 0, 0, 0, 0);
+				Sprite::CalcScreenCoors(&pVehicle->m_pVehicle->GetPosition(), &Out, 0, 0, 0, 0);
 
 				if (Out.z < 1.0f)
 				{
@@ -217,7 +198,7 @@ void CText3DLabelsPool::DrawTextLabel(TEXT_LABELS* pLabel, CVector* pPos)
 	{
 		return;
 	}
-	if (!pPed->IsAdded())
+	if (!pPed->m_pPed->IsAdded())
 	{
 		return;
 	}

@@ -171,7 +171,7 @@ public:
     static inline uint32 desiredNumVehiclesLoaded;
     static inline bool ms_bLoadVehiclesInLoadScene;
     static inline tStreamingFileDesc ms_files[TOTAL_IMG_ARCHIVES];
-    static inline CLinkList<CEntity*> ms_rwObjectInstances;
+    static inline CLinkList<CEntityGta*> ms_rwObjectInstances;
     static inline CStreamingInfo ms_aInfoForModel[RESOURCE_ID_TOTAL];
 
 public:

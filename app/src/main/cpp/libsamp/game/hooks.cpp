@@ -1528,9 +1528,11 @@ void CMatrix__SetScale_hook(void* thiz, float x, float y, float z)
 		if (g_iLastProcessedWheelVehicle >= 2 || g_iLastProcessedWheelVehicle <= 7)
 		{
 			auto pModel = CModelInfo::GetVehicleModelInfo(g_pLastProcessedVehicleMatrix->m_pVehicle->m_nModelIndex);
-			if(g_pLastProcessedVehicleMatrix->m_fWheelSize != pModel->m_fWheelSizeFront) {
+
+			if(g_pLastProcessedVehicleMatrix->m_fWheelSize != g_pLastProcessedVehicleMatrix->m_fDefaultWheelSize) {
 				y *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
 				z *= g_pLastProcessedVehicleMatrix->m_fWheelSize;
+
 			}
 
 			if (g_pLastProcessedVehicleMatrix->m_fWheelWidth != 0)
@@ -1626,9 +1628,9 @@ void CCam__Process_hook(uintptr_t thiz)
 				pVeh = pNetGame->GetVehiclePool()->GetAt(pNetGame->GetPlayerPool()->GetLocalPlayer()->m_CurrentVehicle);
 				if (pVeh)
 				{
-					vecSpeed = pVeh->m_pEntity->m_vecMoveSpeed;
+					vecSpeed = pVeh->m_pVehicle->m_vecMoveSpeed;
 
-					pVeh->m_pEntity->m_vecMoveSpeed *= 6.0f;
+					pVeh->m_pVehicle->m_vecMoveSpeed *= 6.0f;
 
 					*(float*)(g_libGTASA + 0x00608558) = 200.0f;
 				}
@@ -1639,7 +1641,7 @@ void CCam__Process_hook(uintptr_t thiz)
 	CCam__Process(thiz);
 	if (pVeh)
 	{
-		pVeh->m_pEntity->m_vecMoveSpeed = vecSpeed;
+		pVeh->m_pVehicle->m_vecMoveSpeed = vecSpeed;
 		*(float*)(g_libGTASA + 0x00608558) = pOld;
 	}
 	if (*(uint16_t*)(thiz + 14) == 4 || *(uint16_t*)(thiz + 14) == 53) // 53 is weapon
@@ -1877,73 +1879,73 @@ int CWeapon__GenerateDamageEvent_hook(CPedGta *victim, CEntityGta *creator, unsi
 	return result;
 }
 
-
-int (*CTaskSimpleUseGun__SetPedPosition)(uintptr_t thiz, uintptr_t a2);
-int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
-{
-	unsigned char v1 = *((unsigned char*)thiz + 13);
-	bool bChangeTheResult = false;
-
-	CPedGta* pPedPlayer = (CPedGta*)a2;
-	if(pPedPlayer && pNetGame)
-	{
-		if(v1 == 0)
-		{
-			CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-			if(pPlayerPool)
-			{
-				CPlayerPed *pPlayerPed;
-				if(pPedPlayer == GamePool_FindPlayerPed())
-					pPlayerPed = pGame->FindPlayerPed();
-				else
-				{
-					PLAYERID playerId = pPlayerPool->FindRemotePlayerIDFromGtaPtr(pPedPlayer);
-					if(playerId != INVALID_PLAYER_ID)
-					{
-						CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(playerId);
-						if(pRemotePlayer)
-							pPlayerPed = pRemotePlayer->GetPlayerPed();
-					}
-				}
-
-				if(pPlayerPed)
-				{
-					if((pPlayerPed->GetCurrentWeapon() == 42 || pPlayerPed->GetCurrentWeapon() == 41) && pPlayerPed->GetGtaVehicle() == 0)
-					{
-						CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
-						if(pVehiclePool)
-						{
-							for(VEHICLEID veh = 0; veh < MAX_VEHICLES; veh++)
-							{
-								if(pVehiclePool->GetSlotState(veh))
-								{
-									CVehicle* pVehicle = pVehiclePool->GetAt(veh);
-									if(pVehicle)
-									{
-										RwMatrix vehicleMat, playerMat;
-										pVehicle->GetMatrix(&vehicleMat);
-										pPlayerPed->GetMatrix(&playerMat);
-
-										float fSX = (vehicleMat.pos.x - playerMat.pos.x) * (vehicleMat.pos.x - playerMat.pos.x);
-										float fSY = (vehicleMat.pos.y - playerMat.pos.y) * (vehicleMat.pos.y - playerMat.pos.y);
-										float fSZ = (vehicleMat.pos.z - playerMat.pos.z) * (vehicleMat.pos.z - playerMat.pos.z);
-
-										float fDistance = (float)sqrt(fSX + fSY + fSZ);
-
-										if(fDistance <= 100.0f)
-											*((unsigned char*)thiz + 13) |= 1;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return CTaskSimpleUseGun__SetPedPosition(thiz, a2);
-}
+//
+//int (*CTaskSimpleUseGun__SetPedPosition)(uintptr_t thiz, uintptr_t a2);
+//int CTaskSimpleUseGun__SetPedPosition_hook(uintptr_t thiz, uintptr_t a2)
+//{
+//	unsigned char v1 = *((unsigned char*)thiz + 13);
+//	bool bChangeTheResult = false;
+//
+//	CPedGta* pPedPlayer = (CPedGta*)a2;
+//	if(pPedPlayer && pNetGame)
+//	{
+//		if(v1 == 0)
+//		{
+//			CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+//			if(pPlayerPool)
+//			{
+//				CPlayerPed *pPlayerPed;
+//				if(pPedPlayer == GamePool_FindPlayerPed())
+//					pPlayerPed = pGame->FindPlayerPed();
+//				else
+//				{
+//					PLAYERID playerId = pPlayerPool->FindRemotePlayerIDFromGtaPtr(pPedPlayer);
+//					if(playerId != INVALID_PLAYER_ID)
+//					{
+//						CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(playerId);
+//						if(pRemotePlayer)
+//							pPlayerPed = pRemotePlayer->GetPlayerPed();
+//					}
+//				}
+//
+//				if(pPlayerPed)
+//				{
+//					if((pPlayerPed->GetCurrentWeapon() == 42 || pPlayerPed->GetCurrentWeapon() == 41) && pPlayerPed->GetGtaVehicle() == 0)
+//					{
+//						CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+//						if(pVehiclePool)
+//						{
+//							for(VEHICLEID veh = 0; veh < MAX_VEHICLES; veh++)
+//							{
+//								if(pVehiclePool->GetSlotState(veh))
+//								{
+//									CVehicle* pVehicle = pVehiclePool->GetAt(veh);
+//									if(pVehicle)
+//									{
+//										RwMatrix vehicleMat, playerMat;
+//										pVehicle->GetMatrix(&vehicleMat);
+//										pPlayerPed->GetMatrix(&playerMat);
+//
+//										float fSX = (vehicleMat.pos.x - playerMat.pos.x) * (vehicleMat.pos.x - playerMat.pos.x);
+//										float fSY = (vehicleMat.pos.y - playerMat.pos.y) * (vehicleMat.pos.y - playerMat.pos.y);
+//										float fSZ = (vehicleMat.pos.z - playerMat.pos.z) * (vehicleMat.pos.z - playerMat.pos.z);
+//
+//										float fDistance = (float)sqrt(fSX + fSY + fSZ);
+//
+//										if(fDistance <= 100.0f)
+//											*((unsigned char*)thiz + 13) |= 1;
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	return CTaskSimpleUseGun__SetPedPosition(thiz, a2);
+//}
 
 bool CVehicle__GetVehicleLightsStatus_hook(CVehicleGta *pVehicle)
 {
@@ -2270,7 +2272,7 @@ void InstallHooks()
 	CHook::InlineHook(g_libGTASA, 0x29947C, &CCollision__ProcessVerticalLine_hook, &CCollision__ProcessVerticalLine);
 	CHook::InlineHook(g_libGTASA, 0x5669D8, &CWeapon__GenerateDamageEvent_hook, &CWeapon__GenerateDamageEvent);
 	// Fire extingusher fix
-	CHook::InlineHook(g_libGTASA, 0x46D6AC, &CTaskSimpleUseGun__SetPedPosition_hook, &CTaskSimpleUseGun__SetPedPosition);
+	//CHook::InlineHook(g_libGTASA, 0x46D6AC, &CTaskSimpleUseGun__SetPedPosition_hook, &CTaskSimpleUseGun__SetPedPosition);
 
 	//SetUpHook(g_libGTASA+0x291104, (uintptr_t)CStreaming__ConvertBufferToObject_hook, (uintptr_t*)&CStreaming__ConvertBufferToObject);
 	//SetUpHook(g_libGTASA+0x3961C8, (uintptr_t)CFileMgr__ReadLine_hook, (uintptr_t*)&CFileMgr__ReadLine);

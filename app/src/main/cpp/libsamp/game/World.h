@@ -7,6 +7,8 @@
 #include "common.h"
 #include "game/Core/Rect.h"
 #include "CPlayerInfoGta.h"
+#include "game/Core/PtrListDoubleLink.h"
+#include "RepeatSector.h"
 
 constexpr int32 MAX_WORLD_UNITS = 6000;
 
@@ -27,9 +29,12 @@ constexpr float MAP_Z_LOW_LIMIT = -100.0f;
 
 class CWorld {
 public:
+    static void InjectHooks();
 
     static inline CPlayerInfoGta Players[MAX_PLAYERS];
     static inline int PlayerInFocus;
+    static inline CPtrListDoubleLink ms_listMovingEntityPtrs;
+    static inline CRepeatSector ms_aRepeatSectors[MAX_REPEAT_SECTORS_Y][MAX_REPEAT_SECTORS_X];
 
 public:
     // Returns sector index in range -60 to 60 (Example: -3000 => -60, 3000 => 60)
@@ -84,6 +89,9 @@ public:
                && pos.y > -3000.0f && pos.y < 3000.0f;
     }
 };
+
+CRepeatSector* GetRepeatSector(int32 x, int32 y);
+
 
 CPlayerInfoGta&   FindPlayerInfo(int32 playerId = -1);
 CPlayerPedGta*    FindPlayerPed(int32 playerId = -1);

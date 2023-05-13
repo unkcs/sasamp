@@ -15,7 +15,15 @@ enum eRepeatSectorList {
     REPEATSECTOR_OBJECTS = 2
 };
 
-class  CRepeatSector {
+class CRepeatSector {
+public:
+    CPtrListDoubleLink& GetList(eRepeatSectorList type) noexcept {
+        return m_lists[type];
+    }
+
+    const CPtrListDoubleLink& GetList(eRepeatSectorList type) const noexcept {
+        return m_lists[type];
+    }
 public:
     CPtrListDoubleLink m_lists[3];
 };

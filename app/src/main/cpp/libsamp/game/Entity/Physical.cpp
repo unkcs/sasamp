@@ -5,6 +5,9 @@
 #include "Physical.h"
 #include "game/Timer.h"
 #include "util/patch.h"
+#include "../World.h"
+#include "game/RepeatSector.h"
+#include "game/Models/ModelInfo.h"
 
 void CPhysical::ApplyTurnSpeed()
 {
@@ -26,6 +29,38 @@ void CPhysical::ApplyTurnSpeed()
             CVector vecCentreOfMassMultiplied = Multiply3x3(GetMatrix(), vecNegativeCentreOfMass);
             GetPosition() += CrossProduct(vecTurnSpeedTimeStep, vecCentreOfMassMultiplied);
         }
+    }
+}
+
+void CPhysical::ApplyMoveForce(float x, float y, float z)
+{
+    return ApplyMoveForce(CVector(x, y ,z));
+}
+
+// 0x5429F0
+void CPhysical::ApplyMoveForce(CVector force)
+{
+    if (!physicalFlags.bInfiniteMass && !physicalFlags.bDisableMoveForce) {
+        if (physicalFlags.bDisableZ)
+            force.z = 0.0f;
+        m_vecMoveSpeed += force / m_fMass;
+    }
+}
+
+void CPhysical::AddToMovingList()
+{
+    if (!m_pMovingList && !m_bIsStaticWaitingForCollision)
+    {
+        auto pLink = CWorld::ms_listMovingEntityPtrs.AddItem(this);
+        m_pMovingList = pLink;
+    }
+}
+
+void CPhysical::RemoveFromMovingList()
+{
+    if (m_pMovingList) {
+        CWorld::ms_listMovingEntityPtrs.DeleteNode(m_pMovingList);
+        m_pMovingList = nullptr;
     }
 }
 

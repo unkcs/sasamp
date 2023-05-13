@@ -3,6 +3,7 @@
 //
 
 #include "World.h"
+#include "util/patch.h"
 
 // inlined
 CPlayerInfoGta& FindPlayerInfo(int32 playerId) {

@@ -848,6 +848,7 @@ uintptr_t* CCustomRoadsignMgr_RenderRoadsignAtomic_hook(uintptr_t* atomic, CVect
 #include "References.h"
 #include "CarEnterExit.h"
 #include "game/Entity/Ped/PlayerPedGta.h"
+#include "World.h"
 
 void InjectHooks()
 {
@@ -874,6 +875,7 @@ void InjectHooks()
 	CPlayerPedGta::InjectHooks();
 	//CTaskManager::InjectHooks();
 	CPedIntelligence::InjectHooks();
+	CWorld::InjectHooks();
 }
 
 void InstallSpecialHooks()

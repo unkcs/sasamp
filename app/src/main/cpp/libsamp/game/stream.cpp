@@ -18,6 +18,7 @@ Version: $Id: textdraw.cpp,v 1.4 2008-04-16 08:54:17 kyecvs Exp $
 
 extern CGame* pGame;
 #include "..//net/netgame.h"
+#include "game/Entity/Ped/Ped.h"
 extern CNetGame* pNetGame;
 
 void CStream::CreateStream() // ready 50%
@@ -58,9 +59,7 @@ void CStream::ProcessAttached() // todo
 		{
 			return;
 		}
-		RwMatrix mat;
-		pVeh->GetMatrix(&mat);
-		memcpy(&m_vPos, &mat.pos, sizeof(CVector));
+		memcpy(&m_vPos, &pVeh->m_pVehicle->GetPosition(), sizeof(CVector));
 		//CChatWindow::AddDebugMessage("processed for vehicle %d", m_iAttachedTo);
 	}
 	if (m_iAttachType == 2) // player
@@ -74,9 +73,7 @@ void CStream::ProcessAttached() // todo
 		{
 			return;
 		}
-		RwMatrix mat;
-		pPed->GetMatrix(&mat);
-		memcpy(&m_vPos, &mat.pos, sizeof(CVector));
+		memcpy(&m_vPos, &pPed->m_pPed->GetPosition(), sizeof(CVector));
 		//CChatWindow::AddDebugMessage("processed for player %d", m_iAttachedTo);
 	}
 

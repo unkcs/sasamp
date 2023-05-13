@@ -651,14 +651,14 @@ void CLocalPlayer::SendOnKeyFullSyncData()
 void CLocalPlayer::SendOnFootFullSyncData()
 {
 	RakNet::BitStream bsPlayerSync;
-	RwMatrix matPlayer;
+//	RwMatrix matPlayer;
 	CVector vecMoveSpeed = m_pPlayerPed->m_pPed->GetMoveSpeed();
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
 
 	ONFOOT_SYNC_DATA ofSync;
 
-	m_pPlayerPed->GetMatrix(&matPlayer);
+	auto matPlayer = m_pPlayerPed->m_pPed->GetMatrix().ToRwMatrix();
 
 	ofSync.lrAnalog = lrAnalog;
 	ofSync.udAnalog = udAnalog;

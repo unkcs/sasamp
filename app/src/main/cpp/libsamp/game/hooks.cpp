@@ -1214,7 +1214,7 @@ RpMaterial* CVehicle__SetupRenderMatCB(RpMaterial* mat, void* data)
 	{
 		if(mat->texture)
 		{
-			if (!strcmp(mat->texture->name, "remap_plate"))
+			if (!strcmp(mat->texture->name, "nomer"))
 			{
 				resetEntriesVehicle.emplace_back(reinterpret_cast<unsigned int*>(&(mat->texture)), *reinterpret_cast<unsigned int*>(&(mat->texture)));
 				if(pVeh->pPlateTexture) {

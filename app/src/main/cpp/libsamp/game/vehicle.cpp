@@ -825,7 +825,6 @@ void CVehicle::setPlate(ePlateType type, char* szNumber, char* szRegion)
 		RwTextureDestroy(pPlateTexture);
 		pPlateTexture = nullptr;
 	}
-
 	pPlateTexture = CCustomPlateManager::createTexture(type, szNumber, szRegion);
 }
 

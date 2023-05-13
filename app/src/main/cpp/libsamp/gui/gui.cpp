@@ -229,48 +229,7 @@ void CGUI::RenderRakNetStatistics()
 }
 
 extern uint32_t g_uiBorderedText;
-void CGUI::RenderTextForChatWindow(ImVec2& posCur, ImU32 col, bool bOutline, const char* text_begin, const char* text_end)
-{
-	int iOffset = CSettings::m_Settings.iFontOutline;
 
-	ImColor colOutline = ImColor(IM_COL32_BLACK);
-	ImColor colDef = ImColor(col);
-	colOutline.Value.w = colDef.Value.w;
-
-	if (bOutline)
-	{
-		if (g_uiBorderedText)
-		{
-			posCur.x -= iOffset;
-			ImGui::GetBackgroundDrawList()->AddText(posCur, colOutline, text_begin, text_end);
-			posCur.x += iOffset;
-			// right 
-			posCur.x += iOffset;
-			ImGui::GetBackgroundDrawList()->AddText(posCur, colOutline, text_begin, text_end);
-			posCur.x -= iOffset;
-			// above
-			posCur.y -= iOffset;
-			ImGui::GetBackgroundDrawList()->AddText(posCur, colOutline, text_begin, text_end);
-			posCur.y += iOffset;
-			// below
-			posCur.y += iOffset;
-			ImGui::GetBackgroundDrawList()->AddText(posCur, colOutline, text_begin, text_end);
-			posCur.y -= iOffset;
-		}
-		else
-		{
-			ImColor co(0.0f, 0.0f, 0.0f, 0.4f);
-			if (colOutline.Value.w <= 0.4)
-			{
-				co.Value.w = colOutline.Value.w;
-			}
-			ImVec2 b(posCur.x + ImGui::CalcTextSize(text_begin, text_end).x, posCur.y + GetFontSize());
-			ImGui::GetBackgroundDrawList()->AddRectFilled(posCur, b, co);
-		}
-	}
-
-	ImGui::GetBackgroundDrawList()->AddText(posCur, col, text_begin, text_end);
-}
 //
 //void CGUI::PushToBufferedQueueTextDrawPressed(uint16_t textdrawId)
 //{

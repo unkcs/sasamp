@@ -31,10 +31,6 @@ class CCustomPlateManager
 	static struct CSprite2d* m_pKzSprite;
 	static struct CSprite2d* m_pRuPoliceSprite;
 
-	static CFontInstance* m_pRUFont;
-	static CFontInstance* m_pKZFont;
-	static CFontInstance* m_pUAFont;
-
 	static uint8_t* m_pBitmap;
 
 public:

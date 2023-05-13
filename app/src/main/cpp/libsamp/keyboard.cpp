@@ -2444,8 +2444,10 @@ bool ProcessLocalCommands(const char str[])
 	}
 	if (strstr(str, "/vin "))
 	{
-		int vin = -1;
-		if (sscanf(str, "%*s%d", &vin) == -1)
+		int type;
+		char num[255];
+		char reg[255];
+		if (sscanf(str, "%*s%d%s%s", &type, str, reg) == -1)
 		{
 			CChatWindow::AddDebugMessage("Используйте: /vin [id]");
 			return true;
@@ -2453,7 +2455,7 @@ bool ProcessLocalCommands(const char str[])
 		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
 		auto pVeh = pPed->GetCurrentVehicle();
 
-		CTimer::ms_fTimeScale = vin;
+		pVeh->setPlate(static_cast<ePlateType>(type), "fff", "44");
 		return true;
 	}
 

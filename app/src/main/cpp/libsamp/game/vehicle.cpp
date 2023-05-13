@@ -894,7 +894,7 @@ void CVehicle::SetWheelOffset(int iWheel, float offset)
 	}
 	else
 	{
-		m_fWheelOffsetX = offset;
+		m_fWheelOffsetY = offset;
 		m_bWasWheelOffsetProcessedY = false;
 	}
 

@@ -66,7 +66,6 @@ public:
 
 		return false;
 	}
-	void RemoveFromVehicle();
 
 	void HandleDeath();
 	void HandleAnimations();

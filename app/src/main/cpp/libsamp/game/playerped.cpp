@@ -540,6 +540,25 @@ CVehicleGta* CPlayerPed::GetGtaVehicle()
 }
 
 // 0.3.7
+void CPlayerPed::RemoveFromVehicle()
+{
+	if (!m_pPed) return;
+	if(!m_dwGTAId)return;
+	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
+		return;
+	}
+
+	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
+		return;
+	}
+	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
+
+	auto pos = m_pPed->GetPosition();
+
+	if(m_pPed && m_pPed->bInVehicle)
+		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, pos.x, pos.y, pos.z);
+}
+
 void CPlayerPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
 {
 	if (!m_pPed) return;

@@ -33,8 +33,8 @@ public:
 
     static inline CPlayerInfoGta Players[MAX_PLAYERS];
     static inline int PlayerInFocus;
-    static inline CPtrListDoubleLink ms_listMovingEntityPtrs;
-    static inline CRepeatSector ms_aRepeatSectors[MAX_REPEAT_SECTORS_Y][MAX_REPEAT_SECTORS_X];
+ //   static CPtrListDoubleLink ms_listMovingEntityPtrs;
+    //static inline CRepeatSector ms_aRepeatSectors[MAX_REPEAT_SECTORS_Y][MAX_REPEAT_SECTORS_X];
 
 public:
     // Returns sector index in range -60 to 60 (Example: -3000 => -60, 3000 => 60)

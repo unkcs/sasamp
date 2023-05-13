@@ -470,45 +470,43 @@ void CRemotePlayer::StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync)
 
 void CRemotePlayer::UpdateOnFootTargetPosition()
 {
-	RwMatrix mat;
+	//RwMatrix mat;
 	CVector vec;
 
 	if(!m_pPlayerPed) return;
-	m_pPlayerPed->GetMatrix(&mat);
 
 	if(!m_pPlayerPed->IsAdded())
 	{
-		mat.pos = m_vecOnFootTargetPos;
-
-		m_pPlayerPed->SetMatrix(mat);
+		m_pPlayerPed->m_pPed->SetPosn(m_vecOnFootTargetPos);
 		return;
 	}
 
-	m_vecPosOffset.x = FloatOffset(m_vecOnFootTargetPos.x, mat.pos.x);
-	m_vecPosOffset.y = FloatOffset(m_vecOnFootTargetPos.y, mat.pos.y);
-	m_vecPosOffset.z = FloatOffset(m_vecOnFootTargetPos.z, mat.pos.z);
+	auto pos = m_pPlayerPed->m_pPed->GetPosition();
+
+	m_vecPosOffset.x = FloatOffset(m_vecOnFootTargetPos.x, pos.x);
+	m_vecPosOffset.y = FloatOffset(m_vecOnFootTargetPos.y, pos.y);
+	m_vecPosOffset.z = FloatOffset(m_vecOnFootTargetPos.z, pos.z);
 
 	if(m_vecPosOffset.x > 0.00001f || m_vecPosOffset.y > 0.00001f || m_vecPosOffset.z > 0.00001f)
 	{
 		if(m_vecPosOffset.x > 2.0f || m_vecPosOffset.y > 2.0f || m_vecPosOffset.z > 1.0f)
 		{
-			mat.pos = m_vecOnFootTargetPos;
-			m_pPlayerPed->SetMatrix(mat);
+			m_pPlayerPed->m_pPed->SetPosn(m_vecOnFootTargetPos);
 			return;
 		}
 		vec = m_pPlayerPed->m_pPed->GetMoveSpeed();
 
 		if(m_vecPosOffset.x > 0.00001f)
-			vec.x += (m_vecOnFootTargetPos.x - mat.pos.x) * 0.1f;
+			vec.x += (m_vecOnFootTargetPos.x - pos.x) * 0.1f;
 		if(m_vecPosOffset.y > 0.00001f)
-			vec.y += (m_vecOnFootTargetPos.y - mat.pos.y) * 0.1f;
+			vec.y += (m_vecOnFootTargetPos.y - pos.y) * 0.1f;
 		if(m_vecPosOffset.z > 0.00001f)
-			vec.z += (m_vecOnFootTargetPos.z - mat.pos.z) * 0.1f;
+			vec.z += (m_vecOnFootTargetPos.z - pos.z) * 0.1f;
 
 		m_pPlayerPed->m_pPed->SetVelocity(vec);
 	}
 }
-float                    m_fWeaponDamages[43 + 1]
+float m_fWeaponDamages[43 + 1]
 = {
 5.0f, /* Fist */
 5.0f, /* Brass Knuckles */
@@ -688,9 +686,7 @@ void CRemotePlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync, uint32_t 
 
 		if(m_pPlayerPed->IsInVehicle())
 		{
-			RwMatrix mat;
-			m_pPlayerPed->GetMatrix(&mat);
-			m_pPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z);
+			m_pPlayerPed->RemoveFromVehicle();
 		}
 	}
 	m_dwLastRecvTick = GetTickCount();
@@ -715,7 +711,7 @@ void CRemotePlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync, uint32_t dw
 		m_pPlayerPed->PutDirectlyInVehicle(m_pCurrentVehicle, 0);
 	}
 	if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
-        RemoveFromVehicle();
+		m_pPlayerPed->RemoveFromVehicle();
 	}
 
 	// -------------- TRAILER
@@ -778,7 +774,7 @@ void CRemotePlayer::StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync)
 		m_pPlayerPed->PutDirectlyInVehicle(m_pCurrentVehicle, m_byteSeatID);
 	}
 	if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
-        RemoveFromVehicle();
+		m_pPlayerPed->RemoveFromVehicle();
 	}
 
 	m_fCurrentHealth = ppsSync->bytePlayerHealth;
@@ -788,20 +784,6 @@ void CRemotePlayer::StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync)
 	m_dwLastRecvTick = GetTickCount();
 
 	SetState(PLAYER_STATE_PASSENGER);
-}
-
-void CRemotePlayer::RemoveFromVehicle()
-{
-	RwMatrix mat;
-
-	if(m_pPlayerPed)
-	{
-		if(m_pPlayerPed->IsInVehicle())
-		{
-			m_pPlayerPed->GetMatrix(&mat);
-			m_pPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z+1.0);
-		}
-	}
 }
 
 void CRemotePlayer::HandleDeath()
@@ -897,14 +879,12 @@ void CRemotePlayer::StateChange(BYTE byteNewState, BYTE byteOldState)
 		// is driving, we'll have to kick the local player out
 		CPlayerPed *pLocalPlayerPed = pGame->FindPlayerPed();
 		VEHICLEID LocalVehicle=0xFFFF;
-		RwMatrix mat;
 
 		if(pLocalPlayerPed && pLocalPlayerPed->IsInVehicle() && !pLocalPlayerPed->IsAPassenger())
 		{
 			LocalVehicle = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(pLocalPlayerPed->GetGtaVehicle());
 			if(LocalVehicle == m_VehicleID) {
-				pLocalPlayerPed->GetMatrix(&mat);
-				pLocalPlayerPed->RemoveFromVehicleAndPutAt(mat.pos.x,mat.pos.y,mat.pos.z + 1.0f);
+				pLocalPlayerPed->RemoveFromVehicle();
 				pGame->DisplayGameText("~r~Car Jacked~w~!",1000,5);
 			}
 		}

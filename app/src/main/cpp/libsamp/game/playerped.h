@@ -183,4 +183,5 @@ public:
 
     void ClearLook();
 
+	void RemoveFromVehicle();
 };

@@ -583,9 +583,7 @@ void ScrPutPlayerInVehicle(RPCParameters *rpcParams)
 	if(!pVehiclepool)return;
 
 	if(pPed->IsInVehicle()) {
-		RwMatrix mat;
-		pPed->GetMatrix(&mat);
-		pPed->RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z);
+		pPed->RemoveFromVehicle();
 	}
 	CVehicle *pVehicle = pNetGame->GetVehiclePool()->GetAt(vehicleid);
 	if(!pVehicle)return;

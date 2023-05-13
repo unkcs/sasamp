@@ -47,23 +47,6 @@ void CPhysical::ApplyMoveForce(CVector force)
     }
 }
 
-void CPhysical::AddToMovingList()
-{
-    if (!m_pMovingList && !m_bIsStaticWaitingForCollision)
-    {
-        auto pLink = CWorld::ms_listMovingEntityPtrs.AddItem(this);
-        m_pMovingList = pLink;
-    }
-}
-
-void CPhysical::RemoveFromMovingList()
-{
-    if (m_pMovingList) {
-        CWorld::ms_listMovingEntityPtrs.DeleteNode(m_pMovingList);
-        m_pMovingList = nullptr;
-    }
-}
-
 void CPhysical::ApplyTurnForce(CVector force, CVector point)
 {
     if (!physicalFlags.bDisableTurnForce)

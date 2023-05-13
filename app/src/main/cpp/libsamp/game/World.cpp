@@ -5,11 +5,11 @@
 #include "World.h"
 #include "../util/patch.h"
 
-CRepeatSector* GetRepeatSector(int32 x, int32 y) {
-    return &CWorld::ms_aRepeatSectors[y % MAX_REPEAT_SECTORS_Y][x % MAX_REPEAT_SECTORS_X];
-}
+//CPtrListDoubleLink CWorld::ms_listMovingEntityPtrs;
+
 
 void CWorld::InjectHooks() {
-    CHook::Write(g_libGTASA + 0x005D0D8C, &CWorld::ms_listMovingEntityPtrs);
-    CHook::Write(g_libGTASA + 0x005CEF64, &CWorld::ms_aRepeatSectors);
+   // SET_TO(CWorld::ms_listMovingEntityPtrs, 0x008CAA0C);
+   // CHook::Write(g_libGTASA + 0x005D0D8C, &CWorld::ms_listMovingEntityPtrs);
+ //   CHook::Write(g_libGTASA + 0x005CEF64, &CWorld::ms_aRepeatSectors);
 }

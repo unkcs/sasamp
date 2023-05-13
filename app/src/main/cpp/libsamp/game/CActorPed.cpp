@@ -186,12 +186,10 @@ void CActorPed::RemoveFromVehicle()
 	if (!m_pPed) return;
 	if (!GamePool_Ped_GetAt(m_dwGTAId)) return;
 
-	RwMatrix mat;
-
 	if (m_pPed->bInVehicle)
 	{
-		GetMatrix(&mat);
-		RemoveFromVehicleAndPutAt(mat.pos.x, mat.pos.y, mat.pos.z);
+		auto pos = m_pPed->GetPosition();
+		RemoveFromVehicleAndPutAt(pos.x, pos.y, pos.z);
 	}
 }
 

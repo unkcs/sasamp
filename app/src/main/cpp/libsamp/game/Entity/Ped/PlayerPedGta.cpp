@@ -8,7 +8,7 @@
 #include "util/patch.h"
 
 void CPlayerPedGta::ReApplyMoveAnims() {
-    Log("ReApplyMoveAnims");
+   // Log("ReApplyMoveAnims");
 
     constexpr AnimationId anims[]{
             ANIM_ID_WALK,

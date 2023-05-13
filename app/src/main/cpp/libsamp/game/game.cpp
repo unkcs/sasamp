@@ -95,7 +95,7 @@ uint32_t CGame::CreatePickup(int iModel, int iType, float fX, float fY, float fZ
 	if(iModel > 0 && iModel < 20000)
 	{
 		auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
-    	if(dwModelArray[iModel] == 0)
+    	if(dwModelArray[iModel] == nullptr)
     		iModel = 18631;
 	}
 	else iModel = 18631;
@@ -366,24 +366,6 @@ void CGame::DisplayWidgets(bool bDisp)
 void CGame::PlaySound(int iSound, float fX, float fY, float fZ)
 {
 	ScriptCommand(&play_sound, fX, fY, fZ, iSound);
-}
-
-// 0.3.7
-void CGame::RequestModel(unsigned int iModelID, int iLoadingStream)
-{
-	ScriptCommand(&request_model, iModelID);
-}
-
-// 0.3.7
-void CGame::LoadRequestedModels()
-{
-	ScriptCommand(&load_requested_models);
-}
-
-// 0.3.7
-uint8_t CGame::IsModelLoaded(unsigned int iModelID)
-{
-	return ScriptCommand(&is_model_available, iModelID);
 }
 
 // 0.3.7

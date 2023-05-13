@@ -79,3 +79,13 @@ void CStreaming::InitImageList() {
     CStreaming::AddImageToList("TEXDB\\SAMP.IMG", true);
     CStreaming::AddImageToList("TEXDB\\SAMPCOL.IMG", true);
 }
+
+void CStreaming::RequestModel(int32_t index, int32_t flags)
+{
+    ((void (*) (int32_t, int32_t))(g_libGTASA + 0x0028EB10 + 1))(index, flags);
+}
+
+void CStreaming::LoadAllRequestedModels(bool bPriorityRequestsOnly)
+{
+    ((void (*) (bool))(g_libGTASA + 0x00294CB4 + 1))(bPriorityRequestsOnly);
+}

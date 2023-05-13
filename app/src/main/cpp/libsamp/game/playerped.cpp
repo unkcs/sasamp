@@ -423,11 +423,11 @@ void CPlayerPed::GiveWeapon(int iWeaponID, int iAmmo)
 	
 	if (iModelID == -1) return;
 	
-	if (!pGame->IsModelLoaded(iModelID)) 
+	if (!CStreaming::IsModelLoaded(iModelID))
 	{
-		pGame->RequestModel(iModelID);
-		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(iModelID)) sleep(1);
+		CStreaming::RequestModel(iModelID);
+		CStreaming::LoadAllRequestedModels(false);
+		while (!CStreaming::IsModelLoaded(iModelID)) sleep(1);
 	}
 	//ScriptCommand(&give_actor_weapon, m_dwGTAId, iWeaponID, iAmmo);
 
@@ -1422,12 +1422,12 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 			auto modelId = IFPToModelId(idx);
 			// nned 25680
 			Log("trying to load modelid %d, %d", modelId, idx);
-			if (!CGame::IsModelLoaded(modelId))
+			if (!CStreaming::IsModelLoaded(modelId))
 			{
-				pGame->RequestModel(modelId);
-				CGame::LoadRequestedModels();
+				CStreaming::RequestModel(modelId);
+				CStreaming::LoadAllRequestedModels(false);
 				int tries = 0;
-				while (!pGame->IsModelLoaded(modelId) && tries <= 10)
+				while (!CStreaming::IsModelLoaded(modelId) && tries <= 10)
 				{
 					usleep(10);
 					tries++;

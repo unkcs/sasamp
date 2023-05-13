@@ -18,10 +18,10 @@ CActorPed::CActorPed(uint16_t usModel, CVector vecPosition, float fRotation, flo
 	m_pPed = nullptr;
 	m_pEntity = nullptr;
 
-	if (!pGame->IsModelLoaded(usModel)) 
+	if (!CStreaming::IsModelLoaded(usModel))
 	{
-		pGame->RequestModel(usModel);
-		pGame->LoadRequestedModels();
+		CStreaming::RequestModel(usModel);
+		CStreaming::LoadAllRequestedModels(false);
 	}
 
 	if (!IsPedModel(usModel)) 

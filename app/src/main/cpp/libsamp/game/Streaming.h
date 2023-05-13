@@ -182,6 +182,10 @@ public:
     static void RemoveAllUnusedModels();
 
     static void RemoveModel(int32 modelId);
+    static void RequestModel(int32 modelId, int32 flags = STREAMING_GAME_REQUIRED);
 
     static CStreamingInfo& GetInfo(int32 modelId) { assert(modelId >= 0); return ms_aInfoForModel[modelId]; }
+    static bool IsModelLoaded(int32 model) { return ms_aInfoForModel[model].m_nLoadState == eStreamingLoadState::LOADSTATE_LOADED; }
+
+    static void LoadAllRequestedModels(bool bPriorityRequestsOnly);
 };

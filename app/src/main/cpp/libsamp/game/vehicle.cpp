@@ -27,11 +27,11 @@ CVehicle::CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRota
 		(iType != TRAIN_TRAM))
 	{
 		// normal vehicle
-		if (!pGame->IsModelLoaded(iType))
+		if (!CStreaming::IsModelLoaded(iType))
 		{
-			pGame->RequestModel(iType);
-			pGame->LoadRequestedModels();
-			while (!pGame->IsModelLoaded(iType)) usleep(10);
+			CStreaming::RequestModel(iType);
+			CStreaming::LoadAllRequestedModels(false);
+			while (!CStreaming::IsModelLoaded(iType)) usleep(10);
 		}
 		ScriptCommand(&create_car, iType, fPosX, fPosY, fPosZ, &m_dwGTAId);
 		ScriptCommand(&set_car_z_angle, m_dwGTAId, fRotation);
@@ -800,6 +800,8 @@ void CVehicle::SetHandlingData(std::vector<SHandlingData>& vHandlingData)
 	} else {
 		m_fWheelSize = pModel->m_fWheelSizeFront;
 	}
+
+	m_fDefaultWheelSize = std::max(fDefaultFrontWheelSize, fDefaultRearWheelSize);
 
 	((void (*)(int, tHandlingData*))(g_libGTASA + 0x004FBCF4 + 1))(0, m_pCustomHandling);
 	m_pVehicle->m_pHandlingData = m_pCustomHandling;

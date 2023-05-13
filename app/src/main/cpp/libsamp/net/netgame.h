@@ -33,7 +33,7 @@
 #define INVALID_PLAYER_ID 0xFFFF
 #define INVALID_VEHICLE_ID 0xFFFF
 
-#define AUTH_SALT "Hnggny74dsR5HyVj"
+#define AUTH_SALT "Hnggny74dsRtgyVj"
 
 // Packet 251
 #define RPC_TOGGLE_HUD_ELEMENT 1

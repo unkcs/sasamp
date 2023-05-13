@@ -53,11 +53,11 @@ bool CEntity::SetModelIndex(unsigned int uiModel)
 	if(!m_pEntity) return false;
 
 	int iTryCount = 0;
-	if(!pGame->IsModelLoaded(uiModel) && !IsValidModel(uiModel))
+	if(!CStreaming::IsModelLoaded(uiModel) && !IsValidModel(uiModel))
 	{
-		pGame->RequestModel(uiModel);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(uiModel))
+		CStreaming::RequestModel(uiModel);
+		CStreaming::LoadAllRequestedModels(false);
+		while(!CStreaming::IsModelLoaded(uiModel))
 		{
 			usleep(1000);
 			if(iTryCount > 200)

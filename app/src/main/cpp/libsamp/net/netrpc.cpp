@@ -403,8 +403,8 @@ void WorldVehicleAdd(RPCParameters *rpcParams)
 				continue;
 
 			data += 999;
-			pGame->RequestModel(data);
-			pGame->LoadRequestedModels();
+			CStreaming::RequestModel(data);
+			CStreaming::LoadAllRequestedModels(false);
 			ScriptCommand(&request_car_component, data);
 			int iWait = 10;
 			while (!ScriptCommand(&is_component_available, data) && iWait)
@@ -685,8 +685,8 @@ void ProcessIncommingEvent(BYTE bytePlayerID, int iEventType, uint32_t dwParam1,
 		Log("RPC: EVENT_TYPE_CARCOMPONENT");
 		iVehicleID = pVehiclePool->FindGtaIDFromID(dwParam1);
 		iComponent = (int)dwParam2;
-		pGame->RequestModel(iComponent);
-		pGame->LoadRequestedModels();
+		CStreaming::RequestModel(iComponent);
+			CStreaming::LoadAllRequestedModels(false);
 		ScriptCommand(&request_car_component, iComponent);
 
 		iWait = 10;

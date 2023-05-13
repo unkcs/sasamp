@@ -1011,17 +1011,17 @@ void ScrCreateObject(RPCParameters* rpcParams)
 			{
 				modelId = 18631;
 			}
-			if (!pGame->IsModelLoaded(modelId))
-			{
-				pGame->RequestModel(modelId);
-				pGame->LoadRequestedModels();
-				while (!pGame->IsModelLoaded(modelId)) sleep(1);
-			}
-
-			if (!CModelInfo::GetModelInfo(modelId)->m_nRefCount && pGame->IsModelLoaded(modelId))
-			{
-				ScriptCommand(&release_model, modelId);
-			}
+//			if (!CStreaming::IsModelLoaded(modelId))
+//			{
+//				CStreaming::RequestModel(modelId);
+//				CStreaming::LoadAllRequestedModels(false);
+//				while (!CStreaming::IsModelLoaded(modelId)) sleep(1);
+//			}
+//
+//			if (!CModelInfo::GetModelInfo(modelId)->m_nRefCount && CStreaming::IsModelLoaded(modelId))
+//			{
+//				ScriptCommand(&release_model, modelId);
+//			}
 
 		}
 	}
@@ -1465,17 +1465,17 @@ void ScrSetPlayerObjectMaterial(RPCParameters* rpcParams)
 	{
 		modelId = 18631;
 	}
-	if (!pGame->IsModelLoaded(modelId))
-	{
-		pGame->RequestModel(modelId);
-		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(modelId)) sleep(1);
-	}
-
-	if (!CModelInfo::GetModelInfo(modelId)->m_nRefCount && pGame->IsModelLoaded(modelId))
-	{
-		ScriptCommand(&release_model, modelId);
-	}
+//	if (!CStreaming::IsModelLoaded(modelId))
+//	{
+//		CStreaming::RequestModel(modelId);
+//		CStreaming::LoadAllRequestedModels(false);
+//		while (!CStreaming::IsModelLoaded(modelId)) sleep(1);
+//	}
+//
+//	if (!CModelInfo::GetModelInfo(modelId)->m_nRefCount && CStreaming::IsModelLoaded(modelId))
+//	{
+//		ScriptCommand(&release_model, modelId);
+//	}
 }
 
 void ScrSetVehicleZAngle(RPCParameters* rpcParams)

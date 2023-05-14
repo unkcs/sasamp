@@ -219,8 +219,8 @@ public class Notification {
                     br_title_text.setVisibility(View.GONE);
                     br_not_text2.setVisibility(View.VISIBLE);
                     br_not_text.setVisibility(View.GONE);
-                    br_not_view.setBackgroundResource(R.drawable.notify_success_bg);
-                    br_not_icon.setImageResource(R.drawable.notify_success);
+                    br_not_view.setBackgroundResource(R.drawable.notify_info_bg);
+                    br_not_icon.setImageResource(R.drawable.notify_info);
                     br_not_text2.setText(text);
                     break;
             }

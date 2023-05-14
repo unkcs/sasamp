@@ -10,7 +10,7 @@
 #include "CSettings.h"
 #include "java_systems/CSpeedometr.h"
 #include "java_systems/CDonate.h"
-#include "java_systems/CEditobject.h"
+#include "java_systems/ObjectEditor.h"
 #include "java_systems/CStyling.h"
 #include "java_systems/CTireShop.h"
 #include "java_systems/casino/Dice.h"
@@ -75,8 +75,8 @@ void CLoader::initJavaClasses(JavaVM* pjvm)
     CDonate::clazz = env->FindClass("com/liverussia/cr/gui/donate/Donate");
     CDonate::clazz = (jclass) env->NewGlobalRef( CDonate::clazz );
 
-    CEditobject::clazz = env->FindClass("com/liverussia/cr/gui/AttachEdit");
-    CEditobject::clazz = (jclass) env->NewGlobalRef( CEditobject::clazz );
+    CObjectEditor::clazz = env->FindClass("com/liverussia/cr/gui/AttachEdit");
+    CObjectEditor::clazz = (jclass) env->NewGlobalRef(CObjectEditor::clazz );
 
     CStyling::clazz = env->FindClass("com/liverussia/cr/gui/styling/Styling");
     CStyling::clazz = (jclass) env->NewGlobalRef( CStyling::clazz );

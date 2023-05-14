@@ -68,6 +68,35 @@ void CPlaceable::SetOrientation(float x, float y, float z) {
     m_matrix->GetPosition() += vecPos;
 }
 
+void CPlaceable::GetOrientationDeg(float& x, float& y, float& z) {
+    if (!m_matrix) {
+        z = m_placement.m_fHeading;
+        return;
+    }
+
+    m_matrix->ConvertToEulerAngles(&x, &y, &z, 21);
+
+    x = x * 57.295776 * -1.0;
+    y = y * 57.295776 * -1.0;
+    z = z * 57.295776 * -1.0;
+}
+
+void CPlaceable::GetOrientation(float& x, float& y, float& z) {
+    if (!m_matrix) {
+        z = m_placement.m_fHeading;
+        return;
+    }
+
+    x = asinf(GetForward().z);
+
+    float cosx = std::cosf(x);
+    float cosy = GetUp().z / cosx;
+    y = std::acosf(cosy);
+
+    float cosz = GetForward().y / cosx;
+    z = std::acosf(cosz);
+}
+
 void CPlaceable::SetHeading(float heading) {
     if (m_matrix)
         m_matrix->SetRotateZOnly(heading);
@@ -176,22 +205,6 @@ CMatrix& CPlaceable::GetMatrix() {
     }
 
     return *m_matrix;
-}
-
-void CPlaceable::GetOrientation(float& x, float& y, float& z) {
-    if (!m_matrix) {
-        z = m_placement.m_fHeading;
-        return;
-    }
-
-    x = asinf(GetForward().z);
-
-    float cosx = std::cosf(x);
-    float cosy = GetUp().z / cosx;
-    y = std::acosf(cosy);
-
-    float cosz = GetForward().y / cosx;
-    z = std::acosf(cosz);
 }
 
 void CPlaceable::FreeStaticMatrix() {

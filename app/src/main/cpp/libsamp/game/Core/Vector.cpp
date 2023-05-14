@@ -132,6 +132,13 @@ void CVector::operator+=(const CVector& right)
     z += right.z;
 }
 
+void CVector::operator+=(const float& right)
+{
+    x += right;
+    y += right;
+    z += right;
+}
+
 void CVector::operator-=(const CVector& right)
 {
     x -= right.x;

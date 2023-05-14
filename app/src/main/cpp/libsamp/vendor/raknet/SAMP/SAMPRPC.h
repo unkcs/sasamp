@@ -119,6 +119,7 @@ extern int RPC_ScrPlayerSpectateVehicle;
 extern int RPC_ScrRemoveComponent;
 extern int RPC_ScrForceSpawnSelection;
 extern int RPC_ScrAttachObjectToPlayer;
+extern int RPC_EditObject;
 extern int RPC_ScrInitMenu;
 extern int RPC_ScrShowMenu;
 extern int RPC_ScrHideMenu;

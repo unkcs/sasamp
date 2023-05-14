@@ -6,7 +6,7 @@
 #include "../CSettings.h"
 #include "../util/CJavaWrapper.h"
 #include "java_systems/CHUD.h"
-#include "java_systems/CEditobject.h"
+#include "java_systems/ObjectEditor.h"
 #include "../game/Entity/Ped/Ped.h"
 
 extern CGame *pGame;
@@ -17,6 +17,22 @@ int iNetModeNormalInCarSendRate		= NETMODE_INCAR_SENDRATE;
 int iNetModeFiringSendRate			= NETMODE_FIRING_SENDRATE;
 int iNetModeSendMultiplier 			= NETMODE_SEND_MULTIPLIER;
 
+void EditObject(RPCParameters *rpcParams) {
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	int iBitLength = rpcParams->numberOfBitsOfData;
+
+	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
+
+	bool isPlayerObject;
+	uint16_t Id;
+
+	bsData.Read(isPlayerObject);
+	bsData.Read(Id);
+
+	CObjectEditor::startEditObject(Id);
+
+	Log("RPC: EditObject %d", Id);
+}
 
 void EditAttachedObject(RPCParameters *rpcParams) {
 	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
@@ -28,7 +44,7 @@ void EditAttachedObject(RPCParameters *rpcParams) {
 
 	bsData.Read(index);
 
-	CEditobject::StartEditAttachedObject(index);
+	CObjectEditor::startEditPlayerAttach(index);
 
 	Log("RPC: EditAttachedObject %d", index);
 }
@@ -1040,7 +1056,7 @@ void UpdateScoresPingsIPs(RPCParameters* rpcParams)
 void RegisterRPCs(RakClientInterface* pRakClient)
 {
 	Log("Registering RPC's..");
-
+	pRakClient->RegisterAsRemoteProcedureCall(&RPC_EditObject, EditObject);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_EditAttachedObject, EditAttachedObject);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_InitGame, InitGame);
 	pRakClient->RegisterAsRemoteProcedureCall(&RPC_ServerJoin, ServerJoin);

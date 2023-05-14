@@ -169,7 +169,7 @@ uint32_t CLocalPlayer::GetCurrentAnimationIndexFlag()
 extern bool g_uiHeadMoveEnabled;
 
 #include "..//game/CWeaponsOutFit.h"
-#include "java_systems/CEditobject.h"
+#include "java_systems/ObjectEditor.h"
 #include "java_systems/casino/Chip.h"
 #include "java_systems/CAucContainer.h"
 #include "util/patch.h"
@@ -452,7 +452,7 @@ bool CLocalPlayer::Process()
 
 	if(CDialog::bIsShow || CDice::bIsShow || CTab::bIsShow || pGame->isAutoShopActive
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
-	   CMedic::bIsShow || CInventory::bIsToggle || !m_pPlayerPed->m_bIsSpawned || CEditobject::bIsToggle || CChip::bIsShow
+	   CMedic::bIsShow || CInventory::bIsToggle || !m_pPlayerPed->m_bIsSpawned || CObjectEditor::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
 	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow || CTheftAuto::bIsShow)
 	{

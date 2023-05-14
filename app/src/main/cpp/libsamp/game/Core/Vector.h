@@ -93,6 +93,7 @@ public:
     }
 
     void operator+=(const CVector& right);
+    void operator+=(const float& right);
     void operator-=(const CVector& right);
     void operator*=(const CVector& right);
     void operator*=(float multiplier);

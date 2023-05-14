@@ -200,6 +200,8 @@ void CObject::SetPos(float x, float y, float z)
 	}
 }
 
+
+
 void CObject::MoveTo(float fX, float fY, float fZ, float fSpeed, float fRotX, float fRotY, float fRotZ)
 {
 	RwMatrix mat;
@@ -292,7 +294,7 @@ void CObject::ProcessAttachToVehicle(CVehicle* pVehicle)
 {
 	if (GamePool_Object_GetAt(m_dwGTAId))
 	{
-		if (!ScriptCommand(&is_object_attached, m_dwGTAId))
+		if (!ScriptCommand(&is_object_attached, m_dwGTAId) || bNeedReAttach)
 		{
 			ScriptCommand(&attach_object_to_car, m_dwGTAId, pVehicle->m_dwGTAId, m_vecAttachedOffset.x,
 				m_vecAttachedOffset.y, m_vecAttachedOffset.z, m_vecAttachedRotation.x, m_vecAttachedRotation.y, m_vecAttachedRotation.z);
@@ -302,10 +304,21 @@ void CObject::ProcessAttachToVehicle(CVehicle* pVehicle)
 
 void CObject::InstantRotate(float x, float y, float z)
 {
-	if (GamePool_Object_GetAt(m_dwGTAId))
-	{
-		ScriptCommand(&set_object_rotation, m_dwGTAId, x, y, z);
-	}
+	x = DegreesToRadians(x);
+	y = DegreesToRadians(y);
+	z = DegreesToRadians(z);
+
+	// CPhysical::Remove
+	((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
+
+
+	m_pEntity->SetOrientation(x, y, z);
+
+	m_pEntity->UpdateRW();
+	m_pEntity->UpdateRwFrame();
+
+	// CPhysical::Add
+	((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
 }
 
 void CObject::StopMoving()
@@ -314,6 +327,21 @@ void CObject::StopMoving()
 	this->m_pEntity->ResetMoveSpeed();
 	this->m_pEntity->SetTurnSpeed(vec);
 	m_bIsMoving = false;
+}
+
+void CObject::SetRot(float &radX, float &radY, float &radZ)
+{
+	// CPhysical::Remove
+	((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x10)))(m_pEntity);
+
+
+	m_pEntity->SetOrientation(radX, radY, radZ);
+
+	m_pEntity->UpdateRW();
+	m_pEntity->UpdateRwFrame();
+
+	// CPhysical::Add
+	((void (*)(CEntityGta*))(*(uintptr_t*)(m_pEntity->vtable + 0x8)))(m_pEntity);
 }
 
 void CObject::GetRotation(float* pfX,float* pfY,float* pfZ)

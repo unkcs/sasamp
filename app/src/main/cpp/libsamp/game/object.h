@@ -33,6 +33,7 @@ public:
 	CVector		m_vecSubRotationTarget;
 	float		m_fDistanceToTargetPoint;
 	uint32_t		m_iStartMoveTick;
+	bool 		bNeedReAttach = false;
 
 	CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance);
 	~CObject();
@@ -55,4 +56,10 @@ public:
 	static float DistanceRemaining(RwMatrix *matPos, RwMatrix *m_matPositionTarget);
 
 	float RotaionRemaining(CVector &matPos, CVector &m_vecRot);
+
+	void InstantRotate(CVector &rad);
+
+	void SetRot(CVector &rad);
+
+    void SetRot(float &radX, float &radY, float &radZ);
 };

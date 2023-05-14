@@ -35,6 +35,7 @@ public:
     void SetOrientation(float x, float y, float z);
     void SetOrientation(CVector radians) { SetOrientation(radians.x, radians.y, radians.z); } // TODO: Replace method above with this
     void GetOrientation(float& x, float& y, float& z);
+    void GetOrientationDeg(float& x, float& y, float& z);
     void SetHeading(float heading);
     float GetHeading();
     bool IsWithinArea(float x1, float y1, float x2, float y2) const;

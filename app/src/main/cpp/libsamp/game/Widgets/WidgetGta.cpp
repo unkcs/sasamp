@@ -38,6 +38,9 @@ bool CWidget__IsTouched_hook(uintptr_t *thiz, CVector2D *pVecOut) {
 //    if(!CHUD::bIsShow)
 //        return false;
 
+    if(CHUD::bIsDisableControll)
+        return false;
+
     return CWidget__IsTouched(thiz, pVecOut);
 }
 
@@ -82,7 +85,7 @@ void CWidgetGta::init() {
     CWidgetGta::pWidgets = (uintptr_t *) (g_libGTASA + 0x00657E48);
 
     CHook::InlineHook(g_libGTASA, 0x00281398, &CWidgetRegionLook__Update_hook,&CWidgetRegionLook__Update);
-  //  CHook::InlineHook(g_libGTASA, 0x00274218, &CWidget__IsTouched_hook, &CWidget__IsTouched);
+    CHook::InlineHook(g_libGTASA, 0x00274218, &CWidget__IsTouched_hook, &CWidget__IsTouched);
     CHook::InlineHook(g_libGTASA, 0x00276510, &CWidgetButtonEnterCar__Draw_hook,&CWidgetButtonEnterCar__Draw);
     CHook::InlineHook(g_libGTASA, 0x00274AB4, &CWidgetButton__Update_hook, &CWidgetButton__Update);
    // CHook::SetUpHook(g_libGTASA + 0x00274748, (uintptr_t) CWidgetButton__Draw_hook,(uintptr_t *) &CWidgetButton__Draw);

@@ -454,7 +454,8 @@ bool CLocalPlayer::Process()
 	   || pGame->isCasinoWheelActive || !m_pPlayerPed || pGame->isRegistrationActive || pGame->isShopStoreActive ||
 	   CMedic::bIsShow || CInventory::bIsToggle || !m_pPlayerPed->m_bIsSpawned || CObjectEditor::bIsToggle || CChip::bIsShow
 	   || CAucContainer::bIsShow || CAdminRecon::bIsToggle || CHUD::bIsCamEditGui || CDailyReward::bIsShow ||
-	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow || CTheftAuto::bIsShow)
+	   CTechInspect::bIsShow || CBaccarat::bIsShow || m_pPlayerPed->IsDead() || CStyling::bIsShow || CTireShop::bIsShow || CTheftAuto::bIsShow
+	   || CHUD::bIsDisableControll)
 	{
 		needDrawableHud = false;
 	}

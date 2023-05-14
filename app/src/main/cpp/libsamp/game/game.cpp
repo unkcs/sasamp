@@ -92,13 +92,10 @@ uint32_t CGame::CreatePickup(int iModel, int iType, float fX, float fY, float fZ
 {
 	uint32_t hnd;
 
-	if(iModel > 0 && iModel < 20000)
-	{
-		auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
-    	if(dwModelArray[iModel] == nullptr)
-    		iModel = 18631;
-	}
-	else iModel = 18631;
+	auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
+	if(dwModelArray[iModel] == nullptr)
+		iModel = 18631; // вопросик
+
 
 //	if(!ScriptCommand(&is_model_available, iModel))
 //	{

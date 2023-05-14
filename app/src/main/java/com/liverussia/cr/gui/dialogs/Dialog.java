@@ -112,6 +112,7 @@ public class Dialog {
 //        }
         activity.runOnUiThread(() -> {
             if(content.length() < 2) {
+                Utils.HideLayout(this.mMainLayout, false);
                 return;
             }
             clearDialogData();

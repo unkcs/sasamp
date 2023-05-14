@@ -82,8 +82,6 @@ void CDialog::rpcShowPlayerDialog(RPCParameters *rpcParams)
     stringCompressor->DecodeString(szBuff, 4096, &bsData);
     cp1251_to_utf8(info, szBuff);
 
-    if(wDialogID < 0) return;
-
     CDialog::show(wDialogID, byteDialogStyle, title, info, button1, button2);
 }
 

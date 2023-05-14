@@ -3,6 +3,7 @@
 #include "../net/netgame.h"
 #include "util/patch.h"
 #include "Timer.h"
+#include "game/Models/ModelInfo.h"
 #include <cmath>
 
 extern CGame *pGame;
@@ -22,6 +23,10 @@ float subAngle(float a1, float a2)
 
 CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, CVector vecRot, float fDrawDistance)
 {
+	auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
+	if(dwModelArray[iModel] == nullptr)
+		iModel = 18631; // вопросик
+
 	uint32_t dwRetID 	= 0;
 	m_pEntity 			= 0;
 	m_dwGTAId 			= 0;

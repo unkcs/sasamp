@@ -80,7 +80,6 @@ public:
 	CVehicle(int iType, float fPosX, float fPosY, float fPosZ, float fRotation = 0.0f, bool bSiren = false);
 	~CVehicle();
 
-	void LinkToInterior(int iInterior);
 	void SetColor(int iColor1, int iColor2);
 
 	void SetHealth(float fHealth);

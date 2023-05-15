@@ -166,7 +166,7 @@ bool CVehiclePool::New(NEW_VEHICLE *pNewVehicle)
 
 		// interior
 		if(pNewVehicle->byteInterior > 0)
-			LinkToInterior(pNewVehicle->VehicleID, pNewVehicle->byteInterior);
+			m_pVehicles[pNewVehicle->VehicleID]->m_pVehicle->SetInterior(pNewVehicle->byteInterior);
 
 		// damage status
 		if(pNewVehicle->dwPanelDamageStatus ||
@@ -275,12 +275,6 @@ int CVehiclePool::FindNearestToLocalPlayerPed()
 	}
 
 	return ClosetSoFar;
-}
-
-void CVehiclePool::LinkToInterior(VEHICLEID VehicleID, int iInterior)
-{
-	if(m_bVehicleSlotState[VehicleID])
-		m_pVehicles[VehicleID]->LinkToInterior(iInterior);
 }
 
 void CVehiclePool::NotifyVehicleDeath(VEHICLEID VehicleID)

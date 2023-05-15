@@ -876,6 +876,7 @@ void InjectHooks()
 	//CTaskManager::InjectHooks();
 	CPedIntelligence::InjectHooks();
 	CWorld::InjectHooks();
+	CGame::InjectHooks();
 }
 
 void InstallSpecialHooks()

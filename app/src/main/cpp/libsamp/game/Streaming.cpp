@@ -89,3 +89,7 @@ void CStreaming::LoadAllRequestedModels(bool bPriorityRequestsOnly)
 {
     ((void (*) (bool))(g_libGTASA + 0x00294CB4 + 1))(bPriorityRequestsOnly);
 }
+
+void CStreaming::RemoveBuildingsNotInArea(int areaCode) {
+    ((void (*) (int))(g_libGTASA + 0x0028FBAC + 1))(areaCode);
+}

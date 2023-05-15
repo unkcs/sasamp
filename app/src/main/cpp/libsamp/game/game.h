@@ -29,6 +29,8 @@
 class CGame
 {
 public:
+	static void InjectHooks();
+
 	CGame();
 	~CGame() {};
 
@@ -57,8 +59,6 @@ public:
 	uint32_t CreatePickup(int iModel, int iType, float fX, float fY, float fZ, int *unk);
 
 	static float FindGroundZForCoord(float x, float y, float z);
-	// 0.3.7
-	static uint8_t GetActiveInterior();
 	// 0.3.7
 	static void SetWorldTime(int iHour, int iMinute);
 	// 0.3.7
@@ -137,6 +137,7 @@ public:
 
 	void exitGame();
 
+	inline static int32 currArea;
 private:
 	bool aToggleStatusHUD[HUD_MAX];
 	CCamera* 		m_pGameCamera;

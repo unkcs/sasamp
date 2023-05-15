@@ -2436,10 +2436,12 @@ bool ProcessLocalCommands(const char str[])
 	}
 	if (strcmp(str, "/crash") == 0)
 	{
-		uint32_t *sg = nullptr;
-		auto gg = (CVehicle*)sg;
-		gg->m_bShadow = true;
-		//CStyling::show(0, 0, prices);
+//		uint32_t *sg = nullptr;
+//		auto gg = (CVehicle*)sg;
+//		gg->m_bShadow = true;
+		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
+
+		pPed->m_pPed->RemoveFromVehicle();
 		return true;
 	}
 	if (strstr(str, "/vin "))

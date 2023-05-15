@@ -180,24 +180,3 @@ void CActorPed::ApplyAnimation(char* szAnimName, char* szAnimFile, float fDelta,
 //		ScriptCommand(&put_actor_in_car2, m_dwGTAId, iVehicleID, iSeat);
 //	}
 //}
-
-void CActorPed::RemoveFromVehicle()
-{
-	if (!m_pPed) return;
-	if (!GamePool_Ped_GetAt(m_dwGTAId)) return;
-
-	if (m_pPed->bInVehicle)
-	{
-		auto pos = m_pPed->GetPosition();
-		RemoveFromVehicleAndPutAt(pos.x, pos.y, pos.z);
-	}
-}
-
-void CActorPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
-{
-	if (!GamePool_Ped_GetAt(m_dwGTAId)) return;
-	if (m_pPed && m_pPed->bInVehicle)
-	{
-		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, fX, fY, fZ);
-	}
-}

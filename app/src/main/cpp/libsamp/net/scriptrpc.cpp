@@ -49,20 +49,22 @@ void ScrSetGravity(RPCParameters *rpcParams)
 void ScrSetPlayerPos(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrSetPlayerPos");
-	unsigned char * Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
 
-	CLocalPlayer *pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
+	CVector pos;
+	bsData.Read(pos.x);
+	bsData.Read(pos.y);
+	bsData.Read(pos.z);
 
-	CVector vecPos;
-	bsData.Read(vecPos.x);
-	bsData.Read(vecPos.y);
-	bsData.Read(vecPos.z);
+	auto pPed = pGame->FindPlayerPed();
 
-	if(pLocalPlayer)
-		pLocalPlayer->GetPlayerPed()->m_pPed->SetPosn(vecPos);
+	if(pPed->IsInVehicle())
+		pPed->m_pPed->RemoveFromVehicleAndPutAt(pos);
+	else
+		pPed->m_pPed->SetPosn(pos);
 }
 
 void ScrSetCameraPos(RPCParameters *rpcParams)
@@ -404,7 +406,7 @@ void ScrSetPlayerInterior(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrSetPlayerInterior");
 
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 
@@ -412,7 +414,7 @@ void ScrSetPlayerInterior(RPCParameters *rpcParams)
 	uint8_t byteInterior;
 	bsData.Read(byteInterior);
 
-	pGame->FindPlayerPed()->SetInterior(byteInterior);	
+	pGame->FindPlayerPed()->m_pPed->SetInterior(byteInterior, true);
 }
 
 void ScrSetMapIcon(RPCParameters *rpcParams)
@@ -583,7 +585,7 @@ void ScrPutPlayerInVehicle(RPCParameters *rpcParams)
 	if(!pVehiclepool)return;
 
 	if(pPed->IsInVehicle()) {
-		pPed->RemoveFromVehicle();
+		pPed->m_pPed->RemoveFromVehicle();
 	}
 	CVehicle *pVehicle = pNetGame->GetVehiclePool()->GetAt(vehicleid);
 	if(!pVehicle)return;
@@ -679,7 +681,7 @@ void ScrLinkVehicle(RPCParameters *rpcParams)
 {
 	Log("RPC: ScrLinkVehicle");
 
-	unsigned char* Data = reinterpret_cast<unsigned char *>(rpcParams->input);
+	auto Data = reinterpret_cast<unsigned char *>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
 	RakNet::BitStream bsData((unsigned char*)Data,(iBitLength/8)+1,false);
@@ -689,8 +691,12 @@ void ScrLinkVehicle(RPCParameters *rpcParams)
 	bsData.Read(VehicleID);
 	bsData.Read(byteInterior);
 
-	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
-	pVehiclePool->LinkToInterior(VehicleID, (int)byteInterior);
+	auto pVehiclePool = pNetGame->GetVehiclePool();
+	auto pVehicle = pVehiclePool->GetAt(VehicleID);
+
+	if(!pVehicle || !pVehicle->m_pVehicle)return;
+
+	pVehicle->m_pVehicle->SetInterior(byteInterior);
 }
 
 void ScrRemovePlayerFromVehicle(RPCParameters *rpcParams)

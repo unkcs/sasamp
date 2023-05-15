@@ -42,8 +42,6 @@ public:
 	void ApplyCommandTask(char* a2, int a4, int a5, int a6, CVector* a7, char a8, float a9, int a10, int a11, char a12);
 	CVehicleGta* GetGtaVehicle();
 	// 0.3.7
-	void RemoveFromVehicleAndPutAt(float fX, float fY, float fZ);
-	// 0.3.7
 	int SetInitialState();
 	// 0.3.7
 	void SetHealth(float fHealth);
@@ -58,8 +56,6 @@ public:
 
 	bool IsAnimationPlaying(char* szAnimName);
 	void ClearAllTasks();
-
-	void SetInterior(uint8_t byteID, bool refresh = true);
 
 	void PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat);
 	void EnterVehicle(int iVehicleID, bool bPassenger);
@@ -182,6 +178,4 @@ public:
 	void TurnBody();
 
     void ClearLook();
-
-	void RemoveFromVehicle();
 };

@@ -241,11 +241,9 @@ bool CLocalPlayer::Process()
 
 		m_pPlayerPed->ProcessSpecialAction(m_pPlayerPed->m_iCurrentSpecialAction);
 
-
 		// handle interior changing
-		uint8_t byteInterior = pGame->GetActiveInterior();
-		if (byteInterior != m_byteCurInterior)
-			UpdateRemoteInterior(byteInterior);
+		if (CGame::currArea != m_byteCurInterior)
+			UpdateRemoteInterior(CGame::currArea);
 
 		// The new regime for adjusting sendrates is based on the number
 		// of players that will be effected by this update. The more players
@@ -944,7 +942,7 @@ void CLocalPlayer::ProcessSpectating()
 
 	if(m_byteSpectateType == SPECTATE_TYPE_NONE)
 	{
-		GetPlayerPed()->RemoveFromVehicleAndPutAt(0.0f, 0.0f, 10.0f);
+		GetPlayerPed()->m_pPed->RemoveFromVehicle();
 		pGame->GetCamera()->SetPosition(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f);
 		pGame->GetCamera()->LookAtPoint(60.0f, 60.0f, 50.0f, 2);
 		m_bSpectateProcessed = true;

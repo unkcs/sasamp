@@ -58,8 +58,6 @@ public:
 
 	int FindNearestToLocalPlayerPed();
 
-	void LinkToInterior(VEHICLEID VehicleID, int iInterior);
-
 	void NotifyVehicleDeath(VEHICLEID VehicleID);
 
 	bool			m_bIsActive[MAX_VEHICLES];

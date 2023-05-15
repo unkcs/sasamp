@@ -194,6 +194,8 @@ public:
     float GetDistanceFromLocalPlayerPed() const;
 
     float GetDistanceFromPoint(float X, float Y, float Z) const;
+
+    void SetInterior(int interiorId, bool needRefresh = false);
 };
 static_assert(sizeof(CEntityGta) == 0x38);
 #pragma pack(pop)

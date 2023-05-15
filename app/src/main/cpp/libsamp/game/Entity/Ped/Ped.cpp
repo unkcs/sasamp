@@ -10,6 +10,41 @@ void CPedGta::GetBonePosition(RwV3d *posn, uint32 boneTag, bool bCalledFromCamer
     CHook::CallFunction<void>(g_libGTASA + 0x00436590 + 1, this, posn, boneTag, bCalledFromCamera);
 }
 
+/*
+ * Выбросит на указанные координаты. Без анимации!
+ */
+void CPedGta::RemoveFromVehicleAndPutAt(const CVector& pos)
+{
+    if (!this) return;
+    if(!pVehicle) return;
+
+    m_pIntelligence->m_TaskMgr.FlushImmediately();
+
+    SetPosn(pos);
+
+    UpdateRW();
+    UpdateRwFrame();//? надо ли
+}
+
+/*
+ * Выбросит левее от машины. Без анимации!
+ */
+void CPedGta::RemoveFromVehicle()
+{
+    if (!this) return;
+    if(!pVehicle) return;
+
+    m_pIntelligence->m_TaskMgr.FlushImmediately();
+
+    auto pos = pVehicle->GetPosition();
+    float ang = pVehicle->GetHeading();
+
+    pos.x += (1.0f * sin(ang + 4.71239f)); // 270 deg
+    pos.y += (1.0f * sin(-ang + 4.71239f));
+
+    SetPosn(pos);
+}
+
 void CPedGta::StopNonPartialAnims() {
     for (auto assoc = RpAnimBlendClumpGetFirstAssociation(m_pRwClump); assoc; assoc = RpAnimBlendGetNextAssociation(assoc)) {
         if ((assoc->m_nFlags & ANIMATION_PARTIAL) == 0) {

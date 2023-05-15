@@ -204,16 +204,16 @@ Java_com_nvidia_devtech_NvEventQueueActivity_onRegisterChooseSkinClick(JNIEnv *p
             g_pJavaWrapper->ChangeRegisterSkin(g_pJavaWrapper->RegisterSkinValue));
 
     if (pPlayer->IsInVehicle())
-        pPlayer->RemoveFromVehicleAndPutAt(-82.9753, 966.7605, 1597.9788);
+        pPlayer->m_pPed->RemoveFromVehicleAndPutAt({-82.9753, 966.7605, 1597.9788});
     else
         pPlayer->m_pPed->SetPosn(-82.9753, 966.7605, 1597.9788);
 
     pPlayer->ForceTargetRotation(90.0f);
 
     if (pPlayer && pCamera) {
-        pPlayer->SetInterior(2);
         pCamera->SetPosition(-85.068267, 966.699584, 1598.421997, 0.0f, 0.0f, 0.0f);
         pCamera->LookAtPoint(-80.124114, 967.120971, 1597.807373, 2);
+        pPlayer->m_pPed->SetInterior(2, true);
     }
 }
 

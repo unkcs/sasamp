@@ -23,6 +23,28 @@ void CEntityGta::UpdateRwFrame()
     RwFrameUpdateObjects(static_cast<RwFrame*>(rwObjectGetParent(m_pRwObject)));
 }
 
+void CEntityGta::SetInterior(int interiorId, bool needRefresh)
+{
+    m_areaCode = static_cast<eAreaCodes>(interiorId);
+
+    if ( this == pGame->FindPlayerPed()->m_pPed )
+    {
+        CGame::currArea = interiorId;
+        CStreaming::RemoveBuildingsNotInArea(interiorId);
+
+//        //FIXME
+//        if(interiorId == 0) {
+//            CTimeCycle::StopExtraColour(0);
+//        }
+
+    }
+
+//    if(needRefresh) {
+//        auto pos = GetPosition();
+//        ScriptCommand(&refresh_streaming_at, pos.x, pos.y);
+//    }
+}
+
 void CEntityGta::UpdateRpHAnim() {
     if (const auto atomic = GetFirstAtomic(m_pRwClump)) {
         if (RpSkinGeometryGetSkin(RpAtomicGetGeometry(atomic)) && !m_bDontUpdateHierarchy) {

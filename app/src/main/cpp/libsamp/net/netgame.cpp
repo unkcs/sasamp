@@ -204,7 +204,7 @@ void CNetGame::Process() {
 
         if (pPlayer && pCamera) {
             if (pPlayer->IsInVehicle())
-                pPlayer->RemoveFromVehicleAndPutAt(314.0f, 160.0f, 39.0f);
+                pPlayer->m_pPed->RemoveFromVehicleAndPutAt({314.0f, 160.0f, 39.0f});
             else
                 pPlayer->m_pPed->SetPosn(314.0f, 160.0f, 39.0f);
 
@@ -1231,7 +1231,7 @@ void CNetGame::ShutDownForGameRestart() {
     CPlayerPed *pPlayerPed = pGame->FindPlayerPed();
     if (pPlayerPed) {
         //	pGame->RemovePlayer(pPlayerPed);
-        pPlayerPed->SetInterior(0, true);
+        pPlayerPed->m_pPed->SetInterior(0, true);
 //		//pPlayerPed->SetDead();
         pPlayerPed->SetArmour(0.0f);
     }

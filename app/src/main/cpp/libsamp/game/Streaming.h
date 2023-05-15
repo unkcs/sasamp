@@ -188,4 +188,5 @@ public:
     static bool IsModelLoaded(int32 model) { return ms_aInfoForModel[model].m_nLoadState == eStreamingLoadState::LOADSTATE_LOADED; }
 
     static void LoadAllRequestedModels(bool bPriorityRequestsOnly);
+    static void RemoveBuildingsNotInArea(int areaCode);
 };

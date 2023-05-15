@@ -686,7 +686,7 @@ void CRemotePlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync, uint32_t 
 
 		if(m_pPlayerPed->IsInVehicle())
 		{
-			m_pPlayerPed->RemoveFromVehicle();
+			m_pPlayerPed->m_pPed->RemoveFromVehicleAndPutAt(pofSync->vecPos);
 		}
 	}
 	m_dwLastRecvTick = GetTickCount();
@@ -711,7 +711,7 @@ void CRemotePlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync, uint32_t dw
 		m_pPlayerPed->PutDirectlyInVehicle(m_pCurrentVehicle, 0);
 	}
 	if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
-		m_pPlayerPed->RemoveFromVehicle();
+		m_pPlayerPed->m_pPed->RemoveFromVehicleAndPutAt(picSync->vecPos);
 	}
 
 	// -------------- TRAILER
@@ -774,7 +774,7 @@ void CRemotePlayer::StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync)
 		m_pPlayerPed->PutDirectlyInVehicle(m_pCurrentVehicle, m_byteSeatID);
 	}
 	if (m_pPlayerPed->GetCurrentVehicle() != m_pCurrentVehicle) {
-		m_pPlayerPed->RemoveFromVehicle();
+		m_pPlayerPed->m_pPed->RemoveFromVehicleAndPutAt(ppsSync->vecPos);
 	}
 
 	m_fCurrentHealth = ppsSync->bytePlayerHealth;
@@ -884,7 +884,7 @@ void CRemotePlayer::StateChange(BYTE byteNewState, BYTE byteOldState)
 		{
 			LocalVehicle = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(pLocalPlayerPed->GetGtaVehicle());
 			if(LocalVehicle == m_VehicleID) {
-				pLocalPlayerPed->RemoveFromVehicle();
+				pLocalPlayerPed->m_pPed->RemoveFromVehicle();
 				pGame->DisplayGameText("~r~Car Jacked~w~!",1000,5);
 			}
 		}

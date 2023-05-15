@@ -290,14 +290,6 @@ uint32_t CGame::CreateRadarMarkerIcon(int iMarkerType, float fX, float fY, float
 }
 
 // 0.3.7
-uint8_t CGame::GetActiveInterior()
-{
-	uint32_t dwRet;
-	ScriptCommand(&get_active_interior, &dwRet);
-	return (uint8_t)dwRet;
-}
-
-// 0.3.7
 void CGame::SetWorldTime(int iHour, int iMinute)
 {
 	*(uint8_t*)(g_libGTASA+0x8B18A4) = (uint8_t)iMinute;
@@ -458,6 +450,10 @@ extern uint8_t bGZ;
 void CGame::DrawGangZone(float fPos[], uint32_t dwColor)
 {
     (( void (*)(float*, uint32_t*, uint8_t))(g_libGTASA+0x3DE7F8+1))(fPos, &dwColor, bGZ);
+}
+
+void CGame::InjectHooks() {
+	CHook::Write(g_libGTASA + 0x005D0B1C, &CGame::currArea);
 }
 
 

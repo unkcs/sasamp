@@ -13,6 +13,7 @@
 #include "World.h"
 #include "game/Animation/AnimManager.h"
 #include "java_systems/CHUD.h"
+#include "game/Tasks/TaskTypes/TaskSimpleCarSetPedInAsDriver.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -111,7 +112,7 @@ CPlayerPed::~CPlayerPed()
 	{
 		FlushAttach();
 		if (m_pPed->bInVehicle) {
-			RemoveFromVehicleAndPutAt(100.0f, 100.0f, 20.0f);
+			m_pPed->RemoveFromVehicle();
 
 		//	ClearAllTasks();
 		}
@@ -541,42 +542,6 @@ CVehicleGta* CPlayerPed::GetGtaVehicle()
 }
 
 // 0.3.7
-void CPlayerPed::RemoveFromVehicle()
-{
-	if (!m_pPed) return;
-	if(!m_dwGTAId)return;
-	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
-		return;
-	}
-
-	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
-		return;
-	}
-	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
-
-	auto pos = m_pPed->GetPosition();
-
-	if(m_pPed && m_pPed->bInVehicle)
-		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, pos.x, pos.y, pos.z);
-}
-
-void CPlayerPed::RemoveFromVehicleAndPutAt(float fX, float fY, float fZ)
-{
-	if (!m_pPed) return;
-	if(!m_dwGTAId)return;
-	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
-		return;
-	}
-
-	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
-		return;
-	}
-	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
-	if(m_pPed && m_pPed->bInVehicle)
-		ScriptCommand(&remove_actor_from_car_and_put_at, m_dwGTAId, fX, fY, fZ);
-}
-
-// 0.3.7
 int CPlayerPed::SetInitialState()
 {
 	Log("CPlayerPed::SetInitialState()1");
@@ -617,57 +582,17 @@ float CPlayerPed::GetArmour()
 	return m_pPed->m_fArmour;
 }
 
-void CPlayerPed::SetInterior(uint8_t byteID, bool refresh)
-{
-	if(!m_pPed) return;
-
-	if (!GamePool_Ped_GetAt(m_dwGTAId))
-	{
-		return;
-	}
-
-	if(m_pPed && m_bytePlayerNumber != 0) {
-		ScriptCommand(&link_actor_to_interior, m_dwGTAId, byteID);
-	}
-	else {
-		ScriptCommand(&select_interior, byteID);
-		ScriptCommand(&link_actor_to_interior, m_dwGTAId, byteID);
-
-		if(refresh) {
-			RwMatrix mat;
-			this->GetMatrix(&mat);
-			ScriptCommand(&refresh_streaming_at, mat.pos.x, mat.pos.y);
-		}
-	}
-}
-
 void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
-{
-
-	if(!pVehicle) return;
-	if (!GamePool_Vehicle_GetAt(pVehicle->m_dwGTAId)) return;
-
-	if (!m_pPed) return;
-	if(!m_dwGTAId)return;
-	if (!IsValidGamePed(m_pPed) || !GamePool_Ped_GetAt(m_dwGTAId)) {
-		return;
-	}
-	if (CUtil::IsGameEntityArePlaceable(m_pPed)) {
-		return;
-	}
-	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
-
-
-    CVehicleGta *gtaVehicle = pVehicle->m_pVehicle;
-
-    if(gtaVehicle->fHealth == 0.0f) return;
+{ // need replace CCarEnterExit::SetPedInCarDirect
+	if(!pVehicle || !pVehicle->m_pVehicle) return;
 
 	Log("PutDirectlyInVehicle");
 
 	if(iSeat == 0)
 	{
-		//if(pVehicle->m_pVehicle->pDriver) return;
-		ScriptCommand(&TASK_WARP_CHAR_INTO_CAR_AS_DRIVER, m_dwGTAId, pVehicle->m_dwGTAId);
+		CTaskSimpleCarSetPedInAsDriver task{ pVehicle->m_pVehicle };
+		task.m_bWarpingInToCar = true;
+		task.ProcessPed(m_pPed);
 	}
 	else
 	{

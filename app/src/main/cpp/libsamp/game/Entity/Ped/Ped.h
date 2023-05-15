@@ -311,6 +311,10 @@ public:
     CWeapon& GetWeaponInSlot(size_t slot) noexcept { return m_aWeapons[slot]; }
     CWeapon& GetWeaponInSlot(eWeaponSlot slot) noexcept { return m_aWeapons[(size_t)slot]; }
     CWeapon& GetActiveWeapon() noexcept { return GetWeaponInSlot(m_nActiveWeaponSlot); }
+
+    void RemoveFromVehicleAndPutAt(const CVector &pos);
+
+    void RemoveFromVehicle();
 };
 
 

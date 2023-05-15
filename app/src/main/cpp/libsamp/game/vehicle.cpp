@@ -343,15 +343,6 @@ VEHICLEID CVehicle::getSampId()
 	return pNetGame->GetVehiclePool()->FindIDFromGtaPtr(m_pVehicle);
 }
 
-void CVehicle::LinkToInterior(int iInterior)
-{
-   // test();
-	if (GamePool_Vehicle_GetAt(m_dwGTAId))
-	{
-		ScriptCommand(&link_vehicle_to_interior, m_dwGTAId, iInterior);
-	}
-}
-
 void CVehicle::SetColor(int iColor1, int iColor2)
 {
 	if (iColor1 >= 256 || iColor1 < 0)

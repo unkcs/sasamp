@@ -83,7 +83,6 @@ CLocalPlayer::~CLocalPlayer()
 void CLocalPlayer::ResetAllSyncAttributes()
 {
 	m_byteCurInterior = 0;
-	m_LastVehicle = INVALID_VEHICLE_ID;
 	m_bInRCMode = false;
 }
 
@@ -102,9 +101,9 @@ void CLocalPlayer::SendStatsUpdate()
 
 void CLocalPlayer::CheckWeapons()
 {
-	if (m_pPlayerPed->IsInVehicle()) return;
+	RakNet::BitStream bs;
+	bs.Write((uint8_t) ID_WEAPONS_UPDATE);
 
-	//uint8_t byteCurWep = m_pPlayerPed->GetCurrentWeapon();
 	bool bMSend = false;
 
 	for (int i = 0; i < MAX_WEAPONS_SLOT; i++) {
@@ -115,22 +114,16 @@ void CLocalPlayer::CheckWeapons()
 			m_byteLastWeapon[i] = m_pPlayerPed->m_pPed->m_aWeapons[i].m_nType;
 			m_dwLastAmmo[i] = m_pPlayerPed->m_pPed->m_aWeapons[i].m_nTotalAmmo;
 
+			bs.Write((uint8_t) 	i);
+			bs.Write((uint8_t) 	m_byteLastWeapon[i]);
+			bs.Write((uint16_t) m_dwLastAmmo[i]);
+
             bMSend = true;
-			break;
 		}
 
 	}
 	if (bMSend) {
-		RakNet::BitStream bsWeapons;
-		bsWeapons.Write((BYTE) ID_WEAPONS_UPDATE);
-
-		for (int i = 0; i < MAX_WEAPONS_SLOT; i++) {
-
-			bsWeapons.Write((uint8_t) i);
-			bsWeapons.Write((uint8_t) m_byteLastWeapon[i]);
-			bsWeapons.Write((uint16_t) m_dwLastAmmo[i]);
-		}
-		pNetGame->GetRakClient()->Send(&bsWeapons, HIGH_PRIORITY, RELIABLE, 0);
+		pNetGame->GetRakClient()->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 	}
 }
 uint32_t CLocalPlayer::GetCurrentAnimationIndexFlag()
@@ -192,8 +185,6 @@ bool CLocalPlayer::Process()
 	m_pPlayerPed->SetCurrentAim(caAim);
 	caAim = m_pPlayerPed->GetCurrentAim();
 
-
-
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 	uint32_t dwThisTick = GetTickCount();
 
@@ -217,8 +208,6 @@ bool CLocalPlayer::Process()
 			if (m_pPlayerPed->IsAPassenger()) {
 
 				SendInCarFullSyncData();
-				m_LastVehicle = pNetGame->GetVehiclePool()->FindIDFromGtaPtr(
-						m_pPlayerPed->GetGtaVehicle());
 			}
 
 			m_pPlayerPed->SetHealth(0.0f);
@@ -287,27 +276,13 @@ bool CLocalPlayer::Process()
 				m_dwLastHeadUpdate = dwThisTick;
 			}
 
-			if (m_CurrentVehicle != INVALID_VEHICLE_ID) {
-				m_LastVehicle = m_CurrentVehicle;
-				m_CurrentVehicle = INVALID_VEHICLE_ID;
-			}
+			m_CurrentVehicle = INVALID_VEHICLE_ID;
 
 			if ((dwThisTick - m_dwLastSendTick) > (unsigned int) GetOptimumOnFootSendRate() + iNumberOfPlayersInLocalRange) {
 				m_dwLastSendTick = GetTickCount();
 				SendOnFootFullSyncData();
 			}
 
-			if ((dwThisTick - m_dwLastSendTick) > (unsigned int) GetOptimumOnFootSendRate() + iNumberOfPlayersInLocalRange ||
-				LocalPlayerKeys.bKeys[ePadKeys::KEY_WALK] ||
-				LocalPlayerKeys.bKeys[ePadKeys::KEY_YES] ||
-				LocalPlayerKeys.bKeys[ePadKeys::KEY_NO] ||
-				LocalPlayerKeys.bKeys[ePadKeys::KEY_CTRL_BACK]) {
-
-				m_dwLastSendTick = GetTickCount();
-				// Log("[DEBUG] Send Packet Key RPC");
-				SendOnKeyFullSyncData();
-
-			}
 			// TIMING FOR ONFOOT AIM SENDS
 			uint16_t lrAnalog, udAnalog;
 			uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
@@ -535,10 +510,7 @@ void CLocalPlayer::SendExitVehicleNotification(VEHICLEID VehicleID)
 	CVehicle* pVehicle = pVehiclePool->GetAt(VehicleID);
 
 	if(pVehicle)
-	{ 
-		if (!m_pPlayerPed->IsAPassenger()) 
-			m_LastVehicle = VehicleID;
-
+	{
 		bsSend.Write(VehicleID);
 		pNetGame->GetRakClient()->RPC(&RPC_ExitVehicle,&bsSend,HIGH_PRIORITY,RELIABLE_SEQUENCED,0,false, UNASSIGNED_NETWORK_ID, NULL);
     }
@@ -578,7 +550,7 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 
 	CGame::RefreshStreamingAt(pos.x,pos.y);
 
-	m_pPlayerPed->RestartIfWastedAt(pos, rot);
+	//m_pPlayerPed->RestartIfWastedAt(pos, rot);
 	//m_pPlayerPed->SetModelIndex(skin);
 	//m_pPlayerPed->ClearAllWeapons();
 	m_pPlayerPed->ResetDamageEntity();
@@ -588,7 +560,10 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 	// CCamera::Fade
 	CHook::WriteMemory(g_libGTASA + 0x36EA2C, "\x70\x47", 2); // bx lr
 
-	m_pPlayerPed->m_pPed->SetPosn(pos);
+	if(m_pPlayerPed->IsInVehicle())
+		m_pPlayerPed->m_pPed->RemoveFromVehicleAndPutAt(pos);
+	else
+		m_pPlayerPed->m_pPed->SetPosn(pos);
 
 	m_pPlayerPed->ForceTargetRotation(rot);
 
@@ -636,15 +611,6 @@ uint8_t CLocalPlayer::DetermineNumberOfPlayersInLocalRange()
 	return iNumPlayersInRange;
 }
 #include "..//chatwindow.h"
-
-void CLocalPlayer::SendOnKeyFullSyncData()
-{
-	RakNet::BitStream bsPlayerSync;
-	//RwMatrix matPlayer;
-
-
-	uint8_t exKeys = GetPlayerPed()->GetExtendedKeys();
-}
 
 
 void CLocalPlayer::SendOnFootFullSyncData()
@@ -822,7 +788,6 @@ void CLocalPlayer::SendPassengerFullSyncData()
 	uint16_t lrAnalog, udAnalog;
 	uint16_t wKeys = m_pPlayerPed->GetKeys(&lrAnalog, &udAnalog);
 	PASSENGER_SYNC_DATA psSync;
-	RwMatrix mat;
 
 	psSync.VehicleID = m_pPlayerPed->GetCurrentSampVehicleID();
 
@@ -840,8 +805,7 @@ void CLocalPlayer::SendPassengerFullSyncData()
 
 	psSync.byteCurrentWeapon = m_pPlayerPed->GetCurrentWeapon();//m_pPlayerPed->GetCurrentWeapon();
 
-	m_pPlayerPed->GetMatrix(&mat);
-	psSync.vecPos = mat.pos;
+	psSync.vecPos = m_pPlayerPed->m_pPed->GetPosition();
 
 	// send
 	if((GetTickCount() - m_dwLastUpdatePassengerData) > 500 || memcmp(&m_PassengerData, &psSync, sizeof(PASSENGER_SYNC_DATA)))

@@ -14,6 +14,8 @@
 #include "game/Animation/AnimManager.h"
 #include "java_systems/CHUD.h"
 #include "game/Tasks/TaskTypes/TaskSimpleCarSetPedInAsDriver.h"
+#include "game/Plugins/RpAnimBlendPlugin/RpAnimBlend.h"
+#include "CarEnterExit.h"
 
 extern CGame* pGame;
 extern CNetGame *pNetGame;
@@ -519,19 +521,14 @@ BYTE CPlayerPed::GetCurrentWeapon()
 }
 
 // 0.3.7
-bool CPlayerPed::IsAPassenger()
+bool CPlayerPed::IsAPassenger() const
 {
 	//if(m_pPed->m_nPedState == PEDSTATE_PASSENGER) return true;
-	if(m_pPed->pVehicle && m_pPed->bInVehicle)
-	{
-		CVehicleGta *pVehicle = (CVehicleGta *)m_pPed->pVehicle;
-
-		if(	pVehicle->pDriver != m_pPed ||
-               pVehicle->m_nModelIndex == TRAIN_PASSENGER ||
-               pVehicle->m_nModelIndex == TRAIN_FREIGHT )
+	if(m_pPed->bInVehicle) {
+		auto pVehicle = m_pPed->pVehicle;
+		if (pVehicle && pVehicle->pDriver != m_pPed)
 			return true;
 	}
-
 	return false;
 }
 
@@ -588,17 +585,16 @@ void CPlayerPed::PutDirectlyInVehicle(CVehicle *pVehicle, int iSeat)
 
 	Log("PutDirectlyInVehicle");
 
-	if(iSeat == 0)
-	{
-		CTaskSimpleCarSetPedInAsDriver task{ pVehicle->m_pVehicle };
-		task.m_bWarpingInToCar = true;
-		task.ProcessPed(m_pPed);
-	}
-	else
-	{
-		iSeat--;
-		ScriptCommand(&put_actor_in_car2, m_dwGTAId, pVehicle->m_dwGTAId, iSeat);
-	}
+    CCarEnterExit::SetPedInCarDirect(m_pPed, pVehicle->m_pVehicle, iSeat);
+//	if(iSeat == 0)
+//	{
+//		CTaskSimpleCarSetPedInAsDriver{ pVehicle->m_pVehicle, false }.ProcessPed(m_pPed);
+//	}
+//	else
+//	{
+//		iSeat--;
+//		ScriptCommand(&put_actor_in_car2, m_dwGTAId, pVehicle->m_dwGTAId, iSeat);
+//	}
 }
 
 void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
@@ -785,7 +781,17 @@ void CPlayerPed::ClearAllTasks()
 void CPlayerPed::ClearAnimations()
 {
 	m_pPed->ResetMoveSpeed();
-	m_pPed->m_matrix->UpdateRW();
+
+	auto pos = m_pPed->GetPosition();
+	if(IsInVehicle())
+		m_pPed->RemoveFromVehicleAndPutAt(pos);
+	else
+		m_pPed->SetPosn(pos);
+
+	m_pPed->UpdateRW();
+	m_pPed->UpdateRwFrame();
+	//RpAnimBlendClumpRemoveAllAssociations(m_pPed->m_pRwClump);
+
 	Log("ClearAnimations");
 }
 

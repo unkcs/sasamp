@@ -119,7 +119,7 @@ typedef struct _PASSENGER_SYNC_DATA
 		struct
 		{
 			uint8_t byteSeatFlags : 2;
-			uint8_t byteDriveBy : 6;
+			uint8_t byteDriveBy : 2;
 			uint8_t byteCurrentWeapon : 6;
 			uint8_t AdditionalKey : 2;
 		};
@@ -176,7 +176,6 @@ public:
 	bool IsInRCMode() { return m_bInRCMode; };
 
 	void SendOnFootFullSyncData();
-	void SendOnKeyFullSyncData();
 	void SendInCarFullSyncData();
 	void SendPassengerFullSyncData();
 	void SendAimSyncData();
@@ -193,7 +192,6 @@ public:
 	bool				m_bSpectateProcessed;
 
 	VEHICLEID			m_CurrentVehicle;
-	VEHICLEID 			m_LastVehicle;
 	bool				m_bIsActive;
 	PLAYERID 			lastDamageId;
 	eWeaponType 		lastDamageWeap;

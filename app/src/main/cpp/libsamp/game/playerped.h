@@ -37,7 +37,7 @@ public:
 	// 0.3.7
 	bool IsInVehicle();
 	// 0.3.7
-	bool IsAPassenger();
+	bool IsAPassenger() const;
 	// 0.3.7
 	void ApplyCommandTask(char* a2, int a4, int a5, int a6, CVector* a7, char a8, float a9, int a10, int a11, char a12);
 	CVehicleGta* GetGtaVehicle();

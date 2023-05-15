@@ -277,17 +277,6 @@ int CVehiclePool::FindNearestToLocalPlayerPed()
 	return ClosetSoFar;
 }
 
-void CVehiclePool::NotifyVehicleDeath(VEHICLEID VehicleID)
-{
-	if(pNetGame->GetPlayerPool()->GetLocalPlayer()->m_LastVehicle != VehicleID) return;
-	Log("CVehiclePool::NotifyVehicleDeath");
-
-	RakNet::BitStream bsDeath;
-	bsDeath.Write(VehicleID);
-	pNetGame->GetRakClient()->RPC(&RPC_VehicleDestroyed, &bsDeath, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, NULL);
-	pNetGame->GetPlayerPool()->GetLocalPlayer()->m_LastVehicle = INVALID_VEHICLE_ID;
-}
-
 void CVehiclePool::AssignSpecialParamsToVehicle(VEHICLEID VehicleID, uint8_t byteObjective, uint8_t byteDoorsLocked)
 {
 	if(!GetSlotState(VehicleID)) return;

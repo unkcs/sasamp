@@ -337,6 +337,8 @@ void CKeyBoard::Close()
 #include "game/Models/ModelInfo.h"
 #include "game/cHandlingDataMgr.h"
 #include "game/Timer.h"
+#include "game/Tasks/TaskTypes/TaskSimpleCarSetPedInAsDriver.h"
+#include "game/Tasks/TaskTypes/TaskSimpleCarSetPedInAsPassenger.h"
 
 bool CKeyBoard::OnTouchEvent(int type, bool multi, int x, int y)
 {
@@ -2440,8 +2442,13 @@ bool ProcessLocalCommands(const char str[])
 //		auto gg = (CVehicle*)sg;
 //		gg->m_bShadow = true;
 		auto pPed = pNetGame->GetPlayerPool()->GetLocalPlayer()->m_pPlayerPed;
+		auto vehId = pNetGame->GetVehiclePool()->FindNearestToLocalPlayerPed();
+		auto pVeh = pNetGame->GetVehiclePool()->GetAt(vehId);
 
-		pPed->m_pPed->RemoveFromVehicle();
+		CTaskSimpleCarSetPedInAsPassenger task{ pVeh->m_pVehicle, (eTargetDoor)1 };
+		task.m_bWarpingInToCar = true;
+		task.ProcessPed(pPed->m_pPed);
+
 		return true;
 	}
 	if (strstr(str, "/vin "))

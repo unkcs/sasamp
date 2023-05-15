@@ -5,6 +5,7 @@
 #include "Tasks/TaskTypes/TaskSimpleCarSetPedInAsDriver.h"
 #include "game/Enums/eTargetDoor.h"
 #include "util/patch.h"
+#include "game/Tasks/TaskTypes/TaskSimpleCarSetPedInAsPassenger.h"
 
 /*
 const float& CCarEnterExit::ms_fMaxSpeed_CanDragPedOut = *(float*)0x0;
@@ -13,24 +14,23 @@ const float& CCarEnterExit::ms_fMaxSpeed_PlayerCanDragPedOut = *(float*)0x0;
 
 bool CCarEnterExit::SetPedInCarDirect(CPedGta* ped, CVehicleGta* vehicle, int32 doorId, bool bAsDriver) {
     Log("CCarEnterExit::SetPedInCarDirect");
-//    if (bAsDriver) {
-//        // Warp ped into vehicle
-//        CTaskSimpleCarSetPedInAsDriver task{ vehicle };
-//        task.m_bWarpingInToCar = true;
-//        task.ProcessPed(ped);
-//
-////        // And make them drive
-////        ped->GetTaskManager().SetTask(new CTaskComplexCarDriveWander{ vehicle, vehicle->m_autoPilot.m_nCarDrivingStyle, (float)vehicle->m_autoPilot.m_nCruiseSpeed }, TASK_PRIMARY_PRIMARY);
-//
-//        return true;
-//    }
-//
-//    // Warp ped into vehicle
-//    {
-//      //  CTaskSimpleCarSetPedInAsPassenger task{ vehicle, (eTargetDoor)doorId };
-//       // task.m_bWarpingInToCar = true;
-//       // task.ProcessPed(ped);
-//    }
+    if (doorId == 0) {
+        // Warp ped into vehicle
+        CTaskSimpleCarSetPedInAsDriver task{ vehicle };
+        task.m_bWarpingInToCar = true;
+        task.ProcessPed(ped);
+
+//        // And make them drive
+//        ped->GetTaskManager().SetTask(new CTaskComplexCarDriveWander{ vehicle, vehicle->m_autoPilot.m_nCarDrivingStyle, (float)vehicle->m_autoPilot.m_nCruiseSpeed }, TASK_PRIMARY_PRIMARY);
+
+        return true;
+    }
+    // Warp ped into vehicle
+    {
+        CTaskSimpleCarSetPedInAsPassenger task{ vehicle, (eTargetDoor)doorId };
+        task.m_bWarpingInToCar = true;
+        task.ProcessPed(ped);
+    }
 //
 //    if (vehicle->IsBike()) {
 //      //  ped->GetTaskManager().SetTask(new CTaskComplexCarDrive{ vehicle, false }, TASK_PRIMARY_PRIMARY);

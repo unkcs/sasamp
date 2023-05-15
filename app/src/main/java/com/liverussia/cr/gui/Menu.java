@@ -17,11 +17,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -61,40 +59,16 @@ public class Menu {
                 index = dataDialogMenu.getId();
                 view.startAnimation(anim);
                 new Handler().postDelayed(() -> {
-                    if (false == true) {
-                        Update(true);
-                    } else {
-                        try {
-                            NvEventQueueActivity.getInstance().sendRPC(1, String.valueOf(index).getBytes("windows-1251"), index);
-                          //  Toast.makeText(activity, String.valueOf(index), Toast.LENGTH_SHORT).show();
-                            close();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 300);
-            }, this.dataDialogMenuArrayList, recyclerView, mRootView, 4);
-            return;
-        }
-        setDialogMenu();
-        this.menuTitle.setText("Общение");
-        setDataInRecyclerView((dataDialogMenu, view) -> {
-            index = dataDialogMenu.getId();
-            view.startAnimation(anim);
-            new Handler().postDelayed(() -> {
-                if (index == 13) {
-                    Update(false);
-                } else {
                     try {
                         NvEventQueueActivity.getInstance().sendRPC(1, String.valueOf(index).getBytes("windows-1251"), index);
+                      //  Toast.makeText(activity, String.valueOf(index), Toast.LENGTH_SHORT).show();
                         close();
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                }
-
-            }, 300);
-        }, this.dataDialogMenuArrayList, recyclerView, mRootView, 3);
+                }, 300);
+            }, this.dataDialogMenuArrayList, recyclerView, mRootView, 4);
+        }
     }
 
     public void ShowMenu()
@@ -105,26 +79,17 @@ public class Menu {
 
     private void setMenu() {
         this.dataDialogMenuArrayList.clear();
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(1, R.drawable.br_menu_compass, "Навигатор"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(2, R.drawable.br_menu_menu, "Меню"));
+        this.dataDialogMenuArrayList.add(new DataDialogMenu(1, R.drawable.menu_icon_gps, "Навигатор"));
+        this.dataDialogMenuArrayList.add(new DataDialogMenu(2, R.drawable.menu_icon_mm, "Меню"));
        // this.dataDialogMenuArrayList.add(new DataDialogMenu(3, R.drawable.br_menu_chat, "Общение"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(3, R.drawable.br_menu_bag, "Инвентарь"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(4, R.drawable.br_menu_anim, "Анимации"));
+        this.dataDialogMenuArrayList.add(new DataDialogMenu(3, R.drawable.menu_icon_inv, "Инвентарь"));
+        this.dataDialogMenuArrayList.add(new DataDialogMenu(4, R.drawable.menu_icon_anim, "Анимации"));
         this.dataDialogMenuArrayList.add(new DataDialogMenu(5, R.drawable.br_menu_ruble, "Донат"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(6, R.drawable.br_menu_car, "Автомобили"));
+        this.dataDialogMenuArrayList.add(new DataDialogMenu(6, R.drawable.menu_icon_car, "Автомобили"));
         this.dataDialogMenuArrayList.add(new DataDialogMenu(7, R.drawable.menu_report_icon, "Жалоба"));
         this.dataDialogMenuArrayList.add(new DataDialogMenu(8, R.drawable.menu_promocode_icon, "Промокод"));
         this.dataDialogMenuArrayList.add(new DataDialogMenu(9, R.drawable.players_icon, "Игроки"));
-    }
-
-    private void setDialogMenu() {
-        this.dataDialogMenuArrayList.clear();
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(10, R.drawable.menu_passport, "Передать паспорт"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(11, R.drawable.menu_med, "Передать мед.карту"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(12, R.drawable.menu_paper, "Передать лицензии"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(13, R.drawable.menu_lic, "Передать ПТС"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(14, R.drawable.menu_exchange, "Совершить обмен"));
-        this.dataDialogMenuArrayList.add(new DataDialogMenu(15, R.drawable.menu_back, "Назад"));
+        this.dataDialogMenuArrayList.add(new DataDialogMenu(10, R.drawable.menu_icon_family, "Семья"));
     }
 
     private void setDataInRecyclerView(DialogMenuAdapter.OnUserClickListener onUserClickListener, ArrayList<DataDialogMenu> arrayList, RecyclerView recyclerView, final View view, int i) {

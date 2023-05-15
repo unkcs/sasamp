@@ -1,6 +1,7 @@
 package com.liverussia.cr.gui.tab;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -87,7 +88,7 @@ public class Tab {
     }
 
     public void close(Activity activity, View view) {
-        ((InputMethodManager) activity.getSystemService("input_method")).hideSoftInputFromWindow(view.getWindowToken(), 0);
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
         Utils.HideLayout(mInputLayout, true);
         onTabClose();
         this.mPlayersList.getRecycledViewPool().clear();

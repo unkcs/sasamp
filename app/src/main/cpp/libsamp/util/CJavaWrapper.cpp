@@ -131,6 +131,10 @@ Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIEnv *pEnv, jobject thiz,
                     CTab::toggle();
                     break;
                 }
+                case 10: {
+                    pNetGame->SendChatCommand("/fammenu");
+                    break;
+                }
             }
         case 2:
             switch (action) {

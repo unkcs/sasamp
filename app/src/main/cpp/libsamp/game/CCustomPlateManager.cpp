@@ -226,12 +226,10 @@ RwTexture* CCustomPlateManager::createRuPlate(char* szNumber, char* szRegion)
 	ImGui::NewFrame();
 
 	// num
-	ImGui::GetBackgroundDrawList()->AddText(nullptr, 41.f, ImVec2(22, 8), ImColor(IM_COL32_BLACK), utfNum,
-											nullptr, 160.f);
+	ImGui::GetBackgroundDrawList()->AddText(nullptr, 40.f, ImVec2(21, 8), ImColor(IM_COL32_BLACK), utfNum);
 
 	// region
-	ImGui::GetBackgroundDrawList()->AddText(nullptr, 28.f, ImVec2(207, 10), ImColor(IM_COL32_BLACK), szRegion,
-											nullptr, 160.f);
+	ImGui::GetBackgroundDrawList()->AddText(nullptr, 28.f, ImVec2(207, 10), ImColor(IM_COL32_BLACK), szRegion);
 
 
 	ImGui::Render();

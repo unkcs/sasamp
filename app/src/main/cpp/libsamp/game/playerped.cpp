@@ -723,17 +723,17 @@ void CPlayerPed::TogglePlayerControllable(bool bToggle, bool isTemp)
 	}
 	if (m_pPed->vtable == (g_libGTASA + 0x5C7358)) return;
 
-	CHUD::bIsDisableControll = !bToggle;
-//	if(!bToggle)
-//	{
-//		ScriptCommand(&toggle_player_controllable, m_bytePlayerNumber, 0);
-//		ScriptCommand(&lock_actor, m_dwGTAId, 1);
-//	}
-//	else if(lToggle)
-//	{
-//		ScriptCommand(&toggle_player_controllable, m_bytePlayerNumber, 1);
-//		ScriptCommand(&lock_actor, m_dwGTAId, 0);
-//	}
+	//CHUD::bIsDisableControll = !bToggle;
+	if(!bToggle)
+	{
+		ScriptCommand(&toggle_player_controllable, m_bytePlayerNumber, 0);
+		ScriptCommand(&lock_actor, m_dwGTAId, 1);
+	}
+	else if(lToggle)
+	{
+		ScriptCommand(&toggle_player_controllable, m_bytePlayerNumber, 1);
+		ScriptCommand(&lock_actor, m_dwGTAId, 0);
+	}
 
 }
 

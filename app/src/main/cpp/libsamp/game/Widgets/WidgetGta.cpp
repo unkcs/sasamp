@@ -38,8 +38,6 @@ bool CWidget__IsTouched_hook(uintptr_t *thiz, CVector2D *pVecOut) {
 //    if(!CHUD::bIsShow)
 //        return false;
 
-    if(CHUD::bIsDisableControll)
-        return false;
 
     return CWidget__IsTouched(thiz, pVecOut);
 }

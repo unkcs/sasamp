@@ -28,7 +28,6 @@ public:
     static bool bIsTouchCameraButt;
     static bool bIsCamEditGui;
     static jobject thiz;
-    static inline bool bIsDisableControll = false;
 
     static void UpdateWanted();
 

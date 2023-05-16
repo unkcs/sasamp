@@ -816,6 +816,7 @@ void CVehicle::setPlate(ePlateType type, char* szNumber, char* szRegion)
 		RwTextureDestroy(pPlateTexture);
 		pPlateTexture = nullptr;
 	}
+	//pPlateTexture = CCustomPlateManager::createTexture(NUMBERPLATE_TYPE_RUS, "B330OP", szRegion);
 	pPlateTexture = CCustomPlateManager::createTexture(type, szNumber, szRegion);
 }
 

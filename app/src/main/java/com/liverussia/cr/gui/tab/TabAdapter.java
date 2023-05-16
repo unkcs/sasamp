@@ -2,37 +2,55 @@ package com.liverussia.cr.gui.tab;
 
 import static com.liverussia.cr.core.Samp.activity;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.animation.AnimationUtils;
 
 import com.liverussia.cr.R;
-import com.liverussia.launcher.utils.MainUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
-public class TabAdapter extends RecyclerView.Adapter implements Filterable {
+public class TabAdapter extends RecyclerView.Adapter {
 
-    private List<PlayerData> mPlayerData;
-    private List<PlayerData> mPlayerDataCopy;
+    List<PlayerData> activelist = new ArrayList<>();
+    List<PlayerData> savedlist = new ArrayList<>();
 
-    public TabAdapter(List<PlayerData> playerData) {
-        this.mPlayerData = playerData;
-        this.mPlayerDataCopy = playerData;
+    public TabAdapter() {
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void updateSearch(String str) {
+        if(str.isEmpty())
+            activelist = savedlist;
+        else
+            activelist = activelist.stream()
+                    .filter(employee -> employee.getName().equalsIgnoreCase(str))
+                    .collect(Collectors.toList()
+                    );
+
+        notifyDataSetChanged();
+    }
+
+    public void addItem(PlayerData item) {
+        activelist.add(item);
+        savedlist.add(item);
+        notifyItemInserted(activelist.size()-1);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.hassle_tab_item, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tab_item, parent, false));
     }
 
     @Override
@@ -41,7 +59,10 @@ public class TabAdapter extends RecyclerView.Adapter implements Filterable {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        PlayerData data = this.mPlayerData.get(position);
+        PlayerData data = activelist.get(position);
+
+        holder.name.setTextColor(data.color);
+
         holder.id.setText(String.valueOf(data.getId()));
         holder.name.setText(data.getName());
         holder.level.setText(String.valueOf(data.getLevel()));
@@ -53,37 +74,9 @@ public class TabAdapter extends RecyclerView.Adapter implements Filterable {
 
     @Override
     public int getItemCount() {
-        return this.mPlayerData.size();
+        return activelist.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            public Filter.FilterResults performFiltering(CharSequence charSequence) {
-                String input = charSequence.toString();
-                List<PlayerData> newPlayersDataList = new ArrayList<>();
-                if (input.isEmpty()) {
-                    newPlayersDataList = mPlayerDataCopy;
-                } else {
-                    for (PlayerData playersData : mPlayerDataCopy) {
-                        if (playersData.getName().toLowerCase().contains(input.toLowerCase())) {
-                            newPlayersDataList.add(playersData);
-                        }
-                    }
-                }
-                Filter.FilterResults filterResults = new Filter.FilterResults();
-                filterResults.values = newPlayersDataList;
-                return filterResults;
-            }
-
-            @Override
-            public void publishResults(CharSequence charSequence, Filter.FilterResults filterResults) {
-                mPlayerData = (List) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView id;

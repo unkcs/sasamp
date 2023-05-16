@@ -5,14 +5,14 @@
     xmlns:aapt="http://schemas.android.com/aapt">
     <item>
         <shape>
-
+            <corners android:radius="@dimen/_5sdp"/>
             <gradient
-                android:startColor="#99000000"
-                android:endColor="#ff003752"
+                android:startColor="#B3000000"
+                android:endColor="#B3003752"
                 android:angle="45.0"
                 android:type="linear"
                 android:centerX="79.99999%"
-                android:centerColor="#bb000000" />
+                android:centerColor="#CC000000" />
         </shape>
     </item>
 </layer-list>

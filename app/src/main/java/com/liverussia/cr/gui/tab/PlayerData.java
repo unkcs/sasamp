@@ -1,16 +1,20 @@
 package com.liverussia.cr.gui.tab;
 
+import android.graphics.Color;
+
 public class PlayerData {
     int mID;
     int mLevel;
     String mName;
     int mPing;
+    int color;
 
-    public PlayerData(int id, String name, int level, int ping) {
+    public PlayerData(int id, int color, String name, int level, int ping) {
         this.mID = id;
         this.mName = name;
         this.mLevel = level;
         this.mPing = ping;
+        this.color = color;
     }
 
     public int getId() {

@@ -16,26 +16,28 @@ extern CNetGame* pNetGame;
 extern CGame* pGame;
 extern CGUI* pGUI;
 
-jobject CTab::thiz = nullptr;
+void CTab::show() {
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
 
-bool CTab::bIsShow = false;
+    if(!CTab::thiz) {
+        jmethodID constructor = env->GetMethodID(clazz, "<init>", "()V");
+        CTab::thiz = env->NewObject(clazz, constructor);
+        CTab::thiz = env->NewGlobalRef(CTab::thiz);
 
-void CTab::toggle()
-{
-    CTab::bIsShow = !CTab::bIsShow;
-    if (CTab::bIsShow)
-    {
-      //  TabUpdate();
-
-        // Get player list
         pNetGame->UpdatePlayerScoresAndPings();
-
     }
+    CTab::bIsShow = true;
+}
+
+void CTab::hide() {
+    JNIEnv* env = g_pJavaWrapper->GetEnv();
+
+    jmethodID method = env->GetMethodID(clazz, "close", "()V");
+    env->CallVoidMethod(CTab::thiz, method);
+
 }
 
 void CTab::update() {
-    // Get player list
-   // pNetGame->UpdatePlayerScoresAndPings();
 
     CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -57,23 +59,6 @@ void CTab::update() {
     }
 
     //Show Window
-    CTab::show();
-}
-
-
-void CTab::show()
-{
-    JNIEnv* env = g_pJavaWrapper->GetEnv();
-
-    if (!env)
-    {
-        Log("No env");
-        return;
-    }
-    jclass Tab = env->GetObjectClass(CTab::thiz);
-
-    jmethodID show = env->GetMethodID(Tab, "show", "()V");
-    env->CallVoidMethod(CTab::thiz, show);
 }
 
 void CTab::setStat(int id, char name[], int score, int ping) {
@@ -86,25 +71,32 @@ void CTab::setStat(int id, char name[], int score, int ping) {
         return;
     }
 
-    jclass Tab = env->GetObjectClass(CTab::thiz);
-    jmethodID setStat = env->GetMethodID(Tab, "setStat", "(ILjava/lang/String;II)V");
+    jmethodID setStat = env->GetMethodID(clazz, "setStat", "(IILjava/lang/String;II)V");
 
 
     jstring jPlayerName = env->NewStringUTF( name );
 
-    env->CallVoidMethod(CTab::thiz, setStat, id, jPlayerName, score, ping);
+    uint32_t color;
+    if(id == pNetGame->GetPlayerPool()->GetLocalPlayerID())
+        color = pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerColor();
+    else
+        color = pNetGame->GetPlayerPool()->GetAt(id)->GetPlayerColor();
+
+    if(color == 0) color = 0xffffffff;
+    CRGBA gg;
+    gg.Set(color);
+    gg = gg.ToRGB();
+
+    env->CallVoidMethod(CTab::thiz, setStat, id, (jint)gg.ToIntARGB(), jPlayerName, score, ping);
+
     env->DeleteLocalRef(jPlayerName);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_liverussia_cr_gui_tab_Tab_onTabClose(JNIEnv *env, jobject thiz) {
-    CTab::toggle();
-}
+    CTab::bIsShow = false;
 
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_liverussia_cr_gui_tab_Tab_initTab(JNIEnv *env, jobject thiz) {
-    CTab::thiz = env->NewGlobalRef(thiz);
+    env->DeleteGlobalRef(CTab::thiz);
+    CTab::thiz = nullptr;
 }

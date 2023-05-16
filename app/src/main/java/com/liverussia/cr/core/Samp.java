@@ -91,7 +91,6 @@ public class Samp extends GTASA implements SimpleDialog.OnDialogResultListener
         new HudManager(this);
         new AucContainer(this);
         new DailyReward(this);
-        new Tab(this);
         new Casino(this);
         binder = new Binder();
     }

@@ -387,7 +387,7 @@ bool CRemotePlayer::Spawn(uint8_t byteTeam, unsigned int iSkin, CVector *vecPos,
 
 	if(pPlayer)
 	{
-		if(dwColor != 0) SetPlayerColor(dwColor);
+		SetPlayerColor(dwColor);
 
 		if(m_dwMarkerID)
 		{

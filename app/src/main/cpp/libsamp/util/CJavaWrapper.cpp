@@ -128,7 +128,7 @@ Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIEnv *pEnv, jobject thiz,
                     break;
                 }
                 case 9: {
-                    CTab::toggle();
+                    CTab::show();
                     break;
                 }
                 case 10: {

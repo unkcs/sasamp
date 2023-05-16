@@ -5,14 +5,18 @@
 
 static class CTab {
 public:
-    static void toggle();
-    static void update();
-    static bool bIsShow;
-    static jobject thiz;
+    inline static jobject   thiz    = nullptr;
+    inline static jclass    clazz   = nullptr;
+    inline static bool      bIsShow = false;
 
+public:
+    static void update();
     static void show();
 
+
     static void setStat(int id, char *name, int score, int ping);
+
+    static void hide();
 };
 
 

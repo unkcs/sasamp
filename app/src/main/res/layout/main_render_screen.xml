@@ -54,7 +54,7 @@
 
         <include layout="@layout/casino_lucky_wheel" />
 
-        <include layout="@layout/hassle_tab" />
+        <include layout="@layout/tab" />
 
         <include layout="@layout/furniture_factory" />
 

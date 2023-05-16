@@ -2393,7 +2393,11 @@ bool ProcessLocalCommands(const char str[])
 
 	if (strcmp(str, "/tab") == 0)
 	{
-		CTab::toggle();
+		if(CTab::bIsShow)
+			CTab::hide();
+		else
+			CTab::show();
+
 		return true;
 	}
 

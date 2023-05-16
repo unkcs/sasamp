@@ -16,6 +16,7 @@
 #include "java_systems/casino/Dice.h"
 #include "java_systems/CTheftAuto.h"
 #include "java_systems/casino/Baccarat.h"
+#include "java_systems/CTab.h"
 
 void InitBASSFuncs();
 void CLoader::loadBassLib()
@@ -68,6 +69,9 @@ void CLoader::initJavaClasses(JavaVM* pjvm)
 {
     JNIEnv* env = nullptr;
     pjvm->GetEnv((void**)& env, JNI_VERSION_1_6);
+
+    CTab::clazz = env->FindClass("com/liverussia/cr/gui/tab/Tab");
+    CTab::clazz = (jclass) env->NewGlobalRef( CTab::clazz );
 
     CSpeedometr::clazz = env->FindClass("com/liverussia/cr/gui/Speedometer");
     CSpeedometr::clazz = (jclass) env->NewGlobalRef( CSpeedometr::clazz );

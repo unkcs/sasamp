@@ -192,7 +192,6 @@ public:
 	bool				m_bSpectateProcessed;
 
 	VEHICLEID			m_CurrentVehicle;
-	bool				m_bIsActive;
 	PLAYERID 			lastDamageId;
 	eWeaponType 		lastDamageWeap;
 

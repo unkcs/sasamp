@@ -78,7 +78,7 @@ void CRemotePlayer::Process()
 {
 	CPlayerPool *pPool = pNetGame->GetPlayerPool();
 
-	RwMatrix matPlayer, matVehicle;
+	RwMatrix matVehicle;
 
 	if(IsActive())
 	{

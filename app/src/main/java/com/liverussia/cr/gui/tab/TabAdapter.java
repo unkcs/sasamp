@@ -25,17 +25,13 @@ public class TabAdapter extends RecyclerView.Adapter {
     List<PlayerData> activelist = new ArrayList<>();
     List<PlayerData> savedlist = new ArrayList<>();
 
-    public TabAdapter() {
-
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void updateSearch(String str) {
         if(str.isEmpty())
             activelist = savedlist;
         else
-            activelist = activelist.stream()
-                    .filter(employee -> employee.getName().equalsIgnoreCase(str))
+            activelist = savedlist.stream()
+                    .filter(employee -> employee.getName().toLowerCase().contains(str.toLowerCase()))
                     .collect(Collectors.toList()
                     );
 

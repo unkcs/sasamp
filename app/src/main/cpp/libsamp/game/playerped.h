@@ -126,8 +126,6 @@ public:
 public:
 	CPedGta*	m_pPed;
 	bool 		m_bIsSpawned{false};
-	bool 		m_bIsSpawnCd{false};
-	uint32_t 	m_iLastSpawnTime{};
 	uint8_t		m_bytePlayerNumber;
 	uint32_t	m_dwArrow;
 	bool lToggle;

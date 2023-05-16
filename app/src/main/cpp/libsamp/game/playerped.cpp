@@ -1405,7 +1405,6 @@ void CPlayerPed::SetMoveAnim(int iAnimGroup)
 // 0.3.7
 bool CPlayerPed::IsDead()
 {
-	
 	if(!m_pPed) return true;
 	if(m_pPed->m_fHealth > 0.0f) return false;
 	return true;

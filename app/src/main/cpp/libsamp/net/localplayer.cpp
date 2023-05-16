@@ -43,7 +43,6 @@ extern bool bUsedPlayerSlots[];
 CLocalPlayer::CLocalPlayer()
 {
 	m_pPlayerPed = pGame->FindPlayerPed();
-	m_bIsActive = false;
 	m_bIsWasted = false;
 
 	m_bInRCMode = false;
@@ -188,18 +187,15 @@ bool CLocalPlayer::Process()
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 	uint32_t dwThisTick = GetTickCount();
 
-	if(m_pPlayerPed->m_bIsSpawnCd) {
-		if(dwThisTick > (m_pPlayerPed->m_iLastSpawnTime + 5000) )
-			m_pPlayerPed->m_bIsSpawnCd = false;
-	}
-	if(m_bIsActive && m_pPlayerPed) {
+	if(m_pPlayerPed) {
+
 		if (m_pPlayerPed->drunk_level) {
 			m_pPlayerPed->drunk_level--;
 			ScriptCommand(&SET_PLAYER_DRUNKENNESS, m_pPlayerPed->m_bytePlayerNumber,
 						  m_pPlayerPed->drunk_level / 100);
 		}
 		// handle dead
-		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH || m_pPlayerPed->IsDead()) {
+		if (!m_bIsWasted && m_pPlayerPed->IsDead()) {
 			ToggleSpectating(false);
 			m_pPlayerPed->FlushAttach();
 			// reset tasks/anims
@@ -214,7 +210,6 @@ bool CLocalPlayer::Process()
 			m_pPlayerPed->SetDead();
 			sendDeath();
 
-			m_bIsActive = false;
 			m_bIsWasted = true;
 
 			return true;
@@ -438,7 +433,7 @@ bool CLocalPlayer::Process()
 
 	CHUD::toggleAll(needDrawableHud, needDrawableChat);
 
-    if(m_bIsSpectating && !m_bIsActive)
+    if(m_bIsSpectating)
     {
         ProcessSpectating();
         return true;
@@ -567,9 +562,7 @@ bool CLocalPlayer::Spawn(const CVector pos, float rot)
 	m_pPlayerPed->ForceTargetRotation(rot);
 
 	m_bIsWasted = false;
-	m_bIsActive = true;
-	m_pPlayerPed->m_bIsSpawnCd = true;
-	m_pPlayerPed->m_iLastSpawnTime = GetTickCount();
+
 //	RakNet::BitStream bsSendSpawn;
 //	pNetGame->GetRakClient()->RPC(&RPC_Spawn, &bsSendSpawn, SYSTEM_PRIORITY,
 //		RELIABLE_SEQUENCED, 0, false, UNASSIGNED_NETWORK_ID, nullptr);
@@ -614,6 +607,7 @@ uint8_t CLocalPlayer::DetermineNumberOfPlayersInLocalRange()
 
 void CLocalPlayer::SendOnFootFullSyncData()
 {
+	Log("SendOnFootFullSyncData");
 	RakNet::BitStream bsPlayerSync;
 //	RwMatrix matPlayer;
 	CVector vecMoveSpeed = m_pPlayerPed->m_pPed->GetMoveSpeed();

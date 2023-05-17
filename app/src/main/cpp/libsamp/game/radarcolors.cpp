@@ -212,8 +212,6 @@ void SetRadarColor(int nIndex, uint32_t dwColor)
 {
 	if(nIndex < sizeof(dwUseHudColors))
 		dwUseHudColors[nIndex] = dwColor;
-
-	Log("set color = %x", dwColor);
 }
 
 void GameResetRadarColors()

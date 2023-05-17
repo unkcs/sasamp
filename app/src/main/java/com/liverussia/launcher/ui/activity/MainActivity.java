@@ -337,6 +337,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startGame() {
+        File log = new File(getExternalFilesDir(null).toString() + "/log.txt");
+        log.delete();
+
         String nickname = NativeStorage.getClientProperty(NativeStorageElements.NICKNAME, this);
         String selectedServer = NativeStorage.getClientProperty(NativeStorageElements.SERVER, this);
 

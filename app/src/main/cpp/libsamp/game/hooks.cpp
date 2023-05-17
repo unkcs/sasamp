@@ -200,7 +200,7 @@ void Render2dStuff()
     RwRenderStateSet(rwRENDERSTATEDESTBLEND, (void*)6);
     RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void*)0);
 
-	( ( void(*)() )(g_libGTASA + 0x003D44CC + 1) )(); // РїСЂРёС†РµР»
+	( ( void(*)() )(g_libGTASA + 0x003D44CC + 1) )(); // прицел
 
 	if (CHUD::bIsShow) {
 		CHUD::UpdateHudInfo();
@@ -218,7 +218,7 @@ void Render2dStuff()
 			thiz[6] = CHUD::radarSize;
 		}
 
-		((void (*)()) (g_libGTASA + 0x003D4ED8 + 1))(); // СЂР°РґР°СЂ
+		((void (*)()) (g_libGTASA + 0x003D4ED8 + 1))(); // радар
 
 		//
 		if(!CKeyBoard::m_bEnable)
@@ -266,7 +266,7 @@ void MenuItem_add_hook(int r0, uintptr_t r1)
 	static bool bMenuInited = false;
 	char* name = *(char**)(r1+4);
 
-	// СѓР±РёСЂР°РµС‚ РєРЅРѕРїРєРё "Start Game" Рё "Stats" РІ РјРµРЅСЋ
+	// убирает кнопки "Start Game" и "Stats" в меню
 	if(g_bPlaySAMP && (
 		!strcmp(name, "FEP_STG") ||
 		!strcmp(name, "FEH_STA") ||
@@ -893,7 +893,7 @@ void InstallSpecialHooks()
 
 	Log("InstallSpecialHooks");
 
-	// texture РљСЂР°С€ РµСЃР»Рё СЃ С‚РµРєСЃС‚СѓСЂР°РјРё РєР°РєР°СЏ-С‚Рѕ С…СѓР№РЅСЏ
+	// texture Краш если с текстурами какая-то хуйня
 	CHook::InlineHook(g_libGTASA, 0x1bdc3c, &CTextureDatabaseRuntime__GetEntry_hook, &CTextureDatabaseRuntime__GetEntry);
 
 	//CHook::InlineHook(g_libGTASA, 0x0055B968, &TextureDatabaseRuntime__Load_hook, (uintptr_t*)&TextureDatabaseRuntime__Load);
@@ -1026,8 +1026,8 @@ void CPedDamageResponseCalculator__ComputeDamageResponse_hook(stPedDamageRespons
     if(pPlayerPool)
 	{
 
-        auto damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta *) thiz->pEntity); // РѕС‚РїСЂР°РІРёС‚РµР»СЊ СѓСЂРѕРЅР°
-		auto issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta *) pEntity); // РїРѕР»СѓС‡Р°С‚РµР»СЊ
+        auto damagedid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta *) thiz->pEntity); // отправитель урона
+		auto issuerid = pPlayerPool->FindRemotePlayerIDFromGtaPtr((CPedGta *) pEntity); // получатель
 
         PLAYERID byteLocalId = pPlayerPool->GetLocalPlayerID();
 
@@ -1760,7 +1760,7 @@ void CPed__ProcessEntityCollision_hook(CPedGta* thiz, CEntityGta* ent, void* col
 	g_iLastProcessedSkinCollision = thiz->m_nModelIndex;
 	g_iLastProcessedEntityCollision = ent->m_nModelIndex;
 
-//	if(ent->m_nType == ENTITY_TYPE_PED) { // РїСЂРѕС…РѕРґРёС‚СЊ СЃРєРІРѕР·СЊ С‡РµР»РѕРІ
+//	if(ent->m_nType == ENTITY_TYPE_PED) { // проходить сквозь челов
 //		return;
 //	}
 
@@ -2256,10 +2256,10 @@ void InstallHooks()
 	ms_fAspectRatio = (float*)(g_libGTASA + 0x0098525C);
     CHook::InlineHook(g_libGTASA, 0x3D44CC, &DrawCrosshair_hook, &DrawCrosshair);
 
-	// РЅРµ РїР°РґР°С‚СЊ СЃ РјРѕС‚РѕС†РёРєР»Р°
+	// не падать с мотоцикла
 	CHook::InlineHook(g_libGTASA, 0x00322FBC, &CEventKnockOffBike__AffectsPed_hook, &CEventKnockOffBike__AffectsPed);
 
-	// РЎС‚СЂРµР»СЊР±Р°
+	// Стрельба
 	CHook::InlineHook(g_libGTASA, 0x564E28, &CWeapon__ProcessLineOfSight_hook, &CWeapon__ProcessLineOfSight);
 	CHook::InlineHook(g_libGTASA, 0x55E090, &CBulletInfo_AddBullet_hook, &CBulletInfo_AddBullet);
 	CHook::InlineHook(g_libGTASA, 0x56668C, &CWeapon__FireSniper_hook, &CWeapon__FireSniper);
@@ -2383,23 +2383,23 @@ void InstallHooks()
 	CHook::Redirect(g_libGTASA, 0x5189C4, &CVehicle__GetVehicleLightsStatus_hook);
 	//CHook::NOP(g_libGTASA + 0x408AAA, 2);
 
-	//RpMaterialDestroy fix ? РЅРµ С‚РѕС‡РЅРѕ
+	//RpMaterialDestroy fix ? не точно
 	//CHook::InlineHook(g_libGTASA, 0x001E3C54, &RpMaterialDestroy_hook, &RpMaterialDestroy);
 	//CHook::InlineHook(g_libGTASA, 0x1B1808, &_RwTextureDestroy_hook, &_RwTextureDestroy);
 
-	//CRunningScript fix ? РЅРµ С‚РѕС‡РЅРѕ
+	//CRunningScript fix ? не точно
 	//CHook::InlineHook(g_libGTASA, 0x002E5400, &GivePedScriptedTask_hook, &GivePedScriptedTask);
 
-	// РќР°СЃС‚СЂРѕР№РєРё
+	// Настройки
 	CHook::NOP(g_libGTASA + 0x266460, 2); // Game - TrafficMode
 	CHook::NOP(g_libGTASA + 0x266496, 2); // Game - AimMode
 	CHook::NOP(g_libGTASA + 0x261A50, 2); // Main - Language
 	CHook::NOP(g_libGTASA + 0x2665EE, 2); // Game - SocialClub
 
-	// fix СЂР°Р·СЂРµС€РµРЅРёСЏ СЌРєСЂР°РЅР°
+	// fix разрешения экрана
 	CHook::InlineHook(g_libGTASA, 0x0026CE30, &MobileSettings__GetMaxResWidth_hook, &MobileSettings__GetMaxResWidth);
 
-	//СЂР°Р·РјС‹С‚РёРµ РЅР° СЃРєРѕСЂРѕСЃС‚Рё
+	//размытие на скорости
 	CHook::InlineHook(g_libGTASA, 0x005311D0, &CDraw__SetFOV_hook, &CDraw__SetFOV);
 
 	HookCPad();

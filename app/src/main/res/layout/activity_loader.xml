@@ -122,9 +122,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_weight="1.0"
+                android:text="Скачивание файлов игры.."
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_8sdp" />
 
             <TextView
                 android:id="@+id/loadingPercent"
@@ -133,19 +134,18 @@
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/roboto_medium"
                 android:gravity="center_horizontal"
-                android:text=""
+                android:text="0%"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_8sdp" />
         </LinearLayout>
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@id/progressBar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+            app:indicatorColor="@color/yellow"
             android:layout_width="match_parent"
             android:layout_height="18dp"
             android:max="100"
-            android:progress="0"
-            android:progressDrawable="@drawable/progressbar" />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/fileName"
@@ -155,9 +155,9 @@
             android:alpha="0.5"
             android:fontFamily="@font/pt_root_ui_medium"
             android:gravity="center_horizontal"
-            android:text=""
+            android:text="512kb/s"
             android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/_8sdp" />
     </LinearLayout>
 
     <TextView

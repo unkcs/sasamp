@@ -1,11 +1,21 @@
 package com.liverussia.launcher.ui.activity;
 
+import static com.liverussia.launcher.async.task.DownloadTask.calculateSize;
+import static com.liverussia.launcher.config.Config.DOWNLOAD_DIRECTORY_NAME;
+import static com.liverussia.launcher.config.Config.LIVE_RUSSIA_RESOURCE_SERVER_URL;
+import static com.liverussia.launcher.config.Config.UPDATED_APK_PATH;
+import static com.liverussia.launcher.domain.enums.DownloadType.LOAD_ALL_CACHE;
+
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,6 +31,26 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.liverussia.cr.BuildConfig;
 import com.liverussia.cr.R;
+import com.liverussia.cr.core.Samp;
+import com.liverussia.launcher.async.dto.response.FileInfo;
+import com.liverussia.launcher.async.dto.response.GameFileInfoDto;
+import com.liverussia.launcher.async.dto.response.LoaderSliderInfoResponseDto;
+import com.liverussia.launcher.async.service.NetworkService;
+import com.liverussia.launcher.async.task.DownloadTask;
+import com.liverussia.launcher.domain.LoaderSliderItemData;
+import com.liverussia.launcher.domain.enums.DownloadType;
+import com.liverussia.launcher.domain.enums.NativeStorageElements;
+import com.liverussia.launcher.domain.messages.ErrorMessage;
+import com.liverussia.launcher.domain.messages.InfoMessage;
+import com.liverussia.launcher.download.DownloadFullCache;
+import com.liverussia.launcher.service.ActivityService;
+import com.liverussia.launcher.service.impl.ActivityServiceImpl;
+import com.liverussia.launcher.storage.NativeStorage;
+import com.liverussia.launcher.ui.adapters.LoaderSliderAdapter;
+import com.liverussia.launcher.utils.FileUtils;
+import com.liverussia.launcher.utils.MainUtils;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,23 +63,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.liverussia.cr.core.Samp;
-import com.liverussia.launcher.domain.messages.InfoMessage;
-import com.liverussia.launcher.utils.MainUtils;
-import com.liverussia.launcher.async.task.DownloadTask;
-import com.liverussia.launcher.domain.LoaderSliderItemData;
-import com.liverussia.launcher.async.dto.response.LoaderSliderInfoResponseDto;
-import com.liverussia.launcher.domain.enums.DownloadType;
-import com.liverussia.launcher.domain.enums.NativeStorageElements;
-import com.liverussia.launcher.domain.messages.ErrorMessage;
-import com.liverussia.launcher.async.service.NetworkService;
-import com.liverussia.launcher.service.ActivityService;
-import com.liverussia.launcher.service.impl.ActivityServiceImpl;
-import com.liverussia.launcher.storage.NativeStorage;
-import com.liverussia.launcher.ui.adapters.LoaderSliderAdapter;
-
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.Getter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,12 +70,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.liverussia.launcher.config.Config.DOWNLOAD_DIRECTORY_NAME;
-import static com.liverussia.launcher.config.Config.LIVE_RUSSIA_RESOURCE_SERVER_URL;
-import static com.liverussia.launcher.config.Config.UPDATED_APK_PATH;
-
 public class LoaderActivity extends AppCompatActivity {
-
+    DownloadFullCache downloadFullCache;
     private final static String IS_AFTER_LOADING_KEY = "isAfterLoading";
     private final static String APK_DATA_TYPE = "application/vnd.android.package-archive";
     private final static String FILE_PROVIDER_EXTENSION = ".provider";
@@ -90,6 +99,7 @@ public class LoaderActivity extends AppCompatActivity {
         activityService = new ActivityServiceImpl();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +126,15 @@ public class LoaderActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onDestroy() {
+        if (downloadFullCache != null)
+            downloadFullCache.onExitApp();
+
+        super.onDestroy();
+       // Log.d("df", "onDestroy");
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -177,14 +196,35 @@ public class LoaderActivity extends AppCompatActivity {
     private void installGame(DownloadType type) {
         switch (type) {
             case LOAD_ALL_CACHE: {
-                downloadTask = new DownloadTask(this, progressBar);
-                downloadTask.setOnAsyncSuccessListener(this::performAfterLoadCacheSuccess);
-                downloadTask.setOnAsyncCriticalErrorListener(this::performAfterDownloadFailed);
-                downloadTask.download();
+                if(FileUtils.getFreeMemory() < 2000) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Ошибка!")
+                            .setMessage("Нужно минимум 2 GB свободной памяти")
+                            .setPositiveButton("Закрыть", (dialog, id) -> {
+                                // Закрываем диалоговое окно
+                                dialog.cancel();
+
+                                this.finishAffinity();
+                            });
+                    builder.create().show();
+                    return;
+                }
+                downloadFullCache = new DownloadFullCache(this);
+//                downloadTask = new DownloadTask(this, progressBar);
+//                downloadTask.setOnAsyncSuccessListener(this::performAfterLoadCacheSuccess);
+//                downloadTask.setOnAsyncCriticalErrorListener(this::performAfterDownloadFailed);
+//                downloadTask.download();
                 break;
             }
 
             case RELOAD_OR_ADD_PART_OF_CACHE: {
+                List<FileInfo> filesInfo = MainUtils.FILES_TO_RELOAD;
+                long fileLengthFull = calculateSize(filesInfo);
+                Log.d("dsf", "fileLengthFull = " + fileLengthFull);
+                if(fileLengthFull > 629145600) { // если кусков больше 600 метров то лучше скачать фулл архив
+                    installGame(LOAD_ALL_CACHE);
+                    return;
+                }
                 downloadTask = new DownloadTask(this, progressBar);
                 downloadTask.setOnAsyncSuccessListener(this::performAfterReloadCacheSuccess);
                 downloadTask.setOnAsyncCriticalErrorListener(this::performAfterDownloadFailed);
@@ -206,7 +246,7 @@ public class LoaderActivity extends AppCompatActivity {
     }
 
     private void performAfterLoadCacheSuccess() {
-        redirectToSettings();
+        redirectToMonitoring();
     }
 
     private void performAfterReloadCacheSuccess() {
@@ -239,7 +279,7 @@ public class LoaderActivity extends AppCompatActivity {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.button_click);
         loading = (TextView) findViewById(R.id.loadingText);
         loadingPercent = (TextView) findViewById(R.id.loadingPercent);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         fileName = (TextView) findViewById(R.id.fileName);
         leftButton = (ImageView) findViewById(R.id.leftButton);
         rightButton = (ImageView) findViewById(R.id.rightButton);

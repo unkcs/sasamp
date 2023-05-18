@@ -103,6 +103,9 @@ void CLocalPlayer::CheckWeapons()
 	RakNet::BitStream bs;
 	bs.Write((uint8_t) ID_WEAPONS_UPDATE);
 
+	bs.Write((uint16_t)INVALID_PLAYER_ID);
+	bs.Write((uint16_t)INVALID_PLAYER_ID);
+
 	bool bMSend = false;
 
 	for (int i = 0; i < MAX_WEAPONS_SLOT; i++) {
@@ -122,6 +125,7 @@ void CLocalPlayer::CheckWeapons()
 
 	}
 	if (bMSend) {
+        Log("send");
 		pNetGame->GetRakClient()->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 	}
 }
@@ -607,7 +611,6 @@ uint8_t CLocalPlayer::DetermineNumberOfPlayersInLocalRange()
 
 void CLocalPlayer::SendOnFootFullSyncData()
 {
-	Log("SendOnFootFullSyncData");
 	RakNet::BitStream bsPlayerSync;
 //	RwMatrix matPlayer;
 	CVector vecMoveSpeed = m_pPlayerPed->m_pPed->GetMoveSpeed();

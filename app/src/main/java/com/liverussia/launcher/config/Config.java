@@ -1,7 +1,8 @@
 package com.liverussia.launcher.config;
 
 public class Config {
-
+    public static final String FULLCACHE_ZIP_NAME = "cache.zip";
+    public static final String CACHE_ZIP_URL = "https://files.liverussia.online/downloads/" + FULLCACHE_ZIP_NAME;
     public static final String FILE_INFO_URL = "https://files.liverussia.online/downloads/files/files.json";
     public static final String URL_RE_CAPTCHA = "https://files.liverussia.online/reCaptcha.html";
     private static final String URL_DONATE = "https://liverussia.online/donate_v2/confirm.php?server=%s&serverName=%s&sum=%s&account=%s&mail=%s&captcha=%s";

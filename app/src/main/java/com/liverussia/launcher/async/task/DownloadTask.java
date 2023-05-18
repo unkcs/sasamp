@@ -10,6 +10,7 @@ import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.liverussia.launcher.utils.BytesTo;
 import com.liverussia.launcher.utils.MainUtils;
 import com.liverussia.launcher.ui.activity.LoaderActivity;
 import com.liverussia.launcher.async.domain.AsyncTaskResult;
@@ -203,7 +204,7 @@ public class DownloadTask implements Listener<TaskStatus> {
         }
     }
 
-    private long calculateSize(List<FileInfo> filesInfo) {
+    public static long calculateSize(List<FileInfo> filesInfo) {
         return Optional.ofNullable(filesInfo)
                 .orElse(Collections.emptyList())
                 .stream()
@@ -361,13 +362,13 @@ public class DownloadTask implements Listener<TaskStatus> {
         if (DownloadType.LOAD_ALL_CACHE.equals(MainUtils.getType()) || DownloadType.RELOAD_OR_ADD_PART_OF_CACHE.equals(MainUtils.getType())) {
             loaderActivity.getLoading().setText("Загрузка файлов игры...");
             loaderActivity.getLoadingPercent().setText(progress + "%");
-            loaderActivity.getFileName().setText(formatFileSize(fileLengthMin.longValue())+" из "+formatFileSize(fileLengthFull));
+            loaderActivity.getFileName().setText(BytesTo.convert(fileLengthMin.longValue())+" из "+BytesTo.convert(fileLengthFull));
         }
 
         if (DownloadType.UPDATE_APK.equals(MainUtils.getType())) {
             loaderActivity.getLoading().setText("Обновление...");
             loaderActivity.getLoadingPercent().setText(progress + "%");
-            loaderActivity.getFileName().setText(formatFileSize(fileLengthMin.longValue())+" из "+formatFileSize(fileLengthFull));
+            loaderActivity.getFileName().setText(BytesTo.convert(fileLengthMin.longValue())+" из "+BytesTo.convert(fileLengthFull));
         }
 
         progressBar.setProgress(progress);
@@ -430,32 +431,6 @@ public class DownloadTask implements Listener<TaskStatus> {
         this.onAsyncCriticalErrorListener = onAsyncCriticalErrorListener;
     }
 
-
-    public static String formatFileSize(long size) {
-        String hrSize = null;
-
-        double b = size;
-        double k = size/1024.0;
-        double m = ((size/1024.0)/1024.0);
-        double g = (((size/1024.0)/1024.0)/1024.0);
-        double t = ((((size/1024.0)/1024.0)/1024.0)/1024.0);
-
-        DecimalFormat dec = new DecimalFormat("0.00");
-
-        if ( t>1 ) {
-            hrSize = dec.format(t).concat(" TB");
-        } else if ( g>1 ) {
-            hrSize = dec.format(g).concat(" GB");
-        } else if ( m>1 ) {
-            hrSize = dec.format(m).concat(" MB");
-        } else if ( k>1 ) {
-            hrSize = dec.format(k).concat(" KB");
-        } else {
-            hrSize = dec.format(b).concat(" Bytes");
-        }
-
-        return hrSize;
-    }
 
     private void configureProgressBar() {
         loaderActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

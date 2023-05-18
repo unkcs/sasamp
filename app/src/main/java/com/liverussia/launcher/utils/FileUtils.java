@@ -1,5 +1,8 @@
 package com.liverussia.launcher.utils;
 
+import android.os.Environment;
+import android.os.StatFs;
+
 import java.io.File;
 
 public class FileUtils {
@@ -11,6 +14,15 @@ public class FileUtils {
                 }
             }
             file.delete();
+        }
+    }
+
+    public static long getFreeMemory() {
+        try {
+            StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+            return (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong()) / 1048576;
+        } catch (Exception unused) {
+            return 268435455;
         }
     }
 }

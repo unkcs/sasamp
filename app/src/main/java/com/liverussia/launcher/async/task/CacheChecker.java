@@ -313,7 +313,7 @@ public class CacheChecker implements Listener<FileInfo[]> {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //dialogProgress.dismiss();
         // test ы
-        Fragment prev = activity.getSupportFragmentManager().findFragmentByTag("fragment_dialog");
+        Fragment prev = activity.getSupportFragmentManager().findFragmentByTag("progressDialog");
         if (prev != null) {
             DialogFragment df = (DialogFragment) prev;
             df.dismiss();

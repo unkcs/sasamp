@@ -37,24 +37,29 @@ public class DownloadFullCache {
     boolean needUpdateProgress;
 
     public DownloadFullCache(Activity activity) {
-        this.activity       = activity;
+        this.activity = activity;
 
-        progressBar     = activity.findViewById(R.id.progressBar);
-        loadingText     = activity.findViewById(R.id.loadingText);
-        loadingPercent  = activity.findViewById(R.id.loadingPercent);
-        fileName        = activity.findViewById(R.id.fileName);
+        progressBar = activity.findViewById(R.id.progressBar);
+        loadingText = activity.findViewById(R.id.loadingText);
+        loadingPercent = activity.findViewById(R.id.loadingPercent);
+        fileName = activity.findViewById(R.id.fileName);
 
         downloadManager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
 
+        fileName.setText("Подключение...");
+
         Uri uri = Uri.parse(Config.CACHE_ZIP_URL);
+        // Uri uri = Uri.parse("https://gamecache.hb.bizmrg.com/cache.zip");
         DownloadManager.Request request = new DownloadManager.Request(uri);
         request.setVisibleInDownloadsUi(true);
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE ).setAllowedOverRoaming(true);
-        request.setAllowedOverRoaming(false);
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE).setAllowedOverRoaming(true);
+        request.setAllowedOverRoaming(true);
+        request.setAllowedOverMetered(true);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         request.setDestinationInExternalFilesDir(activity, Environment.DIRECTORY_DOWNLOADS, Config.FULLCACHE_ZIP_NAME);
         request.setTitle("Live Russia");
         request.setDescription("Загрузка файлов игры");
+
         downloadId = downloadManager.enqueue(request);
         needUpdateProgress = true;
 
@@ -67,7 +72,7 @@ public class DownloadFullCache {
                     onErrorDownLoading();
                     break;
                 }
-                if(!c.moveToFirst()) {
+                if (!c.moveToFirst()) {
                     onErrorDownLoading();
                     break;
                 }
@@ -78,28 +83,37 @@ public class DownloadFullCache {
                     onComplete();
                     break;
                 }
+                if (status == DownloadManager.STATUS_FAILED) {
+                    onErrorDownLoading();
+                    break;
+                }
+                if (status == DownloadManager.STATUS_PENDING || status == DownloadManager.STATUS_PAUSED)
+                {
+                    activity.runOnUiThread(() ->
+                            fileName.setText("Ожидание повторной попытки...")
+                    );
+                } else {
+                    long totalSize = c.getLong(c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                    long downloadedSize = c.getLong(c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
 
-                long totalSize = c.getLong(c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-                long downloadedSize = c.getLong(c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    long speed = (long) (downloadedSize - lastSize) / 2; // потому что слип на 2
+                    if (lastSize != downloadedSize) lastSize = downloadedSize;
 
-                long speed = (long) (downloadedSize - lastSize) / 2; // потому что слип на 2
-                if (lastSize != downloadedSize) lastSize = downloadedSize;
+                    long percent = (long) (downloadedSize * 100 / totalSize);
 
-                long percent = (long) (downloadedSize * 100 / totalSize);
+                    // int speed = c.getColumnIndex(DownloadManager.)
+                    activity.runOnUiThread(() -> {
+                        progressBar.setProgress((int) percent);
+                        loadingPercent.setText(String.format("%d%%", percent));
 
-                // int speed = c.getColumnIndex(DownloadManager.)
-                activity.runOnUiThread(() -> {
-                    progressBar.setProgress((int) percent);
-                    loadingPercent.setText(String.format("%d%%", percent));
-
-                    fileName.setText(String.format("%s из %s (%s/sec)",
-                            BytesTo.convert(downloadedSize),
-                            BytesTo.convert(totalSize),
-                            BytesTo.convert(speed)
-                    ));
-                });
-                //   progressText.setText();
-
+                        fileName.setText(String.format("%s из %s (%s/sec)",
+                                BytesTo.convert(downloadedSize),
+                                BytesTo.convert(totalSize),
+                                BytesTo.convert(speed)
+                        ));
+                    });
+                    //   progressText.setText();
+                }
                 c.close();
 
                 try {
@@ -110,10 +124,10 @@ public class DownloadFullCache {
             }
         }).start();
 
-     //   activity.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        //   activity.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         progressBar.setMax(100);
-        loadingText.setText("Скачивание файлов игры..");
+        loadingText.setText("Скачивание файлов игры...");
 //        registerReceiver(onNotificationClick,
 //                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
 
@@ -121,6 +135,7 @@ public class DownloadFullCache {
 
     public void onComplete() {
         needUpdateProgress = false;
+
         String zipPath = activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + Config.FULLCACHE_ZIP_NAME;
         String unZipPath = activity.getExternalFilesDir(null).toString();
 
